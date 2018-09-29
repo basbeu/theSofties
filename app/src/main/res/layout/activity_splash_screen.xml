@@ -8,17 +8,12 @@
     android:background="@color/black"
     tools:context=".SplashScreenActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="41dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="156dp"
-        android:text="@string/splashScreen"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="310dp"
+        android:layout_height="382dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/logo" />
 
 </RelativeLayout>
