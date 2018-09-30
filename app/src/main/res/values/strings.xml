@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Favours</string>
+    <string name="splashScreen">Wonderful splash screen</string>
+    <string name="logo">splash screen logo</string>
 </resources>
