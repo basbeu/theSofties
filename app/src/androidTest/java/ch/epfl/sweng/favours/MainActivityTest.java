@@ -19,6 +19,6 @@ public class MainActivityTest {
             new ActivityTestRule<>(MainActivity.class);
     @Test
     public void testHelloWorld() {
-        onView(withId(R.id.hello)).check(matches(withText("Hello World!")));
+        onView(withId(R.id.hello)).check(matches(withText("Hello World!!")));
     }
 }
