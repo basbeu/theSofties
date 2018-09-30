@@ -11,7 +11,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.FavoursMain"
+            type="ch.epfl.sweng.favours.AuthentificationProcess"
             />
 
     </data>
@@ -23,37 +23,47 @@
         tools:context=".MainActivity">
 
         <TextView
-            android:id="@+id/welcomeMessageText"
+            android:id="@+id/loginMessageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="Welcome to favour app \nplease log in or register to continue"
+            android:text="@{elements.headerText}"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/loginButton"
+        <EditText
+            android:id="@+id/emailTextField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Login"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.50"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+            app:layout_constraintTop_toBottomOf="@+id/loginMessageText" />
+
+        <EditText
+            android:id="@+id/passwordTextField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailTextField" />
 
         <Button
-            android:id="@+id/registerButton"
+            android:id="@+id/authentificationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Register"
+            android:layout_marginTop="30dp"
+            android:text="@{elements.validationButton}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.50"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/welcomeMessageText" />
+            app:layout_constraintTop_toBottomOf="@+id/passwordTextField" />
 
 
 
