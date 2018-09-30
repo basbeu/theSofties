@@ -9,7 +9,7 @@
     tools:context=".SplashScreenActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/logoFavours"
         android:layout_width="310dp"
         android:layout_height="382dp"
         android:layout_centerInParent="true"
