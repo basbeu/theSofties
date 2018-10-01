@@ -31,7 +31,7 @@ import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
 public class AuthentificationProcess extends Activity {
 
-    static final String TAG = FavoursMain.TAG + "_Authentification";
+    static final String TAG = FavoursMain.TAG + "_Auth";
     static final String REQUIREMENTS_STRING = "Password must:\n" +
             "- Be between 8 and 20 characters\n" +
             "- Mix numbers and letters";
