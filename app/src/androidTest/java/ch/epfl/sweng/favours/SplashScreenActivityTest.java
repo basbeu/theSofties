@@ -13,12 +13,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+
+public class SplashScreenActivityTest {
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<SplashScreenActivity> mActivityRule =
+            new ActivityTestRule<>(SplashScreenActivity.class);
     @Test
-    public void testHelloWorld() {
-        onView(withId(R.id.hello)).check(matches(withText("Hello World!!")));
+    public void testSplashScreen() {
+        onView(withId(R.id.logoFavours)).check(matches(withId(R.id.logoFavours)));
     }
 }
