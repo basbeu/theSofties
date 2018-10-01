@@ -9,6 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="elements"
             type="ch.epfl.sweng.favours.AuthentificationProcess"
@@ -39,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:ems="10"
-            android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginMessageText" />
@@ -55,16 +55,52 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailTextField" />
 
+        <TextView
+            android:id="@+id/userFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@{elements.requirementsText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/authentificationButton" />
+
         <Button
             android:id="@+id/authentificationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
+            android:enabled="@{(elements.isPasswordCorrect &amp;&amp; elements.isEmailCorrect)}"
             android:text="@{elements.validationButton}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordTextField" />
 
+        <ImageView
+            android:id="@+id/checkEmailImage"
+            android:layout_width="29dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="@{elements.isEmailCorrect ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toEndOf="@+id/emailTextField"
+            app:layout_constraintTop_toTopOf="@id/emailTextField"
+            app:layout_constraintBottom_toBottomOf="@id/emailTextField"
+            android:src="@drawable/check_image"
+            tools:layout_editor_absoluteY="106dp" />
+
+        <ImageView
+            android:id="@+id/checkPasswordImage"
+            android:layout_width="29dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="@{elements.isPasswordCorrect ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toEndOf="@+id/passwordTextField"
+            app:layout_constraintTop_toTopOf="@id/passwordTextField"
+            app:layout_constraintBottom_toBottomOf="@id/passwordTextField"
+            android:src="@drawable/check_image"
+            tools:layout_editor_absoluteY="106dp" />
 
 
     </android.support.constraint.ConstraintLayout>
