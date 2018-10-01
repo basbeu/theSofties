@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "833001557226",
+    "firebase_url": "https://favor-5860a.firebaseio.com",
+    "project_id": "favor-5860a",
+    "storage_bucket": "favor-5860a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833001557226:android:65c1f0dc93514922",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.favours"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833001557226-7q89hhcoqilh8d7543e3pl9lpjlru2jd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.favours",
+            "certificate_hash": "1f182a1f10df10aa4057e85c0d9fe47927a886b9"
+          }
+        },
+        {
+          "client_id": "833001557226-b3eee4gc4oqh0usns8i81f41jm2d3j6j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.favours",
+            "certificate_hash": "f1b68173bfff3d90940b9ea2162ed8302e96b871"
+          }
+        },
+        {
+          "client_id": "833001557226-hjuitv92f4quf70v0ue9go9kjqhri5b0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLl5FGS2ZHGGFVOMzUjrBfRVSI0mlrMEw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833001557226-hjuitv92f4quf70v0ue9go9kjqhri5b0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
