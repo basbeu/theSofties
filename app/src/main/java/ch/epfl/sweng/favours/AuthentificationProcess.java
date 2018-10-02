@@ -98,6 +98,40 @@ public class AuthentificationProcess extends Activity {
         }
     };
 
+    private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
+        @Override
+        public void onComplete(@NonNull Task<AuthResult> task) {
+            if (task.isSuccessful()) {
+                RuntimeEnvironment.getInstance().isConnected.set(true);
+                Log.d(TAG, "signInWithEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+                headerText.set("Welcome " + user.getDisplayName());
+                /*  Validation check + Wait 2s + Back to last activity */
+
+            } else {
+                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                requirementsText.set("Wrong email or password\nPlease try again");
+            }
+        }
+    };
+    private OnCompleteListener<AuthResult> registerComplete = new OnCompleteListener<AuthResult>(){
+        @Override
+        public void onComplete(@NonNull Task<AuthResult> task) {
+            if (task.isSuccessful()) {
+                RuntimeEnvironment.getInstance().isConnected.set(true);
+                Log.d(TAG, "createUserWithEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+                requirementsText.set("Welcome " + user.getEmail());
+
+                /*  Intent new activity for user informations */
+                /* Return to main screen */
+            } else {
+                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                requirementsText.set("Register failed, please try again");
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +220,6 @@ public class AuthentificationProcess extends Activity {
      * @param password The user password
      */
     private void authentification(String email, String password) {
-
         if(!isEmailValid(email)){
             requirementsText.set("Wrong email format");
             return;
@@ -195,53 +228,11 @@ public class AuthentificationProcess extends Activity {
             requirementsText.set("Wrong password format");
             return;
         }
-
         if (status == FavoursMain.Status.Login) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                RuntimeEnvironment.getInstance().isConnected.set(true);
-                                Log.d(TAG, "signInWithEmail:success");
-
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                headerText.set("Welcome " + user.getDisplayName());
-
-                                /*  Validation check + Wait 2s + Back to last activity */
-
-                            } else {
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-
-                                requirementsText.set("Wrong email or password\nPlease try again");
-                            }
-                        }
-                    });
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
         else if (status == FavoursMain.Status.Register) {
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                RuntimeEnvironment.getInstance().isConnected.set(true);
-                                Log.d(TAG, "createUserWithEmail:success");
-
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                requirementsText.set("Welcome " + user.getEmail());
-
-                                /*  Intent new activity for user informations */
-
-                                /* Return to main screen */
-
-
-                            } else {
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-
-                                requirementsText.set("Register failed, please try again");
-                            }
-                        }
-                    });
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     }
