@@ -45,6 +45,46 @@ public class AuthentificationProcess extends Activity {
     public ObservableField<String> requirementsText = new ObservableField<>();
 
     public ObservableBoolean isEmailCorrect = new ObservableBoolean(false);
+
+    private TextWatcher emailTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            isEmailCorrect.set(isEmailValid(binding.emailTextField.getText().toString()));
+        }
+    };
+    private TextWatcher passwordTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            isPasswordCorrect.set(passwordFitsRequirements(binding.passwordTextField.getText().toString()));
+        }
+    };
+    private View.OnClickListener authentificationButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
+        }
+    };
+
     public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){
         @Override
         public void set(boolean value) {
@@ -61,66 +101,19 @@ public class AuthentificationProcess extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mAuth = FirebaseAuth.getInstance();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
         binding.setElements(this);
-
         // Check if the email is correct each time a letter was added
-        binding.emailTextField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                isEmailCorrect.set(isEmailValid(binding.emailTextField.getText().toString()));
-            }
-        });
-
+        binding.emailTextField.addTextChangedListener(emailTextWatcher);
         // Check if the password is correct each time a letter was added
-        binding.passwordTextField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                isPasswordCorrect.set(passwordFitsRequirements(binding.passwordTextField.getText().toString()));
-            }
-        });
-
+        binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
         // Get the Intent that started this activity and extract the string
         Bundle bundle = getIntent().getExtras();
         status = (FavoursMain.Status) bundle.get(FavoursMain.AUTHENTIFICATION_ACTION);
         setUI(status);
-
-        binding.authentificationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
-            }
-
-        });
-
-
+        binding.authentificationButton.setOnClickListener(authentificationButtonListener);
     }
 
 
