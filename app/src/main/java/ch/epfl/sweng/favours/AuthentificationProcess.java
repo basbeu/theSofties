@@ -1,18 +1,15 @@
 package ch.epfl.sweng.favours;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,13 +18,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
+
+import static ch.epfl.sweng.favours.Utils.*;
 
 public class AuthentificationProcess extends Activity {
 
@@ -89,16 +85,15 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void set(boolean value) {
             super.set(value);
-            if(status == FavoursMain.Status.Register){
-                if(this.get()) {
-                    requirementsText.set("");
-                }
-                else{
-                    requirementsText.set(REQUIREMENTS_STRING);
-                }
+            if(this.get() && status == FavoursMain.Status.Register){
+                requirementsText.set("");
+            }
+            else if(!this.get() && status == FavoursMain.Status.Register){
+                requirementsText.set(REQUIREMENTS_STRING);
             }
         }
     };
+
 
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
@@ -200,20 +195,7 @@ public class AuthentificationProcess extends Activity {
             return false;
         }
 
-        boolean containsChar = false;
-        boolean containsDigit = false;
-
-        for (char c : password.toCharArray()) {
-            if (Character.isLetter(c)) {
-                containsChar = true;
-            } else if (Character.isDigit(c)) {
-                containsDigit = true;
-            }
-            if (containsChar && containsDigit) {
-                return true;
-            }
-        }
-        return false;
+        return containsChar(password) && containsDigit(password);
     }
 
     /**
