@@ -89,11 +89,13 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void set(boolean value) {
             super.set(value);
-            if(this.get() && status == FavoursMain.Status.Register){
-                requirementsText.set("");
-            }
-            else if (!this.get() && status == FavoursMain.Status.Register){
-                requirementsText.set(REQUIREMENTS_STRING);
+            if(status == FavoursMain.Status.Register){
+                if(this.get()) {
+                    requirementsText.set("");
+                }
+                else{
+                    requirementsText.set(REQUIREMENTS_STRING);
+                }
             }
         }
     };
