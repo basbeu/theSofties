@@ -28,9 +28,10 @@ import static ch.epfl.sweng.favours.Utils.*;
 public class AuthentificationProcess extends Activity {
 
     static final String TAG = FavoursMain.TAG + "_Auth";
-    static final String REQUIREMENTS_STRING = "Password must:\n" +
-            "- Be between 8 and 20 characters\n" +
-            "- Mix numbers and letters";
+    static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
+    private static final int MAXPASSWORDLEN = 20;
+    private static final int MINPASSWORDLEN = 8;
+
 
     LogInRegisterViewBinding binding;
     private FirebaseAuth mAuth;
@@ -85,11 +86,13 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void set(boolean value) {
             super.set(value);
-            if(this.get() && status == FavoursMain.Status.Register){
-                requirementsText.set("");
-            }
-            else if(!this.get() && status == FavoursMain.Status.Register){
-                requirementsText.set(REQUIREMENTS_STRING);
+            if(status == FavoursMain.Status.Register){
+                if(this.get()){
+                    requirementsText.set("");
+                }
+                else{
+                    requirementsText.set(REQUIREMENTS_STRING);
+                }
             }
         }
     };
@@ -191,7 +194,7 @@ public class AuthentificationProcess extends Activity {
      */
     private Boolean passwordFitsRequirements(String password){
 
-        if (password == null || password.length() < 8 || password.length() > 20) {
+        if (password == null || password.length() < MINPASSWORDLEN || password.length() > MAXPASSWORDLEN) {
             return false;
         }
 
