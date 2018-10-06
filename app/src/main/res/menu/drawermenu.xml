@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:id="@+id/db1" android:title="Favours" android:icon="@drawable/databaselogo"/>
-<item android:id="@+id/db2" android:title="Settings" android:icon="@drawable/settingslogo"/>
-<item android:id="@+id/db3" android:title="Log out" android:icon= "@drawable/logoutlogo"/>
-</menu>

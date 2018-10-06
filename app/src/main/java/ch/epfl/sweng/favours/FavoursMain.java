@@ -29,6 +29,7 @@ public class FavoursMain extends AppCompatActivity {
     ActivityMainBinding binding;
 
     public ObservableBoolean isConnected;
+    public static final String LOGGED_IN = "Logged in successfully";
 
     private RuntimeEnvironment runtimeEnvironment;
 
@@ -66,11 +67,21 @@ public class FavoursMain extends AppCompatActivity {
                 RuntimeEnvironment.getInstance().isConnected.set(false);
             }
         });
+
+        if(RuntimeEnvironment.getInstance().isConnected.get()){
+            loggedinView(Status.LoggedIn);
+        }
     }
 
     public void loginViewLoad(Status status, View view){
         Intent intent = new Intent(view.getContext(), AuthentificationProcess.class);
         intent.putExtra(AUTHENTIFICATION_ACTION, status);
+        startActivity(intent);
+    }
+
+    public void loggedinView(FavoursMain.Status status){
+        Intent intent = new Intent(this, Logged_in_Screen.class);
+        intent.putExtra(LOGGED_IN, status);
         startActivity(intent);
     }
 }
