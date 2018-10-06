@@ -30,7 +30,6 @@ public class AuthentificationProcess extends Activity {
 
     static final String TAG = FavoursMain.TAG + "_Auth";
     static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
-    private final String LOGGED_IN = "Logged in successfully";
     private static final int MAXPASSWORDLEN = 20;
     private static final int MINPASSWORDLEN = 8;
 
@@ -242,7 +241,7 @@ public class AuthentificationProcess extends Activity {
 
     public void loggedinView(FavoursMain.Status status){
         Intent intent = new Intent(this, Logged_in_Screen.class);
-        intent.putExtra(LOGGED_IN, status);
+        intent.putExtra(FavoursMain.LOGGED_IN, status);
         startActivity(intent);
     }
 
