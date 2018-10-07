@@ -7,6 +7,7 @@ public class User {
     public static final String EMAIL = "email";
     public static final String SEX = "sex";
     public static final String BASED_LOCATION = "basedLocation";
+    public static final String USERS = "users";
 
     private String firstName;
     private String lastName;
