@@ -17,6 +17,13 @@ public class User {
 
     public User(){}
 
+    public User(String firstName, String lastName, String email, String sex, String basedLocation) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.sex = sex;
+        this.basedLocation = basedLocation;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -41,5 +48,6 @@ public class User {
     public String[] userInfoList(){
         return new String[]{"First Name", firstName, "Last Name", lastName, "Email", email, "Sex", sex, "Ciry", basedLocation};
     }
+
 
 }
