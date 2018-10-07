@@ -42,8 +42,6 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
 
     }
 
-
-
     @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){
@@ -69,7 +67,7 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
                 break;
             case R.id.logout:
-                Toast.makeText(this, "See you soon !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.seeyou, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, FavoursMain.class);
                 intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
                 RuntimeEnvironment.getInstance().isConnected.set(false);
