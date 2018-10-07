@@ -49,5 +49,5 @@ public class User {
         return new String[]{"First Name", firstName, "Last Name", lastName, "Email", email, "Sex", sex, "Ciry", basedLocation};
     }
 
-
+    
 }
