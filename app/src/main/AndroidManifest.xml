@@ -23,9 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuthentificationProcess"
-            android:parentActivityName=".FavoursMain">
-        </activity>
+        <activity
+            android:name=".AuthentificationProcess"
+            android:parentActivityName=".FavoursMain"></activity>
+        <activity
+            android:name=".Logged_in_Screen"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_logged_in__screen"></activity>
     </application>
 
 </manifest>
