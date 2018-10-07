@@ -11,6 +11,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -103,7 +105,7 @@ public class AuthentificationProcess extends Activity {
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "signInWithEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
@@ -113,18 +115,53 @@ public class AuthentificationProcess extends Activity {
 
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                requirementsText.set("Wrong email or password\nPlease try again");
+                requirementsText.set("Wrong email or password or email not verified\nPlease try again");
             }
         }
     };
+    public void sendConfirmationMail(final FirebaseUser user){
+        user.sendEmailVerification()
+                .addOnCompleteListener(AuthentificationProcess.this, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        // Re-enable button
+                        findViewById(R.id.verify_email_button).setEnabled(true);
+
+                        if (task.isSuccessful()) {
+                            Toast.makeText(AuthentificationProcess.this,
+                                    "Verification email sent to " + user.getEmail(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(AuthentificationProcess.this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private OnCompleteListener<AuthResult> registerComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
+                Button verify_email = (Button)findViewById(R.id.verify_email_button);
+
+                verify_email.setVisibility(View.VISIBLE);
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "createUserWithEmail:success");
-                FirebaseUser user = mAuth.getCurrentUser();
-                requirementsText.set("Welcome " + user.getEmail());
+                final FirebaseUser user = mAuth.getCurrentUser();
+                sendConfirmationMail(user);
+                Button resendMail = (Button) findViewById(R.id.verify_email_button) ;
+                resendMail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       sendConfirmationMail(user);
+                    }
+                });
+                if(mAuth.getCurrentUser().isEmailVerified()) {
+                    requirementsText.set("Welcome " + user.getEmail());
+                }
 
                 /*  Intent new activity for user informations */
                 /* Return to main screen */
@@ -206,7 +243,7 @@ public class AuthentificationProcess extends Activity {
     }
 
     /**
-     * perform the login or registering functionalitie and update the status in runtime environment
+     * perform the login or registering functionality and update the status in runtime environment
      * @param email The email to log in with
      * @param password The user password
      */
@@ -219,7 +256,7 @@ public class AuthentificationProcess extends Activity {
             requirementsText.set("Wrong password format");
             return;
         }
-        if (status == FavoursMain.Status.Login) {
+        if (status == FavoursMain.Status.Login) { // && mAuth.getCurrentUser().isEmailVerified()
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
         else if (status == FavoursMain.Status.Register) {
@@ -237,7 +274,7 @@ public class AuthentificationProcess extends Activity {
         if(currentUser != null){
             headerText.set("You're already logged in");
         }
-    }
+}
 
     private void loggedinView(FavoursMain.Status status){
         Intent intent = new Intent(this, Logged_in_Screen.class);
