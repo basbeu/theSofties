@@ -41,3 +41,5 @@
 
 *.iml
 .Trashes
+
+.idea/caches/build_file_checksums.ser
