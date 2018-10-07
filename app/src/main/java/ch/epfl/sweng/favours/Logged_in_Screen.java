@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favours;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -11,6 +12,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class Logged_in_Screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,7 +39,6 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
             navigationView.setCheckedItem(R.id.profile);
         }
-
 
     }
 
@@ -64,6 +67,14 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
                 break;
             case R.id.settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                break;
+            case R.id.logout:
+                Toast.makeText(this, "See you soon !", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, FavoursMain.class);
+                intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
+                RuntimeEnvironment.getInstance().isConnected.set(false);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(intent);
                 break;
         }
 

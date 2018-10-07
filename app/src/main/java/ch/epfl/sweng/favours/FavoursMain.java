@@ -30,6 +30,7 @@ public class FavoursMain extends AppCompatActivity {
 
     public ObservableBoolean isConnected;
     public static final String LOGGED_IN = "Logged in successfully";
+    public static final String LOGGED_OUT = "Disconnected successfully";
 
     private RuntimeEnvironment runtimeEnvironment;
 
