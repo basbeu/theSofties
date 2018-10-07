@@ -4,7 +4,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private Character sex;
+    private String sex;
     private String basedLocation;
 
     public User(){}
@@ -22,12 +22,16 @@ public class User {
         return email;
     }
 
-    public Character getSex() {
+    public String getSex() {
         return sex;
     }
 
     public String getBasedLocation() {
         return basedLocation;
+    }
+
+    public String[] userInfoList(){
+        return new String[]{"First Name", firstName, "Last Name", lastName, "Email", email, "Sex", sex, "Ciry", basedLocation};
     }
 
 }
