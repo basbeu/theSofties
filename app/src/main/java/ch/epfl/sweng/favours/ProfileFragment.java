@@ -45,16 +45,11 @@ public class ProfileFragment extends Fragment {
 
                     User user = documentSnapshot.toObject(User.class);
                     assert (user != null);
-                    Log.d(LOG_TAG, user.getFirstName());
-                    Log.d(LOG_TAG, user.getLastName());
-                    Log.d(LOG_TAG, user.getBasedLocation());
-                    Log.d(LOG_TAG, user.getEmail());
-                    Log.d(LOG_TAG, user.getSex());
-
-                    /*String[] usrInfo =  user.userInfoList();
-                    ListAdapter userAdapter = new ArrayAdapter<String>(container.getContext(), android.R.layout.simple_list_item_1, usrInfo);
-                    ListView listProfileElements = (ListView)container.findViewById(R.id.drawer_layout);
-                    listProfileElements.setAdapter(userAdapter);*/
+                    Log.i(LOG_TAG, user.getFirstName());
+                    Log.i(LOG_TAG, user.getLastName());
+                    Log.i(LOG_TAG, user.getBasedLocation());
+                    Log.i(LOG_TAG, user.getEmail());
+                    Log.i(LOG_TAG, user.getSex());
 
                     TextView firstName = container.findViewById(R.id.profFirstName);
                     TextView lastName = container.findViewById(R.id.profLastName);
