@@ -28,23 +28,25 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_profile_layout, container, false);
 
+        TextView t = rootView.findViewById(R.id.profileTitle);
+        t.setText("TESTINGF");
 
-       /*mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    TextView title = rootView.findViewById(R.id.profileTitle);
-                    title.setText(documentSnapshot.getString("firstName"));
-
-
-                    assert (user != null);
-                    String[] usrInfo =  user.userInfoList();
-                    ListAdapter userAdapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, usrInfo);
-                    ListView listProfileElements = (ListView)rootView.findViewById(R.id.drawer_layout);
-                    listProfileElements.setAdapter(userAdapter);
-                }
-            }
-        });*/
+//       mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if(documentSnapshot.exists()){
+//                    TextView title = rootView.findViewById(R.id.profileTitle);
+//                    title.setText(documentSnapshot.getString("firstName"));
+//
+//
+//                    assert (user != null);
+//                    String[] usrInfo =  user.userInfoList();
+//                    ListAdapter userAdapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, usrInfo);
+//                    ListView listProfileElements = (ListView)rootView.findViewById(R.id.drawer_layout);
+//                    listProfileElements.setAdapter(userAdapter);*/
+//                }
+//            }
+//        });
 
 
 
