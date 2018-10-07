@@ -51,7 +51,7 @@
         android:id="@+id/profFirstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="myFirstName"
+        android:text=""
         android:textSize="@dimen/profile_fragment_database_content_size"
         android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
     <TextView
@@ -65,7 +65,7 @@
         android:id="@+id/profLastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="myLastName"
+        android:text=""
         android:textSize="@dimen/profile_fragment_database_content_size"
         android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
     <TextView
@@ -79,11 +79,10 @@
         android:id="@+id/profEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="myEmail"
+        android:text=""
         android:textSize="@dimen/profile_fragment_database_content_size"
         android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
     <TextView
-        android:id="@+id/profCity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/city"
@@ -91,9 +90,10 @@
         android:textSize="@dimen/profile_fragment_database_object_size"
         />
     <TextView
+        android:id="@+id/profCity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="myCity"
+        android:text=""
         android:textSize="@dimen/profile_fragment_database_content_size"
         android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
     <TextView
@@ -107,7 +107,7 @@
         android:id="@+id/profSex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="mySex"
+        android:text=""
         android:textSize="@dimen/profile_fragment_database_content_size"/>
 
     <!--
