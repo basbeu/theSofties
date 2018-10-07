@@ -4,9 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 
 /**
@@ -18,6 +32,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class EditProfileFragment extends Fragment {
+
+    private static final String LOG_TAG = "EDIT_PROFILE_FRAGMENT";
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,5 +122,47 @@ public class EditProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    /**
+     * Will read users fields and send the data to the database. Not allowing for email modification is done willingly
+     * @param currentUser User that is trying to edit profile
+     * @param v Current view
+     */
+    public void onValidation(View v,@Nonnull User currentUser) {
+        EditText firstName = v.findViewById(R.id.profFirstNameEdit);
+        EditText lastName = v.findViewById(R.id.profLastNameEdit);
+        EditText sex = v.findViewById(R.id.profSexEdit);
+        EditText city = v.findViewById(R.id.profCityEdit);
+
+        /*Map<String,Object> dataToSave = new HashMap<String, Object>();
+        dataToSave.put(User.FIRST_NAME, firstName.getText());
+        dataToSave.put(User.LAST_NAME, lastName.getText());
+        dataToSave.put(User.EMAIL, email.getText());
+        dataToSave.put(User.BASED_LOCATION, city.getText());
+        dataToSave.put(User.SEX, sex.getText());*/
+
+        User user = new User(firstName.getText().toString(), lastName.getText().toString(), currentUser.getEmail(), sex.getText().toString(), city.getText().toString());
+        String userId;
+        try {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }catch (NullPointerException e){
+            Log.e(LOG_TAG, "FirebaseAuth gurrentUser is null");
+            return;
+        }
+            DocumentReference mDocRef = FirebaseFirestore.getInstance().document(User.USERS + "/" + userId);
+            mDocRef.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(LOG_TAG, "Succesful user update.");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(LOG_TAG, "Failled to update user information. : " + e.toString());
+                }
+            });
+
     }
 }
