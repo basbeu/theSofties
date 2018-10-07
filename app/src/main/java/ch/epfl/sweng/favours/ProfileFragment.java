@@ -14,67 +14,65 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
 
-    private DocumentReference mDocRef = FirebaseFirestore.getInstance().document("users/FDlmugRDbsGw5J4x5avN");
+    private static final String LOG_TAG = "PROFILE_FRAGMENT";
+
+
     private View rootView;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+        FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
+        assert userAuth != null;
+        DocumentReference mDocRef = FirebaseFirestore.getInstance().document("users/"+userAuth.getUid());
+
         rootView = inflater.inflate(R.layout.fragment_profile_layout, container, false);
 
-        TextView t = rootView.findViewById(R.id.profileTitle);
-        t.setText("TESTINGF");
-
-//       mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if(documentSnapshot.exists()){
-//                    TextView title = rootView.findViewById(R.id.profileTitle);
-//                    title.setText(documentSnapshot.getString("firstName"));
-//
-//
-//                    assert (user != null);
-//                    String[] usrInfo =  user.userInfoList();
-//                    ListAdapter userAdapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, usrInfo);
-//                    ListView listProfileElements = (ListView)rootView.findViewById(R.id.drawer_layout);
-//                    listProfileElements.setAdapter(userAdapter);*/
-//                }
-//            }
-//        });
-
-
-
-
-
-
-
-        return inflater.inflate(R.layout.fragment_profile_layout, container, false);
-
-    }
-
-    public void getUser(final View v){
-        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        Log.d(LOG_TAG, "onCreateViewCalled");
+       mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
-                    TextView title = v.findViewById(R.id.profileTitle);
-                    title.setText(documentSnapshot.getString("firstName"));
-                    /*
+                    Log.d(LOG_TAG, "retrievedDocument");
 
+                    User user = documentSnapshot.toObject(User.class);
                     assert (user != null);
-                    String[] usrInfo =  user.userInfoList();
-                    ListAdapter userAdapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, usrInfo);
-                    ListView listProfileElements = (ListView)rootView.findViewById(R.id.drawer_layout);
+                    Log.d(LOG_TAG, user.getFirstName());
+                    Log.d(LOG_TAG, user.getLastName());
+                    Log.d(LOG_TAG, user.getBasedLocation());
+                    Log.d(LOG_TAG, user.getEmail());
+                    Log.d(LOG_TAG, user.getSex());
+
+                    /*String[] usrInfo =  user.userInfoList();
+                    ListAdapter userAdapter = new ArrayAdapter<String>(container.getContext(), android.R.layout.simple_list_item_1, usrInfo);
+                    ListView listProfileElements = (ListView)container.findViewById(R.id.drawer_layout);
                     listProfileElements.setAdapter(userAdapter);*/
+
+                    TextView firstName = container.findViewById(R.id.profFirstName);
+                    TextView lastName = container.findViewById(R.id.profLastName);
+                    TextView email = container.findViewById(R.id.profEmail);
+                    TextView sex = container.findViewById(R.id.profSex);
+                    TextView city = container.findViewById(R.id.profCity);
+
+                    firstName.setText(user.getFirstName());
+                    lastName.setText(user.getLastName());
+                    email.setText(user.getEmail());
+                    sex.setText(user.getSex());
+                    city.setText(user.getBasedLocation());
                 }
             }
         });
+
+        return inflater.inflate(R.layout.fragment_profile_layout, container, false);
+
     }
 
 
