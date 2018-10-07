@@ -7,19 +7,19 @@
         <item
             android:id="@+id/profile"
             android:icon="@drawable/profilelogo"
-            android:title="Profile"/>
+            android:title="@string/profile"/>
         <item
             android:id="@+id/favours"
             android:icon="@drawable/databaselogo"
-            android:title="Favours"/>
+            android:title="@string/app_name"/>
         <item
             android:id="@+id/settings"
             android:icon="@drawable/settingslogo"
-            android:title="Settings"/>
+            android:title="@string/settings"/>
     </group>
 
     <item
         android:id="@+id/logout"
         android:icon="@drawable/logoutlogo"
-        android:title="Log out :("/>
+        android:title="@string/logout"/>
 </menu>
