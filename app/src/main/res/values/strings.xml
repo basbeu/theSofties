@@ -4,6 +4,8 @@
     <string name="logout">Favours</string>
     <string name="logged_in_scree">You successfully logged in !</string>
     <string name="logo">splash screen logo</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_logged_in__screen">Logged_in_Screen</string>
 
 </resources>
