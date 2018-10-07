@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favours;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -27,15 +28,16 @@ import static ch.epfl.sweng.favours.Utils.*;
 
 public class AuthentificationProcess extends Activity {
 
-    static final String TAG = FavoursMain.TAG + "_Auth";
-    static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
+    public static final String TAG = FavoursMain.TAG + "_Auth";
+    public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
     private static final int MAXPASSWORDLEN = 20;
     private static final int MINPASSWORDLEN = 8;
 
 
-    LogInRegisterViewBinding binding;
+
+    public LogInRegisterViewBinding binding;
     private FirebaseAuth mAuth;
-    FavoursMain.Status status;
+    public FavoursMain.Status status;
 
     public ObservableField<String> headerText = new ObservableField<>();
     public ObservableField<String> validationButton = new ObservableField<>();
@@ -107,6 +109,7 @@ public class AuthentificationProcess extends Activity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 headerText.set("Welcome " + user.getDisplayName());
                 /*  Validation check + Wait 2s + Back to last activity */
+                loggedinView(status);
 
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -125,6 +128,7 @@ public class AuthentificationProcess extends Activity {
 
                 /*  Intent new activity for user informations */
                 /* Return to main screen */
+                loggedinView(status);
             } else {
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                 requirementsText.set("Register failed, please try again");
@@ -235,6 +239,10 @@ public class AuthentificationProcess extends Activity {
         }
     }
 
-
+    private void loggedinView(FavoursMain.Status status){
+        Intent intent = new Intent(this, Logged_in_Screen.class);
+        intent.putExtra(FavoursMain.LOGGED_IN, status);
+        startActivity(intent);
+    }
 
 }
