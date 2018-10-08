@@ -47,26 +47,12 @@ public class FavoursMain extends AppCompatActivity {
         isConnected = RuntimeEnvironment.getInstance().isConnected;
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setElements(this);
-        binding.loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginViewLoad(Status.Login,  v);
-            }
-        });
 
-        binding.registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginViewLoad(Status.Register,  v);
-            }
-        });
-
-        binding.logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.loginButton.setOnClickListener(v-> loginViewLoad(Status.Login,  v));
+        binding.registerButton.setOnClickListener(v->loginViewLoad(Status.Register,  v));
+        binding.logoutButton.setOnClickListener(v->{
                 FirebaseAuth.getInstance().signOut();
                 RuntimeEnvironment.getInstance().isConnected.set(false);
-            }
         });
 
         if(RuntimeEnvironment.getInstance().isConnected.get()){
