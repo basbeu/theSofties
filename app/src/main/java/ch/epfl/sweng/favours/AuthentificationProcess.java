@@ -11,6 +11,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,25 +21,23 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
-import static ch.epfl.sweng.favours.Utils.*;
+import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;
+import static ch.epfl.sweng.favours.Utils.isEmailValid;
+import static ch.epfl.sweng.favours.Utils.logout;
+import static ch.epfl.sweng.favours.Utils.passwordFitsRequirements;
+
 
 public class AuthentificationProcess extends Activity {
 
-    static final String TAG = FavoursMain.TAG + "_Auth";
-    static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
-    private static final int MAXPASSWORDLEN = 20;
-    private static final int MINPASSWORDLEN = 8;
+    public static final String TAG = FavoursMain.TAG + "_Auth";
+    public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
 
 
-
-    LogInRegisterViewBinding binding;
+    public LogInRegisterViewBinding binding;
     private FirebaseAuth mAuth;
-    FavoursMain.Status status;
+    public FavoursMain.Status status;
 
     public ObservableField<String> headerText = new ObservableField<>();
     public ObservableField<String> validationButton = new ObservableField<>();
@@ -47,14 +47,10 @@ public class AuthentificationProcess extends Activity {
 
     private TextWatcher emailTextWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
         @Override
         public void afterTextChanged(Editable s) {
@@ -63,14 +59,10 @@ public class AuthentificationProcess extends Activity {
     };
     private TextWatcher passwordTextWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
         @Override
         public void afterTextChanged(Editable s) {
@@ -81,6 +73,34 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void onClick(View v) {
             authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
+        }
+    };
+
+    private OnCompleteListener<AuthResult> registerComplete = task -> {
+        if (task.isSuccessful()) {
+            Button resendConfirmationMail = (Button)findViewById(R.id.resendConfirmationMailButton);
+            resendConfirmationMail.setVisibility(View.VISIBLE);
+
+            Button log_out = (Button)findViewById(R.id.logOutButton);
+            log_out.setVisibility(View.VISIBLE);
+
+            RuntimeEnvironment.getInstance().isConnected.set(true);
+            Log.d(TAG, "createUserWithEmail:success");
+            final FirebaseUser user = mAuth.getCurrentUser();
+            sendConfirmationMail(user);
+            resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
+            log_out.setOnClickListener(v->logout(this));
+            /*  Intent new activity for user informations */
+                /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
+                thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
+                thus it should be possible to check this condition successfully until it is fulfilled!*/
+            if(mAuth.getCurrentUser().isEmailVerified()) {
+                // requirementsText.set("Welcome " + user.getEmail());
+                loggedinView(status);
+            }
+        } else {
+            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+            requirementsText.set("Register failed, please try again");
         }
     };
 
@@ -99,42 +119,49 @@ public class AuthentificationProcess extends Activity {
         }
     };
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
+            headerText.set("You're already logged in");
+        }
+    }
 
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "signInWithEmail:success");
-                FirebaseUser user = mAuth.getCurrentUser();
+                final FirebaseUser user = mAuth.getCurrentUser();
                 headerText.set("Welcome " + user.getDisplayName());
+                Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
+                resetPassword.setVisibility(View.VISIBLE);
+                resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
                 /*  Validation check + Wait 2s + Back to last activity */
                 loggedinView(status);
-
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                requirementsText.set("Wrong email or password\nPlease try again");
+                requirementsText.set("Wrong email or password or email not verified\nPlease try again");
             }
         }
     };
-    private OnCompleteListener<AuthResult> registerComplete = new OnCompleteListener<AuthResult>(){
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if (task.isSuccessful()) {
-                RuntimeEnvironment.getInstance().isConnected.set(true);
-                Log.d(TAG, "createUserWithEmail:success");
-                FirebaseUser user = mAuth.getCurrentUser();
-                requirementsText.set("Welcome " + user.getEmail());
 
-                /*  Intent new activity for user informations */
-                /* Return to main screen */
-                loggedinView(status);
-            } else {
-                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                requirementsText.set("Register failed, please try again");
-            }
-        }
-    };
+    private void sendPasswordResetEmail(Task<AuthResult> task, FirebaseUser user){
+        FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
+                .addOnCompleteListener(w->displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Reset password email sent to " + user.getEmail(),"Failed to send reset password email."));
+    }
+
+    private void sendConfirmationMail(final FirebaseUser user){
+        user.sendEmailVerification()
+                .addOnCompleteListener(AuthentificationProcess.this, task-> {
+                    // Re-enable button
+                    findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
+                    displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
+                });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +180,6 @@ public class AuthentificationProcess extends Activity {
         setUI(status);
         binding.authentificationButton.setOnClickListener(authentificationButtonListener);
     }
-
 
     /**
      * Display UI Elements based on the current mode
@@ -176,37 +202,7 @@ public class AuthentificationProcess extends Activity {
     }
 
     /**
-     * Function to check if the email is in a valid format
-     * Inspired from: https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
-     *
-     * @param email The email to check
-     * @return True if the email is in a valid format
-     */
-    private Boolean isEmailValid(String email){
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
-    /**
-     * Function to check if a password has a valid format
-     * Inspired from : https://stackoverflow.com/questions/24857893/password-requirements-program
-     *
-     * @param password The password to check
-     * @return True if the password fits with requirements
-     */
-    private Boolean passwordFitsRequirements(String password){
-
-        if (password == null || password.length() < MINPASSWORDLEN || password.length() > MAXPASSWORDLEN) {
-            return false;
-        }
-
-        return containsChar(password) && containsDigit(password);
-    }
-
-    /**
-     * perform the login or registering functionalitie and update the status in runtime environment
+     * perform the login or registering functionality and update the status in runtime environment
      * @param email The email to log in with
      * @param password The user password
      */
@@ -228,23 +224,17 @@ public class AuthentificationProcess extends Activity {
         }
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            headerText.set("You're already logged in");
+    private void loggedinView(FavoursMain.Status status){
+        if(mAuth.getCurrentUser().isEmailVerified()) {
+            Intent intent = new Intent(this, Logged_in_Screen.class);
+            intent.putExtra(FavoursMain.LOGGED_IN, status);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, AuthentificationProcess.class);
+            intent.putExtra(FavoursMain.LOGGED_OUT, status);
+            startActivity(intent);
         }
     }
-
-    public void loggedinView(FavoursMain.Status status){
-        Intent intent = new Intent(this, Logged_in_Screen.class);
-        intent.putExtra(FavoursMain.LOGGED_IN, status);
-        startActivity(intent);
-    }
-
-
-
 }
+
+

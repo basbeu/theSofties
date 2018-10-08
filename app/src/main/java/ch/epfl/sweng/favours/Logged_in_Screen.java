@@ -14,9 +14,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import ch.epfl.sweng.favours.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favours.databinding.NavHeaderBinding;
+import static ch.epfl.sweng.favours.Utils.logout;
 
 
 public class Logged_in_Screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,8 +54,6 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
 
     }
 
-
-
     @Override
     public void onBackPressed() {
         if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -81,12 +79,7 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
                 break;
             case R.id.logout:
-                Toast.makeText(this, "See you soon !", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, FavoursMain.class);
-                intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
-                RuntimeEnvironment.getInstance().isConnected.set(false);
-                FirebaseAuth.getInstance().signOut();
-                startActivity(intent);
+                logout(this);
                 break;
         }
 

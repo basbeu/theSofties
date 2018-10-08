@@ -5,7 +5,7 @@
     <string name="profile_text">Your profile</string>
     <string name="logout">Log out :(</string>
     <string name="seeyou">See you soon !</string>
-    <string name="logged_in_scree">You successfully logged in !</string>
+    <string name="logged_in_screen">You successfully logged in !</string>
     <string name="logo">splash screen logo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
