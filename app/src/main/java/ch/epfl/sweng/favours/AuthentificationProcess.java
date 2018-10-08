@@ -21,20 +21,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
-import static ch.epfl.sweng.favours.Utils.*;
+import static ch.epfl.sweng.favours.Utils.isEmailValid;
+import static ch.epfl.sweng.favours.Utils.passwordFitsRequirements;
+
 
 public class AuthentificationProcess extends Activity {
 
     public static final String TAG = FavoursMain.TAG + "_Auth";
     public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
-    private static final int MAXPASSWORDLEN = 20;
-    private static final int MINPASSWORDLEN = 8;
-
 
 
     public LogInRegisterViewBinding binding;
@@ -49,14 +45,10 @@ public class AuthentificationProcess extends Activity {
 
     private TextWatcher emailTextWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
         @Override
         public void afterTextChanged(Editable s) {
@@ -65,14 +57,10 @@ public class AuthentificationProcess extends Activity {
     };
     private TextWatcher passwordTextWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
         @Override
         public void afterTextChanged(Editable s) {
@@ -101,6 +89,15 @@ public class AuthentificationProcess extends Activity {
         }
     };
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
+            headerText.set("You're already logged in");
+        }
+    }
 
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
@@ -108,32 +105,27 @@ public class AuthentificationProcess extends Activity {
             if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "signInWithEmail:success");
-               final FirebaseUser user = mAuth.getCurrentUser();
+                final FirebaseUser user = mAuth.getCurrentUser();
                 headerText.set("Welcome " + user.getDisplayName());
                 Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
                 resetPassword.setVisibility(View.VISIBLE);
-                resetPassword.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(AuthentificationProcess.this,
-                                                    "Reset password email sent to " + user.getEmail(),
-                                                    Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Log.e(TAG, "sendResetPasswordEmail", task.getException());
-                                            Toast.makeText(AuthentificationProcess.this,
-                                                    "Failed to send reset password email.",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
+                resetPassword.setOnClickListener(v -> {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
+                            .addOnCompleteListener(w->{
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(AuthentificationProcess.this,
+                                                "Reset password email sent to " + user.getEmail(),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.e(TAG, "sendResetPasswordEmail", task.getException());
+                                        Toast.makeText(AuthentificationProcess.this,
+                                                "Failed to send reset password email.",
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                    }
-                });
+
+                            });
+
                 /*  Validation check + Wait 2s + Back to last activity */
                 loggedinView(status);
 
@@ -143,11 +135,10 @@ public class AuthentificationProcess extends Activity {
             }
         }
     };
-    public void sendConfirmationMail(final FirebaseUser user){
+
+    private void sendConfirmationMail(final FirebaseUser user){
         user.sendEmailVerification()
-                .addOnCompleteListener(AuthentificationProcess.this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
+                .addOnCompleteListener(AuthentificationProcess.this, task-> {
                         // Re-enable button
                         findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
 
@@ -161,7 +152,6 @@ public class AuthentificationProcess extends Activity {
                                     "Failed to send verification email.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }
                 });
     }
 
@@ -191,7 +181,7 @@ public class AuthentificationProcess extends Activity {
                 resendConfirmationMail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       sendConfirmationMail(user);
+                        sendConfirmationMail(user);
                     }
                 });
                 log_out.setOnClickListener(new View.OnClickListener() {
@@ -205,7 +195,7 @@ public class AuthentificationProcess extends Activity {
                 thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
                 thus it should be possible to check this condition successfully until it is fulfilled!*/
                 if(mAuth.getCurrentUser().isEmailVerified()) {
-                   // requirementsText.set("Welcome " + user.getEmail());
+                    // requirementsText.set("Welcome " + user.getEmail());
                     loggedinView(status);
                 }
             } else {
@@ -233,7 +223,6 @@ public class AuthentificationProcess extends Activity {
         binding.authentificationButton.setOnClickListener(authentificationButtonListener);
     }
 
-
     /**
      * Display UI Elements based on the current mode
      *
@@ -252,36 +241,6 @@ public class AuthentificationProcess extends Activity {
                 requirementsText.set(REQUIREMENTS_STRING);
                 break;
         }
-    }
-
-    /**
-     * Function to check if the email is in a valid format
-     * Inspired from: https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
-     *
-     * @param email The email to check
-     * @return True if the email is in a valid format
-     */
-    private Boolean isEmailValid(String email){
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
-    /**
-     * Function to check if a password has a valid format
-     * Inspired from : https://stackoverflow.com/questions/24857893/password-requirements-program
-     *
-     * @param password The password to check
-     * @return True if the password fits with requirements
-     */
-    private Boolean passwordFitsRequirements(String password){
-
-        if (password == null || password.length() < MINPASSWORDLEN || password.length() > MAXPASSWORDLEN) {
-            return false;
-        }
-
-        return containsChar(password) && containsDigit(password);
     }
 
     /**
@@ -307,17 +266,6 @@ public class AuthentificationProcess extends Activity {
         }
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
-            headerText.set("You're already logged in");
-        }
-}
-
     private void loggedinView(FavoursMain.Status status){
         if(mAuth.getCurrentUser().isEmailVerified()) {
             Intent intent = new Intent(this, Logged_in_Screen.class);
@@ -328,7 +276,7 @@ public class AuthentificationProcess extends Activity {
             intent.putExtra(FavoursMain.LOGGED_OUT, status);
             startActivity(intent);
         }
-        }
     }
+}
 
 
