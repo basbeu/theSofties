@@ -16,7 +16,7 @@ import java.util.Observable;
 public class User {
 
     private static User user = new User();
-    public static User getInstance(){
+    public static User getMain(){
         return user;
     }
 

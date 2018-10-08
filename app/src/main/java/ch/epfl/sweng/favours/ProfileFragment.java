@@ -1,72 +1,36 @@
 package ch.epfl.sweng.favours;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import ch.epfl.sweng.favours.databinding.FragmentProfileLayoutBinding;
 
 public class ProfileFragment extends Fragment {
 
     private static final String LOG_TAG = "PROFILE_FRAGMENT";
 
+    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
+    public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> email = User.getMain().getObservableStringObject(User.StringFields.email);
 
-    private View rootView;
+    FragmentProfileLayoutBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
-        assert userAuth != null;
-        DocumentReference mDocRef = FirebaseFirestore.getInstance().document("users/"+userAuth.getUid());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_layout,container,false);
+        binding.setElements(this);
 
-        rootView = inflater.inflate(R.layout.fragment_profile_layout, container, false);
-
-        Log.d(LOG_TAG, "onCreateViewCalled");
-       mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    Log.d(LOG_TAG, "retrievedDocument");
-
-                    User user = documentSnapshot.toObject(User.class);
-                    assert (user != null);
-                    Log.i(LOG_TAG, user.getFirstName());
-                    Log.i(LOG_TAG, user.getLastName());
-                    Log.i(LOG_TAG, user.getBasedLocation());
-                    Log.i(LOG_TAG, user.getEmail());
-                    Log.i(LOG_TAG, user.getSex());
-
-                    TextView firstName = container.findViewById(R.id.profFirstName);
-                    TextView lastName = container.findViewById(R.id.profLastName);
-                    TextView email = container.findViewById(R.id.profEmail);
-                    TextView sex = container.findViewById(R.id.profSex);
-                    TextView city = container.findViewById(R.id.profCity);
-
-                    firstName.setText(user.getFirstName());
-                    lastName.setText(user.getLastName());
-                    email.setText(user.getEmail());
-                    sex.setText(user.getSex());
-                    city.setText(user.getBasedLocation());
-                }
-            }
-        });
-
-        return inflater.inflate(R.layout.fragment_profile_layout, container, false);
+        return binding.getRoot();
 
     }
 

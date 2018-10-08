@@ -1,6 +1,8 @@
 package ch.epfl.sweng.favours;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -20,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.favours.databinding.FragmentEditProfileBinding;
+
+
 import javax.annotation.Nonnull;
 
 
@@ -35,6 +40,10 @@ public class EditProfileFragment extends Fragment {
 
     private static final String LOG_TAG = "EDIT_PROFILE_FRAGMENT";
 
+    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
+    public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,6 +53,8 @@ public class EditProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    FragmentEditProfileBinding binding;
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,8 +92,11 @@ public class EditProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
+         binding.setElements(this);
+
+         return binding.getRoot();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -131,7 +145,12 @@ public class EditProfileFragment extends Fragment {
      * @param v Current view
      */
     public void onValidation(View v,@Nonnull User currentUser) {
-        EditText firstName = v.findViewById(R.id.profFirstNameEdit);
+
+
+
+
+
+        /*EditText firstName = v.findViewById(R.id.profFirstNameEdit);
         EditText lastName = v.findViewById(R.id.profLastNameEdit);
         EditText sex = v.findViewById(R.id.profSexEdit);
         EditText city = v.findViewById(R.id.profCityEdit);
@@ -143,7 +162,7 @@ public class EditProfileFragment extends Fragment {
         dataToSave.put(User.BASED_LOCATION, city.getText());
         dataToSave.put(User.SEX, sex.getText());*/
 
-        User user = new User(firstName.getText().toString(), lastName.getText().toString(), currentUser.getEmail(), sex.getText().toString(), city.getText().toString());
+        /*User user = new User(firstName.getText().toString(), lastName.getText().toString(), currentUser.getEmail(), sex.getText().toString(), city.getText().toString());
         String userId;
         try {
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -162,7 +181,7 @@ public class EditProfileFragment extends Fragment {
                 public void onFailure(@NonNull Exception e) {
                     Log.w(LOG_TAG, "Failled to update user information. : " + e.toString());
                 }
-            });
+            });*/
 
     }
 }
