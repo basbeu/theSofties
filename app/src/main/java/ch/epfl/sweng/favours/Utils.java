@@ -1,9 +1,11 @@
 package ch.epfl.sweng.favours;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,5 +68,14 @@ public class Utils {
         } else {
             Toast.makeText(context,msgFailure,Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void logout(Context context){
+        Toast.makeText(context, R.string.seeyou, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(context, FavoursMain.class);
+        intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
+        RuntimeEnvironment.getInstance().isConnected.set(false);
+        FirebaseAuth.getInstance().signOut();
+        context.startActivity(intent);
     }
 }

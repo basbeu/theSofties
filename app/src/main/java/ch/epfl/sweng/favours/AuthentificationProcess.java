@@ -25,6 +25,7 @@ import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
 import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;
 import static ch.epfl.sweng.favours.Utils.isEmailValid;
+import static ch.epfl.sweng.favours.Utils.logout;
 import static ch.epfl.sweng.favours.Utils.passwordFitsRequirements;
 
 
@@ -88,7 +89,7 @@ public class AuthentificationProcess extends Activity {
             final FirebaseUser user = mAuth.getCurrentUser();
             sendConfirmationMail(user);
             resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
-            log_out.setOnClickListener(v->logoutOfRegister());
+            log_out.setOnClickListener(v->logout(this));
             /*  Intent new activity for user informations */
                 /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
                 thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
@@ -161,17 +162,6 @@ public class AuthentificationProcess extends Activity {
                     displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
                 });
     }
-
-    public void logoutOfRegister(){
-        Toast.makeText(this, R.string.seeyou, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, FavoursMain.class);
-        intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
-        RuntimeEnvironment.getInstance().isConnected.set(false);
-        FirebaseAuth.getInstance().signOut();
-        startActivity(intent);
-    }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
