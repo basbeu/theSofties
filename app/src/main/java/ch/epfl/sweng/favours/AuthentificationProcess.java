@@ -109,22 +109,7 @@ public class AuthentificationProcess extends Activity {
                 headerText.set("Welcome " + user.getDisplayName());
                 Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
                 resetPassword.setVisibility(View.VISIBLE);
-                resetPassword.setOnClickListener(v -> {
-                    FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
-                            .addOnCompleteListener(w->{
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(AuthentificationProcess.this,
-                                                "Reset password email sent to " + user.getEmail(),
-                                                Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Log.e(TAG, "sendResetPasswordEmail", task.getException());
-                                        Toast.makeText(AuthentificationProcess.this,
-                                                "Failed to send reset password email.",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                            });
+                resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
 
                 /*  Validation check + Wait 2s + Back to last activity */
                 loggedinView(status);
@@ -135,6 +120,23 @@ public class AuthentificationProcess extends Activity {
             }
         }
     };
+
+    private void sendPasswordResetEmail(Task<AuthResult> task, FirebaseUser user){
+        FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
+                .addOnCompleteListener(w->{
+                    if (task.isSuccessful()) {
+                        Toast.makeText(AuthentificationProcess.this,
+                                "Reset password email sent to " + user.getEmail(),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(TAG, "sendResetPasswordEmail", task.getException());
+                        Toast.makeText(AuthentificationProcess.this,
+                                "Failed to send reset password email.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
 
     private void sendConfirmationMail(final FirebaseUser user){
         user.sendEmailVerification()
