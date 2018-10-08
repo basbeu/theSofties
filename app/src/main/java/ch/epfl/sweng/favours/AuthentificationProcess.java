@@ -57,6 +57,11 @@ public class AuthentificationProcess extends Activity {
             isEmailCorrect.set(isEmailValid(binding.emailTextField.getText().toString()));
         }
     };
+    public void setUserInfoLoad(View view){
+        Intent intent = new Intent(view.getContext(), setUserInfo.class);
+        startActivity(intent);
+    }
+
     private TextWatcher passwordTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -84,12 +89,16 @@ public class AuthentificationProcess extends Activity {
             Button log_out = (Button)findViewById(R.id.logOutButton);
             log_out.setVisibility(View.VISIBLE);
 
+            Button set_user_info = (Button)findViewById(R.id.setUserInfo);
+            set_user_info.setVisibility(View.VISIBLE);
+
             RuntimeEnvironment.getInstance().isConnected.set(true);
             Log.d(TAG, "createUserWithEmail:success");
             final FirebaseUser user = mAuth.getCurrentUser();
             sendConfirmationMail(user);
             resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
             log_out.setOnClickListener(v->logout(this));
+            set_user_info.setOnClickListener(v -> setUserInfoLoad(v));
             /*  Intent new activity for user informations */
                 /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
                 thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
