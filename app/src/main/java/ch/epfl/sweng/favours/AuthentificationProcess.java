@@ -141,31 +141,49 @@ public class AuthentificationProcess extends Activity {
                 });
     }
 
+    public void logoutOfRegister(){
+        Toast.makeText(this, R.string.seeyou, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, FavoursMain.class);
+        intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
+        RuntimeEnvironment.getInstance().isConnected.set(false);
+        FirebaseAuth.getInstance().signOut();
+        startActivity(intent);
+    }
+
     private OnCompleteListener<AuthResult> registerComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
                 Button verify_email = (Button)findViewById(R.id.verify_email_button);
-
                 verify_email.setVisibility(View.VISIBLE);
+
+                Button log_out = (Button)findViewById(R.id.log_out_button);
+                log_out.setVisibility(View.VISIBLE);
+
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "createUserWithEmail:success");
                 final FirebaseUser user = mAuth.getCurrentUser();
                 sendConfirmationMail(user);
-                Button resendMail = (Button) findViewById(R.id.verify_email_button) ;
-                resendMail.setOnClickListener(new View.OnClickListener() {
+                verify_email.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                        sendConfirmationMail(user);
                     }
                 });
-                if(mAuth.getCurrentUser().isEmailVerified()) {
-                    requirementsText.set("Welcome " + user.getEmail());
-                }
-
+                log_out.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        logoutOfRegister();
+                    }
+                });
                 /*  Intent new activity for user informations */
-                /* Return to main screen */
-                loggedinView(status);
+                /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
+                thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
+                thus it should be possible to check this condition successfully until it is fulfilled!*/
+                if(mAuth.getCurrentUser().isEmailVerified()) {
+                   // requirementsText.set("Welcome " + user.getEmail());
+                    loggedinView(status);
+                }
             } else {
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                 requirementsText.set("Register failed, please try again");
@@ -256,7 +274,7 @@ public class AuthentificationProcess extends Activity {
             requirementsText.set("Wrong password format");
             return;
         }
-        if (status == FavoursMain.Status.Login) { // && mAuth.getCurrentUser().isEmailVerified()
+        if (status == FavoursMain.Status.Login) {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
         else if (status == FavoursMain.Status.Register) {
@@ -271,15 +289,22 @@ public class AuthentificationProcess extends Activity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
             headerText.set("You're already logged in");
         }
 }
 
     private void loggedinView(FavoursMain.Status status){
-        Intent intent = new Intent(this, Logged_in_Screen.class);
-        intent.putExtra(FavoursMain.LOGGED_IN, status);
-        startActivity(intent);
+        if(mAuth.getCurrentUser().isEmailVerified()) {
+            Intent intent = new Intent(this, Logged_in_Screen.class);
+            intent.putExtra(FavoursMain.LOGGED_IN, status);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, AuthentificationProcess.class);
+            intent.putExtra(FavoursMain.LOGGED_OUT, status);
+            startActivity(intent);
+        }
+        }
     }
 
-}
+
