@@ -108,8 +108,32 @@ public class AuthentificationProcess extends Activity {
             if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "signInWithEmail:success");
-                FirebaseUser user = mAuth.getCurrentUser();
+               final FirebaseUser user = mAuth.getCurrentUser();
                 headerText.set("Welcome " + user.getDisplayName());
+                Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
+                resetPassword.setVisibility(View.VISIBLE);
+                resetPassword.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(AuthentificationProcess.this,
+                                                    "Reset password email sent to " + user.getEmail(),
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.e(TAG, "sendResetPasswordEmail", task.getException());
+                                            Toast.makeText(AuthentificationProcess.this,
+                                                    "Failed to send reset password email.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                });
                 /*  Validation check + Wait 2s + Back to last activity */
                 loggedinView(status);
 
@@ -125,7 +149,7 @@ public class AuthentificationProcess extends Activity {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         // Re-enable button
-                        findViewById(R.id.verify_email_button).setEnabled(true);
+                        findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
 
                         if (task.isSuccessful()) {
                             Toast.makeText(AuthentificationProcess.this,
@@ -154,17 +178,17 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
-                Button verify_email = (Button)findViewById(R.id.verify_email_button);
-                verify_email.setVisibility(View.VISIBLE);
+                Button resendConfirmationMail = (Button)findViewById(R.id.resendConfirmationMailButton);
+                resendConfirmationMail.setVisibility(View.VISIBLE);
 
-                Button log_out = (Button)findViewById(R.id.log_out_button);
+                Button log_out = (Button)findViewById(R.id.logOutButton);
                 log_out.setVisibility(View.VISIBLE);
 
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "createUserWithEmail:success");
                 final FirebaseUser user = mAuth.getCurrentUser();
                 sendConfirmationMail(user);
-                verify_email.setOnClickListener(new View.OnClickListener() {
+                resendConfirmationMail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                        sendConfirmationMail(user);
