@@ -1,8 +1,7 @@
 package ch.epfl.sweng.favours;
 
-import android.content.Context;import android.databinding.DataBindingUtil;
+import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -11,23 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import ch.epfl.sweng.favours.databinding.FragmentEditProfileBinding;
 
 
-import javax.annotation.Nonnull;
-
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EditProfileFragment extends Fragment {
 
-    private static final String LOG_TAG = "EDIT_PROFILE_FRAGMENT";
+    private static final String TAG = "EDIT_PROFILE_FRAGMENT";
 
     public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
@@ -44,7 +35,9 @@ public class EditProfileFragment extends Fragment {
          binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
          binding.setElements(this);
 
-        binding.profFirstNameEdit.addTextChangedListener(new TextWatcher() {
+         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+         binding.profFirstNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -61,7 +54,7 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        binding.profLastNameEdit.addTextChangedListener(new TextWatcher() {
+         binding.profLastNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -78,7 +71,7 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        binding.profCityEdit.addTextChangedListener(new TextWatcher() {
+         binding.profCityEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -95,7 +88,7 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        binding.profSexEdit.addTextChangedListener(new TextWatcher() {
+         binding.profSexEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -112,14 +105,15 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        binding.commitChanges.setOnClickListener(new View.OnClickListener() {
+         binding.commitChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 User.getMain().updateUserDataOnServer();
+                EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
          return binding.getRoot();
     }
-    
+
 }
