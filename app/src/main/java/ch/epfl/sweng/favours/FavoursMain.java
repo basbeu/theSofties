@@ -39,6 +39,8 @@ public class FavoursMain extends AppCompatActivity {
         return context;
     }
 
+    public ObservableField<String> userName = User.getInstance().getObservableStringObject(User.StringFields.firstName);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
