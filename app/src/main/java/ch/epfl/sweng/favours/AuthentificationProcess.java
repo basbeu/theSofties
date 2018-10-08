@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
+import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;
 import static ch.epfl.sweng.favours.Utils.isEmailValid;
 import static ch.epfl.sweng.favours.Utils.passwordFitsRequirements;
 
@@ -149,18 +150,7 @@ public class AuthentificationProcess extends Activity {
 
     private void sendPasswordResetEmail(Task<AuthResult> task, FirebaseUser user){
         FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
-                .addOnCompleteListener(w->{
-                    if (task.isSuccessful()) {
-                        Toast.makeText(AuthentificationProcess.this,
-                                "Reset password email sent to " + user.getEmail(),
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.e(TAG, "sendResetPasswordEmail", task.getException());
-                        Toast.makeText(AuthentificationProcess.this,
-                                "Failed to send reset password email.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+                .addOnCompleteListener(w->displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Reset password email sent to " + user.getEmail(),"Failed to send reset password email."));
     }
 
     private void sendConfirmationMail(final FirebaseUser user){
@@ -168,17 +158,7 @@ public class AuthentificationProcess extends Activity {
                 .addOnCompleteListener(AuthentificationProcess.this, task-> {
                     // Re-enable button
                     findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
-
-                    if (task.isSuccessful()) {
-                        Toast.makeText(AuthentificationProcess.this,
-                                "Verification email sent to " + user.getEmail(),
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.e(TAG, "sendEmailVerification", task.getException());
-                        Toast.makeText(AuthentificationProcess.this,
-                                "Failed to send verification email.",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                    displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
                 });
     }
 

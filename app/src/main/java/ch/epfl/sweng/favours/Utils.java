@@ -1,5 +1,10 @@
 package ch.epfl.sweng.favours;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.Task;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,5 +58,13 @@ public class Utils {
         }
 
         return containsChar(password) && containsDigit(password);
+    }
+
+    public static void displayToastOnTaskCompletion(Task task, Context context,String msgSuccess, String msgFailure){
+        if (task.isSuccessful()) {
+            Toast.makeText(context,msgSuccess, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context,msgFailure,Toast.LENGTH_SHORT).show();
+        }
     }
 }
