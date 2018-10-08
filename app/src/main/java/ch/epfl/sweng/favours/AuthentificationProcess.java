@@ -74,6 +74,34 @@ public class AuthentificationProcess extends Activity {
         }
     };
 
+    private OnCompleteListener<AuthResult> registerComplete = task -> {
+        if (task.isSuccessful()) {
+            Button resendConfirmationMail = (Button)findViewById(R.id.resendConfirmationMailButton);
+            resendConfirmationMail.setVisibility(View.VISIBLE);
+
+            Button log_out = (Button)findViewById(R.id.logOutButton);
+            log_out.setVisibility(View.VISIBLE);
+
+            RuntimeEnvironment.getInstance().isConnected.set(true);
+            Log.d(TAG, "createUserWithEmail:success");
+            final FirebaseUser user = mAuth.getCurrentUser();
+            sendConfirmationMail(user);
+            resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
+            log_out.setOnClickListener(v->logoutOfRegister());
+            /*  Intent new activity for user informations */
+                /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
+                thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
+                thus it should be possible to check this condition successfully until it is fulfilled!*/
+            if(mAuth.getCurrentUser().isEmailVerified()) {
+                // requirementsText.set("Welcome " + user.getEmail());
+                loggedinView(status);
+            }
+        } else {
+            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+            requirementsText.set("Register failed, please try again");
+        }
+    };
+
     public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){
         @Override
         public void set(boolean value) {
@@ -110,10 +138,8 @@ public class AuthentificationProcess extends Activity {
                 Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
                 resetPassword.setVisibility(View.VISIBLE);
                 resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
-
                 /*  Validation check + Wait 2s + Back to last activity */
                 loggedinView(status);
-
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                 requirementsText.set("Wrong email or password or email not verified\nPlease try again");
@@ -135,25 +161,24 @@ public class AuthentificationProcess extends Activity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
     private void sendConfirmationMail(final FirebaseUser user){
         user.sendEmailVerification()
                 .addOnCompleteListener(AuthentificationProcess.this, task-> {
-                        // Re-enable button
-                        findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
+                    // Re-enable button
+                    findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
 
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AuthentificationProcess.this,
-                                    "Verification email sent to " + user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(AuthentificationProcess.this,
-                                    "Failed to send verification email.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                    if (task.isSuccessful()) {
+                        Toast.makeText(AuthentificationProcess.this,
+                                "Verification email sent to " + user.getEmail(),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(TAG, "sendEmailVerification", task.getException());
+                        Toast.makeText(AuthentificationProcess.this,
+                                "Failed to send verification email.",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 
@@ -166,46 +191,7 @@ public class AuthentificationProcess extends Activity {
         startActivity(intent);
     }
 
-    private OnCompleteListener<AuthResult> registerComplete = new OnCompleteListener<AuthResult>(){
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if (task.isSuccessful()) {
-                Button resendConfirmationMail = (Button)findViewById(R.id.resendConfirmationMailButton);
-                resendConfirmationMail.setVisibility(View.VISIBLE);
 
-                Button log_out = (Button)findViewById(R.id.logOutButton);
-                log_out.setVisibility(View.VISIBLE);
-
-                RuntimeEnvironment.getInstance().isConnected.set(true);
-                Log.d(TAG, "createUserWithEmail:success");
-                final FirebaseUser user = mAuth.getCurrentUser();
-                sendConfirmationMail(user);
-                resendConfirmationMail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sendConfirmationMail(user);
-                    }
-                });
-                log_out.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        logoutOfRegister();
-                    }
-                });
-                /*  Intent new activity for user informations */
-                /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
-                thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
-                thus it should be possible to check this condition successfully until it is fulfilled!*/
-                if(mAuth.getCurrentUser().isEmailVerified()) {
-                    // requirementsText.set("Welcome " + user.getEmail());
-                    loggedinView(status);
-                }
-            } else {
-                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                requirementsText.set("Register failed, please try again");
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
