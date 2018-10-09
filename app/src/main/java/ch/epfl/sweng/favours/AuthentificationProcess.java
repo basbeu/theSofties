@@ -96,6 +96,7 @@ public class AuthentificationProcess extends Activity {
             Log.d(TAG, "createUserWithEmail:success");
             final FirebaseUser user = mAuth.getCurrentUser();
             sendConfirmationMail(user);
+            User.setMain(FirebaseAuth.getInstance().getUid());
             resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
             log_out.setOnClickListener(v->logout(this));
             set_user_info.setOnClickListener(v -> setUserInfoLoad(v));
@@ -150,7 +151,7 @@ public class AuthentificationProcess extends Activity {
                 resetPassword.setVisibility(View.VISIBLE);
                 resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
                 /*  Validation check + Wait 2s + Back to last activity */
-                User.getMain().updateFromDb();
+                User.setMain(FirebaseAuth.getInstance().getUid());
                 loggedinView(status);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
