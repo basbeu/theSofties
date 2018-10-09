@@ -11,7 +11,7 @@ import java.util.Map;
 
 public abstract class DatabaseHandler {
     protected static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    
+
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
 
@@ -41,11 +41,12 @@ public abstract class DatabaseHandler {
         convertTypedMapToObjectMap(stringData, toSend);
 
         // Do the same here if other types of datas
-
-        db.collection(collection).document(documentID).set(toSend)
-                .addOnSuccessListener(aVoid ->   updateFromDb()).addOnFailureListener(e -> {
-            /* Feedback of an error here - Impossible to update user informations */
-        });
+        if(documentID != null) {
+            db.collection(collection).document(documentID).set(toSend)
+                    .addOnSuccessListener(aVoid -> updateFromDb()).addOnFailureListener(e -> {
+                /* Feedback of an error here - Impossible to update user informations */
+            });
+        }
     }
 
     public void updateFromDb(){
@@ -53,7 +54,8 @@ public abstract class DatabaseHandler {
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if(document.getData() != null) parseStringData(User.StringFields.values(),document.getData());
+                if(document.getData() != null)
+                    parseStringData(User.StringFields.values(),document.getData());
                 // Do the same for rest of datas
 
             } else {
