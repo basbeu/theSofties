@@ -16,7 +16,7 @@ public abstract class DatabaseHandler {
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
 
     protected final String collection;
-    protected final String documentID;
+    protected String documentID;
 
     public DatabaseHandler(DatabaseStringField fields[], String collection, String documentID){
         assert(fields != null && collection != null);

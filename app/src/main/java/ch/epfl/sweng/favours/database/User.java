@@ -18,6 +18,10 @@ public class User extends DatabaseHandler {
         return user;
     }
 
+    public static void setMain(String id){
+        user = new User(id);
+    }
+
     public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, basedLocation}
 
     public User(){
@@ -25,5 +29,11 @@ public class User extends DatabaseHandler {
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
+    public User(String id){
+        super(StringFields.values(), "users",id);
+        if(FirebaseAuth.getInstance().getUid() != null)
+            updateFromDb();
+    }
+
 
 }
