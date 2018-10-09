@@ -80,8 +80,9 @@ public class AuthentificationProcess extends Activity {
     private View.OnClickListener resetButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            status = FavoursMain.Status.Reset;
-            authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
+
+            FirebaseAuth.getInstance().sendPasswordResetEmail(binding.emailTextField.getText().toString());
+                    //.addOnCompleteListener(w->displayToastOnTaskCompletion(this,AuthentificationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
         }
     };
 
@@ -125,20 +126,6 @@ public class AuthentificationProcess extends Activity {
         }
     };
 
-    private OnCompleteListener<AuthResult> resetPassword = task -> {
-        if (task.isSuccessful()) {
-
-            Log.d(TAG, "resetPassword:success");
-            final FirebaseUser user = mAuth.getCurrentUser();
-            sendPasswordResetEmail(task, user);
-
-        } else {
-            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-            requirementsText.set("No account matches with this email/password.");
-        }
-    };
-
-
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -157,11 +144,6 @@ public class AuthentificationProcess extends Activity {
             }
         }
     };
-
-    private void sendPasswordResetEmail(Task<AuthResult> task, FirebaseUser user){
-        FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
-                .addOnCompleteListener(w->displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Reset password email sent to " + user.getEmail(),"Failed to send reset password email."));
-    }
 
     private void sendConfirmationMail(final FirebaseUser user){
         user.sendEmailVerification()
@@ -233,10 +215,6 @@ public class AuthentificationProcess extends Activity {
         else if (status == FavoursMain.Status.Register) {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
-        }
-        else if(status == FavoursMain.Status.Reset){
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, resetPassword);
-            status = FavoursMain.Status.Login;
         }
     }
 
