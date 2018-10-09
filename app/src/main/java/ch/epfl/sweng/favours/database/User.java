@@ -12,55 +12,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User extends DatabaseHandler {
+    private static final String COLLECTION = "users";
 
     private static User user = new User();
     public static User getMain(){
         return user;
     }
 
+    public static void setMain(String id){
+        user = new User(id);
+    }
+
     public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, basedLocation}
 
     public User(){
-        super(StringFields.values());
+        super(StringFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
 
-    public void updateOnDb(){
-        Map<String, Object> toSend = new HashMap<>();
-
-        convertTypedMapToObjectMap(stringData, toSend);
-
-        // Do the same here if other types of datas
-
-        Database.getInstance().getUserCollection().document(FirebaseAuth.getInstance().getUid()).set(toSend)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                updateFromDb();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                /* Feedback of an error here - Impossible to update user informations */
-            }
-        });
-    }
-
-    public void updateFromDb(){
-        Database.getInstance().getUserCollection().document(FirebaseAuth.getInstance().getUid())
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if(document.getData() != null) parseStringData(StringFields.values(),document.getData());
-                    // Do the same for rest of datas
-
-                } else {
-                    /* Feedback of an error here - Impossible to get user informations from server */
-                }
-            }
-        });
+    public User(String id){
+        super(StringFields.values(), COLLECTION,id);
+        if(FirebaseAuth.getInstance().getUid() != null)
+            updateFromDb();
     }
 }
