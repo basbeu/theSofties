@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favours.database;
 
-import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -11,8 +10,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import ch.epfl.sweng.favours.Database;
 
 public class User extends DatabaseHandler {
 

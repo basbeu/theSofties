@@ -1,12 +1,7 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favours.database;
 
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Database {
