@@ -50,6 +50,6 @@ public class ProfileFragment extends Fragment {
         transaction.replace(R.id.fragment_container, someFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
+}
 
 }
