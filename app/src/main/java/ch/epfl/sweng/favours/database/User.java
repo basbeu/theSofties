@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favours.database;
 
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
@@ -11,7 +11,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
+
+import ch.epfl.sweng.favours.Database;
 
 public class User {
 
