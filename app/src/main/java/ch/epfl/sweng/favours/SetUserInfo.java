@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favours;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.support.v7.app.AppCompatActivity;
@@ -101,6 +102,12 @@ public class SetUserInfo extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 User.getMain().set(User.StringFields.sex, s.toString());
             }
+        });
+
+        binding.submit.setOnClickListener(v->{
+            User.getMain().updateOnDb();
+            Intent intent = new Intent(v.getContext(), Logged_in_Screen.class);
+            startActivity(intent);
         });
     }
 }
