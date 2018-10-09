@@ -108,7 +108,7 @@ public class EditProfileFragment extends Fragment {
          binding.commitChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User.getMain().updateUserDataOnServer();
+                User.getMain().updateOnDb();
                 EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
             }
         });

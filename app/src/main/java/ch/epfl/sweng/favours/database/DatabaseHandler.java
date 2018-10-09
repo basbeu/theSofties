@@ -24,6 +24,9 @@ public abstract class DatabaseHandler {
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
 
+    abstract public void updateOnDb();
+    abstract public void updateFromDb();
+
     public String get(DatabaseStringField field){
         if(stringData.get(field) != null)
             return stringData.get(field).get();

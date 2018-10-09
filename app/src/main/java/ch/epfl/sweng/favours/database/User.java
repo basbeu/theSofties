@@ -26,7 +26,7 @@ public class User extends DatabaseHandler {
             updateFromDb();
     }
 
-    public void updateUserDataOnServer(){
+    public void updateOnDb(){
         Map<String, Object> toSend = new HashMap<>();
 
         convertTypedMapToObjectMap(stringData, toSend);
