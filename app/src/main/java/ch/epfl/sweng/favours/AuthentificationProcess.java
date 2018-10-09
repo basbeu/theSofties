@@ -77,33 +77,14 @@ public class AuthentificationProcess extends Activity {
         }
     };
 
-    private OnCompleteListener<AuthResult> registerComplete = task -> {
-        if (task.isSuccessful()) {
-            Button resendConfirmationMail = (Button)findViewById(R.id.resendConfirmationMailButton);
-            resendConfirmationMail.setVisibility(View.VISIBLE);
-
-            Button log_out = (Button)findViewById(R.id.logOutButton);
-            log_out.setVisibility(View.VISIBLE);
-
-            RuntimeEnvironment.getInstance().isConnected.set(true);
-            Log.d(TAG, "createUserWithEmail:success");
-            final FirebaseUser user = mAuth.getCurrentUser();
-            sendConfirmationMail(user);
-            resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
-            log_out.setOnClickListener(v->logout(this));
-            /*  Intent new activity for user informations */
-                /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
-                thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
-                thus it should be possible to check this condition successfully until it is fulfilled!*/
-            if(mAuth.getCurrentUser().isEmailVerified()) {
-                // requirementsText.set("Welcome " + user.getEmail());
-                loggedinView(status);
-            }
-        } else {
-            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-            requirementsText.set("Register failed, please try again");
+    private View.OnClickListener resetButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            status = FavoursMain.Status.Reset;
+            authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     };
+
 
     public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){
         @Override
@@ -130,6 +111,34 @@ public class AuthentificationProcess extends Activity {
         }
     }
 
+    private OnCompleteListener<AuthResult> registerComplete = task -> {
+        if (task.isSuccessful()) {
+
+            Log.d(TAG, "createUserWithEmail:success");
+            final FirebaseUser user = mAuth.getCurrentUser();
+            sendConfirmationMail(user);
+            confirmationSent(status);
+
+        } else {
+            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+            requirementsText.set("Register failed, please try again");
+        }
+    };
+
+    private OnCompleteListener<AuthResult> resetPassword = task -> {
+        if (task.isSuccessful()) {
+
+            Log.d(TAG, "resetPassword:success");
+            final FirebaseUser user = mAuth.getCurrentUser();
+            sendPasswordResetEmail(task, user);
+
+        } else {
+            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+            requirementsText.set("No account matches with this email/password.");
+        }
+    };
+
+
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -138,9 +147,7 @@ public class AuthentificationProcess extends Activity {
                 Log.d(TAG, "signInWithEmail:success");
                 final FirebaseUser user = mAuth.getCurrentUser();
                 headerText.set("Welcome " + user.getDisplayName());
-                Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
-                resetPassword.setVisibility(View.VISIBLE);
-                resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
+
                 /*  Validation check + Wait 2s + Back to last activity */
                 User.getMain().updateFromDb();
                 loggedinView(status);
@@ -181,6 +188,7 @@ public class AuthentificationProcess extends Activity {
         status = (FavoursMain.Status) bundle.get(FavoursMain.AUTHENTIFICATION_ACTION);
         setUI(status);
         binding.authentificationButton.setOnClickListener(authentificationButtonListener);
+        binding.resetPasswordButton.setOnClickListener(resetButtonListener);
     }
 
     /**
@@ -194,6 +202,8 @@ public class AuthentificationProcess extends Activity {
                 headerText.set("Please enter your login informations:");
                 validationButton.set("Login");
                 requirementsText.set("");
+                Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
+                resetPassword.setVisibility(View.VISIBLE);
                 break;
             case Register:
                 headerText.set("Welcome here! Just some small steps...");
@@ -224,6 +234,10 @@ public class AuthentificationProcess extends Activity {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
+        else if(status == FavoursMain.Status.Reset){
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, resetPassword);
+            status = FavoursMain.Status.Login;
+        }
     }
 
     private void loggedinView(FavoursMain.Status status){
@@ -236,6 +250,12 @@ public class AuthentificationProcess extends Activity {
             intent.putExtra(FavoursMain.LOGGED_OUT, status);
             startActivity(intent);
         }
+    }
+    private void confirmationSent(FavoursMain.Status status){
+
+        Intent intent = new Intent(this, ConfirmationSent.class);
+        intent.putExtra(FavoursMain.LOGGED_IN, status);
+        startActivity(intent);
     }
 }
 

@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:ems="10"
+            android:hint="@string/email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginMessageText" />
@@ -50,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:ems="10"
+            android:hint="@string/password"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +65,7 @@
             android:text="@{elements.requirementsText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/authentificationButton" />
+            app:layout_constraintTop_toBottomOf="@+id/resetPasswordButton" />
 
         <Button
             android:id="@+id/authentificationButton"
@@ -106,18 +108,18 @@
             android:id="@+id/resendConfirmationMailButton"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginTop="204dp"
-            android:text="resend confirmation mail"
+            android:layout_marginTop="176dp"
+            android:text="@string/resendConfirmation"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.096"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/authentificationButton" />
 
         <Button
             android:id="@+id/logOutButton"
             android:layout_width="wrap_content"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="31dp"
             android:layout_marginEnd="18dp"
             android:layout_marginRight="18dp"
@@ -134,17 +136,30 @@
 
         <Button
             android:id="@+id/resetPasswordButton"
-            android:layout_width="107dp"
-            android:layout_height="57dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:enabled="@{elements.isEmailCorrect}"
+            android:text="@string/resetPassword"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/authentificationButton" />
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="84dp"
+            android:layout_height="51dp"
             android:layout_marginBottom="35dp"
-            android:layout_marginLeft="136dp"
-            android:layout_marginStart="136dp"
-            android:text="reset password"
+            android:layout_marginLeft="148dp"
+            android:layout_marginStart="148dp"
+            android:text="@string/next"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkEmailImage"
-            app:layout_constraintVertical_bias="0.504" />
+            app:layout_constraintVertical_bias="0.491" />
 
 
     </android.support.constraint.ConstraintLayout>
