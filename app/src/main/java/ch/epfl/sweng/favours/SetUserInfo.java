@@ -28,7 +28,7 @@ public class SetUserInfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        User.getMain().setMainUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        User.getMain().setMain(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
