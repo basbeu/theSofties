@@ -54,7 +54,7 @@ public class User extends DatabaseHandler {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if(document.getData() != null) parseStringData(document.getData());
+                    if(document.getData() != null) parseStringData(StringFields.values(),document.getData());
                     // Do the same for rest of datas
 
                 } else {
@@ -62,13 +62,5 @@ public class User extends DatabaseHandler {
                 }
             }
         });
-    }
-
-    private void parseStringData(Map<String, Object> data){
-        for(StringFields fieldName : StringFields.values()){
-            if(data.get(fieldName.toString()) instanceof String){
-                set(fieldName, (String) data.get(fieldName.toString()));
-            }
-        }
     }
 }

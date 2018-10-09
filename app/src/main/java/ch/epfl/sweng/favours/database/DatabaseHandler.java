@@ -49,16 +49,13 @@ public abstract class DatabaseHandler {
             return null;
     }
 
-
-
-    /*private void parseStringData(Map<String, Object> data){
-        for(StringField fieldName : stringData.values()){
+    protected void parseStringData(DatabaseStringField fields[], Map<String, Object> data){
+        for(DatabaseStringField fieldName : fields){
             if(data.get(fieldName.toString()) instanceof String){
                 set(fieldName, (String) data.get(fieldName.toString()));
             }
         }
-    }*/
-
+    }
 
     /**
      * Convert the map containing some parameters in an String / Object map
