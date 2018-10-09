@@ -141,6 +141,7 @@ public class AuthentificationProcess extends Activity {
                 resetPassword.setVisibility(View.VISIBLE);
                 resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
                 /*  Validation check + Wait 2s + Back to last activity */
+                User.getMain().updateFromDb();
                 loggedinView(status);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
