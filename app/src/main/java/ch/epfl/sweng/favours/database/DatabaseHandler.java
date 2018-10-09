@@ -16,13 +16,13 @@ public abstract class DatabaseHandler {
                 }
             }
 
-        };;
+        };
 
         intData = new HashMap<>();
     }
 
-    Map<DatabaseStringField, ObservableField<String>> stringData;
-    Map<DatabaseIntField, ObservableField<Integer>> intData;
+    protected Map<DatabaseStringField, ObservableField<String>> stringData;
+    protected Map<DatabaseIntField, ObservableField<Integer>> intData;
 
     public String get(DatabaseStringField field){
         if(stringData.get(field) != null)
@@ -65,7 +65,7 @@ public abstract class DatabaseHandler {
      * @param <V>   The ObservableField content type
      * @param <U>   The ObservableField
      */
-    <T extends DatabaseField, V, U extends ObservableField<V>> void convertTypedMapToObjectMap(Map<T, U> from, Map<String, Object> to) {
+    protected <T extends DatabaseField, V, U extends ObservableField<V>> void convertTypedMapToObjectMap(Map<T, U> from, Map<String, Object> to) {
         for (Map.Entry<T, U> entry : from.entrySet()){
             V value = (V) entry.getValue().get();
             if(value != null) to.put(entry.getKey().toString(), value);
