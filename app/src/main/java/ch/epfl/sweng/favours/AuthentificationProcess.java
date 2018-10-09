@@ -109,6 +109,7 @@ public class AuthentificationProcess extends Activity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 headerText.set("Welcome " + user.getDisplayName());
                 /*  Validation check + Wait 2s + Back to last activity */
+                User.getMain().updateFromDb();
                 loggedinView(status);
 
             } else {
@@ -125,7 +126,7 @@ public class AuthentificationProcess extends Activity {
                 Log.d(TAG, "createUserWithEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
                 requirementsText.set("Welcome " + user.getEmail());
-
+                User.getMain().updateFromDb();
                 /*  Intent new activity for user informations */
                 /* Return to main screen */
                 loggedinView(status);

@@ -36,6 +36,7 @@ public class User {
 
     };
 
+
     public String get(StringFields field){
         if(stringData.get(field) != null) return stringData.get(field).get();
         else return null;
