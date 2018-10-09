@@ -21,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.favours.database.User;
 import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
 import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;
@@ -150,6 +151,7 @@ public class AuthentificationProcess extends Activity {
                 resetPassword.setVisibility(View.VISIBLE);
                 resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
                 /*  Validation check + Wait 2s + Back to last activity */
+                User.getMain().updateFromDb();
                 loggedinView(status);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
