@@ -6,16 +6,7 @@ public class Favor extends DatabaseHandler {
     public enum IntegerFields implements DatabaseIntField {creationTimestamp}
 
     public Favor(){
-        super(StringFields.values());
+        super(StringFields.values(), "favor",null);
     }
 
-    @Override
-    public void updateOnDb() {
-
-    }
-
-    @Override
-    public void updateFromDb() {
-
-    }
 }
