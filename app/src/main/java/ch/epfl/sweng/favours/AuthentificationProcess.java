@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,7 +58,7 @@ public class AuthentificationProcess extends Activity {
         }
     };
     public void setUserInfoLoad(View view){
-        Intent intent = new Intent(view.getContext(), setUserInfo.class);
+        Intent intent = new Intent(view.getContext(), SetUserInfo.class);
         startActivity(intent);
     }
 
