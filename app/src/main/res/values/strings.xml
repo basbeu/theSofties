@@ -22,4 +22,9 @@
     <string name="email">Email</string>
     <string name="city">City</string>
     <string name="sex">Sex</string>
+    <string name="add_a_new_favor">Add a new Favor</string>
+    <string name="titleFavor">Favor Title</string>
+    <string name="descriptionFavor">Favor Description</string>
+    <string name="imageFavor">Favor Image</string>
+    <string name="addFavor">Add Favor</string>
 </resources>
