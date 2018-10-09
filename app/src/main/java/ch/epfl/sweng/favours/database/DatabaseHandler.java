@@ -1,25 +1,23 @@
 package ch.epfl.sweng.favours.database;
 
 import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.favours.Database;
-
 
 public abstract class DatabaseHandler {
 
-    public DatabaseHandler(){
-        stringData = new HashMap<>();
+    public DatabaseHandler(DatabaseStringField fields[]){
+        stringData = new HashMap<DatabaseStringField, ObservableField<String>>(){
+            {
+                for(DatabaseStringField field : fields){
+                    this.put(field, new ObservableField<String>());
+                }
+            }
+
+        };;
+
         intData = new HashMap<>();
     }
 
@@ -67,7 +65,7 @@ public abstract class DatabaseHandler {
      * @param <V>   The ObservableField content type
      * @param <U>   The ObservableField
      */
-    <T extends Enum<T>, V, U extends ObservableField<V>> void convertTypedMapToObjectMap(Map<T, U> from, Map<String, Object> to) {
+    <T extends DatabaseField, V, U extends ObservableField<V>> void convertTypedMapToObjectMap(Map<T, U> from, Map<String, Object> to) {
         for (Map.Entry<T, U> entry : from.entrySet()){
             V value = (V) entry.getValue().get();
             if(value != null) to.put(entry.getKey().toString(), value);
