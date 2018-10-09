@@ -21,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.favours.database.User;
 import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
 
 import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;

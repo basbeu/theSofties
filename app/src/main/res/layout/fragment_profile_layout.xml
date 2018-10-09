@@ -50,7 +50,15 @@
         </LinearLayout>
 
 
-        <TextView
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
             android:layout_marginTop="30sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,68 +66,73 @@
             android:textStyle="bold"
             android:textSize="@dimen/profile_fragment_database_object_size"
             />
-        <TextView
-            android:id="@+id/profFirstName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{elements.firstName}"
-            android:textSize="@dimen/profile_fragment_database_content_size"
-            android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/last_name"
-            android:textStyle="bold"
-            android:textSize="@dimen/profile_fragment_database_object_size"
-            />
-        <TextView
-            android:id="@+id/profLastName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{elements.lastName}"
-            android:textSize="@dimen/profile_fragment_database_content_size"
-            android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/email"
-            android:textStyle="bold"
-            android:textSize="@dimen/profile_fragment_database_object_size"
-            />
-        <TextView
-            android:id="@+id/profEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{elements.email}"
-            android:textSize="@dimen/profile_fragment_database_content_size"
-            android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/city"
-            android:textStyle="bold"
-            android:textSize="@dimen/profile_fragment_database_object_size"
-            />
-        <TextView
-            android:id="@+id/profCity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{elements.baseCity}"
-            android:textSize="@dimen/profile_fragment_database_content_size"
-            android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sex"
-            android:textStyle="bold"
-            android:textSize="@dimen/profile_fragment_database_object_size"
-            />
-        <TextView
-            android:id="@+id/profSex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{elements.sexe}"
-            android:textSize="@dimen/profile_fragment_database_content_size"/>
+            <TextView
+                android:id="@+id/profFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{elements.firstName}"
+                android:textSize="@dimen/profile_fragment_database_content_size"
+                android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/last_name"
+                android:textStyle="bold"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                />
+            <TextView
+                android:id="@+id/profLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{elements.lastName}"
+                android:textSize="@dimen/profile_fragment_database_content_size"
+                android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:textStyle="bold"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                />
+            <TextView
+                android:id="@+id/profEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{elements.email}"
+                android:textSize="@dimen/profile_fragment_database_content_size"
+                android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/city"
+                android:textStyle="bold"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                />
+            <TextView
+                android:id="@+id/profCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{elements.baseCity}"
+                android:textSize="@dimen/profile_fragment_database_content_size"
+                android:paddingBottom="@dimen/profil_fragment_bottom_padding"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sex"
+                android:textStyle="bold"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                />
+            <TextView
+                android:id="@+id/profSex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{elements.sexe}"
+                android:textSize="@dimen/profile_fragment_database_content_size"/>
+
+        </LinearLayout>
+
+
+        </ScrollView>
 
         <!--
         <ListView
@@ -128,4 +141,5 @@
             android:layout_height="match_parent" />
         -->
     </LinearLayout>
+
 </layout>

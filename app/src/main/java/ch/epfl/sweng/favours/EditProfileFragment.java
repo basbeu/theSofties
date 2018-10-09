@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.favours.database.User;
 import ch.epfl.sweng.favours.databinding.FragmentEditProfileBinding;
 
 
@@ -108,7 +108,7 @@ public class EditProfileFragment extends Fragment {
          binding.commitChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User.getMain().updateUserDataOnServer();
+                User.getMain().updateOnDb();
                 EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
             }
         });

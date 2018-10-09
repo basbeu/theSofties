@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ch.epfl.sweng.favours.database.User;
 import ch.epfl.sweng.favours.databinding.FragmentProfileLayoutBinding;
 
 public class ProfileFragment extends Fragment {
@@ -49,6 +50,6 @@ public class ProfileFragment extends Fragment {
         transaction.replace(R.id.fragment_container, someFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
+}
 
 }
