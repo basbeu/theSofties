@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User extends DatabaseHandler {
+    private static final String COLLECTION = "users";
 
     private static User user = new User();
     public static User getMain(){
@@ -25,12 +26,12 @@ public class User extends DatabaseHandler {
     public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, basedLocation}
 
     public User(){
-        super(StringFields.values(), "users",FirebaseAuth.getInstance().getUid());
+        super(StringFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
     public User(String id){
-        super(StringFields.values(), "users",id);
+        super(StringFields.values(), COLLECTION,id);
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
