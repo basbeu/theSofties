@@ -11,4 +11,15 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_logged_in__screen">Logged_in_Screen</string>
 
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_profile">Edit profile</string>
+
+
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="city">City</string>
+    <string name="sex">Sex</string>
 </resources>
