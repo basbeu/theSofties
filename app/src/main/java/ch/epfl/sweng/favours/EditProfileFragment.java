@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.favours.database.User;
 import ch.epfl.sweng.favours.databinding.FragmentEditProfileBinding;
 
 
