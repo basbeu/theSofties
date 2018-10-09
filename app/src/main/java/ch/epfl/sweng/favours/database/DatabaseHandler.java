@@ -10,8 +10,8 @@ import java.util.Map;
 
 
 public abstract class DatabaseHandler {
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    protected static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
 

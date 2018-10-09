@@ -30,11 +30,10 @@ public class User extends DatabaseHandler {
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
+
     public User(String id){
         super(StringFields.values(), COLLECTION,id);
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
-
-
 }
