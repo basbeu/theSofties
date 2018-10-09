@@ -1,13 +1,7 @@
 package ch.epfl.sweng.favours.database;
 
 import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -41,9 +35,6 @@ public abstract class DatabaseHandler {
         this.documentID = documentID;
     }
 
-/*    abstract public void updateOnDb();
-    abstract public void updateFromDb();*/
-
     public void updateOnDb(){
         Map<String, Object> toSend = new HashMap<>();
 
@@ -52,32 +43,21 @@ public abstract class DatabaseHandler {
         // Do the same here if other types of datas
 
         db.collection(collection).document(documentID).set(toSend)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        updateFromDb();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                /* Feedback of an error here - Impossible to update user informations */
-            }
+                .addOnSuccessListener(aVoid ->   updateFromDb()).addOnFailureListener(e -> {
+            /* Feedback of an error here - Impossible to update user informations */
         });
     }
 
     public void updateFromDb(){
         db.collection(collection).document(documentID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if(document.getData() != null) parseStringData(User.StringFields.values(),document.getData());
-                    // Do the same for rest of datas
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if(document.getData() != null) parseStringData(User.StringFields.values(),document.getData());
+                // Do the same for rest of datas
 
-                } else {
-                    /* Feedback of an error here - Impossible to get user informations from server */
-                }
+            } else {
+                /* Feedback of an error here - Impossible to get user informations from server */
             }
         });
     }
