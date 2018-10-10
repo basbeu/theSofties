@@ -25,6 +25,32 @@ public class SetUserInfo extends AppCompatActivity {
     public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
 
     ActivitySetUserInfoBinding binding;
+    private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.firstName, editable.toString());
+        }
+    };
+    private TextWatcherCustom lastNameWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.lastName, editable.toString());
+        }
+    };
+
+    private TextWatcherCustom basedLocationWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.basedLocation, editable.toString());
+        }
+    };
+
+    private TextWatcherCustom sexWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.sex, editable.toString());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,74 +61,17 @@ public class SetUserInfo extends AppCompatActivity {
         binding.setElements(this);
 
         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        bindUi();
+    }
 
-        binding.userFirstNameEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void bindUi(){
+        binding.userFirstNameEdit.addTextChangedListener(firstNameWatcher);
 
-            }
+        binding.userLastNameEdit.addTextChangedListener(lastNameWatcher);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        binding.userCityEdit.addTextChangedListener(basedLocationWatcher);
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.firstName, s.toString());
-            }
-        });
-
-        binding.userLastNameEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.lastName, s.toString());
-            }
-        });
-
-        binding.userCityEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.basedLocation, s.toString());
-            }
-        });
-
-        binding.userSexEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.sex, s.toString());
-            }
-        });
+        binding.userSexEdit.addTextChangedListener(sexWatcher);
 
         binding.submit.setOnClickListener(v->{
             User.getMain().updateOnDb();

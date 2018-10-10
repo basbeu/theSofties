@@ -104,7 +104,7 @@
                     android:id="@+id/profSexEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{elements.sexe}"
+                    android:text="@{elements.sex}"
                     android:textSize="@dimen/profile_fragment_database_content_size"/>
                 <Button
                     android:id="@+id/commitChanges"

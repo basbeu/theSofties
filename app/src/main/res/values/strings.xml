@@ -10,6 +10,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_logged_in__screen">Logged_in_Screen</string>
+    <string name="confirmationSent">Please check your e-mails to confirm your inscription.</string>
+    <string name="resetPassword">Reset password</string>
+    <string name="resendConfirmation">Resend confirmation.</string>
+    <string name="gotit">Got it !</string>
+    <string name="next">Next</string>
+
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -20,6 +26,7 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="city">City</string>
     <string name="sex">Sex</string>
     <string name="add_a_new_favor">Add a new Favor</string>
@@ -27,4 +34,5 @@
     <string name="descriptionFavor">Favor Description</string>
     <string name="imageFavor">Favor Image</string>
     <string name="addFavor">Add Favor</string>
+    <string name="title_activity_confirmation_sent">ConfirmationSent</string>
 </resources>
