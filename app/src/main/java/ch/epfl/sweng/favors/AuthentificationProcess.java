@@ -87,18 +87,14 @@ public class AuthentificationProcess extends Activity {
     };
 
 
+    /**
+     * sets the boolean to whether password is correct or not
+     */
     public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){
         @Override
         public void set(boolean value) {
             super.set(value);
-            if(status == FavorsMain.Status.Register){
-                if(this.get()){
-                    requirementsText.set("");
-                }
-                else{
-                    requirementsText.set(REQUIREMENTS_STRING);
-                }
-            }
+            requirementsText.set(status == FavorsMain.Status.Register && this.get() ? "" : REQUIREMENTS_STRING);
         }
     };
 
