@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="profile_fragment_database_content_size">20sp</dimen>
+    <dimen name="profile_fragment_database_object_size">30sp</dimen>
+    <dimen name="profil_fragment_bottom_padding">15sp</dimen>
+</resources>
