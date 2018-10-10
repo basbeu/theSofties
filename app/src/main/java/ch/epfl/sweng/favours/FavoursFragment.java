@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,14 @@ import ch.epfl.sweng.favours.database.Favor;
 import ch.epfl.sweng.favours.databinding.FavoursLayoutBinding;
 
 public class FavoursFragment extends Fragment {
+    private static final String TAG = "FAVOR_FRAGMENT";
     FavoursLayoutBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Favor newFavor = new Favor();
-        newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
+        final Favor newFavor = new Favor();
 
         binding = DataBindingUtil.inflate(inflater, R.layout.favours_layout,container,false);
         binding.setElements(this);
@@ -52,20 +53,23 @@ public class FavoursFragment extends Fragment {
         binding.addFavor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (title.get().isEmpty()) {
-
-                    CharSequence text = "You cannot create favor with an empty title!";
-                    int duration = Toast.LENGTH_SHORT;
-                } else if (description.get().isEmpty()) {
-                    //Error cannot create favor with empty description
+                if (newFavor.get(Favor.StringFields.title).isEmpty() || newFavor.get(Favor.StringFields.description).isEmpty()) {
+                    Log.d(TAG, "Failure to check favor input");
+                    launchToast("There is an empty field left");
                 } else {
-                    //create new favor
+                    //int timestamp = (int)System.currentTimeMillis() /1000;
+                    Log.d(TAG, "Succes to check favor input");
+                    newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
+                    newFavor.updateOnDb();
                 }
             }
         });
 
+
         return inflater.inflate(R.layout.favours_layout, container, false);
     }
 
-
+    private void launchToast(String text) {
+        Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
+    }
 }
