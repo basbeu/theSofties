@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,23 +6,18 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Arrays;
-import java.util.List;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
 
-import ch.epfl.sweng.favours.databinding.ActivityMainBinding;
+public class FavorsMain extends AppCompatActivity {
 
-public class FavoursMain extends AppCompatActivity {
-
-    public static final String TAG = "FavoursApp";
-    public ObservableField<String> appName = new ObservableField<>("Favours");
+    public static final String TAG = "FavorsApp";
+    public ObservableField<String> appName = new ObservableField<>("Favors");
 
     public enum Status{Register, Login, LoggedIn, Disconnect, Reset};
     public static String AUTHENTIFICATION_ACTION = "AUTHENTIFICATION_ACTION";
@@ -66,7 +61,7 @@ public class FavoursMain extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void loggedinView(FavoursMain.Status status){
+    private void loggedinView(FavorsMain.Status status){
         Intent intent = new Intent(this, Logged_in_Screen.class);
         intent.putExtra(LOGGED_IN, status);
         startActivity(intent);

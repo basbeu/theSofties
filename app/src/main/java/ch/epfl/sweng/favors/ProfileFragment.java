@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ch.epfl.sweng.favours.database.User;
-import ch.epfl.sweng.favours.databinding.FragmentProfileLayoutBinding;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 
 public class ProfileFragment extends Fragment {
 

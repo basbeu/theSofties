@@ -5,7 +5,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.Logged_in_Screen"
+            type="ch.epfl.sweng.favors.Logged_in_Screen"
             />
 
     </data>
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:id="@+id/drawer_layout"
         android:fitsSystemWindows="true"
-        tools:context=".Logged_in_Screen">
+        tools:context="ch.epfl.sweng.favors.Logged_in_Screen">
 
             <LinearLayout
                 android:layout_width="match_parent"
