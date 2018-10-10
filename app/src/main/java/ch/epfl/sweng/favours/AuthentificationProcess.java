@@ -81,8 +81,8 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void onClick(View v) {
 
-            FirebaseAuth.getInstance().sendPasswordResetEmail(binding.emailTextField.getText().toString());
-                    //.addOnCompleteListener(w->displayToastOnTaskCompletion(this,AuthentificationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
+            FirebaseAuth.getInstance().sendPasswordResetEmail(binding.emailTextField.getText().toString())
+                    .addOnCompleteListener(w->displayToastOnTaskCompletion(w,AuthentificationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
         }
     };
 
@@ -133,7 +133,6 @@ public class AuthentificationProcess extends Activity {
                 RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "signInWithEmail:success");
                 final FirebaseUser user = mAuth.getCurrentUser();
-                headerText.set("Welcome " + user.getDisplayName());
 
                 /*  Validation check + Wait 2s + Back to last activity */
                 User.getMain().updateFromDb();
