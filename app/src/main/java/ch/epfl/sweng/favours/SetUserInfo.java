@@ -24,7 +24,33 @@ public class SetUserInfo extends AppCompatActivity {
     public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
     public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
 
-    ActivitySetUserInfoBinding binding;
+    private ActivitySetUserInfoBinding binding;
+    private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.firstName, editable.toString());
+        }
+    };
+    private TextWatcherCustom lastNameWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.lastName, editable.toString());
+        }
+    };
+
+    private TextWatcherCustom basedLocationWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.basedLocation, editable.toString());
+        }
+    };
+
+    private TextWatcherCustom sexWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.sex, editable.toString());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,33 +65,13 @@ public class SetUserInfo extends AppCompatActivity {
     }
 
     private void bindUi(){
-        binding.userFirstNameEdit.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                User.getMain().set(User.StringFields.firstName, editable.toString());
-            }
-        });
+        binding.userFirstNameEdit.addTextChangedListener(firstNameWatcher);
 
-        binding.userLastNameEdit.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                User.getMain().set(User.StringFields.lastName, editable.toString());
-            }
-        });
+        binding.userLastNameEdit.addTextChangedListener(lastNameWatcher);
 
-        binding.userCityEdit.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                User.getMain().set(User.StringFields.basedLocation, editable.toString());
-            }
-        });
+        binding.userCityEdit.addTextChangedListener(basedLocationWatcher);
 
-        binding.userSexEdit.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                User.getMain().set(User.StringFields.sex, editable.toString());
-            }
-        });
+        binding.userSexEdit.addTextChangedListener(sexWatcher);
 
         binding.submit.setOnClickListener(v->{
             User.getMain().updateOnDb();
