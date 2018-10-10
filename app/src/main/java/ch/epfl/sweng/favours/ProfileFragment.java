@@ -17,11 +17,10 @@ import ch.epfl.sweng.favours.databinding.FragmentProfileLayoutBinding;
 public class ProfileFragment extends Fragment {
 
     private static final String LOG_TAG = "PROFILE_FRAGMENT";
-
     public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
     public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
-    public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> sex = User.getMain().getObservableStringObject(User.StringFields.sex);
     public ObservableField<String> email = User.getMain().getObservableStringObject(User.StringFields.email);
 
     FragmentProfileLayoutBinding binding;
@@ -42,7 +41,6 @@ public class ProfileFragment extends Fragment {
         });
 
         return binding.getRoot();
-
     }
 
     public void replaceFragment(Fragment someFragment) {
@@ -50,6 +48,5 @@ public class ProfileFragment extends Fragment {
         transaction.replace(R.id.fragment_container, someFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-}
-
+    }
 }

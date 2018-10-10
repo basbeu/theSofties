@@ -23,10 +23,39 @@ public class EditProfileFragment extends Fragment {
     public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
     public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
-    public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> sex = User.getMain().getObservableStringObject(User.StringFields.sex);
 
 
     FragmentEditProfileBinding binding;
+
+    private TextWatcherCustom profFirstNameEditWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.firstName, editable.toString());
+        }
+    };
+
+    private TextWatcherCustom profLastNameEditWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.lastName, editable.toString());
+        }
+    };
+
+
+    private TextWatcherCustom profCityEditWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.basedLocation, editable.toString());
+        }
+    };
+
+    private TextWatcherCustom profSexEditWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            User.getMain().set(User.StringFields.sex, editable.toString());
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,73 +66,13 @@ public class EditProfileFragment extends Fragment {
 
          User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-         binding.profFirstNameEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+         binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
 
-            }
+         binding.profLastNameEdit.addTextChangedListener(profLastNameEditWatcher);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+         binding.profCityEdit.addTextChangedListener(profCityEditWatcher);
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.firstName, s.toString());
-            }
-        });
-
-         binding.profLastNameEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.lastName, s.toString());
-            }
-        });
-
-         binding.profCityEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.basedLocation, s.toString());
-            }
-        });
-
-         binding.profSexEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.sex, s.toString());
-            }
-        });
+         binding.profSexEdit.addTextChangedListener(profSexEditWatcher);
 
          binding.commitChanges.setOnClickListener(new View.OnClickListener() {
             @Override
