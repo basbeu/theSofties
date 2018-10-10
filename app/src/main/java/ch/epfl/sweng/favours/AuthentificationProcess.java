@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,6 +57,11 @@ public class AuthentificationProcess extends Activity {
             isEmailCorrect.set(isEmailValid(binding.emailTextField.getText().toString()));
         }
     };
+    public void setUserInfoLoad(View view){
+        Intent intent = new Intent(view.getContext(), SetUserInfo.class);
+        startActivity(intent);
+    }
+
     private TextWatcher passwordTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -85,12 +89,17 @@ public class AuthentificationProcess extends Activity {
             Button log_out = (Button)findViewById(R.id.logOutButton);
             log_out.setVisibility(View.VISIBLE);
 
+            Button set_user_info = (Button)findViewById(R.id.setUserInfo);
+            set_user_info.setVisibility(View.VISIBLE);
+
             RuntimeEnvironment.getInstance().isConnected.set(true);
             Log.d(TAG, "createUserWithEmail:success");
             final FirebaseUser user = mAuth.getCurrentUser();
             sendConfirmationMail(user);
+            User.setMain(FirebaseAuth.getInstance().getUid());
             resendConfirmationMail.setOnClickListener(v-> sendConfirmationMail(user));
             log_out.setOnClickListener(v->logout(this));
+            set_user_info.setOnClickListener(v -> setUserInfoLoad(v));
             /*  Intent new activity for user informations */
                 /* Return to main screen FOR THE MOMENT NEVER REACHED because condition instantly checked
                 thus impossible to fulfill because when clicked on register button it is impossible to verify its email instantly
@@ -142,7 +151,7 @@ public class AuthentificationProcess extends Activity {
                 resetPassword.setVisibility(View.VISIBLE);
                 resetPassword.setOnClickListener(v -> {sendPasswordResetEmail(task, user);});
                 /*  Validation check + Wait 2s + Back to last activity */
-                User.getMain().updateFromDb();
+                User.setMain(FirebaseAuth.getInstance().getUid());
                 loggedinView(status);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
