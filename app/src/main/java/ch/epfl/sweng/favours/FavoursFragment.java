@@ -14,14 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ch.epfl.sweng.favours.database.Favor;
 import ch.epfl.sweng.favours.databinding.FavoursLayoutBinding;
 
 public class FavoursFragment extends Fragment {
-
-    public ObservableField<String> title = new ObservableField<>(Favor.StringFields.title.toString());
-    public ObservableField<String> description = new ObservableField<>(Favor.StringFields.description.toString());
-
     FavoursLayoutBinding binding;
 
     @Nullable
@@ -29,6 +27,8 @@ public class FavoursFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Favor newFavor = new Favor();
+        newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
+
         binding = DataBindingUtil.inflate(inflater, R.layout.favours_layout,container,false);
         binding.setElements(this);
 
@@ -46,6 +46,8 @@ public class FavoursFragment extends Fragment {
                 newFavor.set(Favor.StringFields.description, editable.toString());
             }
         });
+
+
 
         binding.addFavor.setOnClickListener(new View.OnClickListener() {
             @Override
