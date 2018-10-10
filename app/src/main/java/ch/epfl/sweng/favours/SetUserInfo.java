@@ -35,7 +35,10 @@ public class SetUserInfo extends AppCompatActivity {
         binding.setElements(this);
 
         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        bindUi();
+    }
 
+    private void bindUi(){
         binding.userFirstNameEdit.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable editable) {
