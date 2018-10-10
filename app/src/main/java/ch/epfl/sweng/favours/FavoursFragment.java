@@ -36,16 +36,12 @@ public class FavoursFragment extends Fragment {
 
         binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void afterTextChanged(Editable s) {
-                newFavor.set(Favor.StringFields.title,s.toString());
-            }
+            public void afterTextChanged(Editable s) { newFavor.set(Favor.StringFields.title,s.toString()); }
         });
 
         binding.descriptionFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void afterTextChanged(Editable editable) {
-                newFavor.set(Favor.StringFields.description, editable.toString());
-            }
+            public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.description, editable.toString()); }
         });
 
 
