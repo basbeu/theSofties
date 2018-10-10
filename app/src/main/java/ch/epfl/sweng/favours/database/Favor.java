@@ -1,10 +1,13 @@
 package ch.epfl.sweng.favours.database;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Favor extends DatabaseHandler {
 
+    private static final String TAG = "c";
     private static final String COLLECTION = "favors";
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description}
@@ -33,6 +36,7 @@ public class Favor extends DatabaseHandler {
                         documentID = docRef.getId();
                         updateFromDb();
                     }).addOnFailureListener(e -> {
+                        Log.d(TAG,"failure to push to database");
                 /* Feedback of an error here - Impossible to update user informations */
             });
         }else{
