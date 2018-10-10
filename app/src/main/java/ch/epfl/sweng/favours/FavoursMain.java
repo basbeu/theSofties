@@ -24,7 +24,7 @@ public class FavoursMain extends AppCompatActivity {
     public static final String TAG = "FavoursApp";
     public ObservableField<String> appName = new ObservableField<>("Favours");
 
-    public enum Status{Register, Login, LoggedIn, Disconnect};
+    public enum Status{Register, Login, LoggedIn, Disconnect, Reset};
     public static String AUTHENTIFICATION_ACTION = "AUTHENTIFICATION_ACTION";
     public ActivityMainBinding binding;
 
@@ -55,7 +55,7 @@ public class FavoursMain extends AppCompatActivity {
                 RuntimeEnvironment.getInstance().isConnected.set(false);
         });
 
-        if(RuntimeEnvironment.getInstance().isConnected.get()){
+        if(RuntimeEnvironment.getInstance().isConnected.get() && FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
             loggedinView(Status.LoggedIn);
         }
     }
