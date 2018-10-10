@@ -54,11 +54,8 @@ public class FavoursFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (newFavor.get(Favor.StringFields.title).isEmpty() || newFavor.get(Favor.StringFields.description).isEmpty()) {
-                    Log.d(TAG, "Failure to check favor input");
                     launchToast("There is an empty field left");
                 } else {
-                    //int timestamp = (int)System.currentTimeMillis() /1000;
-                    Log.d(TAG, "Succes to check favor input");
                     newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
                     newFavor.updateOnDb();
                 }
