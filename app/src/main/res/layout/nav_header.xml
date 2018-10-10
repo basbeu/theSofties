@@ -3,7 +3,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.Logged_in_Screen"
+            type="ch.epfl.sweng.favors.Logged_in_Screen"
             />
 
     </data>

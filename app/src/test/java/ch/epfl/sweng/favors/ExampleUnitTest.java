@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import org.junit.Test;
 

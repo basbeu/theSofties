@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.epfl.sweng.favours">
+    package="ch.epfl.sweng.favors">
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -11,14 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         >
-        <activity android:name=".FavoursMain">
+        <activity android:name="ch.epfl.sweng.favors.FavorsMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name="ch.epfl.sweng.favors.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,16 +26,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AuthentificationProcess"
-            android:parentActivityName=".FavoursMain" />
+            android:name="ch.epfl.sweng.favors.AuthentificationProcess"
+            android:parentActivityName="ch.epfl.sweng.favors.FavorsMain" />
         <activity
-            android:name=".Logged_in_Screen"
+            android:name="ch.epfl.sweng.favors.Logged_in_Screen"
             android:label="@string/title_activity_logged_in__screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ConfirmationSent"
+            android:name="ch.epfl.sweng.favors.ConfirmationSent"
             android:label="@string/title_activity_confirmation_sent"></activity>
-        <activity android:name=".SetUserInfo"></activity>
+        <activity android:name="ch.epfl.sweng.favors.SetUserInfo"></activity>
     </application>
 
 </manifest>

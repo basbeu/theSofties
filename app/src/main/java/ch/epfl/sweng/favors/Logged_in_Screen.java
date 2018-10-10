@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
@@ -10,10 +10,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import ch.epfl.sweng.favours.database.User;
-import ch.epfl.sweng.favours.databinding.ActivityLoggedInScreenBinding;
-import ch.epfl.sweng.favours.databinding.NavHeaderBinding;
-import static ch.epfl.sweng.favours.Utils.logout;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
+import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 
 
 public class Logged_in_Screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -69,14 +69,14 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 break;
-            case R.id.favours:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoursFragment()).commit();
+            case R.id.favors:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).commit();
                 break;
             case R.id.settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
                 break;
             case R.id.logout:
-                logout(this);
+                Utils.logout(this);
                 break;
         }
 

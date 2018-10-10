@@ -5,7 +5,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.EditProfileFragment"
+            type="ch.epfl.sweng.favors.EditProfileFragment"
             />
 
     </data>
@@ -106,12 +106,13 @@
                     android:layout_height="wrap_content"
                     android:text="@{elements.sex}"
                     android:textSize="@dimen/profile_fragment_database_content_size"/>
+
                 <Button
                     android:id="@+id/commitChanges"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Commit changes"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:text="Update" />
 
             </LinearLayout>
 

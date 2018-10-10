@@ -1,15 +1,11 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +13,13 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.sweng.favours.database.Favor;
-import ch.epfl.sweng.favours.databinding.FavoursLayoutBinding;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 
-public class FavoursFragment extends Fragment {
+public class FavorsFragment extends Fragment {
     private static final String TAG = "FAVOR_FRAGMENT";
-    FavoursLayoutBinding binding;
+    FavorsLayoutBinding binding;
 
     @Nullable
     @Override
@@ -30,7 +27,7 @@ public class FavoursFragment extends Fragment {
 
         final Favor newFavor = new Favor();
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.favours_layout,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
 

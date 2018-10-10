@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,24 +20,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ch.epfl.sweng.favours.database.User;
-import ch.epfl.sweng.favours.databinding.LogInRegisterViewBinding;
-
-import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;
-import static ch.epfl.sweng.favours.Utils.isEmailValid;
-import static ch.epfl.sweng.favours.Utils.logout;
-import static ch.epfl.sweng.favours.Utils.passwordFitsRequirements;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 
 
 public class AuthentificationProcess extends Activity {
 
-    public static final String TAG = FavoursMain.TAG + "_Auth";
+    public static final String TAG = FavorsMain.TAG + "_Auth";
     public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
 
 
     public LogInRegisterViewBinding binding;
     private FirebaseAuth mAuth;
-    public FavoursMain.Status status;
+    public FavorsMain.Status status;
 
     public ObservableField<String> headerText = new ObservableField<>();
     public ObservableField<String> validationButton = new ObservableField<>();
@@ -54,7 +50,7 @@ public class AuthentificationProcess extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            isEmailCorrect.set(isEmailValid(binding.emailTextField.getText().toString()));
+            isEmailCorrect.set(Utils.isEmailValid(binding.emailTextField.getText().toString()));
         }
     };
     public void setUserInfoLoad(View view){
@@ -71,7 +67,7 @@ public class AuthentificationProcess extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            isPasswordCorrect.set(passwordFitsRequirements(binding.passwordTextField.getText().toString()));
+            isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordTextField.getText().toString()));
         }
     };
     private View.OnClickListener authentificationButtonListener = new View.OnClickListener() {
@@ -86,7 +82,7 @@ public class AuthentificationProcess extends Activity {
         public void onClick(View v) {
 
             FirebaseAuth.getInstance().sendPasswordResetEmail(binding.emailTextField.getText().toString())
-                    .addOnCompleteListener(w->displayToastOnTaskCompletion(w,AuthentificationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
+                    .addOnCompleteListener(w-> Utils.displayToastOnTaskCompletion(w,AuthentificationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
         }
     };
 
@@ -95,7 +91,7 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void set(boolean value) {
             super.set(value);
-            if(status == FavoursMain.Status.Register){
+            if(status == FavorsMain.Status.Register){
                 if(this.get()){
                     requirementsText.set("");
                 }
@@ -153,7 +149,7 @@ public class AuthentificationProcess extends Activity {
                 .addOnCompleteListener(AuthentificationProcess.this, task-> {
                     // Re-enable button
                     findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
-                    displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
+                    Utils.displayToastOnTaskCompletion(task,AuthentificationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
                 });
     }
 
@@ -170,7 +166,7 @@ public class AuthentificationProcess extends Activity {
         binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
         // Get the Intent that started this activity and extract the string
         Bundle bundle = getIntent().getExtras();
-        status = (FavoursMain.Status) bundle.get(FavoursMain.AUTHENTIFICATION_ACTION);
+        status = (FavorsMain.Status) bundle.get(FavorsMain.AUTHENTIFICATION_ACTION);
         setUI(status);
         binding.authentificationButton.setOnClickListener(authentificationButtonListener);
         binding.resetPasswordButton.setOnClickListener(resetButtonListener);
@@ -181,7 +177,7 @@ public class AuthentificationProcess extends Activity {
      *
      * @param status The current mode
      */
-    private void setUI(FavoursMain.Status status){
+    private void setUI(FavorsMain.Status status){
         switch(status){
             case Login:
                 headerText.set("Please enter your login informations:");
@@ -204,35 +200,35 @@ public class AuthentificationProcess extends Activity {
      * @param password The user password
      */
     private void authentification(String email, String password) {
-        if(!isEmailValid(email)){
+        if(!Utils.isEmailValid(email)){
             requirementsText.set("Wrong email format");
             return;
         }
-        if(!passwordFitsRequirements(password)){
+        if(!Utils.passwordFitsRequirements(password)){
             requirementsText.set("Wrong password format");
             return;
         }
-        if (status == FavoursMain.Status.Login) {
+        if (status == FavorsMain.Status.Login) {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
-        else if (status == FavoursMain.Status.Register) {
+        else if (status == FavorsMain.Status.Register) {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     }
 
-    private void loggedinView(FavoursMain.Status status){
+    private void loggedinView(FavorsMain.Status status){
         if(mAuth.getCurrentUser().isEmailVerified()) {
             Intent intent = new Intent(this, Logged_in_Screen.class);
-            intent.putExtra(FavoursMain.LOGGED_IN, status);
+            intent.putExtra(FavorsMain.LOGGED_IN, status);
             startActivity(intent);
         } else {
             Intent intent = new Intent(this, AuthentificationProcess.class);
-            intent.putExtra(FavoursMain.LOGGED_OUT, status);
+            intent.putExtra(FavorsMain.LOGGED_OUT, status);
             startActivity(intent);
         }
     }
-    private void confirmationSent(FavoursMain.Status status){
+    private void confirmationSent(FavorsMain.Status status){
 
         Intent intent = new Intent(this, SetUserInfo.class);
         startActivity(intent);

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ch.epfl.sweng.favors.R;
 
 public class Utils {
     private static final int MAXPASSWORDLEN = 20;
@@ -72,8 +74,8 @@ public class Utils {
 
     public static void logout(Context context){
         Toast.makeText(context, R.string.seeyou, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(context, FavoursMain.class);
-        intent.putExtra(FavoursMain.LOGGED_OUT, FavoursMain.Status.Disconnect);
+        Intent intent = new Intent(context, FavorsMain.class);
+        intent.putExtra(FavorsMain.LOGGED_OUT, FavorsMain.Status.Disconnect);
         RuntimeEnvironment.getInstance().isConnected.set(false);
         FirebaseAuth.getInstance().signOut();
         context.startActivity(intent);

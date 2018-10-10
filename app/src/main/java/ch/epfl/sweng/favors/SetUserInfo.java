@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -6,14 +6,12 @@ import android.databinding.ObservableField;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.sweng.favours.database.User;
-import ch.epfl.sweng.favours.databinding.ActivitySetUserInfoBinding;
-
-import ch.epfl.sweng.favours.database.User;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
 
 public class SetUserInfo extends AppCompatActivity {
 
