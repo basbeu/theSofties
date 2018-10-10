@@ -41,13 +41,7 @@ public class AuthentificationProcess extends Activity {
 
     public ObservableBoolean isEmailCorrect = new ObservableBoolean(false);
 
-    private TextWatcher emailTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
+    private TextWatcher emailTextWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable s) {
             isEmailCorrect.set(Utils.isEmailValid(binding.emailTextField.getText().toString()));
@@ -58,13 +52,7 @@ public class AuthentificationProcess extends Activity {
         startActivity(intent);
     }
 
-    private TextWatcher passwordTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
+    private TextWatcher passwordTextWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable s) {
             isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordTextField.getText().toString()));
