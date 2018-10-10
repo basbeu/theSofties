@@ -35,6 +35,7 @@
         <activity
             android:name=".ConfirmationSent"
             android:label="@string/title_activity_confirmation_sent"></activity>
+        <activity android:name=".SetUserInfo"></activity>
     </application>
 
 </manifest>

@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,6 +57,11 @@ public class AuthentificationProcess extends Activity {
             isEmailCorrect.set(isEmailValid(binding.emailTextField.getText().toString()));
         }
     };
+    public void setUserInfoLoad(View view){
+        Intent intent = new Intent(view.getContext(), SetUserInfo.class);
+        startActivity(intent);
+    }
+
     private TextWatcher passwordTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -135,7 +139,7 @@ public class AuthentificationProcess extends Activity {
                 final FirebaseUser user = mAuth.getCurrentUser();
 
                 /*  Validation check + Wait 2s + Back to last activity */
-                User.getMain().updateFromDb();
+                User.setMain(FirebaseAuth.getInstance().getUid());
                 loggedinView(status);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
