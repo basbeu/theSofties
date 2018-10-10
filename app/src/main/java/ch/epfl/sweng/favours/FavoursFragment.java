@@ -65,8 +65,7 @@ public class FavoursFragment extends Fragment {
             }
         });
 
-
-        return inflater.inflate(R.layout.favours_layout, container, false);
+        return binding.getRoot();
     }
 
     private void launchToast(String text) {
