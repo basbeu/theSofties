@@ -1,12 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_light">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="elements"
+            type="ch.epfl.sweng.favours.FavoursFragment"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
-</RelativeLayout>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_light">
+
+        <TextView
+            android:id="@+id/createFavorTitle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="62dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="85dp"
+            android:layout_marginEnd="63dp"
+            android:layout_marginRight="63dp"
+            android:gravity="center_horizontal"
+            android:text="@string/add_a_new_favor"
+            android:textSize="24sp"
+            tools:layout_centerInParent="false" />
+
+        <EditText
+            android:id="@+id/titleFavor"
+            android:hint="@string/titleFavor"
+            android:inputType="text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="186dp"
+            android:layout_marginEnd="148dp"
+            android:layout_marginRight="148dp"
+            android:ems="10"
+            android:importantForAutofill="no" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="108dp"
+            android:layout_height="112dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            android:contentDescription="@string/imageFavor"
+            app:srcCompat="@drawable/logo" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="163dp"
+            android:layout_marginEnd="53dp"
+            android:layout_marginRight="53dp"
+            android:clickable="true"
+            app:backgroundTint="@color/browser_actions_divider_color"
+            app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <EditText
+            android:id="@+id/descriptionFavor"
+            android:hint="@string/descriptionFavor"
+            android:inputType="text"
+            android:layout_width="354dp"
+            android:layout_height="242dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="70dp"/>
+
+        <Button
+            android:id="@+id/addFavor"
+            android:layout_width="354dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="42dp"
+            android:text="@string/addFavor" />
+
+    </RelativeLayout>
+</layout>
