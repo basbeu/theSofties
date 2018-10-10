@@ -32,6 +32,9 @@
             android:name=".Logged_in_Screen"
             android:label="@string/title_activity_logged_in__screen"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ConfirmationSent"
+            android:label="@string/title_activity_confirmation_sent"></activity>
         <activity android:name=".SetUserInfo"></activity>
     </application>
 
