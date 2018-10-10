@@ -24,7 +24,7 @@ public class SetUserInfo extends AppCompatActivity {
     public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
     public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
 
-    private ActivitySetUserInfoBinding binding;
+    ActivitySetUserInfoBinding binding;
     private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
