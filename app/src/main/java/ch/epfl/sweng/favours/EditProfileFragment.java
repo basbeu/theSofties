@@ -61,6 +61,7 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
          binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
          binding.setElements(this);
 
