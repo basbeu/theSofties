@@ -36,71 +36,31 @@ public class SetUserInfo extends AppCompatActivity {
 
         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-        binding.userFirstNameEdit.addTextChangedListener(new TextWatcher() {
+        binding.userFirstNameEdit.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.firstName, s.toString());
+            public void afterTextChanged(Editable editable) {
+                User.getMain().set(User.StringFields.firstName, editable.toString());
             }
         });
 
-        binding.userLastNameEdit.addTextChangedListener(new TextWatcher() {
+        binding.userLastNameEdit.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.lastName, s.toString());
+            public void afterTextChanged(Editable editable) {
+                User.getMain().set(User.StringFields.lastName, editable.toString());
             }
         });
 
-        binding.userCityEdit.addTextChangedListener(new TextWatcher() {
+        binding.userCityEdit.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.basedLocation, s.toString());
+            public void afterTextChanged(Editable editable) {
+                User.getMain().set(User.StringFields.basedLocation, editable.toString());
             }
         });
 
-        binding.userSexEdit.addTextChangedListener(new TextWatcher() {
+        binding.userSexEdit.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                User.getMain().set(User.StringFields.sex, s.toString());
+            public void afterTextChanged(Editable editable) {
+                User.getMain().set(User.StringFields.sex, editable.toString());
             }
         });
 
