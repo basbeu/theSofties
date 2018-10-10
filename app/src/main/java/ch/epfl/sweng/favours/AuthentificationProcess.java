@@ -234,8 +234,7 @@ public class AuthentificationProcess extends Activity {
     }
     private void confirmationSent(FavoursMain.Status status){
 
-        Intent intent = new Intent(this, ConfirmationSent.class);
-        intent.putExtra(FavoursMain.LOGGED_IN, status);
+        Intent intent = new Intent(this, SetUserInfo.class);
         startActivity(intent);
     }
 }

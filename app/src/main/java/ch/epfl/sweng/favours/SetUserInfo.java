@@ -75,7 +75,7 @@ public class SetUserInfo extends AppCompatActivity {
 
         binding.submit.setOnClickListener(v->{
             User.getMain().updateOnDb();
-            Intent intent = new Intent(v.getContext(), Logged_in_Screen.class);
+            Intent intent = new Intent(this, ConfirmationSent.class);
             startActivity(intent);
         });
     }
