@@ -41,9 +41,9 @@ public class FavorsFragment extends Fragment {
         });
 
         binding.addFavor.setOnClickListener(v->{
-                if (newFavor.get(Favor.StringFields.title) != null || newFavor.get(Favor.StringFields.title).isEmpty()){
+                if (newFavor.get(Favor.StringFields.title) == null || newFavor.get(Favor.StringFields.title).isEmpty()){
                     launchToast("Please add a title to the favor");
-                } else if( newFavor.get(Favor.StringFields.description) != null || newFavor.get(Favor.StringFields.description).isEmpty()){
+                } else if( newFavor.get(Favor.StringFields.description) == null || newFavor.get(Favor.StringFields.description).isEmpty()){
                     launchToast("Please add a description to the favor");
                 }
                 else {
