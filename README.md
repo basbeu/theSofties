@@ -101,8 +101,16 @@ code example goes here
 For installing this project in the development environment you will need:
 
 - Gradle
-- Java
-- Android SDK
+- Java v.1.8
+- Android SDK v.28
+
+###### Libraries
+
+- Jacoco (testing & code coverage)
+
+- Espresso (UI testing)
+
+- firebase (core, auth)
 
 ## Credits
 
