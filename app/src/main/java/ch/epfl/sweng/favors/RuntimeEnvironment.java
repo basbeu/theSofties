@@ -1,7 +1,6 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

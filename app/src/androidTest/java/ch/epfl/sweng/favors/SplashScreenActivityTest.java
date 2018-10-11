@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -6,6 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ch.epfl.sweng.favors.SplashScreenActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -20,6 +22,6 @@ public class SplashScreenActivityTest {
             new ActivityTestRule<>(SplashScreenActivity.class);
     @Test
     public void testSplashScreen() {
-        onView(withId(R.id.logoFavours)).check(matches(withId(R.id.logoFavours)));
+        onView(withId(R.id.logoFavors)).check(matches(withId(R.id.logoFavors)));
     }
 }

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import static ch.epfl.sweng.favours.Utils.displayToastOnTaskCompletion;
+import ch.epfl.sweng.favors.R;
 
 public class ConfirmationSent extends Activity {
 
@@ -28,7 +28,7 @@ public class ConfirmationSent extends Activity {
         RuntimeEnvironment.getInstance().isConnected.set(false);
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, AuthentificationProcess.class);
-        intent.putExtra(FavoursMain.AUTHENTIFICATION_ACTION, FavoursMain.Status.Login);
+        intent.putExtra(FavorsMain.AUTHENTIFICATION_ACTION, FavorsMain.Status.Login);
         startActivity(intent);
     }
 

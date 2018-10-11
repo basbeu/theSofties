@@ -11,7 +11,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.FavoursMain"
+            type="ch.epfl.sweng.favors.FavorsMain"
             />
 
     </data>

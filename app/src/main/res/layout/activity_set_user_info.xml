@@ -5,7 +5,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.SetUserInfo"
+            type="ch.epfl.sweng.favors.SetUserInfo"
             />
 
     </data>
@@ -14,7 +14,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SetUserInfo">
+        tools:context="ch.epfl.sweng.favors.SetUserInfo">
 
         <EditText
             android:id="@+id/userFirstNameEdit"

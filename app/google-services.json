@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:833001557226:android:65c1f0dc93514922",
         "android_client_info": {
-          "package_name": "ch.epfl.sweng.favours"
+          "package_name": "ch.epfl.sweng.favors"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "833001557226-7q89hhcoqilh8d7543e3pl9lpjlru2jd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ch.epfl.sweng.favours",
+            "package_name": "ch.epfl.sweng.favors",
             "certificate_hash": "1f182a1f10df10aa4057e85c0d9fe47927a886b9"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "833001557226-b3eee4gc4oqh0usns8i81f41jm2d3j6j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ch.epfl.sweng.favours",
+            "package_name": "ch.epfl.sweng.favors",
             "certificate_hash": "f1b68173bfff3d90940b9ea2162ed8302e96b871"
           }
         },

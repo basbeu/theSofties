@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours.database;
+package ch.epfl.sweng.favors.database;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Favor extends DatabaseHandler {
 
-    private static final String TAG = "c";
+    private static final String TAG = "FAVOR";
     private static final String COLLECTION = "favors";
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description}

@@ -1,19 +1,19 @@
-package ch.epfl.sweng.favours;
+package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.sweng.favours.database.User;
-import ch.epfl.sweng.favours.databinding.FragmentEditProfileBinding;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
 
 
 public class EditProfileFragment extends Fragment {

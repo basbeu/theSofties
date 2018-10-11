@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favours.database;
+package ch.epfl.sweng.favors.database;
 
 public interface DatabaseIntField extends DatabaseField{
 }

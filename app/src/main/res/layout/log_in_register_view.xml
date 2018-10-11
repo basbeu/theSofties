@@ -12,7 +12,7 @@
         <import type="android.view.View"/>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favours.AuthentificationProcess"
+            type="ch.epfl.sweng.favors.AuthentificationProcess"
             />
 
     </data>
