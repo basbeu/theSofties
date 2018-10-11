@@ -46,7 +46,7 @@ public class FavorsFragment extends Fragment {
         binding.addFavor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (newFavor.get(Favor.StringFields.title).isEmpty() || newFavor.get(Favor.StringFields.description).isEmpty()) {
+                if (newFavor.get(Favor.StringFields.title) != null || newFavor.get(Favor.StringFields.title).isEmpty() ||newFavor.get(Favor.StringFields.description) != null || newFavor.get(Favor.StringFields.description).isEmpty()) {
                     launchToast("There is an empty field left");
                 } else {
                     newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
