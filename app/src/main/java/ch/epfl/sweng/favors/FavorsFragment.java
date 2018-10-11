@@ -30,7 +30,6 @@ public class FavorsFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
-
         binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable s) { newFavor.set(Favor.StringFields.title,s.toString()); }
@@ -41,21 +40,18 @@ public class FavorsFragment extends Fragment {
             public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.description, editable.toString()); }
         });
 
-
-
-        binding.addFavor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (newFavor.get(Favor.StringFields.title) != null || newFavor.get(Favor.StringFields.title).isEmpty() ||newFavor.get(Favor.StringFields.description) != null || newFavor.get(Favor.StringFields.description).isEmpty()) {
-
-                    launchToast("There is an empty field left");
-                } else {
+        binding.addFavor.setOnClickListener(v->{
+                if (newFavor.get(Favor.StringFields.title) != null || newFavor.get(Favor.StringFields.title).isEmpty()){
+                    launchToast("Please add a title to the favor");
+                } else if( newFavor.get(Favor.StringFields.description) != null || newFavor.get(Favor.StringFields.description).isEmpty()){
+                    launchToast("Please add a description to the favor");
+                }
+                else {
                     newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
                     newFavor.updateOnDb();
+                    launchToast("Favor created successfully");
                 }
-            }
         });
-
         return binding.getRoot();
     }
 
