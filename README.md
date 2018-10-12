@@ -102,7 +102,7 @@ For installing this project in the development environment you will need:
 
 - Gradle
 - Java v.1.8
-- Android SDK v.28
+- Android SDK (target: v.28, minimum: v.15)
 
 ###### Libraries
 
@@ -121,6 +121,5 @@ This work is a project of the incredible Softies
 - Bastien
 - Charline
 - Jeniffer
-
 - Jeremy
 - Nicolas
