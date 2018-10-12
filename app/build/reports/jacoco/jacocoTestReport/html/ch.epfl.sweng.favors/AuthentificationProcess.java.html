@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthentificationProcess.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">ch.epfl.sweng.favors</a> &gt; <span class="el_source">AuthentificationProcess.java</span></div><h1>AuthentificationProcess.java</h1><pre class="source lang-java linenums">package ch.epfl.sweng.favors;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
+
+
+<span class="nc" id="L28">public class AuthentificationProcess extends Activity {</span>
+
+    public static final String TAG = FavorsMain.TAG + &quot;_Auth&quot;;
+    public static final String REQUIREMENTS_STRING = &quot;Password must:\n&quot; + &quot;- Be between 8 and 20 characters\n&quot; + &quot;- Mix numbers and letters&quot;;
+
+
+    public LogInRegisterViewBinding binding;
+    private FirebaseAuth mAuth;
+    public FavorsMain.Status status;
+
+<span class="nc" id="L38">    public ObservableField&lt;String&gt; headerText = new ObservableField&lt;&gt;();</span>
+<span class="nc" id="L39">    public ObservableField&lt;String&gt; validationButton = new ObservableField&lt;&gt;();</span>
+<span class="nc" id="L40">    public ObservableField&lt;String&gt; requirementsText = new ObservableField&lt;&gt;();</span>
+
+<span class="nc" id="L42">    public ObservableBoolean isEmailCorrect = new ObservableBoolean(false);</span>
+
+<span class="nc" id="L44">    private TextWatcher emailTextWatcher = new TextWatcherCustom() {</span>
+        @Override
+        public void afterTextChanged(Editable s) {
+<span class="nc" id="L47">            isEmailCorrect.set(Utils.isEmailValid(binding.emailTextField.getText().toString()));</span>
+<span class="nc" id="L48">        }</span>
+    };
+    public void setUserInfoLoad(View view){
+<span class="nc" id="L51">        Intent intent = new Intent(view.getContext(), SetUserInfo.class);</span>
+<span class="nc" id="L52">        startActivity(intent);</span>
+<span class="nc" id="L53">    }</span>
+
+<span class="nc" id="L55">    private TextWatcher passwordTextWatcher = new TextWatcherCustom() {</span>
+        @Override
+        public void afterTextChanged(Editable s) {
+<span class="nc" id="L58">            isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordTextField.getText().toString()));</span>
+<span class="nc" id="L59">        }</span>
+    };
+<span class="nc" id="L61">    private View.OnClickListener authentificationButtonListener = new View.OnClickListener() {</span>
+        @Override
+        public void onClick(View v) {
+<span class="nc" id="L64">            authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());</span>
+<span class="nc" id="L65">        }</span>
+    };
+
+<span class="nc" id="L68">    private View.OnClickListener resetButtonListener = new View.OnClickListener() {</span>
+        @Override
+        public void onClick(View v) {
+
+<span class="nc" id="L72">            FirebaseAuth.getInstance().sendPasswordResetEmail(binding.emailTextField.getText().toString())</span>
+<span class="nc" id="L73">                    .addOnCompleteListener(w-&gt; Utils.displayToastOnTaskCompletion(w,AuthentificationProcess.this, &quot;Reset password email sent to &quot; + binding.emailTextField.getText().toString(),&quot;No account with this email.&quot;));</span>
+<span class="nc" id="L74">        }</span>
+    };
+
+
+    /**
+     * sets the boolean to whether password is correct or not
+     */
+<span class="nc" id="L81">    public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){</span>
+        @Override
+        public void set(boolean value) {
+<span class="nc" id="L84">            super.set(value);</span>
+<span class="nc bnc" id="L85" title="All 4 branches missed.">            requirementsText.set(status == FavorsMain.Status.Register &amp;&amp; this.get() ? &quot;&quot; : REQUIREMENTS_STRING);</span>
+<span class="nc" id="L86">        }</span>
+    };
+
+    @Override
+    public void onStart() {
+<span class="nc" id="L91">        super.onStart();</span>
+        // Check if user is signed in (non-null) and update UI accordingly.
+<span class="nc" id="L93">        FirebaseUser currentUser = mAuth.getCurrentUser();</span>
+<span class="nc bnc" id="L94" title="All 4 branches missed.">        if(currentUser != null &amp;&amp; mAuth.getCurrentUser().isEmailVerified()){</span>
+<span class="nc" id="L95">            headerText.set(&quot;You're already logged in&quot;);</span>
+        }
+<span class="nc" id="L97">    }</span>
+
+<span class="nc" id="L99">    private OnCompleteListener&lt;AuthResult&gt; registerComplete = task -&gt; {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (task.isSuccessful()) {</span>
+
+<span class="nc" id="L102">            Log.d(TAG, &quot;createUserWithEmail:success&quot;);</span>
+<span class="nc" id="L103">            final FirebaseUser user = mAuth.getCurrentUser();</span>
+<span class="nc" id="L104">            sendConfirmationMail(user);</span>
+<span class="nc" id="L105">            confirmationSent(status);</span>
+
+<span class="nc" id="L107">        } else {</span>
+<span class="nc" id="L108">            Log.w(TAG, &quot;createUserWithEmail:failure&quot;, task.getException());</span>
+<span class="nc" id="L109">            requirementsText.set(&quot;Register failed, please try again&quot;);</span>
+        }
+<span class="nc" id="L111">    };</span>
+
+<span class="nc" id="L113">    private OnCompleteListener&lt;AuthResult&gt; signInComplete = new OnCompleteListener&lt;AuthResult&gt;(){</span>
+        @Override
+        public void onComplete(@NonNull Task&lt;AuthResult&gt; task) {
+<span class="nc bnc" id="L116" title="All 4 branches missed.">            if (task.isSuccessful() &amp;&amp; mAuth.getCurrentUser().isEmailVerified()) {</span>
+<span class="nc" id="L117">                RuntimeEnvironment.getInstance().isConnected.set(true);</span>
+<span class="nc" id="L118">                Log.d(TAG, &quot;signInWithEmail:success&quot;);</span>
+<span class="nc" id="L119">                final FirebaseUser user = mAuth.getCurrentUser();</span>
+
+                /*  Validation check + Wait 2s + Back to last activity */
+<span class="nc" id="L122">                User.setMain(FirebaseAuth.getInstance().getUid());</span>
+<span class="nc" id="L123">                loggedinView(status);</span>
+<span class="nc" id="L124">            } else {</span>
+<span class="nc" id="L125">                Log.w(TAG, &quot;signInWithEmail:failure&quot;, task.getException());</span>
+<span class="nc" id="L126">                requirementsText.set(&quot;Wrong email or password or email not verified\nPlease try again&quot;);</span>
+            }
+<span class="nc" id="L128">        }</span>
+    };
+
+    private void sendConfirmationMail(final FirebaseUser user){
+<span class="nc" id="L132">        user.sendEmailVerification()</span>
+<span class="nc" id="L133">                .addOnCompleteListener(AuthentificationProcess.this, task-&gt; {</span>
+                    // Re-enable button
+<span class="nc" id="L135">                    findViewById(R.id.resendConfirmationMailButton).setEnabled(true);</span>
+<span class="nc" id="L136">                    Utils.displayToastOnTaskCompletion(task,AuthentificationProcess.this, &quot;Verification email sent to &quot; + user.getEmail(),&quot;Failed to send verification email.&quot;);</span>
+<span class="nc" id="L137">                });</span>
+<span class="nc" id="L138">    }</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L142">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L143">        mAuth = FirebaseAuth.getInstance();</span>
+<span class="nc" id="L144">        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();</span>
+<span class="nc" id="L145">        binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);</span>
+<span class="nc" id="L146">        binding.setElements(this);</span>
+        // Check if the email is correct each time a letter was added
+<span class="nc" id="L148">        binding.emailTextField.addTextChangedListener(emailTextWatcher);</span>
+        // Check if the password is correct each time a letter was added
+<span class="nc" id="L150">        binding.passwordTextField.addTextChangedListener(passwordTextWatcher);</span>
+        // Get the Intent that started this activity and extract the string
+<span class="nc" id="L152">        Bundle bundle = getIntent().getExtras();</span>
+<span class="nc" id="L153">        status = (FavorsMain.Status) bundle.get(FavorsMain.AUTHENTIFICATION_ACTION);</span>
+<span class="nc" id="L154">        setUI(status);</span>
+<span class="nc" id="L155">        binding.authentificationButton.setOnClickListener(authentificationButtonListener);</span>
+<span class="nc" id="L156">        binding.resetPasswordButton.setOnClickListener(resetButtonListener);</span>
+<span class="nc" id="L157">    }</span>
+
+    /**
+     * Display UI Elements based on the current mode
+     *
+     * @param status The current mode
+     */
+    private void setUI(FavorsMain.Status status){
+<span class="nc bnc" id="L165" title="All 3 branches missed.">        switch(status){</span>
+            case Login:
+<span class="nc" id="L167">                headerText.set(&quot;Please enter your login informations:&quot;);</span>
+<span class="nc" id="L168">                validationButton.set(&quot;Login&quot;);</span>
+<span class="nc" id="L169">                requirementsText.set(&quot;&quot;);</span>
+<span class="nc" id="L170">                Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);</span>
+<span class="nc" id="L171">                resetPassword.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L172">                break;</span>
+            case Register:
+<span class="nc" id="L174">                headerText.set(&quot;Welcome here! Just some small steps...&quot;);</span>
+<span class="nc" id="L175">                validationButton.set(&quot;Register&quot;);</span>
+<span class="nc" id="L176">                requirementsText.set(REQUIREMENTS_STRING);</span>
+                break;
+        }
+<span class="nc" id="L179">    }</span>
+
+    /**
+     * perform the login or registering functionality and update the status in runtime environment
+     * @param email The email to log in with
+     * @param password The user password
+     */
+    private void authentification(String email, String password) {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if(!Utils.isEmailValid(email)){</span>
+<span class="nc" id="L188">            requirementsText.set(&quot;Wrong email format&quot;);</span>
+<span class="nc" id="L189">            return;</span>
+        }
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if(!Utils.passwordFitsRequirements(password)){</span>
+<span class="nc" id="L192">            requirementsText.set(&quot;Wrong password format&quot;);</span>
+<span class="nc" id="L193">            return;</span>
+        }
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (status == FavorsMain.Status.Login) {</span>
+<span class="nc" id="L196">            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);</span>
+        }
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        else if (status == FavorsMain.Status.Register) {</span>
+<span class="nc" id="L199">            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);</span>
+<span class="nc" id="L200">            mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());</span>
+        }
+<span class="nc" id="L202">    }</span>
+
+    private void loggedinView(FavorsMain.Status status){
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        if(mAuth.getCurrentUser().isEmailVerified()) {</span>
+<span class="nc" id="L206">            Intent intent = new Intent(this, Logged_in_Screen.class);</span>
+<span class="nc" id="L207">            intent.putExtra(FavorsMain.LOGGED_IN, status);</span>
+<span class="nc" id="L208">            startActivity(intent);</span>
+<span class="nc" id="L209">        } else {</span>
+<span class="nc" id="L210">            Intent intent = new Intent(this, AuthentificationProcess.class);</span>
+<span class="nc" id="L211">            intent.putExtra(FavorsMain.LOGGED_OUT, status);</span>
+<span class="nc" id="L212">            startActivity(intent);</span>
+        }
+<span class="nc" id="L214">    }</span>
+    private void confirmationSent(FavorsMain.Status status){
+
+<span class="nc" id="L217">        Intent intent = new Intent(this, SetUserInfo.class);</span>
+<span class="nc" id="L218">        startActivity(intent);</span>
+<span class="nc" id="L219">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

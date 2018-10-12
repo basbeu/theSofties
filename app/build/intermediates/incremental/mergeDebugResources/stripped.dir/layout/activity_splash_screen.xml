@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splashLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context="ch.epfl.sweng.favors.SplashScreenActivity">
+
+    <ImageView
+        android:id="@+id/logoFavors"
+        android:layout_width="310dp"
+        android:layout_height="382dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/versionNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logoFavors"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="71dp"
+        android:hint="version number"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="24sp"
+        app:fontFamily="sans-serif" />
+
+</RelativeLayout>
