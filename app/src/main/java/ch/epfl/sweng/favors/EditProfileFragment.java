@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserGender;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
@@ -46,7 +44,6 @@ public class EditProfileFragment extends Fragment {
         }
     };
 
-
     private TextWatcherCustom profCityEditWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
@@ -54,18 +51,10 @@ public class EditProfileFragment extends Fragment {
         }
     };
 
-    private TextWatcherCustom profSexEditWatcher = new TextWatcherCustom() {
-        @Override
-        public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.sex, editable.toString());
-        }
-    };
-
-    private void updateSex(){
+    private void displaySex(){
         Log.d(TAG, User.getMain().get(User.StringFields.sex));
-        UserGender gender = UserGender.getGenderFromString(User.getMain().get(User.StringFields.sex));
+        UserGender gender = UserGender.getGenderFromUser(User.getMain());
         Log.d(TAG,gender.toString());
-
         switch (gender){
             case F: binding.profSexEdit.check(R.id.profSexFEdit); break;
             case M: binding.profSexEdit.check(R.id.profSexMEdit); break;
@@ -76,11 +65,10 @@ public class EditProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
          binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
          binding.setElements(this);
-
-         updateSex();
+         //Set the RadioGroup buttons to select the current sex
+         displaySex();
 
          User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -92,22 +80,17 @@ public class EditProfileFragment extends Fragment {
 
          binding.profSexEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
                     if(checkedId == R.id.profSexMEdit){
-                        User.getMain().set(User.StringFields.sex,UserGender.M.toString());
+                        UserGender.setGender(User.getMain(),UserGender.M);
                     }
                     if(checkedId == R.id.profSexFEdit){
-                        User.getMain().set(User.StringFields.sex,UserGender.F.toString());
+                        UserGender.setGender(User.getMain(),UserGender.F);
                     }
          });
 
-         binding.commitChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+         binding.commitChanges.setOnClickListener((v)-> {
                 User.getMain().updateOnDb();
                 EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
-            }
         });
-
          return binding.getRoot();
     }
-
 }
