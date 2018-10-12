@@ -32,13 +32,10 @@ public class ProfileFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_layout,container,false);
         binding.setElements(this);
 
-        binding.editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.editProfile.setOnClickListener((v)-> {
                 Fragment fragment = null;
                 fragment = new EditProfileFragment();
                 replaceFragment(fragment);
-            }
         });
 
         return binding.getRoot();
