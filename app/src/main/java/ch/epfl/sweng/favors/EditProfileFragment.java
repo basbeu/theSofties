@@ -1,18 +1,22 @@
 package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.UserGender;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
 
 
@@ -57,13 +61,26 @@ public class EditProfileFragment extends Fragment {
         }
     };
 
+    private void updateSex(){
+        Log.d(TAG, User.getMain().get(User.StringFields.sex));
+        UserGender gender = UserGender.getGenderFromString(User.getMain().get(User.StringFields.sex));
+        Log.d(TAG,gender.toString());
+
+        switch (gender){
+            case F: binding.profSexEdit.check(R.id.profSexFEdit); break;
+            case M: binding.profSexEdit.check(R.id.profSexMEdit); break;
+            case DEFAULT: Log.e(TAG,"Gender parsing issue.");
+        }
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
          binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
          binding.setElements(this);
+
+         updateSex();
 
          User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -73,7 +90,14 @@ public class EditProfileFragment extends Fragment {
 
          binding.profCityEdit.addTextChangedListener(profCityEditWatcher);
 
-         binding.profSexEdit.addTextChangedListener(profSexEditWatcher);
+         binding.profSexEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
+                    if(checkedId == R.id.profSexMEdit){
+                        User.getMain().set(User.StringFields.sex,UserGender.M.toString());
+                    }
+                    if(checkedId == R.id.profSexFEdit){
+                        User.getMain().set(User.StringFields.sex,UserGender.F.toString());
+                    }
+         });
 
          binding.commitChanges.setOnClickListener(new View.OnClickListener() {
             @Override
