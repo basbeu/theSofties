@@ -20,7 +20,7 @@ public enum UserGender {
      */
     static public UserGender getGenderFromUser(User user){
         if(user != null) {
-            String gender = user.get(User.StringFieldProtected.sex);
+            String gender = user.get(User.StringFields.sex);
             gender = gender.trim().substring(0, 1);
             if (gender.toUpperCase().equals("M"))
                 return M;
@@ -37,10 +37,10 @@ public enum UserGender {
      * @param gender to set the users gender to
      */
     static public void setGender(@Nonnull User user,@Nonnull UserGender gender){
-        user.set(User.StringFieldProtected.sex,gender.toString().toUpperCase());
+        user.set(User.StringFields.sex,gender.toString().toUpperCase());
     }
 
     static public ObservableField<String> getObservableGenderSString(@Nonnull User user){
-        return user.getObservableStringObject(User.StringFieldProtected.sex);
+        return user.getObservableStringObject(User.StringFields.sex);
     }
 }
