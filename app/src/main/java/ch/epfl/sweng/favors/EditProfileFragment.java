@@ -25,7 +25,7 @@ public class EditProfileFragment extends Fragment {
     public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
     public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
-    public ObservableField<String> sex = User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> sex = UserGender.getObservableGenderSString(User.getMain());
 
 
     FragmentEditProfileBinding binding;
@@ -52,7 +52,7 @@ public class EditProfileFragment extends Fragment {
     };
 
     private void displaySex(){
-        Log.d(TAG, User.getMain().get(User.StringFields.sex));
+        //Log.d(TAG, UserGender.getGenderFromUser(User.getMain()).toString());
         UserGender gender = UserGender.getGenderFromUser(User.getMain());
         Log.d(TAG,gender.toString());
         switch (gender){
