@@ -1,3 +1,0 @@
-# Referenced at /home/bastien/SwEng/SDP_project/theSofties/app/build/intermediates/manifest/androidTest/debug/AndroidManifest.xml:9
--keep class android.support.test.runner.AndroidJUnitRunner { <init>(...); }
-

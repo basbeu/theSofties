@@ -1,3 +1,0 @@
-# Referenced at /home/bastien/SwEng/SDP_project/theSofties/app/build/intermediates/manifests/full/release/AndroidManifest.xml:17
--keep class android.support.multidex.MultiDexApplication { <init>(...); }
-
