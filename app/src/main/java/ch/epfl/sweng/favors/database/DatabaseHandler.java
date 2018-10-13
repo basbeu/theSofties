@@ -182,9 +182,6 @@ public abstract class DatabaseHandler {
     }
 
 
-
-
-
     public String get(DatabaseStringField field){
         if(stringData.get(field) != null)
             return stringData.get(field).get();
@@ -192,12 +189,27 @@ public abstract class DatabaseHandler {
             return null;
     }
 
-    public ObservableField<String> getObservableStringObject(DatabaseStringField field){
+    public void set(DatabaseStringField field, String value){
+        stringData.get(field).set(value);
+    }
+
+    public ObservableField<String> getObservableObject(DatabaseStringField field){
         return stringData.get(field);
     }
 
-    public void set(DatabaseStringField field, String value){
-        stringData.get(field).set(value);
+    public Object get(DatabaseObjectField field){
+        if(objectData.get(field) != null)
+            return objectData.get(field).get();
+        else
+            return null;
+    }
+
+    public void set(DatabaseObjectField field, Object value){
+        objectData.get(field).set(value);
+    }
+
+    public ObservableField<Object> getObservableObject(DatabaseObjectField field){
+        return objectData.get(field);
     }
 
     public Integer get(DatabaseIntField field){
@@ -205,6 +217,29 @@ public abstract class DatabaseHandler {
             return intData.get(field).get();
         else
             return null;
+    }
+
+    public void set(DatabaseIntField field, Integer value){
+        intData.get(field).set(value);
+    }
+
+    public ObservableField<Integer> getObservableObject(DatabaseIntField field){
+        return intData.get(field);
+    }
+
+    public Boolean get(DatabaseBooleanField field){
+        if(booleanData.get(field) != null)
+            return booleanData.get(field).get();
+        else
+            return null;
+    }
+
+    public void set(DatabaseBooleanField field, Boolean value){
+        booleanData.get(field).set(value);
+    }
+
+    public ObservableField<Boolean> getObservableObject(DatabaseBooleanField field){
+        return booleanData.get(field);
     }
 
 }

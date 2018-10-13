@@ -20,10 +20,10 @@ public class EditProfileFragment extends Fragment {
 
     private static final String TAG = "EDIT_PROFILE_FRAGMENT";
 
-    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.location);
-    public ObservableField<String> sex = User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.location);
+    public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
 
 
     FragmentEditProfileBinding binding;

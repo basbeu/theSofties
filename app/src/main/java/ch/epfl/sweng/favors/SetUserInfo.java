@@ -17,10 +17,10 @@ public class SetUserInfo extends AppCompatActivity {
 
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
 
-    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.location);
-    public ObservableField<String> sexe = User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.location);
+    public ObservableField<String> sexe = User.getMain().getObservableObject(User.StringFields.sex);
 
     ActivitySetUserInfoBinding binding;
     private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
