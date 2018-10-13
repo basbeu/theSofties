@@ -1,7 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 public class Discussion extends DatabaseHandler{
 
     private static final String TAG = "DB_DISCUSSION";
