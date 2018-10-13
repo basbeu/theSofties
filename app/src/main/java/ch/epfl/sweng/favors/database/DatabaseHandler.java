@@ -182,6 +182,9 @@ public abstract class DatabaseHandler {
     }
 
 
+    /*
+     * Get / set methods for the different types of data
+     */
     public String get(DatabaseStringField field){
         if(stringData.get(field) != null)
             return stringData.get(field).get();
