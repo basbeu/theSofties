@@ -14,16 +14,21 @@ public class User extends DatabaseHandler {
         user = new User(id);
     }
 
-    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, basedLocation}
+    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, location, pseudo}
+    public enum IntFields implements DatabaseIntField{creationTimeStamp}
+    public enum ObjectFields implements DatabaseObjectField {rights}
+
 
     public User(){
-        super(StringFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
+        super(StringFields.values(), IntFields.values(), null,
+                ObjectFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }
 
     public User(String id){
-        super(StringFields.values(), COLLECTION,id);
+        super(StringFields.values(), IntFields.values(), null,
+                ObjectFields.values(), COLLECTION, id);
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
     }

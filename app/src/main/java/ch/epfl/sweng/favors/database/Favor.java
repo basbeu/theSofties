@@ -11,27 +11,27 @@ public class Favor extends DatabaseHandler {
     private static final String COLLECTION = "favors";
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description}
-    public enum IntegerFields implements DatabaseIntField {creationTimestamp}
+    public enum IntegerFields implements DatabaseIntField {creationTimestamp, reward, expirationTimestamp}
+    public enum ObjectFields implements DatabaseObjectField {location}
+    public enum BooleanFields implements DatabaseBooleanField {isOpen}
 
     public Favor(){
-        super(StringFields.values(), COLLECTION,null);
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,null);
     }
 
     public Favor(String id){
-        super(StringFields.values(), COLLECTION,id);
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id);
         updateFromDb();
     }
 
     @Override
     public void updateOnDb(){
         if(documentID == null){
-            Map<String, Object> toSend = new HashMap<>();
+             // Do the same here if other types of datas
 
-            convertTypedMapToObjectMap(stringData, toSend);
-
-            // Do the same here if other types of datas
-
-            db.collection(collection).add(toSend)
+            db.collection(collection).add(getEncapsulatedObjectOfMaps())
                     .addOnSuccessListener(docRef -> {
                         documentID = docRef.getId();
                         updateFromDb();
