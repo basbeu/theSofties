@@ -3,6 +3,8 @@ package ch.epfl.sweng.favors.database;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class User extends DatabaseHandler {
+
+    private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
 
     private static User user = new User();

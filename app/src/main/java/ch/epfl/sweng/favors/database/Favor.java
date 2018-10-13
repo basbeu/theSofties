@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Favor extends DatabaseHandler {
 
-    private static final String TAG = "FAVOR";
+    private static final String TAG = "DB_FAVOR";
     private static final String COLLECTION = "favors";
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description}
