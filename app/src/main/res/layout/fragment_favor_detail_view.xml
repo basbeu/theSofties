@@ -32,8 +32,8 @@ tools:context=".FavorDetailView">
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="179dp"
-            tools:src="@tools:sample/backgrounds/scenic"
-            android:padding="10sp"/>
+            android:padding="10sp"
+            tools:src="@tools:sample/backgrounds/scenic" />
     <TextView
         android:id="@+id/favDescription"
         android:layout_margin="35sp"

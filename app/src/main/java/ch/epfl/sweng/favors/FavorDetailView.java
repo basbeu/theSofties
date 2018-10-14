@@ -78,7 +78,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view,container,false);
         binding.setElements(this);
 
         return binding.getRoot();
