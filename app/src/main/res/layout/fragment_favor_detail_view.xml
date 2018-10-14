@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".FavorDetailView">
+
+    <data>
+        <variable
+            name="elements"
+            type="ch.epfl.sweng.favors.FavorDetailView"
+            />
+    </data>
 
 <ScrollView
     android:layout_width="match_parent"
@@ -15,10 +21,11 @@ tools:context=".FavorDetailView">
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/favTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Title of favor"
+        android:text="@{elements.title}"
         android:textSize="30sp" />
 
         <ImageView
@@ -28,10 +35,11 @@ tools:context=".FavorDetailView">
             tools:src="@tools:sample/backgrounds/scenic"
             android:padding="10sp"/>
     <TextView
+        android:id="@+id/favDescription"
         android:layout_margin="35sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="rem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet turpis eu euismod facilisis. Pellentesque finibus enim leo, id semper est maximus ac. Morbi et diam vitae risus fringilla porttitor ut pharetra orci. Sed mattis sapien id elementum facilisis. Morbi mauris metus, suscipit vel odio facilisis, convallis aliquet dui. Morbi commodo lorem eget felis tempor lobortis. In in viverra tellus. onsectetur adipiscing elit. Donec aliquet turpis eu euismod facilisis. Pellentesque finibus enim leo, id semper est maximus ac. Morbi et diam vitae risus fringilla porttitor ut pharetra orci. Sed mattis sapien id elementum facilisis. Morbi mauris metus, suscipit vel odio facilisis, convallis aliquet dui. Morbi commodo lorem eget felis tempor lobortis. In in viverra tellus."
+        android:text="@{elements.descrption}"
         />
 
         <LinearLayout
@@ -39,12 +47,14 @@ tools:context=".FavorDetailView">
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
+                android:id="@+id/favIntrestedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="I'm intrested"
                 android:textSize="20sp"
                 android:layout_marginLeft="35sp" />
             <TextView
+                android:id="@+id/favTokAmmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -62,6 +72,7 @@ tools:context=".FavorDetailView">
         </LinearLayout>
 
         <TextView
+            android:id="@+id/favReportAbusiveAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -72,4 +83,4 @@ tools:context=".FavorDetailView">
 </LinearLayout>
 </ScrollView>
 
-</FrameLayout>
+</layout>
