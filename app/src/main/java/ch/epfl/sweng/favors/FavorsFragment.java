@@ -29,6 +29,7 @@ public class FavorsFragment extends Fragment {
     private static final String TAG = "FAVOR_FRAGMENT";
     FavorsLayoutBinding binding;
     ObservableArrayList<Favor> favorList;
+    Boolean editing = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class FavorsFragment extends Fragment {
         });
 
         binding.addFavor.setOnClickListener(v->{
-                favorList = FavorRequest.getList(Favor.StringFields.title, newFavor.get(Favor.StringFields.title), null, null);
+                favorList = FavorRequest.getList(Favor.StringFields.title, "test", null, null);
                 favorList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
                     @Override
                     public void onChanged(ObservableList<Favor> sender) {
@@ -87,7 +88,12 @@ public class FavorsFragment extends Fragment {
                 else {
                     newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
                     newFavor.updateOnDb();
-                    launchToast("Favor created successfully");
+
+                    binding.addFavor.setText("Edit your favor");
+                    if(editing) launchToast("Favor edited successfully");
+                    else launchToast("Favor created successfully");
+
+                    editing= true;
                 }
         });
         return binding.getRoot();
