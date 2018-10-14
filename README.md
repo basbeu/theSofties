@@ -24,7 +24,7 @@ We are 7 computer science and communication system students at EPFL, currently e
 
 # Features
 
-######Completed
+###### Completed
 
 - users can create accounts, login, edit their profile and reset their password
 - users can see a list of favors, a detailed description of a favor and can ask for a new one and set a deadline
