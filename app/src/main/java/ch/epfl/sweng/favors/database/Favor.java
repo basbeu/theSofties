@@ -26,6 +26,7 @@ public class Favor extends DatabaseHandler {
         updateFromDb();
     }
 
+
     @Override
     public void updateOnDb(){
         if(documentID == null){

@@ -37,9 +37,6 @@ public class User extends DatabaseHandler {
             updateFromDb();
     }
 
-    public User(String id, Map<String, Object> content){
-        super(StringFields.values(), IntFields.values(), null,
-                ObjectFields.values(), COLLECTION, id);
-        updateLocalData(content);
-    }
+
+
 }

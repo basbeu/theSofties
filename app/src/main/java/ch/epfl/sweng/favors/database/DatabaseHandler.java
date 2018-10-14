@@ -136,6 +136,9 @@ public abstract class DatabaseHandler {
      * @return True is successfull
      */
     protected void updateLocalData(Map<String, Object> incommingData){
+        for(String name: incommingData.keySet()){
+            Log.d(TAG, stringData.keySet().toString());
+        }
         convertObjectMapToTypedMap(incommingData, stringData, String.class);
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
@@ -152,6 +155,7 @@ public abstract class DatabaseHandler {
      * @param <U>   The ObservableField
      */
     private static <T extends DatabaseField, V extends Object, U extends ObservableField<V>> void convertObjectMapToTypedMap(Map<String, Object> from, Map<T, U> to, Class<V> clazz) {
+        if(from == null || to == null){return;}
         for (Map.Entry<T, U> entry : to.entrySet()){
             T fieldName = entry.getKey();
             Object object = from.get(fieldName.toString());
@@ -175,10 +179,17 @@ public abstract class DatabaseHandler {
      * @param <U>   The ObservableField
      */
     private <T extends DatabaseField, V, U extends ObservableField<V>> void convertTypedMapToObjectMap(Map<T, U> from, Map<String, Object> to) {
+        if(from == null || to == null){return;}
         for (Map.Entry<T, U> entry : from.entrySet()){
             V value = (V) entry.getValue().get();
             if(value != null) to.put(entry.getKey().toString(), value);
         }
+    }
+
+
+    public void set(String id, Map<String, Object> content){
+        this.documentID =id;
+        this.updateLocalData(content);
     }
 
 
@@ -245,8 +256,4 @@ public abstract class DatabaseHandler {
         return booleanData.get(field);
     }
 
-    public DatabaseHandler(String id, Map<String, Object> content){
-
-
-    };
 }
