@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".FavorDetailView">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Title of favor"
+        android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="179dp"
+            tools:src="@tools:sample/backgrounds/scenic"
+            android:padding="10sp"/>
+    <TextView
+        android:layout_margin="35sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet turpis eu euismod facilisis. Pellentesque finibus enim leo, id semper est maximus ac. Morbi et diam vitae risus fringilla porttitor ut pharetra orci. Sed mattis sapien id elementum facilisis. Morbi mauris metus, suscipit vel odio facilisis, convallis aliquet dui. Morbi commodo lorem eget felis tempor lobortis. In in viverra tellus. onsectetur adipiscing elit. Donec aliquet turpis eu euismod facilisis. Pellentesque finibus enim leo, id semper est maximus ac. Morbi et diam vitae risus fringilla porttitor ut pharetra orci. Sed mattis sapien id elementum facilisis. Morbi mauris metus, suscipit vel odio facilisis, convallis aliquet dui. Morbi commodo lorem eget felis tempor lobortis. In in viverra tellus."
+        />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I'm intrested"
+                android:textSize="20sp"
+                android:layout_marginLeft="35sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="100"
+                android:layout_marginLeft="70sp"
+                />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="38sp"
+                android:layout_height="38sp"
+                android:src="@drawable/favor_token_img"
+                android:layout_marginLeft="10sp"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:text="Report abusive add"
+            android:layout_margin="40sp"/>
+
+</LinearLayout>
+</ScrollView>
+
+</FrameLayout>
