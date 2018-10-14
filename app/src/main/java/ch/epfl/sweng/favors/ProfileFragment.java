@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.UserGender;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 
 public class ProfileFragment extends Fragment {
@@ -22,7 +20,7 @@ public class ProfileFragment extends Fragment {
     public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
     public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
-    public ObservableField<String> sex = UserGender.getObservableGenderSString(User.getMain());//User.getMain().getObservableStringObject(User.StringFields.sex);
+    public ObservableField<String> sex = User.UserGender.getObservableGenderString(User.getMain());//User.getMain().getObservableStringObject(User.StringFields.sex);
     public ObservableField<String> email = User.getMain().getObservableStringObject(User.StringFields.email);
 
     FragmentProfileLayoutBinding binding;

@@ -105,7 +105,7 @@
                     />
                 <!--
                 <EditText
-                    android:id="@+id/profSexEdit"
+                    android:id="@+id/prof_gender_editdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{elements.sex}"
@@ -118,13 +118,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <RadioGroup
-                        android:id="@+id/profSexEdit"
+                        android:id="@+id/prof_gender_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         >
                         <RadioButton
-                            android:id="@+id/profSexMEdit"
+                            android:id="@+id/profGenderMEdit"
                             android:padding="10sp"
                             android:layout_margin="10sp"
                             android:layout_width="wrap_content"
@@ -133,7 +133,7 @@
                             android:gravity="right"
                             />
                         <RadioButton
-                            android:id="@+id/profSexFEdit"
+                            android:id="@+id/profGenderFEdit"
                             android:padding="10sp"
                             android:layout_margin="10sp"
                             android:layout_width="wrap_content"
