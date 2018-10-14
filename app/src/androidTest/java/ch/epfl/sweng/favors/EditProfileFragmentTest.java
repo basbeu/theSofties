@@ -32,7 +32,7 @@ public class EditProfileFragmentTest {
     @Test
     public void fragment_can_be_instantiated() {
         //when(fakeUser.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail())).thenReturn("Toto");
-       // mFragmentTestRule.launchActivity(null);
+        //mFragmentTestRule.launchActivity(null);
         //onView(withId(R.id.profileTitle)).check(matches(isDisplayed()));
     }
     
