@@ -2,6 +2,8 @@ package ch.epfl.sweng.favors.database;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Map;
+
 public class User extends DatabaseHandler {
 
     private static final String TAG = "DB_USER";
@@ -33,5 +35,11 @@ public class User extends DatabaseHandler {
                 ObjectFields.values(), COLLECTION, id);
         if(FirebaseAuth.getInstance().getUid() != null)
             updateFromDb();
+    }
+
+    public User(String id, Map<String, Object> content){
+        super(StringFields.values(), IntFields.values(), null,
+                ObjectFields.values(), COLLECTION, id);
+        updateLocalData(content);
     }
 }

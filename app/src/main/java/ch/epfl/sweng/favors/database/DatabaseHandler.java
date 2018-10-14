@@ -135,7 +135,7 @@ public abstract class DatabaseHandler {
      * @param incommingData The map with object content and object value
      * @return True is successfull
      */
-    private void updateLocalData(Map<String, Object> incommingData){
+    protected void updateLocalData(Map<String, Object> incommingData){
         convertObjectMapToTypedMap(incommingData, stringData, String.class);
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
@@ -245,4 +245,8 @@ public abstract class DatabaseHandler {
         return booleanData.get(field);
     }
 
+    public DatabaseHandler(String id, Map<String, Object> content){
+
+
+    };
 }
