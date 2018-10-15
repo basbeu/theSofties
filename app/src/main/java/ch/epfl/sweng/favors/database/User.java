@@ -74,7 +74,7 @@ public class User extends DatabaseHandler {
         }
 
         static public ObservableField<String> getObservableGenderString(@Nonnull User user){
-            return user.getObservableStringObject(User.StringFields.sex);
+            return user.getObservableObject(User.StringFields.sex);
         }
     }
 }
