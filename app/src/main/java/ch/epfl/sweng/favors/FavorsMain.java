@@ -205,8 +205,9 @@ public class FavorsMain extends AppCompatActivity {
      */
     private void requestUpdatesHelper(LocationCallback callback) {
         if (checkPermissions()) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(locationRequest, callback, null);
-        }
+        }}
     }
 
     /**
@@ -218,10 +219,12 @@ public class FavorsMain extends AppCompatActivity {
      */
     private Location getLocationHelper(LocationCallback callback) {
         if(checkPermissions()) {
+            // redundant check required by Travis and IDE
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
                 if (l != null) { lastLocation = l; debugLogs(); }
                 else { requestUpdatesHelper(callback); }
-            });
+            });}
         }
         return lastLocation;
     }
