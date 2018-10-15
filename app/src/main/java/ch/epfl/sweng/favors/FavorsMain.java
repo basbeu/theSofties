@@ -27,11 +27,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
 
+/**
+ * This is the main class of the Favors application
+ * the entry point for the actual app
+ */
 public class FavorsMain extends AppCompatActivity {
 
     public static final String TAG = "FavorsApp";
     public ObservableField<String> appName = new ObservableField<>("Favors");
 
+    /**-----------------**/
+    /**      Login      **/
+    /**-----------------**/
     public enum Status{Register, Login, LoggedIn, Disconnect, Reset};
     public static String AUTHENTIFICATION_ACTION = "AUTHENTIFICATION_ACTION";
     public ActivityMainBinding binding;
@@ -40,6 +47,9 @@ public class FavorsMain extends AppCompatActivity {
     public static final String LOGGED_IN = "Logged in successfully";
     public static final String LOGGED_OUT = "Disconnected successfully";
 
+    /**-----------------**/
+    /**     Context     **/
+    /**-----------------**/
     private RuntimeEnvironment runtimeEnvironment;
 
     private static Context context;
@@ -47,17 +57,26 @@ public class FavorsMain extends AppCompatActivity {
         return context;
     }
 
+    /**-----------------**/
+    /**     Location    **/
+    /**-----------------**/
     // client used for location
     private FusedLocationProviderClient mFusedLocationClient;
     // permissions
     public enum Permissions{LOCATION_REQUEST};
     // location
-    private Location location;
+    private Location lastLocation;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     // decides continuous location updates
     private boolean isContinue = false;
 
+    /**
+     * onCreate is where you initialize your activity
+     * Most importantly, here you will usually call setContentView(int) with a layout resource defining your UI,
+     * and using findViewById(int) to retrieve the widgets in that UI that you need to interact with programmatically.
+     * @param savedInstanceState of type Bundle - contains must recent data after shutdown or null
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +112,8 @@ public class FavorsMain extends AppCompatActivity {
         // set periodic updates of location
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10 * 1000); // 60 seconds
-        locationRequest.setFastestInterval(5 * 1000); // 30 seconds
+        locationRequest.setInterval(60 * 1000); // 60 seconds
+        locationRequest.setFastestInterval(30 * 1000); // 30 seconds
         // callback methods
         locationCallback = new LocationCallback() {
             @Override
@@ -104,10 +123,7 @@ public class FavorsMain extends AppCompatActivity {
                     return;
                 }
                 for (Location l : locationResult.getLocations()) {
-                    if (l != null) {
-                        location = l;
-                        Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
-                    }
+                    if (l != null) { lastLocation = l; debugLogs(); }
                 }
             }
         };
@@ -127,70 +143,51 @@ public class FavorsMain extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void getLocation() {
+    /**
+     * this method checks if we have the permission to access a user's location
+     * @return if we are allowed (boolean)
+     */
+    private boolean checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    Permissions.LOCATION_REQUEST.ordinal());
-
+            // ask for permissions
+            requestPermissions();
+            Log.d("location", "code:1001 - location services have not been granted yet, asking now");
+            return false;
         } else {
-            if (isContinue) {
-                mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-            } else {
-                mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
-                    if (l != null) {
-                        location = l;
-                        Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
-
-                    } else {
-                        mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-                    }
-                });
-            }
+            // Permission has already been granted
+            Log.d("location", "code:1000 - location services already granted");
+            return true;
         }
     }
 
+    /**
+     * GPS localization permission
+     * this method requests the permission of the user to access his location
+     */
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                Permissions.LOCATION_REQUEST.ordinal());
+    }
+
+    /**
+     * This interface is the contract for receiving the results for permission requests.
+     * @param requestCode - the int that defines which permission was asked for
+     * @param permissions - the actual manifest permissions that are passed on
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // get request code
         Permissions p = Permissions.values()[requestCode];
         switch (p) {
             case LOCATION_REQUEST: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // check for GPS localization permission
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // ask for permissions
-                        Log.d("location", "code:1001 -location services have not been granted yet, asking now");
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                                Permissions.LOCATION_REQUEST.ordinal());
-                    } else {
-                        // Permission has already been granted
-                        Log.d("location", "code:1000 - location services granted");
-//                        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
-//                            if (l != null) {
-//                                location = l;
-//                                Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
-////                            wayLatitude = location.getLatitude();
-////                            wayLongitude = location.getLongitude();
-//                            }
-//                        });
-                        if (isContinue) {
-                            mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-                        } else {
-                            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
-                                if (l != null) {
-                                    location = l;
-                                    Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
-                                } else {
-                                    mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-                                }
-                            });
-                        }
-                    }
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("debugRemove", "enters onRequestPermissionsResult");
+                    // request permission to access location, if granted assign to lastLocation
+                    getLocation();
                 } else {
                     // permission denied
                     Toast.makeText(this, "The app requires you to enable Location services!", Toast.LENGTH_SHORT).show();
@@ -201,16 +198,48 @@ public class FavorsMain extends AppCompatActivity {
         }
     }
 
+    /**
+     * Request Location Updates
+     * Helper method that invokes the callback when the permissions allow it
+     * @param callback for Location
+     */
+    private void requestUpdatesHelper(LocationCallback callback) {
+        if (checkPermissions()) {
+            mFusedLocationClient.requestLocationUpdates(locationRequest, callback, null);
+        }
+    }
 
-//    @Override
-//    public void onConnected(Bundle bundle) {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-//            Location lastLocation = LocationServices.getFusedLocationProviderClient(this).getLastLocation();
-//
-//            double lat = lastLocation.getLatitude(), lon = lastLocation.getLongitude();
-//        }
-//    }
+    /**
+     * Get Location
+     * Helper method for obtaining a location
+     * adds a listener to LocationClient and if there is no location invokes a callback
+     * @param callback for Location
+     * @return the location value that was obtained (value can be ignored)
+     */
+    private Location getLocationHelper(LocationCallback callback) {
+        if(checkPermissions()) {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
+                if (l != null) { lastLocation = l; debugLogs(); }
+                else { requestUpdatesHelper(callback); }
+            });
+        }
+        return lastLocation;
+    }
+
+    /**
+     * This method call handles all the location requests.
+     * It updates the location when it is stale or when there is none
+     */
+    private void getLocation() {
+        if (isContinue) { requestUpdatesHelper(locationCallback); }
+        else { getLocationHelper(locationCallback); }
+    }
+
+    /**
+     * Debug logs that will only be printed to console in non-release mode
+     */
+    private void debugLogs() {
+        Log.d("location", "code:1002 - we have a location: (" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude()+(")"));
+    }
 }
 
