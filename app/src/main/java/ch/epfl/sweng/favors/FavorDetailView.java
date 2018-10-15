@@ -69,8 +69,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         super.onCreate(savedInstanceState);
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
         model.getfavor().observe(this, newFavor -> {
-            title = newFavor.getObservableStringObject(Favor.StringFields.title);
-            description = newFavor.getObservableStringObject(Favor.StringFields.description);
+            title = newFavor.getObservableObject(Favor.StringFields.title);
+            description = newFavor.getObservableObject(Favor.StringFields.description);
             //TODO add token cost binding with new database implementation
             //tokenCost = new ObservableField<>(newFavor.get(Favor.IntegerFields.))
         });
