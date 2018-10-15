@@ -21,6 +21,23 @@ public abstract class Request {
 
     protected static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
+    protected static <T extends DatabaseHandler> ObservableArrayList<T> getAll(Class<T> clazz,
+                                                                            String collection,
+                                                                            Integer limit,
+                                                                            DatabaseStringField orderBy){
+        ObservableArrayList<T> result = new ObservableArrayList<>();
+        Query query = db.collection(collection);
+        if(orderBy != null){
+            query = query.orderBy(orderBy.toString());
+        }
+        if(limit != null){
+            query = query.limit(limit);
+        }
+        getList(query, result, clazz);
+        return result;
+    }
+
     protected static <T extends DatabaseHandler> ObservableArrayList<T> getList(Class<T> clazz,
                                                                                 String collection,
                                                                                 DatabaseField element,
@@ -29,7 +46,6 @@ public abstract class Request {
                                                                                 DatabaseStringField orderBy){
         ObservableArrayList<T> result = new ObservableArrayList<>();
         if(element == null || value == null){return null;}
-        Log.d(TAG,element.toString() + value);
         Query query = db.collection(collection).whereEqualTo(element.toString(), value);
         if(orderBy != null){
             query = query.orderBy(orderBy.toString());
