@@ -10,7 +10,7 @@ public class Favor extends DatabaseHandler {
     private static final String TAG = "FAVOR";
     private static final String COLLECTION = "favors";
 
-    public enum StringFields implements DatabaseStringField {title, ownerID, description, location}
+    public enum StringFields implements DatabaseStringField {title, ownerID, description, location, deadline}
     public enum IntegerFields implements DatabaseIntField {creationTimestamp}
 
     public Favor(){

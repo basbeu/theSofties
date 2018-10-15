@@ -82,6 +82,15 @@
                 android:hint="@string/locationFavor"
                 android:inputType="text" />
 
+            <TextView
+                android:id="@+id/deadlineFavor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="@string/deadlineFavor"
+                android:inputType="text"
+                android:textSize="18sp" />
+
             <Button
                 android:layout_marginTop="50sp"
                 android:id="@+id/addFavor"

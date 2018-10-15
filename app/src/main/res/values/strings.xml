@@ -33,6 +33,7 @@
     <string name="titleFavor">Favor Title</string>
     <string name="descriptionFavor">Favor Description</string>
     <string name="locationFavor">Favor Location</string>
+    <string name="deadlineFavor">Favor Deadline</string>
     <string name="imageFavor">Favor Image</string>
     <string name="addFavor">Add Favor</string>
     <string name="title_activity_confirmation_sent">ConfirmationSent</string>
