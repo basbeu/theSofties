@@ -82,7 +82,5 @@
                 android:text="@{elements.validationButtonText}"
                 android:layout_gravity="center"
                 />
-
-
         </LinearLayout>
 </layout>
