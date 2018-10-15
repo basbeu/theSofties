@@ -5,20 +5,30 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Favor class is an extension of the Database handler
+ */
 public class Favor extends DatabaseHandler {
 
+    // tag for log messages
     private static final String TAG = "FAVOR";
+    // identifier for firebase
     private static final String COLLECTION = "favors";
 
+    // enums in order to abstract from database implementation
     public enum StringFields implements DatabaseStringField {title, ownerID, description}
     public enum IntegerFields implements DatabaseIntField {creationTimestamp}
+    public enum LocationFields implements DatabaseLocationField {currentLocation, preferredLocations}
 
+    /**
+     * empty constructor as required per firebase
+     */
     public Favor(){
         super(StringFields.values(), COLLECTION,null);
     }
 
     public Favor(String id){
-        super(StringFields.values(), COLLECTION,id);
+        super(StringFields.values(), COLLECTION, id);
         updateFromDb();
     }
 
