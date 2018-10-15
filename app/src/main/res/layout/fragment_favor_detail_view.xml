@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
 
@@ -30,8 +31,12 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="179dp"
+            android:layout_gravity="center"
+            android:contentDescription="image"
             android:padding="10sp"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            android:src="@drawable/test_image"
+            app:srcCompat="@drawable/test_image" />
+
     <TextView
         android:id="@+id/favDescription"
         android:layout_margin="35sp"
