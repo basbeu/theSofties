@@ -56,6 +56,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.1.1'
     // location play services
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    // dexter runtime permissions
+    // runtime permissions letting user to allow or deny any permission at runtime.
+    // Implementing runtime permissions is a tedious process and developer needs to write lot of code just to get a single permission.
+    implementation 'com.karumi:dexter:4.2.0'
+    // ButterKnife view binding
+    // Android ButterKnife library is a view injection library that injects views into android activity / fragments using annotations.
+    // For example, @BindView annotation avoids using findViewById() method by automatically type casting the view element.
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     // UnitTest & testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
