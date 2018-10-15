@@ -78,12 +78,16 @@ public class EditProfileFragment extends Fragment {
          binding.profCityEdit.addTextChangedListener(profCityEditWatcher);
 
          binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
-                    if(checkedId == R.id.profGenderMEdit){
-                        User.UserGender.setGender(User.getMain(),User.UserGender.M);
-                    }
-                    if(checkedId == R.id.profGenderFEdit){
-                        User.UserGender.setGender(User.getMain(),User.UserGender.F);
-                    }
+             switch (checkedId){
+                 case R.id.profGenderMEdit:
+                     User.UserGender.setGender(User.getMain(),User.UserGender.M);
+                     break;
+                 case  R.id.profGenderFEdit:
+                     User.UserGender.setGender(User.getMain(), User.UserGender.F);
+                     break;
+                 default:
+                     Log.e(TAG, "RadioButton clicked for sex change unidentified");
+             }
          });
 
          binding.commitChanges.setOnClickListener((v)-> {
