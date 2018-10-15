@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:layout_marginTop="30sp"
                 android:id="@+id/createFavorTitle"
@@ -64,13 +65,22 @@
                         app:srcCompat="@android:drawable/ic_menu_add" />
                 </RelativeLayout>
             </LinearLayout>
+
             <EditText
-                android:layout_marginTop="20sp"
+                android:id="@+id/descriptionFavor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/descriptionFavor"
+                android:layout_marginTop="20sp"
                 android:hint="@string/descriptionFavor"
-                android:inputType="text"/>
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/locationFavor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="@string/locationFavor"
+                android:inputType="text" />
 
             <Button
                 android:layout_marginTop="50sp"
