@@ -55,7 +55,6 @@ public class FavorsFragment extends Fragment {
         });
         return binding.getRoot();
     }
-
     private void launchToast(String text) {
         Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
     }
