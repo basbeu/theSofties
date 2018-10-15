@@ -80,7 +80,5 @@
                 android:text="@string/addFavor"
                 android:layout_gravity="center"
                 />
-
-
         </LinearLayout>
 </layout>
