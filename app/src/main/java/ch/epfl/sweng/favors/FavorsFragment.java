@@ -52,6 +52,9 @@ public class FavorsFragment extends Fragment {
                     launchToast("Favor created successfully");
                 }
         });
+
+        //binding.testFavorDetailButton.setOnClickListener(v->{getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();});
+
         return binding.getRoot();
     }
 
