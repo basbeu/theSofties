@@ -55,6 +55,8 @@ public class FavorsMain extends AppCompatActivity {
     private Location location;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
+    // decides continuous location updates
+    private boolean isContinue = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,8 @@ public class FavorsMain extends AppCompatActivity {
                 }
             }
         };
+
+        getLocation();
     }
 
     public void loginViewLoad(Status status, View view){
@@ -121,6 +125,29 @@ public class FavorsMain extends AppCompatActivity {
         Intent intent = new Intent(this, Logged_in_Screen.class);
         intent.putExtra(LOGGED_IN, status);
         startActivity(intent);
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    Permissions.LOCATION_REQUEST.ordinal());
+
+        } else {
+            if (isContinue) {
+                mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            } else {
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
+                    if (l != null) {
+                        location = l;
+                        Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
+
+                    } else {
+                        mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -143,14 +170,26 @@ public class FavorsMain extends AppCompatActivity {
                     } else {
                         // Permission has already been granted
                         Log.d("location", "code:1000 - location services granted");
-                        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
-                            if (l != null) {
-                                location = l;
-                                Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
-//                            wayLatitude = location.getLatitude();
-//                            wayLongitude = location.getLongitude();
-                            }
-                        });
+//                        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
+//                            if (l != null) {
+//                                location = l;
+//                                Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
+////                            wayLatitude = location.getLatitude();
+////                            wayLongitude = location.getLongitude();
+//                            }
+//                        });
+                        if (isContinue) {
+                            mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                        } else {
+                            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
+                                if (l != null) {
+                                    location = l;
+                                    Log.d("location", "code:1002 - we have a location: (" + location.getLatitude() + ", " + location.getLongitude()+(")"));
+                                } else {
+                                    mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                                }
+                            });
+                        }
                     }
                 } else {
                     // permission denied
