@@ -40,11 +40,18 @@ public class FavorsFragment extends Fragment {
             public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.description, editable.toString()); }
         });
 
+        binding.locationFavor.addTextChangedListener(new TextWatcherCustom() {
+            @Override
+            public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.location, editable.toString()); }
+        });
+
         binding.addFavor.setOnClickListener(v->{
                 if (newFavor.get(Favor.StringFields.title) == null || newFavor.get(Favor.StringFields.title).isEmpty()){
                     launchToast("Please add a title to the favor");
                 } else if( newFavor.get(Favor.StringFields.description) == null || newFavor.get(Favor.StringFields.description).isEmpty()){
                     launchToast("Please add a description to the favor");
+                } else if( newFavor.get(Favor.StringFields.location) == null || newFavor.get(Favor.StringFields.location).isEmpty()){
+                    launchToast("Please add a location to the favor");
                 }
                 else {
                     newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
