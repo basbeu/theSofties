@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
+import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 
 
 /**
@@ -32,7 +33,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<Integer> tokenCost;
 
 
-    FragmentEditProfileBinding binding;
+    FragmentFavorDetailViewBinding binding;
 
 
     // TODO: Rename parameter arguments, choose names that match
