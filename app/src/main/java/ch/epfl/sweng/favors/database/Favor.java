@@ -20,7 +20,7 @@ public class Favor extends DatabaseHandler {
     public enum IntegerFields implements DatabaseIntField {creationTimestamp, reward, expirationTimestamp}
 
     public enum ObjectFields implements DatabaseObjectField {location}
-    public enum LocationFields implements DatabaseLocationField {currentLocation, preferredLocations}
+//    public enum LocationFields implements DatabaseLocationField {currentLocation, preferredLocations}
 
     public enum BooleanFields implements DatabaseBooleanField {isOpen}
 

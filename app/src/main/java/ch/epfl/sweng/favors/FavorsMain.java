@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
@@ -68,6 +71,8 @@ public class FavorsMain extends AppCompatActivity {
     private Location lastLocation;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
+    // geocoder
+    Geocoder geo = new Geocoder(context, Locale.getDefault());
     // decides continuous location updates
     private boolean isContinue = false;
 
