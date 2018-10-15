@@ -25,6 +25,7 @@ public class FavorsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final Favor newFavor = new Favor();
+        
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
         binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
