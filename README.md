@@ -2,7 +2,7 @@
 
 #### created by theSofties
 
-It is an application that revolves around facilitating helping out other people. This is done by crowsourcing the principle **if I help you, you owe me**. For this we have favor tokens so it is possible to both spend and earn favors and they must not be settled immediately. Just ask for a favor and you will get the help you need and desire. After you have helped you can ask for favors. You cannot only use this if you need help, but also if you have time, want to get to meet new & interesting peopler or just help out.
+It is an application that revolves around facilitating helping out other people. This is done by crowdsourcing the principle **if I help you, you owe me**. For this we have favor tokens so it is possible to both spend and earn favors and they must not be settled immediately. Just ask for a favor and you will get the help you need and desire. After you have helped you can ask for favors. You cannot only use this if you need help, but also if you have time, want to get to meet new & interesting people or just help out.
 
 # Motivation
 
