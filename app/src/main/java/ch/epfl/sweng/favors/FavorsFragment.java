@@ -1,34 +1,23 @@
 package ch.epfl.sweng.favors;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.view.View;
-import android.app.DialogFragment;
+
 import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
-
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 
@@ -61,7 +50,7 @@ public class FavorsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.favors_layout, container, false);
+      View view =  inflater.inflate(R.layout.favors_layout, container, false);
         final Favor newFavor = new Favor();
 
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
@@ -84,8 +73,19 @@ public class FavorsFragment extends Fragment {
             public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.deadline, editable.toString()); }
         });
 
-        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+        binding.categoryFavor.addTextChangedListener(new TextWatcherCustom() {
+            @Override
+            public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.category, editable.toString()); }
+        });
 
+        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+        String [] values =
+                {"Time at Residence","Under 6 months","6-12 months","1-2 years","2-4 years","4-8 years","8-15 years","Over 15 years",};
+        Spinner spinner = view.findViewById(R.id.categoryFavor);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, values);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+       // return view;
         return binding.getRoot();
     }
     public void onViewCreated(View view, Bundle savedInstanceState) {

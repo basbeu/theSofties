@@ -91,6 +91,15 @@
                 android:inputType="text"
                 android:textSize="18sp" />
 
+            <Spinner
+                android:id="@+id/categoryFavor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="@string/categoryFavor"
+                android:inputType="text"
+                android:textSize="18sp" />
+
             <Button
                 android:layout_marginTop="50sp"
                 android:id="@+id/addFavor"

@@ -36,5 +36,6 @@
     <string name="deadlineFavor">Favor Deadline</string>
     <string name="imageFavor">Favor Image</string>
     <string name="addFavor">Add Favor</string>
+    <string name="categoryFavor">Add Favor Category</string>
     <string name="title_activity_confirmation_sent">ConfirmationSent</string>
 </resources>
