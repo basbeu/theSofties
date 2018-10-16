@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
 
@@ -65,7 +62,7 @@ public class EditProfileFragment extends Fragment {
          binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
          binding.setElements(this);
 
-         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+         User.getMain().set(User.StringFields.email, User.getMain().getInstance().getCurrentUser().getEmail());
 
          binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
 
