@@ -18,6 +18,7 @@ public class User extends DatabaseHandler {
     public static void setMain(String id){
         user = new User(id);
     }
+    public static void setMain(User u) {user = u; }
 
     public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, basedLocation}
 
