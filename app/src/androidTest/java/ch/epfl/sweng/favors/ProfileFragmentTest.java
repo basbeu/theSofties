@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoRule;
 import ch.epfl.sweng.favors.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -69,11 +70,9 @@ public class ProfileFragmentTest {
     }
 
     @Test
-    public void email_is_displaye(){
+    public void email_is_displayed(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profEmail)).check(matches(withText(FAKEEMAIL)));
-
     }
-
 
 }

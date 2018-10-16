@@ -48,7 +48,7 @@ public class EditProfileFragmentTest {
     @Test
     public void fragment_can_be_instantiated() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profileTitle)).check(matches(isDisplayed()));
+        onView(withId(R.id.editProfileTitle)).check(matches(isDisplayed()));
     }
 
 }
