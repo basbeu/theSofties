@@ -11,118 +11,161 @@
 
     </data>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/whiteSmoke"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/createFavorTitle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30sp"
+            android:gravity="center_horizontal"
+            android:text="@{elements.fragmentTitle}"
+            android:textSize="24sp"
+            tools:layout_centerInParent="false" />
+
         <LinearLayout
-            android:background="@color/whiteSmoke"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="81dp"
+            android:layout_marginTop="30sp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_marginTop="30sp"
-                android:id="@+id/createFavorTitle"
-                android:layout_width="260dp"
+            <EditText
+                android:id="@+id/titleFavor"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@{elements.fragmentTitle}"
-                android:textSize="24sp"
-                tools:layout_centerInParent="false"
-                android:layout_gravity="center"/>
+                android:layout_margin="30sp"
+                android:ems="10"
+                android:hint="@string/titleFavor"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="1sp"
+                android:text="@{elements.favorTitle}" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30sp"
-                android:orientation="horizontal">
-                <EditText
-                    android:padding="1sp"
-                    android:layout_margin="30sp"
-                    android:id="@+id/titleFavor"
-                    android:hint="@string/titleFavor"
-                    android:inputType="text"
-                    android:text="@{elements.favorTitle}"
+            <ImageView
+                android:id="@+id/checkFavorTitle"
+                android:layout_width="29dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/check_image"
+                android:visibility="@{elements.titleValid ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFavor"
+                app:layout_constraintStart_toEndOf="@+id/titleFavor"
+                app:layout_constraintTop_toTopOf="@+id/titleFavor"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="108dp"
+                    android:layout_height="112dp"
+
+                    android:contentDescription="@string/imageFavor"
+                    app:srcCompat="@drawable/logo" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/floatingActionButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:importantForAutofill="no" />
-                <ImageView
-                    android:id="@+id/checkFavorTitle"
-                    android:layout_width="29dp"
-                    android:layout_height="24dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:src="@drawable/check_image"
-                    android:visibility="@{elements.titleValid ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="@+id/titleFavor"
-                    app:layout_constraintStart_toEndOf="@+id/titleFavor"
-                    app:layout_constraintTop_toTopOf="@+id/titleFavor"
-                    tools:layout_editor_absoluteY="106dp" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="108dp"
-                        android:layout_height="112dp"
-
-                        android:contentDescription="@string/imageFavor"
-                        app:srcCompat="@drawable/logo" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/floatingActionButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="20sp"
-                        android:layout_margin="35sp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:backgroundTint="@color/browser_actions_divider_color"
-                        app:srcCompat="@android:drawable/ic_menu_add" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <EditText
-                android:id="@+id/descriptionFavor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:hint="@string/descriptionFavor"
-                  android:text="@{elements.favorDescription}"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/locationFavor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:hint="@string/locationFavor"
-                android:inputType="text" />
-
-            <TextView
-                android:id="@+id/deadlineFavor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:hint="@string/deadlineFavor"
-                android:inputType="text"
-                android:textSize="18sp" />
-
-            <Spinner
-                android:id="@+id/categoryFavor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:hint="@string/categoryFavor"
-                android:inputType="text"
-                android:textSize="18sp" />
-
-            <Button
-                android:layout_marginTop="50sp"
-                android:id="@+id/addFavor"
-                android:layout_width="300sp"
-                android:layout_height="wrap_content"
-                android:text="@{elements.validationButtonText}"
-                android:layout_gravity="center"
-                />
+                    android:layout_margin="35sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="20sp"
+                    app:backgroundTint="@color/browser_actions_divider_color"
+                    app:srcCompat="@android:drawable/ic_menu_add" />
+            </RelativeLayout>
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/descriptionFavor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:hint="@string/descriptionFavor"
+            android:inputType="text"
+            android:text="@{elements.favorDescription}" />
+
+        <ImageView
+            android:id="@+id/checkFavorDescription"
+            android:layout_width="17dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/check_image"
+            android:visibility="@{elements.descriptionValid ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/descriptionFavor"
+            app:layout_constraintStart_toEndOf="@+id/descriptionFavor"
+            app:layout_constraintTop_toTopOf="@+id/descriptionFavor"
+            tools:layout_editor_absoluteY="106dp" />
+
+        <EditText
+            android:id="@+id/locationFavor"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginTop="20sp"
+            android:hint="@string/locationFavor"
+            android:inputType="text" />
+
+        <ImageView
+            android:id="@+id/checkFavorLocation"
+            android:layout_width="17dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/check_image"
+            android:visibility="@{elements.locationCityValid ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/locationFavor"
+            app:layout_constraintStart_toEndOf="@+id/locationFavor"
+            app:layout_constraintTop_toTopOf="@+id/locationFavor"
+            tools:layout_editor_absoluteY="106dp" />
+
+
+        <TextView
+            android:id="@+id/deadlineFavor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:hint="@string/deadlineFavor"
+            android:inputType="text"
+            android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/checkdeadlineFavor"
+            android:layout_width="17dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/check_image"
+            android:visibility="@{elements.deadlineValid ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/categoryFavor"
+            app:layout_constraintStart_toEndOf="@+id/categoryFavor"
+            app:layout_constraintTop_toTopOf="@+id/categoryFavor"
+            tools:layout_editor_absoluteY="106dp" />
+
+        <Spinner
+            android:id="@+id/categoryFavor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:hint="@string/categoryFavor"
+            android:inputType="text"
+            android:textSize="18sp" />
+
+
+
+        <Button
+            android:id="@+id/addFavor"
+            android:layout_width="300sp"
+            android:layout_height="46dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50sp"
+            android:text="@{elements.validationButtonText}" />
+    </LinearLayout>
 </layout>

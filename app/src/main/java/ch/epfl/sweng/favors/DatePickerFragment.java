@@ -1,6 +1,4 @@
 package ch.epfl.sweng.favors;
-
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ public class DatePickerFragment extends DialogFragment {
         ondateSet = ondate;
     }
 
-    @SuppressLint("NewApi")
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);

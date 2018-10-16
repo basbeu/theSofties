@@ -1,10 +1,7 @@
 package ch.epfl.sweng.favors;
 
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
-import android.util.Log;
 import android.view.View;
-
 import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
@@ -14,9 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -38,16 +33,25 @@ public class FavorsFragment extends Fragment {
     private final int MIN_STRING_SIZE = 5;
 
     public ObservableBoolean titleValid = new ObservableBoolean(false);
+    public ObservableBoolean descriptionValid = new ObservableBoolean(false);
+    public ObservableBoolean locationCityValid = new ObservableBoolean(false);
+    public ObservableBoolean deadlineValid = new ObservableBoolean(false);
+
 
     public boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
     }
 
+    public boolean allFavorFieldsValid(){
+        return (titleValid.get() && descriptionValid.get() && locationCityValid.get() && deadlineValid.get());
+    }
     public void createFavorIfValid(Favor newFavor) {
-        if (titleValid.get()) { // && check other fields
+        if (allFavorFieldsValid()) {
             newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+            newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+            newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
             newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
-            //set otherfields
+
             newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
             newFavor.updateOnDb();
             launchToast("Favor created successfully");
@@ -112,27 +116,23 @@ public class FavorsFragment extends Fragment {
         binding.descriptionFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable editable) {
-                newFavor.set(Favor.StringFields.description, editable.toString());
+                descriptionValid.set(isStringValid(editable.toString()));
             }
         });
         binding.locationFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable editable) {
-                newFavor.set(Favor.StringFields.locationCity, editable.toString());
+                locationCityValid.set(isStringValid(editable.toString()));
             }
         });
 
         binding.deadlineFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable editable) {
-                newFavor.set(Favor.StringFields.deadline, editable.toString());
+                deadlineValid.set(isStringValid(editable.toString()));
             }
         });
 
-       /* binding.categoryFavor.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.category, editable.toString()); }
-        });*/
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
 
         Spinner spinner = binding.categoryFavor;
@@ -211,7 +211,7 @@ public class FavorsFragment extends Fragment {
     }
 
     DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> {
-        TextView textView = (TextView) getView().findViewById(R.id.deadlineFavor);
+        TextView textView = getView().findViewById(R.id.deadlineFavor);
         textView.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
                 + "-" + String.valueOf(year));
 
