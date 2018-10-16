@@ -11,7 +11,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
-public class AuthetificationProcessTest {
+public class AuthentificationProcessTest {
     @Test
     public void firstTest(){
         assertEquals(true, true);
