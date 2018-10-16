@@ -82,5 +82,21 @@
                 android:text="@{elements.validationButtonText}"
                 android:layout_gravity="center"
                 />
+            <!-- this is a test part of the app -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="test content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30sp"/>
+            <Button
+                android:id="@+id/testFavorDetailButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="display current favor in detail"
+                android:layout_margin="20sp"
+                android:layout_gravity="center"/>
+
+
         </LinearLayout>
 </layout>
