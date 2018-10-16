@@ -21,10 +21,10 @@ public class EditProfileFragment extends Fragment {
 
     private static final String TAG = "EDIT_PROFILE_FRAGMENT";
 
-    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
-    public ObservableField<String> sex = User.UserGender.getObservableGenderString(User.getMain());
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.location);
+    public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
 
 
     FragmentEditProfileBinding binding;
@@ -46,7 +46,7 @@ public class EditProfileFragment extends Fragment {
     private TextWatcherCustom profCityEditWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.basedLocation, editable.toString());
+            User.getMain().set(User.StringFields.location, editable.toString());
         }
     };
 
