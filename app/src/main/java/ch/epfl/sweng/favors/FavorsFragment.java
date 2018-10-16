@@ -1,5 +1,8 @@
 package ch.epfl.sweng.favors;
 
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableBoolean;
+import android.util.Log;
 import android.view.View;
 
 import android.app.DatePickerDialog;
@@ -24,20 +27,19 @@ import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 public class FavorsFragment extends Fragment {
     private static final String TAG = "FAVOR_FRAGMENT";
 
-
+    public ObservableBoolean titleValid = new ObservableBoolean(false);
+    private final int MIN_STRING_SIZE = 5;
     FavorsLayoutBinding binding;
+    public boolean isStringValid(String s) {
+        Log.d(TAG, "testici");
+        return ( s != null && s.length() > MIN_STRING_SIZE ) ;
+        }
+
 
     public void createFavorIfValid(Favor newFavor) {
-        if (newFavor.get(Favor.StringFields.title) == null || newFavor.get(Favor.StringFields.title).isEmpty()){
-            launchToast("Please add a title to the favor");
-        } else if( newFavor.get(Favor.StringFields.description) == null || newFavor.get(Favor.StringFields.description).isEmpty()){
-            launchToast("Please add a description to the favor");
-        } else if( newFavor.get(Favor.StringFields.location) == null || newFavor.get(Favor.StringFields.location).isEmpty()){
-            launchToast("Please add a location to the favor");
-        } else if( newFavor.get(Favor.StringFields.deadline) == null || newFavor.get(Favor.StringFields.location).isEmpty()){
-            launchToast("Please add a location to the favor");
-        }
-        else {
+        if (titleValid.get()) { // && check other fields
+            newFavor.set(Favor.StringFields.title, binding.titleFavor.toString());
+            //set otherfields
             newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
             newFavor.updateOnDb();
             launchToast("Favor created successfully");
@@ -57,7 +59,9 @@ public class FavorsFragment extends Fragment {
         binding.setElements(this);
         binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
-            public void afterTextChanged(Editable s) { newFavor.set(Favor.StringFields.title,s.toString()); }
+            public void afterTextChanged(Editable s) {
+                titleValid.set(isStringValid(s.toString()));
+            }
         });
         binding.descriptionFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
@@ -76,17 +80,18 @@ public class FavorsFragment extends Fragment {
        /* binding.categoryFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.category, editable.toString()); }
-        });
+        });*/
 
-        /*binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
         String [] values =
                 {"Time at Residence","Under 6 months","6-12 months","1-2 years","2-4 years","4-8 years","8-15 years","Over 15 years",};
         Spinner spinner = view.findViewById(R.id.categoryFavor);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, values);
+        ObservableArrayList
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, InterestRequest.all());
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinner.setAdapter(adapter);*/
-       // return view;
-        return binding.getRoot();
+        spinner.setAdapter(adapter);
+        //return view;
+       return binding.getRoot();
     }
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

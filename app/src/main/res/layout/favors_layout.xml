@@ -7,6 +7,7 @@
             name="elements"
             type="ch.epfl.sweng.favors.FavorsFragment"
             />
+        <import type="android.view.View" />
 
     </data>
 
@@ -42,6 +43,19 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:importantForAutofill="no" />
+                <ImageView
+                    android:id="@+id/checkFavorTitle"
+                    android:layout_width="29dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/check_image"
+                    android:visibility="@{elements.titleValid ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/titleFavor"
+                    app:layout_constraintStart_toEndOf="@+id/titleFavor"
+                    app:layout_constraintTop_toTopOf="@+id/titleFavor"
+                    tools:layout_editor_absoluteY="106dp" />
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
