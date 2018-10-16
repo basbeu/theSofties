@@ -1,8 +1,6 @@
 package ch.epfl.sweng.favors;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.net.Uri;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 
 
@@ -41,7 +38,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String FAVOR_ID = "favorID";
 
-    private Favor currentFavor;
+    private String currentFavorID;
 
 
     public FavorDetailView() {
@@ -55,7 +52,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
      * @param favorID ID of the favor that will be used to display details about.
      * @return A new instance of fragment FavorDetailView.
      */
-    // TODO: Rename and change types and number of parameters
     public static FavorDetailView newInstance(String favorID) {
         FavorDetailView fragment = new FavorDetailView();
         Bundle args = new Bundle();
@@ -68,14 +64,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
-        model.getfavor().observe(this, newFavor -> {
+        currentFavorID = savedInstanceState.getString(FAVOR_ID);
+        model.getFavor().observe(this, newFavor -> {
             title = newFavor.getObservableObject(Favor.StringFields.title);
             description = newFavor.getObservableObject(Favor.StringFields.description);
             //TODO add token cost binding with new database implementation
             //tokenCost = new ObservableField<>(newFavor.get(Favor.IntegerFields.))
         });
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,7 +95,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
+        currentFavorID = null;
     }
 
     /**
