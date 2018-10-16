@@ -12,17 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 
 public class ProfileFragment extends Fragment {
 
     private static final String LOG_TAG = "PROFILE_FRAGMENT";
-    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableStringObject(User.StringFields.basedLocation);
-    public ObservableField<String> sex = User.getMain().getObservableStringObject(User.StringFields.sex);
-    public ObservableField<String> email = User.getMain().getObservableStringObject(User.StringFields.email);
+
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.location);
+    public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
+    public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
 
     FragmentProfileLayoutBinding binding;
 
@@ -32,13 +32,10 @@ public class ProfileFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_layout,container,false);
         binding.setElements(this);
 
-        binding.editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.editProfile.setOnClickListener((v)-> {
                 Fragment fragment = null;
                 fragment = new EditProfileFragment();
                 replaceFragment(fragment);
-            }
         });
 
         return binding.getRoot();

@@ -167,7 +167,7 @@ public class AuthentificationProcess extends Activity {
                 headerText.set("Please enter your login informations:");
                 validationButton.set("Login");
                 requirementsText.set("");
-                Button resetPassword = (Button)findViewById(R.id.resetPasswordButton);
+                Button resetPassword = findViewById(R.id.resetPasswordButton);
                 resetPassword.setVisibility(View.VISIBLE);
                 break;
             case Register:

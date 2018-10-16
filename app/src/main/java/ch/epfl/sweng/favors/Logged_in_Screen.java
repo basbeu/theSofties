@@ -18,12 +18,11 @@ import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 
 public class Logged_in_Screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public ObservableField<String> firstName = User.getMain().getObservableStringObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableStringObject(User.StringFields.lastName);
-    public ObservableField<String> email = User.getMain().getObservableStringObject(User.StringFields.email);
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
 
     ActivityLoggedInScreenBinding binding;
-
     NavHeaderBinding headerBinding;
 
     @Override

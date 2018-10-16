@@ -7,6 +7,7 @@
             name="elements"
             type="ch.epfl.sweng.favors.FavorsFragment"
             />
+        <import type="android.view.View" />
 
     </data>
 
@@ -15,13 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:layout_marginTop="30sp"
                 android:id="@+id/createFavorTitle"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/add_a_new_favor"
+                android:text="@{elements.fragmentTitle}"
                 android:textSize="24sp"
                 tools:layout_centerInParent="false"
                 android:layout_gravity="center"/>
@@ -37,10 +39,24 @@
                     android:id="@+id/titleFavor"
                     android:hint="@string/titleFavor"
                     android:inputType="text"
+                    android:text="@{elements.favorTitle}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:importantForAutofill="no" />
+                <ImageView
+                    android:id="@+id/checkFavorTitle"
+                    android:layout_width="29dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/check_image"
+                    android:visibility="@{elements.titleValid ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/titleFavor"
+                    app:layout_constraintStart_toEndOf="@+id/titleFavor"
+                    app:layout_constraintTop_toTopOf="@+id/titleFavor"
+                    tools:layout_editor_absoluteY="106dp" />
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -64,23 +80,49 @@
                         app:srcCompat="@android:drawable/ic_menu_add" />
                 </RelativeLayout>
             </LinearLayout>
+
             <EditText
-                android:layout_marginTop="20sp"
+                android:id="@+id/descriptionFavor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/descriptionFavor"
+                android:layout_marginTop="20sp"
                 android:hint="@string/descriptionFavor"
-                android:inputType="text"/>
+                  android:text="@{elements.favorDescription}"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/locationFavor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="@string/locationFavor"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/deadlineFavor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="@string/deadlineFavor"
+                android:inputType="text"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/categoryFavor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="@string/categoryFavor"
+                android:inputType="text"
+                android:textSize="18sp" />
 
             <Button
                 android:layout_marginTop="50sp"
                 android:id="@+id/addFavor"
                 android:layout_width="300sp"
                 android:layout_height="wrap_content"
-                android:text="@string/addFavor"
+                android:text="@{elements.validationButtonText}"
                 android:layout_gravity="center"
                 />
-
-
         </LinearLayout>
 </layout>
