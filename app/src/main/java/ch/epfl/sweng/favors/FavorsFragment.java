@@ -73,18 +73,18 @@ public class FavorsFragment extends Fragment {
             public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.deadline, editable.toString()); }
         });
 
-        binding.categoryFavor.addTextChangedListener(new TextWatcherCustom() {
+       /* binding.categoryFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.category, editable.toString()); }
         });
 
-        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+        /*binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
         String [] values =
                 {"Time at Residence","Under 6 months","6-12 months","1-2 years","2-4 years","4-8 years","8-15 years","Over 15 years",};
         Spinner spinner = view.findViewById(R.id.categoryFavor);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, values);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(adapter);*/
        // return view;
         return binding.getRoot();
     }
