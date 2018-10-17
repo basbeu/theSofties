@@ -136,8 +136,8 @@ public abstract class DatabaseHandler {
      * @return True is successfull
      */
     protected void updateLocalData(Map<String, Object> incommingData){
-        for(String name: incommingData.keySet()){
-            Log.d(TAG, stringData.keySet().toString());
+        if(incommingData == null){
+            return;
         }
         convertObjectMapToTypedMap(incommingData, stringData, String.class);
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
