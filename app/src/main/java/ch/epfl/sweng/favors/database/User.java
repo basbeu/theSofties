@@ -75,6 +75,7 @@ public class User extends DatabaseHandler {
         static public UserGender getGenderFromUser(User user){
             if(user != null) {
                 String gender = user.get(User.StringFields.sex);
+                if(gender == null || gender.length() == 0) return DEFAULT;
                 gender = gender.trim().substring(0, 1);
                 if (gender.toUpperCase().equals("M"))
                     return M;

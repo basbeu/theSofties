@@ -58,6 +58,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
             newFavor.updateOnDb();
             sharedViewFavor.select(newFavor);
             launchToast("Favor created successfully");
+            updateUI(true);
         }
     }
     FavorsLayoutBinding binding;

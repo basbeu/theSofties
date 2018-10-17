@@ -185,6 +185,7 @@
             android:layout_height="46dp"
             android:layout_gravity="center"
             android:layout_marginTop="20sp"
+            android:enabled="@{elements.titleValid &amp;&amp; elements.deadlineValid &amp;&amp; elements.descriptionValid &amp;&amp; elements.locationCityValid}"
             android:text="@{elements.validationButtonText}"
             app:layout_constraintTop_toBottomOf="@+id/categoryFavor"
             app:layout_constraintStart_toStartOf="parent"
