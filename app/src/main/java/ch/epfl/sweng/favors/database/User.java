@@ -72,19 +72,19 @@ public class User extends DatabaseHandler {
          * @return M or F depending on users sex. Can return DEFAULT if
          */
         static public UserGender getGenderFromUser(User user){
+            if(user == null) return DEFAULT;
             UserGender userGender = DEFAULT;
-            if(user != null) {
-                String gender = user.get(User.StringFields.sex);
-                if (genderIsValid(gender)) {
-                    gender = gender.trim().substring(0, 1);
-                    if (gender.toUpperCase().equals("M"))
-                        userGender =  M;
-                    else if (gender.toUpperCase().equals("F"))
-                        userGender = F;
-                    else
-                        Log.e(TAG, "Failed to parse the gender returned by the database");
-                }
+            String gender = user.get(User.StringFields.sex);
+            if (genderIsValid(gender)) {
+                gender = gender.trim().substring(0, 1);
+                if (gender.toUpperCase().equals("M"))
+                    userGender =  M;
+                else if (gender.toUpperCase().equals("F"))
+                    userGender = F;
+                else
+                    Log.e(TAG, "Failed to parse the gender returned by the database");
             }
+
             return userGender;
         }
         /*static public UserGender getGenderFromUser(User user){
