@@ -188,19 +188,16 @@ public class FavorsMain extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // get request code
         Permissions p = Permissions.values()[requestCode];
-        switch (p) {
-            case LOCATION_REQUEST: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("debugRemove", "enters onRequestPermissionsResult");
-                    // request permission to access location, if granted assign to lastLocation
-                    getLocation();
-                } else {
-                    // permission denied
-                    Toast.makeText(this, "The app requires you to enable Location services!", Toast.LENGTH_SHORT).show();
-                    Log.e("location", "code:404 - location service where not granted");
-                }
-                return;
+        if(p == Permissions.LOCATION_REQUEST){
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("debugRemove", "enters onRequestPermissionsResult");
+                // request permission to access location, if granted assign to lastLocation
+                getLocation();
+            } else {
+                // permission denied
+                Toast.makeText(this, "The app requires you to enable Location services!", Toast.LENGTH_SHORT).show();
+                Log.e("location", "code:404 - location service where not granted");
             }
         }
     }
