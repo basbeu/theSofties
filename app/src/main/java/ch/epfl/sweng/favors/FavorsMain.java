@@ -132,15 +132,15 @@ public class FavorsMain extends AppCompatActivity {
                 for (Location l : locationResult.getLocations()) {
                     if (l != null) {
                         lastLocation = l;
-//                        User.getMain().set(User.StringFields.city, lastLocation.toString());
-//                        User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                        User.getMain().set(User.StringFields.city, lastLocation.toString());
+                        User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
                         //User.getMain().updateOnDb();
                         debugLogs(); }
                 }
             }
         };
 
-//        getLocation();
+        getLocation();
     }
 
     public void loginViewLoad(Status status, View view){
@@ -218,7 +218,7 @@ public class FavorsMain extends AppCompatActivity {
     private void requestUpdatesHelper(LocationCallback callback) {
         if (checkPermissions()) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Log.d("debugRemove", "requestUpdates callback");
+            Log.d("debugRemove", "requestUpdates assign callback");
             mFusedLocationClient.requestLocationUpdates(locationRequest, callback, null);
         }}
     }
@@ -234,19 +234,17 @@ public class FavorsMain extends AppCompatActivity {
         if(checkPermissions()) {
             // redundant check required by Travis and IDE
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Log.d("debugRemove", "enters getLocationHelper");
                 mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
-                    Log.d("debugRemove", "enters listener");
                 if (l != null) {
-                    Log.d("debugRemove", "enters l != null");
+                    Log.d("debugRemove", "location successfully obtained");
                     lastLocation = l;
-//                    User.getMain().set(User.StringFields.city, "("+lastLocation.getLatitude()+", "+lastLocation.getLongitude()+")");
-//                    User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                    User.getMain().set(User.StringFields.city, "("+lastLocation.getLatitude()+", "+lastLocation.getLongitude()+")");
+                    User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
                     //User.getMain().updateOnDb();
                     debugLogs(); }
                 else {
                     Log.d("debugRemove", "is null");
-                    User.getMain().set(User.StringFields.city, "currently no location");
+                    User.getMain().set(User.StringFields.city, "currently no location, trying to load ...");
                     requestUpdatesHelper(locationCallback); // change to callback
                 }
             });}
