@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors;
 import android.databinding.ObservableBoolean;
 import android.view.View;
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
@@ -27,7 +28,8 @@ import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 
-public class FavorsFragment extends Fragment {
+
+public class FavorsFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
     private final int MIN_STRING_SIZE = 5;
@@ -72,6 +74,17 @@ public class FavorsFragment extends Fragment {
     public final String KEY_FRAGMENT_ID = "fragment_id";
     ArrayAdapter<String> adapter = null;
 
+    //TEST CODE FOR DETAIL FRAGMENT
+    private SharedViewFavor sharedViewFavor;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
+    }
+    //*************************END OF TEST  *******************
+
     /**
      * Load a fragment with a view to edit a favor of the database or to add a new one
      * While creating the favor fragment, please indicate the favor ID of the favor you want to edit
@@ -86,7 +99,6 @@ public class FavorsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
@@ -170,6 +182,9 @@ public class FavorsFragment extends Fragment {
 
             @Override
             public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
+                    //TEST ***********setting the favor that will be used to display details
+                    sharedViewFavor.select(newFavor);
+                    launchToast(validationText.get());
 
             }
 
@@ -179,11 +194,15 @@ public class FavorsFragment extends Fragment {
             }
         });
 
+        // TESTING LINE FOR BINDING
+        binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();
+        });
+
         return binding.getRoot();
     }
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.deadlineFavor).setOnClickListener(new View.OnClickListener() {
+        binding.deadlineFavor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -211,7 +230,7 @@ public class FavorsFragment extends Fragment {
     }
 
     DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> {
-        TextView textView = getView().findViewById(R.id.deadlineFavor);
+        TextView textView = binding.deadlineFavor;
         textView.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
                 + "-" + String.valueOf(year));
 
