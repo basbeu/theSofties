@@ -29,12 +29,13 @@ public class User extends DatabaseHandler {
     public static void setMain(User u) {user = u; }
 
     public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, location, pseudo}
-    public enum IntFields implements DatabaseIntField{creationTimeStamp}
+    public enum IntegerFields implements DatabaseIntField{creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights}
-
+    public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
-        super(StringFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
         instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null){
             updateFromDb();
@@ -43,7 +44,8 @@ public class User extends DatabaseHandler {
     }
 
     public User(String id){
-        super(StringFields.values(), COLLECTION,id);
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id);
         instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null) {
             updateFromDb();
@@ -51,7 +53,8 @@ public class User extends DatabaseHandler {
     }
 
     public User(FirebaseAuth instance){
-        super(StringFields.values(), COLLECTION,instance.getUid());
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,instance.getUid());
         this.instance = instance;
         if(instance.getUid() != null) {
             updateFromDb();
