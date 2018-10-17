@@ -32,7 +32,7 @@ import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 public class FavorsFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
-    private final int MIN_STRING_SIZE = 5;
+    private final int MIN_STRING_SIZE = 1;
 
     public ObservableBoolean titleValid = new ObservableBoolean(false);
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
