@@ -35,7 +35,7 @@ public class Interest extends DatabaseHandler{
                         documentID = docRef.getId();
                         updateFromDb();
                     }).addOnFailureListener(e -> {
-                Log.d(TAG,"failure to push to database");
+                Log.d(TAG,"failure to push interest to database");
                 /* Feedback of an error here - Impossible to update user informations */
             });
         }else{
