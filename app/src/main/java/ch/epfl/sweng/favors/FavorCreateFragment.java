@@ -119,8 +119,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         favorDescription = newFavor.getObservableObject(Favor.StringFields.description);
         locationCity = newFavor.getObservableObject(Favor.StringFields.locationCity);
         deadline = newFavor.getObservableObject(Favor.StringFields.deadline);
-
-
+        
         binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -152,46 +151,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         Spinner spinner = binding.categoryFavor;
 
         interestsList = InterestRequest.all(null, null);
-        interestsList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
-            @Override
-            public void onChanged(ObservableList sender) {
-
-            }
-
-            @Override
-            public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
-            }
-
-            @Override
-            public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-                if(sender != null  && !(sender.isEmpty())){
-                    ArrayList interestsTitles = new ArrayList();
-                    for(Interest interest : interestsList) {
-                        interestsTitles.add(interest.get(Interest.StringFields.title));
-                    }
-                    if (adapter == null) {
-
-                        adapter = new ArrayAdapter<String>((FavorCreateFragment.this).getActivity(), android.R.layout.simple_spinner_item, interestsTitles);
-                        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                        spinner.setAdapter(adapter);
-                    } else {
-
-                        adapter.clear();
-                        adapter.addAll(interestsTitles);
-                    }
-                }
-            }
-
-            @Override
-            public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
-
-            }
-
-            @Override
-            public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
-
-            }
-        });
+        interestsList.addOnListChangedCallback(createInterestCallback(spinner));
 
         // TESTING LINE FOR BINDING
         binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();
@@ -249,6 +209,41 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private void launchToast(String text) {
         Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    private ObservableList.OnListChangedCallback<ObservableList<Interest>> createInterestCallback(Spinner spinner){
+        return new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
+            @Override
+            public void onChanged(ObservableList sender) {}
+
+            @Override
+            public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {}
+
+            @Override
+            public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+                if (sender != null && !(sender.isEmpty())) {
+                    ArrayList interestsTitles = new ArrayList();
+                    for (Interest interest : interestsList) {
+                        interestsTitles.add(interest.get(Interest.StringFields.title));
+                    }
+                    if (adapter == null) {
+                        adapter = new ArrayAdapter<String>((FavorCreateFragment.this).getActivity(), android.R.layout.simple_spinner_item, interestsTitles);
+                        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                        spinner.setAdapter(adapter);
+                    } else {
+
+                        adapter.clear();
+                        adapter.addAll(interestsTitles);
+                    }
+                }
+            }
+
+            @Override
+            public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {}
+
+            @Override
+            public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {}
+        };
     }
 
 }
