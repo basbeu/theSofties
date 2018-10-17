@@ -15,13 +15,9 @@ public class Favor extends DatabaseHandler {
     // identifier for firebase
     private static final String COLLECTION = "favors";
 
-    // enums in order to abstract from database implementation
-    public enum StringFields implements DatabaseStringField {title, ownerID, description}
+    public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category}
     public enum IntegerFields implements DatabaseIntField {creationTimestamp, reward, expirationTimestamp}
-
     public enum ObjectFields implements DatabaseObjectField {location}
-//    public enum LocationFields implements DatabaseLocationField {currentLocation, preferredLocations}
-
     public enum BooleanFields implements DatabaseBooleanField {isOpen}
 
 

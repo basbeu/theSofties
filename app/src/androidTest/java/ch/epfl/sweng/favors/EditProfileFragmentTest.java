@@ -42,6 +42,7 @@ public class EditProfileFragmentTest {
     public void Before(){
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
+        User.UserGender.setGender(User.getMain(), User.UserGender.M);
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
         when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
     }

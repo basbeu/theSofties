@@ -1,150 +1,110 @@
 package ch.epfl.sweng.favors;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
+import java.util.List;
 
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
-import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
+import ch.epfl.sweng.favors.databinding.FragmentFavorsBinding;
 
-public class FavorsFragment extends Fragment {
 
+public class FavorsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "FAVOR_FRAGMENT";
 
-    FavorsLayoutBinding binding;
+    FragmentFavorsBinding binding;
     ObservableArrayList<Favor> favorList;
+    FavorListAdapter listAdapter;
 
-    public ObservableField<String> favorTitle;
-    public ObservableField<String> favorDescription;
-
-    public ObservableField<String> validationButtonText = new ObservableField<>("--");
-    public ObservableField<String> fragmentTitle = new ObservableField<>("--");
-    public ObservableField<String> validationText = new ObservableField<>("--");
-
-    public final String KEY_FRAGMENT_ID = "fragment_id";
-
-    /**
-     * Load a fragment with a view to edit a favor of the database or to add a new one
-     * While creating the favor fragment, please indicate the favor ID of the favor you want to edit
-     * with the KEY_FRAGMENT_ID key and it'll be loaded directly form the server and updated when
-     * the validation button is clicked
-     *
-     * @param inflater Managed by the system
-     * @param container Managed by the system
-     * @param savedInstanceState Managed by the system
-     * @return The view
-     */
+    //RecyclerView favorsListView;
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favors,container,false);
         binding.setElements(this);
 
-        Favor newFavor;
-        String strtext;
-        if(getArguments() != null && (strtext = getArguments().getString(KEY_FRAGMENT_ID)) != null) {
-            newFavor = new Favor(strtext);
-            updateUI(true);
-        }
-        else{
-            newFavor = new Favor();
-            updateUI(false);
-        }
+        //TODO: add text "sort by" to Spinner
 
-        favorTitle = newFavor.getObservableObject(Favor.StringFields.title);
-        favorDescription = newFavor.getObservableObject(Favor.StringFields.description);
+        //Spinner for sorting criteria
+        Spinner sortBySpinner = binding.sortBySpinner;
 
-        binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
+        //create Spinner Adapter from resource list
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.sortBy, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(adapter);
+        sortBySpinner.setOnItemSelectedListener(this);
+
+        //button redirects to creating favor page
+        binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
+
+        binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        favorList = FavorRequest.all(null, null);
+        favorList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
+
             @Override
-            public void afterTextChanged(Editable s) { newFavor.set(Favor.StringFields.title,s.toString()); }
-        });
+            public void onChanged(ObservableList<Favor> sender) {
 
-        binding.descriptionFavor.addTextChangedListener(new TextWatcherCustom() {
+            }
+
             @Override
-            public void afterTextChanged(Editable editable) { newFavor.set(Favor.StringFields.description, editable.toString()); }
+            public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {
+            }
+
+            @Override
+            public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
+                favorList.clear();
+                for (Favor fav : sender) {
+                    favorList.add(fav);
+                }
+                listAdapter = new FavorListAdapter(getContext(), favorList);
+                binding.favorsList.setAdapter(listAdapter);
+                listAdapter.notifyDataSetChanged();
+                Toast.makeText(getContext(), "list charged " + favorList.size(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {
+            }
+
+            @Override
+            public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {
+            }
         });
 
-        binding.addFavor.setOnClickListener(v->{
-                favorList = FavorRequest.getList(Favor.StringFields.title, "test", null, null);
-                favorList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
-                    @Override
-                    public void onChanged(ObservableList<Favor> sender) {
-
-                    }
-
-                    @Override
-                    public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {
-
-                    }
-
-                    @Override
-                    public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-                        Log.d(TAG ,"favor list changed");
-                        for(Favor favor: favorList){
-                            Log.d(TAG + " desc:", favor.get(Favor.StringFields.description));
-                        }
-                    }
-
-                    @Override
-                    public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {
-
-                    }
-
-                    @Override
-                    public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {
-
-                    }
-                });
-                if (newFavor.get(Favor.StringFields.title) == null || newFavor.get(Favor.StringFields.title).isEmpty()){
-                    launchToast("Please add a title to the favor");
-                } else if( newFavor.get(Favor.StringFields.description) == null || newFavor.get(Favor.StringFields.description).isEmpty()){
-                    launchToast("Please add a description to the favor");
-                }
-                else {
-                    newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
-                    newFavor.updateOnDb();
-
-                    launchToast(validationText.get());
-
-                    updateUI(true);
-                }
-        });
         return binding.getRoot();
     }
 
-    private void updateUI(boolean isEditing){
-        if(isEditing){
-            validationButtonText.set("Edit the favor");
-            fragmentTitle.set("Edit an existing favor");
-            validationText.set("Favor edited successfully");
-        }
-        else{
-            validationButtonText.set("Create the favor");
-            fragmentTitle.set("Create a new favor");
-            validationText.set("Favor created successfully");
-        }
+    /**
+     *
+     * Sorts the favors list according to sort criteria
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
-    private void launchToast(String text) {
-        Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
+    /**
+     *
+     * Takes the favors list from the data base
+     */
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }
