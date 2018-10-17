@@ -24,10 +24,12 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Locale;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
 
 /**
@@ -72,7 +74,7 @@ public class FavorsMain extends AppCompatActivity {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     // geocoder
-    Geocoder geo = new Geocoder(context, Locale.getDefault());
+    // Geocoder geo = new Geocoder(context, Locale.getDefault());
     // decides continuous location updates
     private boolean isContinue = false;
 
@@ -117,8 +119,8 @@ public class FavorsMain extends AppCompatActivity {
         // set periodic updates of location
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(60 * 1000); // 60 seconds
-        locationRequest.setFastestInterval(30 * 1000); // 30 seconds
+        locationRequest.setInterval(10 * 1000); // 60 seconds
+        locationRequest.setFastestInterval(5 * 1000); // 30 seconds
         // callback methods
         locationCallback = new LocationCallback() {
             @Override
@@ -128,12 +130,17 @@ public class FavorsMain extends AppCompatActivity {
                     return;
                 }
                 for (Location l : locationResult.getLocations()) {
-                    if (l != null) { lastLocation = l; debugLogs(); }
+                    if (l != null) {
+                        lastLocation = l;
+//                        User.getMain().set(User.StringFields.city, lastLocation.toString());
+//                        User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                        //User.getMain().updateOnDb();
+                        debugLogs(); }
                 }
             }
         };
 
-        getLocation();
+//        getLocation();
     }
 
     public void loginViewLoad(Status status, View view){
@@ -211,6 +218,7 @@ public class FavorsMain extends AppCompatActivity {
     private void requestUpdatesHelper(LocationCallback callback) {
         if (checkPermissions()) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Log.d("debugRemove", "requestUpdates callback");
             mFusedLocationClient.requestLocationUpdates(locationRequest, callback, null);
         }}
     }
@@ -226,9 +234,21 @@ public class FavorsMain extends AppCompatActivity {
         if(checkPermissions()) {
             // redundant check required by Travis and IDE
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
-                if (l != null) { lastLocation = l; debugLogs(); }
-                else { requestUpdatesHelper(callback); }
+                Log.d("debugRemove", "enters getLocationHelper");
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
+                    Log.d("debugRemove", "enters listener");
+                if (l != null) {
+                    Log.d("debugRemove", "enters l != null");
+                    lastLocation = l;
+//                    User.getMain().set(User.StringFields.city, "("+lastLocation.getLatitude()+", "+lastLocation.getLongitude()+")");
+//                    User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                    //User.getMain().updateOnDb();
+                    debugLogs(); }
+                else {
+                    Log.d("debugRemove", "is null");
+                    User.getMain().set(User.StringFields.city, "currently no location");
+                    requestUpdatesHelper(locationCallback); // change to callback
+                }
             });}
         }
         return lastLocation;
@@ -250,4 +270,3 @@ public class FavorsMain extends AppCompatActivity {
         Log.d("location", "code:1002 - we have a location: (" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude()+(")"));
     }
 }
-

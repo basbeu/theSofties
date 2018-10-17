@@ -22,7 +22,7 @@ public class User extends DatabaseHandler {
         user = new User(id);
     }
 
-    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, pseudo}
+    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, pseudo, city}
     public enum IntFields implements DatabaseIntField{creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {location, rights}
 
