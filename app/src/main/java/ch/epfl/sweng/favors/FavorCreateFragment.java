@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
@@ -15,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import android.arch.lifecycle.ViewModelProviders;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -26,7 +26,9 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 
-public class FavorCreateFragment extends Fragment {
+
+public class FavorCreateFragment extends android.support.v4.app.Fragment {
+
     private static final String TAG = "FAVOR_FRAGMENT";
 
     FavorsLayoutBinding binding;
@@ -41,11 +43,16 @@ public class FavorCreateFragment extends Fragment {
 
     public final String KEY_FRAGMENT_ID = "fragment_id";
 
+    //TEST CODE FOR DETAIL FRAGMENT
+    private SharedViewFavor sharedViewFavor;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
     }
+    //*************************END OF TEST  *******************
 
     /**
      * Load a fragment with a view to edit a favor of the database or to add a new one
@@ -61,7 +68,6 @@ public class FavorCreateFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
@@ -128,7 +134,13 @@ public class FavorCreateFragment extends Fragment {
             else {
                 newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
                 newFavor.updateOnDb();
+
+                //TEST ***********setting the favor that will be used to display details
+                sharedViewFavor.select(newFavor);
+
+
                 launchToast(validationText.get());
+
                 updateUI(true);
             }
         });
