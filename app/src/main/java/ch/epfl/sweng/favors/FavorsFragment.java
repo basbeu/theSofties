@@ -65,10 +65,7 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
 
             @Override
             public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-                listAdapter = new FavorListAdapter(getContext(), favorList);
-                binding.favorsList.setAdapter(listAdapter);
-                listAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "list charged " + favorList.size(), Toast.LENGTH_LONG).show();
+                updateList();
             }
 
             @Override
@@ -86,15 +83,18 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
      * Sorts the favors list according to sort criteria
      */
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {}
 
     /**
      *
      * Takes the favors list from the data base
      */
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) {}
+
+    private void updateList(){
+        listAdapter = new FavorListAdapter(getContext(), favorList);
+        binding.favorsList.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
     }
 }
