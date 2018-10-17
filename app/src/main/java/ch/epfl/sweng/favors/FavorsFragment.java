@@ -69,10 +69,6 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
 
             @Override
             public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-                favorList.clear();
-                for (Favor fav : sender) {
-                    favorList.add(fav);
-                }
                 listAdapter = new FavorListAdapter(getContext(), favorList);
                 binding.favorsList.setAdapter(listAdapter);
                 listAdapter.notifyDataSetChanged();
