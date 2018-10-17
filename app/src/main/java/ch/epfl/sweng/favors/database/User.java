@@ -12,15 +12,21 @@ public class User extends DatabaseHandler {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
+    private FirebaseAuth instance;
 
     private static User user = new User();
     public static User getMain(){
         return user;
     }
 
+    public FirebaseAuth getInstance() {
+        return instance;
+    }
+
     public static void setMain(String id){
         user = new User(id);
     }
+    public static void setMain(User u) {user = u; }
 
     public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, pseudo, city}
     public enum IntFields implements DatabaseIntField{creationTimeStamp}
@@ -28,17 +34,29 @@ public class User extends DatabaseHandler {
 
 
     public User(){
-        super(StringFields.values(), IntFields.values(), null,
+       super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
-        if(FirebaseAuth.getInstance().getUid() != null)
+        instance = FirebaseAuth.getInstance();
+        if(instance.getUid() != null){
             updateFromDb();
+        }
     }
 
     public User(String id){
-        super(StringFields.values(), IntFields.values(), null,
-                ObjectFields.values(), COLLECTION, id);
-        if(FirebaseAuth.getInstance().getUid() != null)
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id);
+        instance = FirebaseAuth.getInstance();
+        if(instance.getUid() != null) {
             updateFromDb();
+        }
+    }
+
+    public User(FirebaseAuth instance){
+        super(StringFields.values(), COLLECTION,instance.getUid());
+        this.instance = instance;
+        if(instance.getUid() != null) {
+            updateFromDb();
+        }
     }
 
     public enum UserGender {
