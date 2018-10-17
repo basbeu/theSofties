@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +21,11 @@ public class ProfileFragment extends Fragment {
 
     public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.location);
+//    public /**ObservableField<Location>**/Location city = (Location)User.getMain().get(User.ObjectFields.location);
+    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.city);
+    public ObservableField<Object> location = User.getMain().getObservableObject(User.ObjectFields.location);
+    // new ObservableField<>(city.toString());
+    //    public ObservableField<Object> baseCity = User.getMain().getObservableObject(User.ObjectFields.location);
     public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
     public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
 
