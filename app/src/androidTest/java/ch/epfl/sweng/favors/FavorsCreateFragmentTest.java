@@ -12,10 +12,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class FavorsFragmentTest {
+public class FavorsCreateFragmentTest {
 
     @Rule
-    public FragmentTestRule<FavorsFragment> mFragmentTestRule = new FragmentTestRule<>(FavorsFragment.class);
+    public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
 
     @Test
     public void fragment_can_be_instantiated() {
