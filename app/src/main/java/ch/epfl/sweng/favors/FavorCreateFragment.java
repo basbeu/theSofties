@@ -79,6 +79,70 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     //TEST CODE FOR DETAIL FRAGMENT
     private SharedViewFavor sharedViewFavor;
 
+    private Favor newFavor;
+    private String strtext;
+
+    private Spinner spinner = binding.categoryFavor;
+    private ObservableList.OnListChangedCallback<ObservableList<Interest>> callbackInterestList = new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
+        @Override
+        public void onChanged(ObservableList sender) {}
+
+        @Override
+        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {}
+
+        @Override
+        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+            if(sender != null  && !(sender.isEmpty())){
+                ArrayList interestsTitles = new ArrayList();
+                for(Interest interest : interestsList) {
+                    interestsTitles.add(interest.get(Interest.StringFields.title));
+                }
+                if (adapter == null) {
+
+                    adapter = new ArrayAdapter<String>((FavorCreateFragment.this).getActivity(), android.R.layout.simple_spinner_item, interestsTitles);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                    spinner.setAdapter(adapter);
+                } else {
+
+                    adapter.clear();
+                    adapter.addAll(interestsTitles);
+                }
+            }
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {}
+
+        @Override
+        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {}
+    };
+
+    private TextWatcherCustom titleFavorTextWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            titleValid.set(isStringValid(s.toString()));
+        }
+    };
+    private TextWatcherCustom descriptionFavorTextWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            descriptionValid.set(isStringValid(editable.toString()));
+        }
+    };
+    private TextWatcherCustom locationFavorTextWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            locationCityValid.set(isStringValid(editable.toString()));
+        }
+    };
+    private TextWatcherCustom deadlineFavorTextWatcher = new TextWatcherCustom() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            deadlineValid.set(isStringValid(editable.toString()));
+        }
+    };
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,8 +168,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
-        Favor newFavor;
-        String strtext;
         if(getArguments() != null && (strtext = getArguments().getString(KEY_FRAGMENT_ID)) != null) {
             newFavor = new Favor(strtext);
             updateUI(true);
@@ -120,85 +182,21 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         locationCity = newFavor.getObservableObject(Favor.StringFields.locationCity);
         deadline = newFavor.getObservableObject(Favor.StringFields.deadline);
 
-
-        binding.titleFavor.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable s) {
-                titleValid.set(isStringValid(s.toString()));
-            }
-        });
-        binding.descriptionFavor.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                descriptionValid.set(isStringValid(editable.toString()));
-            }
-        });
-        binding.locationFavor.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                locationCityValid.set(isStringValid(editable.toString()));
-            }
-        });
-
-        binding.deadlineFavor.addTextChangedListener(new TextWatcherCustom() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                deadlineValid.set(isStringValid(editable.toString()));
-            }
-        });
-
+        binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
+        binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
+        binding.locationFavor.addTextChangedListener(locationFavorTextWatcher);
+        binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
 
-        Spinner spinner = binding.categoryFavor;
-
         interestsList = InterestRequest.all(null, null);
-        interestsList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
-            @Override
-            public void onChanged(ObservableList sender) {
-
-            }
-
-            @Override
-            public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
-            }
-
-            @Override
-            public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-                if(sender != null  && !(sender.isEmpty())){
-                    ArrayList interestsTitles = new ArrayList();
-                    for(Interest interest : interestsList) {
-                        interestsTitles.add(interest.get(Interest.StringFields.title));
-                    }
-                    if (adapter == null) {
-
-                        adapter = new ArrayAdapter<String>((FavorCreateFragment.this).getActivity(), android.R.layout.simple_spinner_item, interestsTitles);
-                        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                        spinner.setAdapter(adapter);
-                    } else {
-
-                        adapter.clear();
-                        adapter.addAll(interestsTitles);
-                    }
-                }
-            }
-
-            @Override
-            public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
-
-            }
-
-            @Override
-            public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
-
-            }
-        });
+        interestsList.addOnListChangedCallback(callbackInterestList);
 
         // TESTING LINE FOR BINDING
-        binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();
-        });
+        binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();});
 
         return binding.getRoot();
     }
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.deadlineFavor.setOnClickListener(new View.OnClickListener() {
