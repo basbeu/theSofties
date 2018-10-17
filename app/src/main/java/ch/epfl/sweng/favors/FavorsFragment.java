@@ -35,8 +35,7 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
     //RecyclerView favorsListView;
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favors,container,false);
         binding.setElements(this);
 
@@ -59,13 +58,10 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
         favorList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
 
             @Override
-            public void onChanged(ObservableList<Favor> sender) {
-
-            }
+            public void onChanged(ObservableList<Favor> sender) {}
 
             @Override
-            public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {
-            }
+            public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {}
 
             @Override
             public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
@@ -76,12 +72,10 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
             }
 
             @Override
-            public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {
-            }
+            public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {}
 
             @Override
-            public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {
-            }
+            public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {}
         });
 
         return binding.getRoot();
