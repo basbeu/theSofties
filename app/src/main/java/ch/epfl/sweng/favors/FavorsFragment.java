@@ -56,6 +56,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
 
             newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
             newFavor.updateOnDb();
+            sharedViewFavor.select(newFavor);
             launchToast("Favor created successfully");
         }
     }
@@ -182,9 +183,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
-                    //TEST ***********setting the favor that will be used to display details
-                    sharedViewFavor.select(newFavor);
-                    launchToast(validationText.get());
 
             }
 
