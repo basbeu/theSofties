@@ -19,4 +19,5 @@ public final class FavorRequest extends Request{
         return getAll(Favor.class, COLLECTION, limit, orderBy);
     }
 
+
 }

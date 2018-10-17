@@ -23,7 +23,6 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
     public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
 
     ActivityLoggedInScreenBinding binding;
-
     NavHeaderBinding headerBinding;
 
     @Override

@@ -12,33 +12,53 @@ public class User extends DatabaseHandler {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
+    private FirebaseAuth instance;
 
     private static User user = new User();
     public static User getMain(){
         return user;
     }
 
+    public FirebaseAuth getInstance() {
+        return instance;
+    }
+
     public static void setMain(String id){
         user = new User(id);
     }
+    public static void setMain(User u) {user = u; }
 
-    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, location, pseudo}
-    public enum IntFields implements DatabaseIntField{creationTimeStamp}
-    public enum ObjectFields implements DatabaseObjectField {rights}
+    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, pseudo, city}
+    public enum IntegerFields implements DatabaseIntField{creationTimeStamp}
+    public enum ObjectFields implements DatabaseObjectField {rights, location}
+    public enum BooleanFields implements DatabaseBooleanField {}
 
 
     public User(){
-        super(StringFields.values(), IntFields.values(), null,
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
-        if(FirebaseAuth.getInstance().getUid() != null)
+        instance = FirebaseAuth.getInstance();
+        if(instance.getUid() != null){
             updateFromDb();
+        }
     }
 
     public User(String id){
-        super(StringFields.values(), IntFields.values(), null,
-                ObjectFields.values(), COLLECTION, id);
-        if(FirebaseAuth.getInstance().getUid() != null)
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id);
+        instance = FirebaseAuth.getInstance();
+        if(instance.getUid() != null) {
             updateFromDb();
+        }
+    }
+
+    public User(FirebaseAuth instance){
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,instance.getUid());
+        this.instance = instance;
+        if(instance.getUid() != null) {
+            updateFromDb();
+        }
     }
 
     public enum UserGender {
@@ -52,16 +72,36 @@ public class User extends DatabaseHandler {
          * @return M or F depending on users sex. Can return DEFAULT if
          */
         static public UserGender getGenderFromUser(User user){
-            if(user != null) {
-                String gender = user.get(User.StringFields.sex);
+            if(user == null) return DEFAULT;
+            UserGender userGender = DEFAULT;
+            String gender = user.get(User.StringFields.sex);
+            if (genderIsValid(gender)) {
                 gender = gender.trim().substring(0, 1);
                 if (gender.toUpperCase().equals("M"))
-                    return M;
+                    userGender =  M;
                 else if (gender.toUpperCase().equals("F"))
-                    return F;
+                    userGender = F;
+                else
+                    Log.e(TAG, "Failed to parse the gender returned by the database");
             }
+
+            return userGender;
+        }
+        /*static public UserGender getGenderFromUser(User user){
+            if(user == null) return DEFAULT;
+            String gender = user.get(User.StringFields.sex);
+            if(genderIsValid(gender)) return DEFAULT;
+            gender = gender.trim().substring(0, 1);
+            if (gender.toUpperCase().equals("M"))
+                return M;
+            else if (gender.toUpperCase().equals("F"))
+               return F;
             Log.e(TAG,"Failed to parse the gender returned by the database");
             return DEFAULT;
+        }*/
+
+        private static boolean genderIsValid(String gender) {
+            return gender == null || gender.length() == 0;
         }
 
         /**
