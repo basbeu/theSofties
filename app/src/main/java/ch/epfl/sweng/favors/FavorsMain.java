@@ -72,7 +72,23 @@ public class FavorsMain extends AppCompatActivity {
     // location
     private Location lastLocation;
     private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Log.d("debugRemove", "enters callback");
+            if (locationResult == null) {
+                return;
+            }
+            for (Location l : locationResult.getLocations()) {
+                if (l != null) {
+                    lastLocation = l;
+                    User.getMain().set(User.StringFields.city, lastLocation.toString());
+                    User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                    //User.getMain().updateOnDb();
+                    debugLogs(); }
+            }
+        }
+    };
     // geocoder
     // Geocoder geo = new Geocoder(context, Locale.getDefault());
     // decides continuous location updates
@@ -106,14 +122,10 @@ public class FavorsMain extends AppCompatActivity {
         }
 
         // check for GPS localization permission
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // request permission
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    Permissions.LOCATION_REQUEST.ordinal());
-        } else {
-            // permission already granted
-        }
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Permissions.LOCATION_REQUEST.ordinal());
+        } else {/*permission already granted*/}
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // set periodic updates of location
@@ -122,23 +134,6 @@ public class FavorsMain extends AppCompatActivity {
         locationRequest.setInterval(10 * 1000); // 60 seconds
         locationRequest.setFastestInterval(5 * 1000); // 30 seconds
         // callback methods
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                Log.d("debugRemove", "enters callback");
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location l : locationResult.getLocations()) {
-                    if (l != null) {
-                        lastLocation = l;
-                        User.getMain().set(User.StringFields.city, lastLocation.toString());
-                        User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
-                        //User.getMain().updateOnDb();
-                        debugLogs(); }
-                }
-            }
-        };
 
         getLocation();
     }

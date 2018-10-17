@@ -82,7 +82,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private Favor newFavor;
     private String strtext;
 
-    private Spinner spinner = binding.categoryFavor;
+    private Spinner spinner;
     private ObservableList.OnListChangedCallback<ObservableList<Interest>> callbackInterestList = new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
         @Override
         public void onChanged(ObservableList sender) {}
@@ -187,6 +187,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.locationFavor.addTextChangedListener(locationFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+
+        spinner =  binding.categoryFavor;
 
         interestsList = InterestRequest.all(null, null);
         interestsList.addOnListChangedCallback(callbackInterestList);
