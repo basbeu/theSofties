@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'jacoco'
+
 
 jacoco {
     toolVersion = "0.8.0"
@@ -57,6 +58,8 @@ dependencies {
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.9'
+    androidTestImplementation 'org.mockito:mockito-android:2.8.9'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
