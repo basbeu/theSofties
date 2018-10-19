@@ -242,9 +242,7 @@ public class FavorsMain extends AppCompatActivity {
                         }
 
                     }
-                    catch(IOException e) {
-
-                    }
+                    catch(IOException e) {}
 
                     User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
                     //User.getMain().updateOnDb();
