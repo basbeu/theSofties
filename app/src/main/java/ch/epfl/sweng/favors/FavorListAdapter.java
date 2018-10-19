@@ -1,8 +1,6 @@
 package ch.epfl.sweng.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -10,20 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.List;
 
 import ch.epfl.sweng.favors.database.Favor;
-
-import ch.epfl.sweng.favors.database.FavorRequest;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;

@@ -52,26 +52,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
         binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
 
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        favorList = FavorRequest.all(null, null);
-        favorList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
-
-            @Override
-            public void onChanged(ObservableList<Favor> sender) {}
-
-            @Override
-            public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {}
-
-            @Override
-            public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-                updateList();
-            }
-
-            @Override
-            public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {}
-
-            @Override
-            public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {}
-        });
 
         return binding.getRoot();
     }
@@ -81,7 +61,23 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
      * Sorts the favors list according to sort criteria
      */
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {}
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                favorList = FavorRequest.all(null, null);
+            case 1: //location
+                favorList = FavorRequest.all(null, Favor.StringFields.locationCity);
+                break;
+            case 2: //recent
+                favorList = FavorRequest.all(null, null);
+                break;
+            case 3: //category
+                favorList = FavorRequest.all(null, Favor.StringFields.category);
+                break;
+            default: break;
+        }
+        favorList.addOnListChangedCallback(listCallBack);
+    }
 
     /**
      *
@@ -90,9 +86,28 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
 
-    private void updateList(){
-        listAdapter = new FavorListAdapter(this.getActivity(), favorList);
+    private void updateList(ObservableList<Favor> list){
+        listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }
+
+    ObservableList.OnListChangedCallback listCallBack = new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
+        @Override
+        public void onChanged(ObservableList<Favor> sender) {}
+
+        @Override
+        public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {}
+
+        @Override
+        public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
+            updateList(sender);
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {}
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {}
+    };
 }
