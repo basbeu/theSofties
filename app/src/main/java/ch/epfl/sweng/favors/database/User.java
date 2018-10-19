@@ -101,7 +101,7 @@ public class User extends DatabaseHandler {
         }*/
 
         private static boolean genderIsValid(String gender) {
-            return gender == null || gender.length() == 0;
+            return !(gender == null || gender.length() == 0);
         }
 
         /**
