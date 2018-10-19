@@ -58,6 +58,7 @@
                 android:textStyle="bold"
                 />
             <TextView
+                android:id="@+id/favCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{elements.city}"
@@ -76,6 +77,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"/>
             <TextView
+                android:id="@+id/favCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{elements.categories}"
