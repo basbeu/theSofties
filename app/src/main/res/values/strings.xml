@@ -16,6 +16,7 @@
     <string name="gotit">Got it !</string>
     <string name="next">Next</string>
     <string-array name="sortBy">
+        <item>sort by</item>
         <item>location</item>
         <item>recent</item>
         <item>category</item>
