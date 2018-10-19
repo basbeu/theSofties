@@ -29,6 +29,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<Integer> tokenCost;
+    public ObservableField<String> city;
+    public ObservableField<String> categories;
+
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -69,6 +72,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             localFavor = new Favor(currentFavorID);
             title = localFavor.getObservableObject(Favor.StringFields.title);
             description = localFavor.getObservableObject(Favor.StringFields.description);
+            city = localFavor.getObservableObject(Favor.StringFields.locationCity);
+            categories = localFavor.getObservableObject(Favor.StringFields.category);
         }
         else {
             model.getFavor().observe(this, newFavor -> {
