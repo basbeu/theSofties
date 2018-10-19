@@ -227,8 +227,7 @@ public class FavorsMain extends AppCompatActivity {
      * @return the location value that was obtained (value can be ignored)
      */
     private Location getLocationHelper(LocationCallback callback) {
-        if(checkPermissions()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if(checkPermissions() && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
                 if (l != null) {
                     Log.d("debugRemove", "location successfully obtained");
@@ -255,7 +254,6 @@ public class FavorsMain extends AppCompatActivity {
                     requestUpdatesHelper(locationCallback); // change to callback
                 }
             });}
-        }
         return lastLocation;
     }
 
