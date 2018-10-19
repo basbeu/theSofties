@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.epfl.sweng.favors">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -11,14 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         >
-        <activity android:name="ch.epfl.sweng.favors.FavorsMain">
+        <activity android:name=".FavorsMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="ch.epfl.sweng.favors.SplashScreenActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,16 +31,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ch.epfl.sweng.favors.AuthentificationProcess"
-            android:parentActivityName="ch.epfl.sweng.favors.FavorsMain" />
+            android:name=".AuthentificationProcess"
+            android:parentActivityName=".FavorsMain" />
         <activity
-            android:name="ch.epfl.sweng.favors.Logged_in_Screen"
+            android:name=".Logged_in_Screen"
             android:label="@string/title_activity_logged_in__screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="ch.epfl.sweng.favors.ConfirmationSent"
-            android:label="@string/title_activity_confirmation_sent"></activity>
-        <activity android:name="ch.epfl.sweng.favors.SetUserInfo"></activity>
+            android:name=".ConfirmationSent"
+            android:label="@string/title_activity_confirmation_sent" />
+        <activity android:name=".SetUserInfo" />
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test"/>
     </application>
 
 </manifest>

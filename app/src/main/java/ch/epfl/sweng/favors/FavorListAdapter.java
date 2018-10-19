@@ -71,10 +71,12 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
     public void onBindViewHolder(FavorViewHolder holder, int position) {
         Favor favor = favorList.get(position);
         holder.setFavor(favor);
-        holder.title.setText(favor.get(Favor.StringFields.title));
-        holder.timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
-        holder.description.setText(favor.get(Favor.StringFields.description));
-        //holder.location.setText(favor.get(Favor.StringFields.location));
+        if(favor.get(Favor.StringFields.title) != null)
+            holder.title.setText(favor.get(Favor.StringFields.title));
+        if(favor.get(Favor.IntegerFields.creationTimestamp) != null)
+            holder.timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
+        if(favor.get(Favor.StringFields.description) != null)
+            holder.description.setText(favor.get(Favor.StringFields.description));
     }
 
     @Override

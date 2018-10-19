@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
 
@@ -23,7 +21,7 @@ public class EditProfileFragment extends Fragment {
 
     public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
     public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.location);
+    public ObservableField<Object> baseCity = User.getMain().getObservableObject(User.ObjectFields.location);
     public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
 
 
@@ -46,7 +44,7 @@ public class EditProfileFragment extends Fragment {
     private TextWatcherCustom profCityEditWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.location, editable.toString());
+            User.getMain().set(User.ObjectFields.location, editable.toString());
         }
     };
 
@@ -69,7 +67,7 @@ public class EditProfileFragment extends Fragment {
          //Set the RadioGroup buttons to select the current sex
          displayGender();
 
-         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+         User.getMain().set(User.StringFields.email, User.getMain().getInstance().getCurrentUser().getEmail());
 
          binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
 

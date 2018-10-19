@@ -7,6 +7,7 @@
             name="elements"
             type="ch.epfl.sweng.favors.FavorCreateFragment"
             />
+        <import type="android.view.View" />
 
     </data>
 
@@ -211,5 +212,5 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
 
-        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>
