@@ -25,11 +25,6 @@ script:
   - ./gradlew build connectedCheck jacocoTestReport
 after_script:
   # Report test coverage to Code Climate
-  - cp app/build/generated/source/apt/debug/ch/epfl/sweng/favors/BR.java app/src/main/java/ch/epfl/sweng/favors/
-  - mkdir -p ./app/src/main/java/com/android/databinding/library/baseAdapters/
-  - cp app/build/generated/source/apt/debug/com/android/databinding/library/baseAdapters/BR.java app/src/main/java/com/android/databinding/library/baseAdapters/
-  - mkdir -p app/src/main/java/ch/epfl/sweng/favors/databinding
-  - cp -R app/build/generated/source/apt/debug/ch/epfl/sweng/favors/databinding/. app/src/main/java/ch/epfl/sweng/favors/databinding
   - export JACOCO_SOURCE_PATH=app/src/main/java/
   - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
   - ./cc-test-reporter upload-coverage
