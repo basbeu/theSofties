@@ -66,13 +66,13 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
         switch (menuItem.getItemId())
         {
             case R.id.profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
             case R.id.favors:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
                 Utils.logout(this);
