@@ -20,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
 
 
 public class FavorsMainTest {
-    @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<FavorsMain>(FavorsMain.class);
+    //@Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<FavorsMain>(FavorsMain.class);
 
     @Test
     public void registerView(){
