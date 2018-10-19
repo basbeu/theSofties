@@ -6,6 +6,8 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     private Favor localFavor;
 
-    FragmentFavorDetailViewBinding binding;
+    private FragmentFavorDetailViewBinding binding;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -66,38 +68,35 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getActivity() == null)
+            Log.e(TAG, "current activity is null cannot access shared view of favor");
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
         if(savedInstanceState != null) {
             currentFavorID = savedInstanceState.getString(FAVOR_ID);
             localFavor = new Favor(currentFavorID);
-            title = localFavor.getObservableObject(Favor.StringFields.title);
-            description = localFavor.getObservableObject(Favor.StringFields.description);
-            city = localFavor.getObservableObject(Favor.StringFields.locationCity);
-            categories = localFavor.getObservableObject(Favor.StringFields.category);
+            updateUI(localFavor);
         }
         else {
-            model.getFavor().observe(this, newFavor -> {
-                title = newFavor.getObservableObject(Favor.StringFields.title);
-                description = newFavor.getObservableObject(Favor.StringFields.description);
-                //TODO add token cost binding with new database implementation
-                //tokenCost = new ObservableField<>(newFavor.get(Favor.IntegerFields.))
-            });
+            model.getFavor().observe(this, this::updateUI);
         }
     }
 
+    private void updateUI(Favor localFavor) {
+        title = localFavor.getObservableObject(Favor.StringFields.title);
+        description = localFavor.getObservableObject(Favor.StringFields.description);
+        city = localFavor.getObservableObject(Favor.StringFields.locationCity);
+        categories = localFavor.getObservableObject(Favor.StringFields.category);
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view,container,false);
         binding.setElements(this);
 
-        binding.favReportAbusiveAdd.setOnClickListener((l)->{
-            Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
-        });
+        binding.favReportAbusiveAdd.setOnClickListener((l)-> Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show());
 
-        binding.favIntrestedButton.setOnClickListener((l)->{
-            Toast.makeText(this.getContext(), "We will inform the poster of the add that you are intrested to help!", Toast.LENGTH_LONG).show();
-        });
+        binding.favIntrestedButton.setOnClickListener((l)->Toast.makeText(this.getContext(), "We will inform the poster of the add that you are intrested to help!", Toast.LENGTH_LONG).show());
 
         return binding.getRoot();
     }
