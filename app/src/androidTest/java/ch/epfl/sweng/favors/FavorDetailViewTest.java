@@ -83,4 +83,9 @@ public class FavorDetailViewTest {
 //        onView(withId(R.id.favCity)).check(matches(withContentDescription(mCity)));
 //        onView(withId(R.id.favCategory)).check(matches(withContentDescription(mCategory)));
     }
+
+    @Test
+    public void init_with_string(){
+        FavorDetailView.newInstance("URE72wp3KDpdCurjD957");
+    }
 }
