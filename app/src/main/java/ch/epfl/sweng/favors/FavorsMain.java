@@ -82,10 +82,11 @@ public class FavorsMain extends AppCompatActivity {
             for (Location l : locationResult.getLocations()) {
                 if (l != null) {
                     lastLocation = l;
-                    User.getMain().set(User.StringFields.city, lastLocation.toString());
-                    User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                    //User.getMain().set(User.StringFields.city, lastLocation.getProvider();
+                    //User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
                     //User.getMain().updateOnDb();
-                    debugLogs(); }
+                    debugLogs();
+                }
             }
         }
     };
