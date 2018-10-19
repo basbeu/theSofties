@@ -1,12 +1,16 @@
 package ch.epfl.sweng.favors;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableArrayList;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +27,14 @@ import static android.support.v4.content.ContextCompat.startActivity;
 
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
-    public Context context;
     private SharedViewFavor sharedViewFavor;
+    private FragmentActivity fragmentActivity;
+    private OnItemClickListener listener;
+    private static final String TAG = "FAVOR_ADAPTER_LIST";
 
+    public interface OnItemClickListener {
+        void onItemClick(Favor item);
+    }
 
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, timestamp, location, description;
@@ -47,18 +56,32 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         }
 
         @Override
-        public void onClick(View v) {
-            sharedViewFavor.select(this.selectedFavor);
-            Intent intent = new Intent(v.getContext(), FavorDetailView.class);
-            context.startActivity(intent);
+        public void onClick(View v) {}
+
+        public void bind(final Favor item, final OnItemClickListener listener){
+            Favor favor = item;
+            if(favor.get(Favor.StringFields.title) != null)
+                title.setText(favor.get(Favor.StringFields.title));
+            if(favor.get(Favor.IntegerFields.creationTimestamp) != null)
+                timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
+            if(favor.get(Favor.StringFields.description) != null)
+                description.setText(favor.get(Favor.StringFields.description));
+            itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
     }
 
     //constructor
-    public FavorListAdapter(Context context, ObservableArrayList<Favor> favorList) {
+    public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
-        this.context = context;
+        this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
+        this.fragmentActivity = fragActivity;
+        this.listener = (Favor item) -> {
+            Log.d(TAG,"click recorded");
+            this.sharedViewFavor.select(item);
+            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+        };
     }
+
 
     @Override
     public FavorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -69,14 +92,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     @Override
     public void onBindViewHolder(FavorViewHolder holder, int position) {
-        Favor favor = favorList.get(position);
-        holder.setFavor(favor);
-        if(favor.get(Favor.StringFields.title) != null)
-            holder.title.setText(favor.get(Favor.StringFields.title));
-        if(favor.get(Favor.IntegerFields.creationTimestamp) != null)
-            holder.timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
-        if(favor.get(Favor.StringFields.description) != null)
-            holder.description.setText(favor.get(Favor.StringFields.description));
+        holder.bind(favorList.get(position), listener);
     }
 
     @Override

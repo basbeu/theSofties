@@ -25,7 +25,7 @@ import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.databinding.FragmentFavorsBinding;
 
 
-public class FavorsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class FavorsFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "FAVOR_FRAGMENT";
 
     FragmentFavorsBinding binding;
@@ -38,8 +38,6 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favors,container,false);
         binding.setElements(this);
-
-        //TODO: add text "sort by" to Spinner
 
         //Spinner for sorting criteria
         Spinner sortBySpinner = binding.sortBySpinner;
@@ -93,7 +91,7 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
     public void onNothingSelected(AdapterView<?> parent) {}
 
     private void updateList(){
-        listAdapter = new FavorListAdapter(getContext(), favorList);
+        listAdapter = new FavorListAdapter(this.getActivity(), favorList);
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }
