@@ -9,16 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
@@ -76,7 +74,7 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
                 listAdapter = new FavorListAdapter(getContext(), favorList);
                 binding.favorsList.setAdapter(listAdapter);
                 listAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "list charged " + favorList.size(), Toast.LENGTH_LONG).show();
+                Log.d(TAG, "list charged " + favorList.size());
             }
 
             @Override
@@ -88,7 +86,37 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
             }
         });
 
+        binding.searchFavor.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ObservableArrayList<Favor> filteredList = filter(favorList, newText);
+                listAdapter = new FavorListAdapter(getContext(), filteredList);
+                binding.favorsList.setAdapter(listAdapter);
+                listAdapter.notifyDataSetChanged();
+                Log.d(TAG, "filtered list with size " + filteredList.size());
+                return false;
+            }
+        });
+
         return binding.getRoot();
+    }
+
+    private ObservableArrayList<Favor> filter(ObservableList<Favor> favors, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final ObservableList<Favor> filteredModelList = new ObservableArrayList<>();
+        for (Favor f : favors) {
+            final String title = f.get(Favor.StringFields.title).toLowerCase();
+            if (title.contains(lowerCaseQuery)) {
+                filteredModelList.add(f);
+            }
+        }
+        return (ObservableArrayList)filteredModelList;
     }
 
     /**
@@ -97,7 +125,21 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        switch (position){
+            case 1: //sort list by location
+                Log.d(TAG, "item " + position + " from the spinner is selected");
+                //favorList = FavorRequest.all(null, Favor.ObjectFields.location);
+                break;
+            case 2: //sort list by recent
+                Log.d(TAG, "item " + position + " from the spinner is selected");
+                //favorList = FavorRequest.all(null, Favor.IntegerFields.creationTimestamp);
+                break;
+            case 3: //TODO: sort by category
+                Log.d(TAG, "item " + position + " from the spinner is selected");
+                //favorList = FavorRequest.all(null, Favor.StringFields.category);
+                break;
+            default: break;
+        }
     }
 
     /**
@@ -106,5 +148,7 @@ public class FavorsFragment extends Fragment implements AdapterView.OnItemSelect
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        favorList = FavorRequest.all(null, null);
+        Log.d(TAG, "no item from the spinner is selected");
     }
 }

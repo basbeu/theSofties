@@ -29,7 +29,7 @@ import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
-    private static final String TAG = "FAVOR_FRAGMENT";
+    private static final String TAG = "FAVOR_CREATE_FRAGMENT";
 
     FavorsLayoutBinding binding;
     ObservableArrayList<Favor> favorList;
