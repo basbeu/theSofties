@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -20,12 +19,13 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import ch.epfl.sweng.favors.database.User;
 
-import static org.junit.Assert.assertEquals;;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+
+;
 
 @RunWith(AndroidJUnit4.class)
 public class UserTest {
@@ -133,6 +133,24 @@ public class UserTest {
             User.UserGender.setGender(user, User.UserGender.F);
             assertEquals(User.UserGender.F,User.UserGender.getGenderFromUser(user));
         });
+    }
+
+    @Test
+    public void getObservableFirstNameTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, user.getObservableObject(User.StringFields.firstName).get()));
+    }
+
+    @Test
+    public void getObservableLastNameTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LAST_NAME, user.getObservableObject(User.StringFields.lastName).get()));
+    }
+
+    @Test
+    public void getObservableEmailTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_EMAIL, user.getObservableObject(User.StringFields.email).get()));
     }
 
     @Test
