@@ -2,7 +2,10 @@ package ch.epfl.sweng.favors;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.ActivityCompat;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +27,11 @@ import static org.junit.Assert.fail;
 public class SplashScreenActivityTest {
     @Rule public final ActivityTestRule<SplashScreenActivity> mActivityRule = new ActivityTestRule<>(SplashScreenActivity.class);
 
+    @Before
+    public void Before(){
+        ActivityCompat.setPermissionCompatDelegate(new LocationDelegate());
+    }
+
     @Test
     public void testSplashScreen() {
         onView(withId(R.id.logoFavors)).check(matches(isDisplayed()));
@@ -38,5 +46,10 @@ public class SplashScreenActivityTest {
         }catch(Exception e){
             fail("Can't sleep");
         }
+    }
+
+    @After
+    public void After(){
+        ActivityCompat.setPermissionCompatDelegate(null);
     }
 }
