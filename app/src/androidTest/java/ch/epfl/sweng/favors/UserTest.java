@@ -94,6 +94,39 @@ public class UserTest {
     }
 
     @Test
+    public void setFirstNameTest(){
+        String newFirstName = "tata";
+        User user = new User(fakeAuth, fakeDb);
+
+        user.updateFromDb().addOnCompleteListener(t->{
+            user.set(User.StringFields.firstName, newFirstName);
+            assertEquals(newFirstName, user.get(User.StringFields.firstName));
+        });
+    }
+
+    @Test
+    public void setLastNameTest(){
+        String newLastName = "foofoo";
+        User user = new User(fakeAuth, fakeDb);
+
+        user.updateFromDb().addOnCompleteListener(t->{
+            user.set(User.StringFields.lastName, newLastName);
+            assertEquals(newLastName, user.get(User.StringFields.lastName));
+        });
+    }
+
+    @Test
+    public void setEmailTest(){
+        String newEmail = "email@new.com";
+        User user = new User(fakeAuth, fakeDb);
+
+        user.updateFromDb().addOnCompleteListener(t->{
+            user.set(User.StringFields.email, newEmail);
+            assertEquals(newEmail, user.get(User.StringFields.email));
+        });
+    }
+
+    @Test
     public void setGenderTest(){
         User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t->{
