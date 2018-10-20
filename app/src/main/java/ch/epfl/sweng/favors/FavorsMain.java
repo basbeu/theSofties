@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.favors.R;
@@ -82,10 +85,11 @@ public class FavorsMain extends AppCompatActivity {
             for (Location l : locationResult.getLocations()) {
                 if (l != null) {
                     lastLocation = l;
-                    User.getMain().set(User.StringFields.city, lastLocation.toString());
+                    User.getMain().set(User.StringFields.city, "("+lastLocation.getLatitude()+", "+lastLocation.getLongitude()+")");
                     User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
-                    //User.getMain().updateOnDb();
-                    debugLogs(); }
+                    User.getMain().updateOnDb();
+                    debugLogs();
+                }
             }
         }
     };
@@ -225,13 +229,22 @@ public class FavorsMain extends AppCompatActivity {
      */
     private Location getLocationHelper(LocationCallback callback) {
         if(checkPermissions()) {
-            // redundant check required by Travis and IDE
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mFusedLocationClient.getLastLocation().addOnSuccessListener(this, l -> {
                 if (l != null) {
                     Log.d("debugRemove", "location successfully obtained");
                     lastLocation = l;
-                    User.getMain().set(User.StringFields.city, "("+lastLocation.getLatitude()+", "+lastLocation.getLongitude()+")");
+                    Geocoder gcd = new Geocoder(context, Locale.getDefault());
+                    try {
+                        List<Address> addresses = gcd.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 1);
+                        if (addresses.size() > 0) {
+                            System.out.println("COOL:" + addresses.get(0).getLocality());
+                            User.getMain().set(User.StringFields.city, addresses.get(0).getLocality() );
+                        }
+
+                    }
+                    catch(IOException e) {}
+
                     User.getMain().set(User.ObjectFields.location, new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
                     //User.getMain().updateOnDb();
                     debugLogs(); }
