@@ -73,7 +73,7 @@ right now there is only a very limited amount of tests
 This will be changed in Sprint 3
 
 ``` bash
-code for running the single line command in the command line goes here
+./gradlew build connectedCheck jacocoTestReport
 ```
 
 ## API Reference
