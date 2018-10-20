@@ -21,6 +21,7 @@ import org.mockito.junit.MockitoRule;
 import ch.epfl.sweng.favors.database.Favor;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.Mockito.when;
 
 import static android.support.test.espresso.action.ViewActions.click;
@@ -83,10 +84,10 @@ public class FavorDetailViewTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withId(R.id.favTitle)).check(matches(withContentDescription(mTitile)));
-        onView(withId(R.id.favDescription)).check(matches(withContentDescription(mDescription)));
-        onView(withId(R.id.favCity)).check(matches(withContentDescription(mCity)));
-        onView(withId(R.id.favCategory)).check(matches(withContentDescription(mCategory)));
+        onView(withId(R.id.favTitle)).check(matches(withText(mTitile)));
+        onView(withId(R.id.favDescription)).check(matches(withText(mDescription)));
+        onView(withId(R.id.favCity)).check(matches(withText(mCity)));
+        onView(withId(R.id.favCategory)).check(matches(withText(mCategory)));
     }
 
     @Test
