@@ -40,7 +40,7 @@ public class SplashScreenActivityTest {
     @Test
     public void splashScreenDoesNotLastForever(){
         try{
-            Thread.sleep(6000);
+            Thread.sleep(10000);
             onView(withId(R.id.welcomeMessageText)).check(matches(isDisplayed()));
 
         }catch(Exception e){
