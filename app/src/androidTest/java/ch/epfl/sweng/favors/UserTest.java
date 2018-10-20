@@ -40,7 +40,6 @@ public class UserTest {
 
     private Task<DocumentSnapshot> fakeTask;
     private HashMap<String,Object> data;
-    private User user;
 
     private final String FAKE_UID = "sklfklalsdj";
     private final String FAKE_EMAIL = "thisisatestemail@email.com";
@@ -61,30 +60,51 @@ public class UserTest {
         when(fakeCollection.document(FAKE_UID)).thenReturn(fakeDoc);
         when(fakeDoc.get()).thenReturn(fakeTask);
         when(fakeDocSnap.getData()).thenReturn(data);
-
-        user = new User(fakeAuth, fakeDb);
     }
 
 
     @Test
     public void getFirstNameTest(){
+        User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, user.get(User.StringFields.firstName)));
     }
 
     @Test
     public void getLastNameTest(){
+        User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LAST_NAME, user.get(User.StringFields.lastName)));
     }
 
     @Test
     public void getEmailTest(){
+        User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_EMAIL, user.get(User.StringFields.email)));
     }
 
     @Test
     public void getSexTest(){
+        User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_SEX, user.get(User.StringFields.sex)));
     }
 
+    @Test
+    public void getGenderTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->assertEquals(User.UserGender.M,User.UserGender.getGenderFromUser(user)));
+    }
 
+    @Test
+    public void setGenderTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->{
+            User.UserGender.setGender(user, User.UserGender.F);
+            assertEquals(User.UserGender.F,User.UserGender.getGenderFromUser(user));
+        });
+    }
+
+    @Test
+    public void getObservableGenderStringTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t-> assertEquals(User.UserGender.getGenderFromUser(user).toString(),User.UserGender.getObservableGenderString(user).get()));
+    }
 }
