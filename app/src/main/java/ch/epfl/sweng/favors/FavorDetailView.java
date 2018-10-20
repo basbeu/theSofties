@@ -81,11 +81,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
     }
 
-    private void updateUI(Favor localFavor) {
-        title = localFavor.getObservableObject(Favor.StringFields.title);
-        description = localFavor.getObservableObject(Favor.StringFields.description);
-        city = localFavor.getObservableObject(Favor.StringFields.locationCity);
-        categories = localFavor.getObservableObject(Favor.StringFields.category);
+    private void updateUI(Favor favor) {
+        title = favor.getObservableObject(Favor.StringFields.title);
+        description = favor.getObservableObject(Favor.StringFields.description);
+        city = favor.getObservableObject(Favor.StringFields.locationCity);
+        categories = favor.getObservableObject(Favor.StringFields.category);
     }
 
     @Override

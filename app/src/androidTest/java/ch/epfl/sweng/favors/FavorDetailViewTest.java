@@ -64,12 +64,12 @@ public class FavorDetailViewTest {
     @Test
     public void fields_are_displayed_properly(){
 
-//        Mockito.when(fvMock.getObservableObject(Favor.StringFields.description)).thenReturn(new ObservableField<>(mDescription));
-//        Mockito.when(fvMock.getObservableObject(Favor.StringFields.locationCity)).thenReturn(new ObservableField<>(mCity));
-//        Mockito.when(fvMock.getObservableObject(Favor.StringFields.category)).thenReturn(new ObservableField<>(mCategory));
-//        Mockito.when(fvMock.getObservableObject(Favor.StringFields.title)).thenReturn(new ObservableField<>(mTitile));
-//
-//
+        Mockito.when(fvMock.getObservableObject(Favor.StringFields.description)).thenReturn(new ObservableField<>(mDescription));
+        Mockito.when(fvMock.getObservableObject(Favor.StringFields.locationCity)).thenReturn(new ObservableField<>(mCity));
+        Mockito.when(fvMock.getObservableObject(Favor.StringFields.category)).thenReturn(new ObservableField<>(mCategory));
+        Mockito.when(fvMock.getObservableObject(Favor.StringFields.title)).thenReturn(new ObservableField<>(mTitile));
+
+
 //        when(mSV.getFavor()).thenReturn(new LiveData<Favor>() {
 //                                            @Override
 //                                            public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<Favor> observer) {
@@ -77,11 +77,16 @@ public class FavorDetailViewTest {
 //                                            }
 //                                        });
 
-                mFragmentTestRule.launchActivity(null);
-        //onView(withId(R.id.favTitle)).check(matches(withContentDescription(mTitile)));
-//        onView(withId(R.id.favDescription)).check(matches(withContentDescription(mDescription)));
-//        onView(withId(R.id.favCity)).check(matches(withContentDescription(mCity)));
-//        onView(withId(R.id.favCategory)).check(matches(withContentDescription(mCategory)));
+        mFragmentTestRule.launchActivity(null);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.favTitle)).check(matches(withContentDescription(mTitile)));
+        onView(withId(R.id.favDescription)).check(matches(withContentDescription(mDescription)));
+        onView(withId(R.id.favCity)).check(matches(withContentDescription(mCity)));
+        onView(withId(R.id.favCategory)).check(matches(withContentDescription(mCategory)));
     }
 
     @Test
