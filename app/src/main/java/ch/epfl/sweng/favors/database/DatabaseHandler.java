@@ -5,6 +5,8 @@ import android.databinding.ObservableField;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -56,15 +58,21 @@ public abstract class DatabaseHandler {
         this.documentID = documentID;
     }
 
+    public DatabaseHandler(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
+                           DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
+                           String collection, String documentID, FirebaseFirestore db) {
+        this(stringFieldsValues, intFieldsValues, booleanFieldsValues, objectFieldsValues,collection,documentID);
+        this.db = db;
+    }
 
-    /**
-     * Init the map with a null value for every possible object of a specific type
-     *
-     * @param possibleValues An array containing the possible names of this kind of object
-     * @param <T> The field enum type
-     * @param <V> The type of objects
-     * @return An initialised map
-     */
+        /**
+         * Init the map with a null value for every possible object of a specific type
+         *
+         * @param possibleValues An array containing the possible names of this kind of object
+         * @param <T> The field enum type
+         * @param <V> The type of objects
+         * @return An initialised map
+         */
     private <T extends DatabaseField, V> Map<T, ObservableField<V>>  initMap( final T[] possibleValues){
         if(possibleValues == null || possibleValues.length == 0){return null;}
         return new HashMap<T, ObservableField<V>>(){
@@ -108,25 +116,19 @@ public abstract class DatabaseHandler {
         return toSend;
     }
 
-    /**
-     * Send request to update local map with database content
-     *
-     * @return True if the request for data was sent
-     */
-    public boolean updateFromDb(){
-        if(documentID == null){return false;}
-        db.collection(collection).document(documentID)
+    public Task updateFromDb(){
+        if(documentID == null){return Tasks.forCanceled();}
+        return db.collection(collection).document(documentID)
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 updateLocalData(document.getData());
-
             } else {
                 Toast.makeText(FavorsMain.getContext(), "An error occured while requesting " +
                         "data from database",Toast.LENGTH_LONG);
             }
         });
-        return true;
+
     }
 
     /**
@@ -154,7 +156,7 @@ public abstract class DatabaseHandler {
      * @param <V>   The ObservableField content type
      * @param <U>   The ObservableField
      */
-    private static <T extends DatabaseField, V extends Object, U extends ObservableField<V>> void convertObjectMapToTypedMap(Map<String, Object> from, Map<T, U> to, Class<V> clazz) {
+    private <T extends DatabaseField, V extends Object, U extends ObservableField<V>> void convertObjectMapToTypedMap(Map<String, Object> from, Map<T, U> to, Class<V> clazz) {
         if(from == null || to == null){return;}
         for (Map.Entry<T, U> entry : to.entrySet()){
             T fieldName = entry.getKey();
@@ -191,7 +193,6 @@ public abstract class DatabaseHandler {
         this.documentID =id;
         this.updateLocalData(content);
     }
-
 
     /*
      * Get / set methods for the different types of data

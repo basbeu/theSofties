@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -61,6 +62,15 @@ public class User extends DatabaseHandler {
         }
     }
 
+    public User(FirebaseAuth instance, FirebaseFirestore db){
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,instance.getUid(),db);
+        this.instance = instance;
+        if(instance.getUid() != null) {
+            updateFromDb();
+        }
+    }
+
     public enum UserGender {
         M ,F, DEFAULT;
 
@@ -87,18 +97,6 @@ public class User extends DatabaseHandler {
 
             return userGender;
         }
-        /*static public UserGender getGenderFromUser(User user){
-            if(user == null) return DEFAULT;
-            String gender = user.get(User.StringFields.sex);
-            if(genderIsValid(gender)) return DEFAULT;
-            gender = gender.trim().substring(0, 1);
-            if (gender.toUpperCase().equals("M"))
-                return M;
-            else if (gender.toUpperCase().equals("F"))
-               return F;
-            Log.e(TAG,"Failed to parse the gender returned by the database");
-            return DEFAULT;
-        }*/
 
         private static boolean genderIsValid(String gender) {
             return gender == null || gender.length() == 0;
