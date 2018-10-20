@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
 
 public class ConfirmationSent extends Activity {
 
@@ -20,13 +21,12 @@ public class ConfirmationSent extends Activity {
         Button gotIt = findViewById(R.id.gotItButton);
         gotIt.setOnClickListener(v-> goMain());
         Button ResendConf = findViewById(R.id.resendConfirmationMailButton);
-        ResendConf.setOnClickListener(v -> sendConfirmationMail(FirebaseAuth.getInstance().getCurrentUser()));
+        ResendConf.setOnClickListener(v -> sendConfirmationMail(User.getMain().getInstance().getCurrentUser()));
 
     }
 
     private void goMain(){
-        RuntimeEnvironment.getInstance().isConnected.set(false);
-        FirebaseAuth.getInstance().signOut();
+        User.getMain().getInstance().signOut();
         Intent intent = new Intent(this, AuthentificationProcess.class);
         intent.putExtra(FavorsMain.AUTHENTIFICATION_ACTION, FavorsMain.Status.Login);
         startActivity(intent);
@@ -34,7 +34,8 @@ public class ConfirmationSent extends Activity {
 
     private void sendConfirmationMail(final FirebaseUser user){
         if(user != null){
-            user.sendEmailVerification().addOnSuccessListener(v-> Toast.makeText(this, "Email confirmation sent successfully", Toast.LENGTH_SHORT).show());
+            user.sendEmailVerification().addOnSuccessListener(v-> Toast.makeText(this, "Email confirmation sent successfully", Toast.LENGTH_LONG).show())
+                    .addOnFailureListener(v-> Toast.makeText(this, "Unable to send email", Toast.LENGTH_LONG).show());
         }
         else{
             Toast.makeText(this, "Unable to send email", Toast.LENGTH_SHORT).show();
