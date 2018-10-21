@@ -36,7 +36,7 @@ public class FavorsMainTest {
 
     @Test
     public void registerView(){
-        launchActivity();
+        activityActivityTestRule.launchActivity(null);
         closeSoftKeyboard();
 
         try{
@@ -53,7 +53,7 @@ public class FavorsMainTest {
 
     @Test
     public void loginView(){
-        launchActivity();
+        activityActivityTestRule.launchActivity(null);
         closeSoftKeyboard();
 
         try{
@@ -73,10 +73,4 @@ public class FavorsMainTest {
         ActivityCompat.setPermissionCompatDelegate(null);
     }
 
-    private void launchActivity(){
-        Intent intent = new Intent();
-        //intent.putExtra("test", "test");
-        activityActivityTestRule.launchActivity(intent);
-    }
-    
 }

@@ -30,19 +30,16 @@ public class SplashScreenActivityTest {
 
     @Test
     public void testSplashScreen() {
-
-        launchActivity();
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.logoFavors)).check(matches(isDisplayed()));
     }
 
     @Test
     public void splashScreenDoesNotLastForever(){
-        launchActivity();
+        mActivityRule.launchActivity(null);
        try{
             Thread.sleep(6000);
             onView(withId(R.id.welcomeMessageText)).check(matches(isDisplayed()));
-
-
         }catch(Exception e){
             fail("Can't sleep");
         }
@@ -53,9 +50,4 @@ public class SplashScreenActivityTest {
         ActivityCompat.setPermissionCompatDelegate(null);
     }
 
-    private void launchActivity(){
-        Intent intent = new Intent();
-        intent.putExtra("test", "test");
-        mActivityRule.launchActivity(intent);
-    }
 }
