@@ -31,18 +31,13 @@ public class SplashScreenActivityTest {
     @Test
     public void testSplashScreen() {
 
-        Intent intent = new Intent();
-        intent.putExtra("test", "test");
-        mActivityRule.launchActivity(intent);
-
+        launchActivity();
         onView(withId(R.id.logoFavors)).check(matches(isDisplayed()));
     }
 
     @Test
     public void splashScreenDoesNotLastForever(){
-        Intent intent = new Intent();
-        intent.putExtra("test", "test");
-        mActivityRule.launchActivity(intent);
+        launchActivity();
        try{
             Thread.sleep(4000);
             onView(withId(R.id.welcomeMessageText)).check(matches(isDisplayed()));
@@ -56,5 +51,11 @@ public class SplashScreenActivityTest {
     @After
     public void After(){
         ActivityCompat.setPermissionCompatDelegate(null);
+    }
+
+    private void launchActivity(){
+        Intent intent = new Intent();
+        intent.putExtra("test", "test");
+        mActivityRule.launchActivity(intent);
     }
 }

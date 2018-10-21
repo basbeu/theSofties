@@ -11,8 +11,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -34,9 +36,9 @@ public class FavorsMainTest {
 
     @Test
     public void registerView(){
-        Intent intent = new Intent();
-        intent.putExtra("test", "test");
-        activityActivityTestRule.launchActivity(intent);
+        launchActivity();
+        closeSoftKeyboard();
+        scrollTo();
         onView(withId(R.id.registerButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
@@ -44,9 +46,9 @@ public class FavorsMainTest {
 
     @Test
     public void loginView(){
-        Intent intent = new Intent();
-        intent.putExtra("test", "test");
-        activityActivityTestRule.launchActivity(intent);
+        launchActivity();
+        closeSoftKeyboard();
+        scrollTo();
         onView(withId(R.id.loginButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
@@ -55,6 +57,12 @@ public class FavorsMainTest {
     @After
     public void After(){
         ActivityCompat.setPermissionCompatDelegate(null);
+    }
+
+    private void launchActivity(){
+        Intent intent = new Intent();
+        intent.putExtra("test", "test");
+        activityActivityTestRule.launchActivity(intent);
     }
     
 }
