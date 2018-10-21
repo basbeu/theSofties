@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.ActivityCompat;
@@ -23,7 +24,7 @@ import static junit.framework.TestCase.assertEquals;
 
 
 public class FavorsMainTest {
-    @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class);
+    @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class, true, false);
 
 
     @Before
@@ -33,6 +34,9 @@ public class FavorsMainTest {
 
     @Test
     public void registerView(){
+        Intent intent = new Intent();
+        intent.putExtra("test", "test");
+        activityActivityTestRule.launchActivity(intent);
         onView(withId(R.id.registerButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
@@ -40,6 +44,9 @@ public class FavorsMainTest {
 
     @Test
     public void loginView(){
+        Intent intent = new Intent();
+        intent.putExtra("test", "test");
+        activityActivityTestRule.launchActivity(intent);
         onView(withId(R.id.loginButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
