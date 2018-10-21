@@ -3,17 +3,17 @@ package ch.epfl.sweng.favors;
 /**
  * Singleton class that give the execution Mode of the app : Test, Normal
  */
-public final class TestMode {
-    private final static TestMode instance = new TestMode();
+public final class ExecutionMode {
+    private final static ExecutionMode instance = new ExecutionMode();
 
     private boolean test;
 
     /**
      * Construct the singleton class
      */
-    private TestMode(){
+    private ExecutionMode(){
         if(instance != null)
-            throw new IllegalStateException("TestMode already instantiated");
+            throw new IllegalStateException("ExecutionMode already instantiated");
 
         test = false;
     }
@@ -21,7 +21,7 @@ public final class TestMode {
     /**
      * @return the instance of the mode of execution
      */
-    public final static TestMode getInstance(){
+    public final static ExecutionMode getInstance(){
         return instance;
     }
 
