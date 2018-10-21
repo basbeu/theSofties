@@ -146,13 +146,15 @@ public class FavorsMain extends AppCompatActivity {
         Intent intent = new Intent(view.getContext(), AuthentificationProcess.class);
         intent.putExtra(AUTHENTIFICATION_ACTION, status);
         startActivity(intent);
+        finish();
     }
 
     private void loggedinView(FavorsMain.Status status){
         Intent intent = new Intent(this, Logged_in_Screen.class);
         intent.putExtra(LOGGED_IN, status);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        //avoids that the back button can get to this activity since it is explicitly finished
+        finish();
     }
 
     /**
