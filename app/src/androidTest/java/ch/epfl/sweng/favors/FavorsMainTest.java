@@ -38,8 +38,15 @@ public class FavorsMainTest {
     public void registerView(){
         launchActivity();
         closeSoftKeyboard();
-        scrollTo();
-        onView(withId(R.id.registerButton)).perform(click());
+
+        try{
+            //Try to scroll if the button is not displayed
+            onView(withId(R.id.registerButton)).perform(scrollTo(), click());
+        }catch(Exception e){
+            //If not possible to scroll, then the button should be here
+            onView(withId(R.id.registerButton)).perform(click());
+        }
+
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
     }
@@ -48,8 +55,15 @@ public class FavorsMainTest {
     public void loginView(){
         launchActivity();
         closeSoftKeyboard();
-        scrollTo();
-        onView(withId(R.id.loginButton)).perform(click());
+
+        try{
+            //Try to scroll if the button is not displayed
+            onView(withId(R.id.loginButton)).perform(scrollTo(), click());
+        }catch (Exception e){
+            //If not possible to scroll, then the button should be here
+            onView(withId(R.id.loginButton)).perform(click());
+        }
+
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
     }
@@ -61,7 +75,7 @@ public class FavorsMainTest {
 
     private void launchActivity(){
         Intent intent = new Intent();
-        intent.putExtra("test", "test");
+        //intent.putExtra("test", "test");
         activityActivityTestRule.launchActivity(intent);
     }
     
