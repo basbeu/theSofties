@@ -1,14 +1,8 @@
 package ch.epfl.sweng.favors;
 
-import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,8 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import java.util.concurrent.Executor;
 
 import ch.epfl.sweng.favors.database.User;
 
@@ -51,6 +43,7 @@ public class ConfirmationSentTest {
 
     @Before
     public void Before(){
+        ExecutionMode.getInstance().setTest(true);
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
         User.UserGender.setGender(User.getMain(), User.UserGender.M);
