@@ -76,11 +76,4 @@ public class ProfileFragmentTest {
         onView(withId(R.id.profEmail)).check(matches(withText(FAKEEMAIL)));
     }
 
-    @Test
-    public void editProfileWorks(){
-        mFragmentTestRule.launchActivity(null);
-        //onView(withId(R.id.editProfile)).perform(click());
-        //onView(withId(R.id.editProfileTitle)).check(matches(isDisplayed()));
-    }
-
 }
