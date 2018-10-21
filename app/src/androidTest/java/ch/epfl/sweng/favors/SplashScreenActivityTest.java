@@ -34,7 +34,7 @@ public class SplashScreenActivityTest {
         onView(withId(R.id.logoFavors)).check(matches(isDisplayed()));
     }
 
-    @Test
+    /*@Test
     public void splashScreenDoesNotLastForever(){
         mActivityRule.launchActivity(null);
        try{
@@ -43,7 +43,7 @@ public class SplashScreenActivityTest {
         }catch(Exception e){
             fail("Can't sleep");
         }
-    }
+    }*/
 
     @After
     public void After(){
