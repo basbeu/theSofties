@@ -49,6 +49,7 @@ public class UserTest {
 
     @Before
     public void Before(){
+        ExecutionMode.getInstance().setTest(true);
         fakeTask = Tasks.forResult(fakeDocSnap);
         data = new HashMap<>();
         data.put(User.StringFields.firstName.toString(),FAKE_FIRST_NAME);

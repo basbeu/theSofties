@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.FavorsMain;
+import ch.epfl.sweng.favors.ExecutionMode;
 
 
 public abstract class DatabaseHandler {
@@ -62,6 +62,9 @@ public abstract class DatabaseHandler {
                            DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
                            String collection, String documentID, FirebaseFirestore db) {
         this(stringFieldsValues, intFieldsValues, booleanFieldsValues, objectFieldsValues,collection,documentID);
+        if(!ExecutionMode.getInstance().isTest()){
+            throw new IllegalStateException("This constructor should be used only for testing purpose");
+        }
         this.db = db;
     }
 
