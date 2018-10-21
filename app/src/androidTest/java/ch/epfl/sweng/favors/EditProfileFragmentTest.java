@@ -40,6 +40,7 @@ public class EditProfileFragmentTest {
 
     @Before
     public void Before(){
+        ExecutionMode.getInstance().setTest(true);
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
         User.UserGender.setGender(User.getMain(), User.UserGender.M);
