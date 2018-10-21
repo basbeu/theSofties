@@ -6,6 +6,8 @@ import android.databinding.ObservableField;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
+import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,13 +45,6 @@ public class SetUserInfo extends AppCompatActivity {
         }
     };
 
-    private TextWatcherCustom sexWatcher = new TextWatcherCustom() {
-        @Override
-        public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.sex, editable.toString());
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +64,18 @@ public class SetUserInfo extends AppCompatActivity {
 
         binding.userCityEdit.addTextChangedListener(basedLocationWatcher);
 
-        binding.userSexEdit.addTextChangedListener(sexWatcher);
+        binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
+            switch (checkedId){
+                case R.id.profGenderMEdit:
+                    User.UserGender.setGender(User.getMain(),User.UserGender.M);
+                    break;
+                case  R.id.profGenderFEdit:
+                    User.UserGender.setGender(User.getMain(), User.UserGender.F);
+                    break;
+                default:
+                    Log.e(TAG, "RadioButton clicked for sex change unidentified");
+            }
+        });
 
         binding.submit.setOnClickListener(v->{
             User.getMain().updateOnDb();
