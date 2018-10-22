@@ -32,15 +32,29 @@ import static junit.framework.TestCase.assertEquals;
 
 public class FavorsMainTest {
     @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class);
+    private UiDevice device;
 
+    @Before
+    public void Before(){
+        device = UiDevice.getInstance(getInstrumentation());
+    }
 
 
     @Test
     public void canRegister() throws Exception {
-        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
-        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
+        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
+        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
 
-        denyCurrentPermission(UiDevice.getInstance(getInstrumentation()));
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
+
+        if(denyButton.exists()){
+           denyButton.click();
+        }
+        else if(allowButton.exists()){
+            allowButton.click();
+        }
+
 
         onView(withId(R.id.registerButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
@@ -50,10 +64,20 @@ public class FavorsMainTest {
 
     @Test
     public void canLogin() throws Exception {
-        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
-        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
+        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
+        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
 
-        denyCurrentPermission(UiDevice.getInstance(getInstrumentation()));
+        //denyCurrentPermission(UiDevice.getInstance(getInstrumentation()));
+
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
+
+        if(denyButton.exists()){
+            denyButton.click();
+        }
+        else if(allowButton.exists()){
+            allowButton.click();
+        }
 
         onView(withId(R.id.loginButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
@@ -73,6 +97,11 @@ public class FavorsMainTest {
     public static void denyCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
         UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
         denyButton.click();
+    }
+
+    public static void allowCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        allowButton.click();
     }
 
 
