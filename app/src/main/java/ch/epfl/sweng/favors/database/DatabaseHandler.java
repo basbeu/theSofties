@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableField;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -188,6 +189,28 @@ public abstract class DatabaseHandler {
         for (Map.Entry<T, U> entry : from.entrySet()){
             V value = (V) entry.getValue().get();
             if(value != null) to.put(entry.getKey().toString(), value);
+        }
+    }
+
+    public void reset(){
+        resetMap(stringData, null);
+        resetMap(booleanData, null);
+        resetMap(objectData, null);
+        resetMap(intData,null);
+
+    }
+
+    /**
+     * Clears a map of all the data that is contained in it and replaces it with the default value passed in.
+     *
+     * @param map Map that needs to be cleared of information
+     * @param defaultValue What value should be placed in the map when being cleared
+     * @param <K> Key type of the map
+     * @param <V> Value contained in the observableField of the map
+     */
+    private <K,V> void resetMap(@NonNull Map<K, ObservableField<V>> map, V defaultValue) {
+        for(K key : map.keySet()){
+            map.get(key).set(defaultValue);
         }
     }
 
