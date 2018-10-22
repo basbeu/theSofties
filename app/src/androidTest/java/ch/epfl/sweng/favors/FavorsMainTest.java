@@ -3,6 +3,10 @@ package ch.epfl.sweng.favors;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 import android.support.v4.app.ActivityCompat;
 
 import org.junit.After;
@@ -11,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -26,58 +31,51 @@ import static junit.framework.TestCase.assertEquals;
 
 
 public class FavorsMainTest {
-    @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class, true, false);
+    @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class);
 
 
-    @Before
-    public void Before(){
-        ActivityCompat.setPermissionCompatDelegate(new LocationDelegate());
-    }
 
-    /*@Test
-    public void registerView(){
-        activityActivityTestRule.launchActivity(null);
-        closeSoftKeyboard();
+    @Test
+    public void canRegister() throws Exception {
+        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
+        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
 
-        try{
-            //Try to scroll if the button is not displayed
-            onView(withId(R.id.registerButton)).perform(scrollTo(), click());
-        }catch(Exception e){
-            //If not possible to scroll, then the button should be here
-            onView(withId(R.id.registerButton)).perform(click());
-        }
+        denyCurrentPermission(UiDevice.getInstance(getInstrumentation()));
 
+        onView(withId(R.id.registerButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
+
     }
 
     @Test
-    public void loginView(){
-        activityActivityTestRule.launchActivity(null);
-        closeSoftKeyboard();
+    public void canLogin() throws Exception {
+        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
+        assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
 
-        try{
-            //Try to scroll if the button is not displayed
-            onView(withId(R.id.loginButton)).perform(scrollTo(), click());
-        }catch (Exception e){
-            //If not possible to scroll, then the button should be here
-            onView(withId(R.id.loginButton)).perform(click());
-        }
+        denyCurrentPermission(UiDevice.getInstance(getInstrumentation()));
 
+        onView(withId(R.id.loginButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
-    }*/
-
-    @Test
-    public void activityCanBeLaunched(){
-        activityActivityTestRule.launchActivity(null);
-        //onView(withId(R.id.welcomeMessageText)).check(matches(isDisplayed()));
 
     }
 
-    @After
-    public void After(){
-        ActivityCompat.setPermissionCompatDelegate(null);
+
+
+    public static void assertViewWithTextIsVisible(UiDevice device, String text) {
+        UiObject allowButton = device.findObject(new UiSelector().text(text));
+        if (!allowButton.exists()) {
+            throw new AssertionError("View with text <" + text + "> not found!");
+        }
     }
+
+    public static void denyCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
+        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
+        denyButton.click();
+    }
+
+
+
 
 }
