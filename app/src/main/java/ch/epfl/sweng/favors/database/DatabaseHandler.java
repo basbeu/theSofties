@@ -193,11 +193,14 @@ public abstract class DatabaseHandler {
     }
 
     public void reset(){
-        resetMap(stringData, null);
-        resetMap(booleanData, null);
-        resetMap(objectData, null);
-        resetMap(intData,null);
-
+        if(stringData != null)
+            resetMap(stringData, null);
+        if(booleanData != null)
+            resetMap(booleanData, null);
+        if(objectData != null)
+            resetMap(objectData, null);
+        if(intData != null)
+            resetMap(intData,null);
     }
 
     /**
@@ -208,7 +211,7 @@ public abstract class DatabaseHandler {
      * @param <K> Key type of the map
      * @param <V> Value contained in the observableField of the map
      */
-    private <K,V> void resetMap(@NonNull Map<K, ObservableField<V>> map, V defaultValue) {
+    protected  <K,V> void resetMap(@NonNull Map<K, ObservableField<V>> map, V defaultValue) {
         for(K key : map.keySet()){
             map.get(key).set(defaultValue);
         }
