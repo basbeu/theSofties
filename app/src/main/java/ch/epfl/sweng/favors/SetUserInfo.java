@@ -6,8 +6,10 @@ import android.databinding.ObservableField;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
@@ -84,6 +86,12 @@ public class SetUserInfo extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete();
+        }else {
+            Log.e(TAG, "Failled to delete account that didin't finish registration");
+        }
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, FavorsMain.class);
         startActivity(intent);
