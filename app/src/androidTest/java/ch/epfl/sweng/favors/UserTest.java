@@ -202,6 +202,4 @@ public class UserTest {
         ExecutionMode.getInstance().setTest(false);
         User user = new User(fakeAuth, fakeDb);
     }
-
-
 }
