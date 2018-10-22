@@ -33,6 +33,7 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class LoginRegisterNavigationTest {
 
+    private final int WAIT = 12000;
     @Rule
     public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class);
 
@@ -49,7 +50,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(2000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,7 +59,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(2000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -77,7 +78,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(2000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -98,7 +99,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -127,7 +128,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -201,7 +202,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -235,7 +236,7 @@ public class LoginRegisterNavigationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3000);
+            Thread.sleep(WAIT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
