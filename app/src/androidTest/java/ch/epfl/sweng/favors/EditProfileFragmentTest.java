@@ -19,16 +19,20 @@ import org.mockito.junit.MockitoRule;
 import ch.epfl.sweng.favors.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.when;
 
 
 @RunWith(AndroidJUnit4.class)
 
-
+//TODO: test if fragment loads all already existing info correctly
 public class EditProfileFragmentTest {
 
     @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<>(EditProfileFragment.class);
@@ -37,6 +41,13 @@ public class EditProfileFragmentTest {
     @Mock private FirebaseUser fbFakeUser;
     @Mock private FirebaseAuth fakeAuth;
     private final String FAKEEMAIL = "thisisatestemail@email.com";
+    private final String FAKEFIRSTNAME = "Bastien";
+    private final String FAKELASTNAME = "Beuchat";
+    private final String FAKECITY = "Lausanne";
+    private final String FAKENEWFIRSTNAME = "Charline";
+    private final String FAKENEWLASTNAME = "Montial";
+    private final String FAKENEWCITY = "Corseaux";
+
 
     @Before
     public void Before(){
@@ -44,13 +55,78 @@ public class EditProfileFragmentTest {
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
         User.UserGender.setGender(User.getMain(), User.UserGender.M);
+        User.getMain().set(User.StringFields.firstName, FAKEFIRSTNAME);
+        User.getMain().set(User.StringFields.lastName, FAKELASTNAME);
+        User.getMain().set(User.StringFields.city, FAKECITY);
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
         when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
     }
     @Test
-    public void fragment_can_be_instantiated() {
+    public void fragmentCanBeInstantiated() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.editProfileTitle)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void userCanEditFirstName() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profFirstNameEdit)).perform(replaceText(FAKENEWFIRSTNAME)).perform(closeSoftKeyboard());
+        onView(withId(R.id.commitChanges)).perform(click());
+        assertEquals(FAKENEWFIRSTNAME, User.getMain().get(User.StringFields.firstName));
+
+    }
+
+    @Test
+    public void userHasCorrectFirstName() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profFirstNameEdit)).check(matches(withText(FAKEFIRSTNAME)));
+
+    }
+
+    @Test
+    public void userCanEditLastName() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profLastNameEdit)).perform(replaceText(FAKENEWLASTNAME)).perform(closeSoftKeyboard());
+        onView(withId(R.id.commitChanges)).perform(click());
+        assertEquals(FAKENEWLASTNAME, User.getMain().get(User.StringFields.lastName));
+
+    }
+
+    @Test
+    public void userHasCorrectLastName() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profLastNameEdit)).check(matches(withText(FAKELASTNAME)));
+
+    }
+
+    @Test
+    public void userCanEditCity() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profCityEdit)).perform(replaceText(FAKENEWCITY)).perform(closeSoftKeyboard());
+        onView(withId(R.id.commitChanges)).perform(click());
+        assertEquals(FAKENEWCITY, User.getMain().get(User.StringFields.city));
+
+    }
+
+    @Test
+    public void userHasCorrectCity() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profCityEdit)).check(matches(withText(FAKECITY)));
+
+    }
+
+    @Test
+    public void userCanEditGender() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profGenderFEdit)).perform(click());
+        onView(withId(R.id.commitChanges)).perform(click());
+        assertEquals("F", User.getMain().get(User.StringFields.sex));
+
+    }
+
+    @Test
+    public void userHasCorrectGender() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profGenderMEdit)).check(matches(withText(User.getMain().get(User.StringFields.sex))));
+    }
 }
