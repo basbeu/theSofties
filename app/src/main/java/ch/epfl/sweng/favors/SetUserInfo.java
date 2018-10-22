@@ -77,4 +77,16 @@ public class SetUserInfo extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    /*
+    Explicitly calls the FavorMain because the back button will not work to go back to FavorMain.
+    This behavior is wanted because we don't want to accidentally have a user reach the login screen when he is logged in
+     */
+    @Override
+    public void onBackPressed() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, FavorsMain.class);
+        startActivity(intent);
+        finish();
+    }
 }
