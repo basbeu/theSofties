@@ -275,4 +275,9 @@ public class FavorsMain extends AppCompatActivity {
     private void debugLogs() {
         Log.d("location", "code:1002 - we have a location: (" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude()+(")"));
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
