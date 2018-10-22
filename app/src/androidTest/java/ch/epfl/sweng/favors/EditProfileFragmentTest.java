@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 
-//TODO: test if fragment loads all already existing info correctly
 public class EditProfileFragmentTest {
 
     @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<>(EditProfileFragment.class);
