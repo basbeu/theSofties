@@ -21,6 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 
@@ -43,6 +44,12 @@ public class FavorsMainTest {
         //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
 
         activityActivityTestRule.launchActivity(null);
+        try{
+            Thread.sleep(3000);
+
+        }catch (Exception e){
+            fail("Can't sleep");
+        }
 
         //UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
         //UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
@@ -78,6 +85,12 @@ public class FavorsMainTest {
         if(loginButton.exists()){
             loginButton.click();
         }*/
+        try{
+            Thread.sleep(3000);
+
+        }catch (Exception e){
+            fail("Can't sleep");
+        }
 
         onView(withId(R.id.loginButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
