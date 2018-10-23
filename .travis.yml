@@ -25,7 +25,6 @@ script:
   - ./gradlew build connectedCheck jacocoTestReport
 after_script:
   # Report test coverage to Code Climate
-  - cp app/build/generated/source/apt/debug/ch/epfl/sweng/favors/BR.java app/src/main/java/ch/epfl/sweng/favors/
   - mkdir -p ./app/src/main/java/com/android/databinding/library/baseAdapters/
   - cp app/build/generated/source/apt/debug/com/android/databinding/library/baseAdapters/BR.java app/src/main/java/com/android/databinding/library/baseAdapters/
   - mkdir -p app/src/main/java/ch/epfl/sweng/favors/databinding
