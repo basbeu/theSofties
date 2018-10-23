@@ -206,6 +206,7 @@ public class AuthentificationProcess extends Activity {
             Intent intent = new Intent(this, Logged_in_Screen.class);
             intent.putExtra(FavorsMain.LOGGED_IN, status);
             startActivity(intent);
+            finish();
         } else {
             Intent intent = new Intent(this, AuthentificationProcess.class);
             intent.putExtra(FavorsMain.LOGGED_OUT, status);
@@ -216,6 +217,17 @@ public class AuthentificationProcess extends Activity {
 
         Intent intent = new Intent(this, SetUserInfo.class);
         startActivity(intent);
+    }
+
+    /*
+    Explicitly calls the FavorMain because the back button will not work to go back to FavorMain.
+    This behavior is wanted because we don't want to accidentally have a user reach the login screen when he is logged in
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, FavorsMain.class);
+        startActivity(intent);
+        finish();
     }
 }
 
