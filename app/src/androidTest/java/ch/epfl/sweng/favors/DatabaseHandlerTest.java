@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.is;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.DatabaseBooleanField;
@@ -18,6 +19,7 @@ import ch.epfl.sweng.favors.database.DatabaseHandler;
 import ch.epfl.sweng.favors.database.DatabaseIntField;
 import ch.epfl.sweng.favors.database.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.DatabaseStringField;
+import ch.epfl.sweng.favors.database.Discussion;
 import ch.epfl.sweng.favors.database.User;
 
 @RunWith(AndroidJUnit4.class)
@@ -34,7 +36,7 @@ public class DatabaseHandlerTest {
                             this.put(field, new ObservableField<String>("TEST"));
                         }
                     }
-                };
+        };
         assertThat(stringData.get(StringFields.firstName).get(), is("TEST"));
         assertThat(stringData.get(StringFields.lastName).get(), is("TEST"));
         assertThat(stringData.get(StringFields.email).get(), is("TEST"));
@@ -56,5 +58,30 @@ public class DatabaseHandlerTest {
         } catch (Exception e) {
             assertThat("", is(e.toString()));
         }
+    }
+
+
+
+    public enum IntegerFields implements DatabaseIntField{creationTimeStamp}
+    public enum ObjectFields implements DatabaseObjectField {rights, location}
+
+//
+//    @Test
+//    public void resetTestClearsData(){
+//        DatabaseHandler db = new User();
+//        Method privateResetMap = null;
+//        try {
+//            privateResetMap = DatabaseHandler.class.getDeclaredMethod("initMap",T[].class);
+//            privateResetMap.setAccessible(true);
+//
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    @Test
+    public void discussionTest(){
+        Discussion d = new Discussion("H6DR8KCMHWhmooBZ4GokLCoVIB23");
+        assertThat(true, is(d !=null));
     }
 }
