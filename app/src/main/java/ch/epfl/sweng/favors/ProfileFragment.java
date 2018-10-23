@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_layout,container,false);
         binding.setElements(this);
 
-        binding.editProfile.setOnClickListener((v)-> {
+        binding.editProfileButton.setOnClickListener((v)-> {
                 Fragment fragment = null;
                 fragment = new EditProfileFragment();
                 replaceFragment(fragment);
