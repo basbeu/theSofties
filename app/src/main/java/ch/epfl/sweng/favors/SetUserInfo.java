@@ -50,12 +50,13 @@ public class SetUserInfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       User.getMain().setMain(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        if(!ExecutionMode.getInstance().isTest())
+            User.getMain().setMain(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
-
-       User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        if(!ExecutionMode.getInstance().isTest())
+            User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
         bindUi();
     }
 

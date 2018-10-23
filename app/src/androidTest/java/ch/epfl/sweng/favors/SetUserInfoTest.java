@@ -47,9 +47,6 @@ public class SetUserInfoTest {
     private final String FAKECITY = "Lausanne";
     private final String FAKEUID= "userID";
 
-
-
-
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
@@ -67,7 +64,9 @@ public class SetUserInfoTest {
 
    @Test
     public void userHasCorrectFirstName() {
-        assertEquals(FAKEFIRSTNAME, User.getMain().get(User.StringFields.firstName));
+       activityActivityTestRule.getActivity().
+       ExecutionMode.getInstance().setTest(true);
+       assertEquals(FAKEFIRSTNAME, User.getMain().get(User.StringFields.firstName));
     }
     @Test
     public void userHasCorrectLastName() {
