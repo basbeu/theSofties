@@ -3,6 +3,9 @@ package ch.epfl.sweng.favors;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 import android.support.v4.app.ActivityCompat;
 
 import org.junit.After;
@@ -29,19 +32,18 @@ import static org.junit.Assert.fail;
 
 public class FavorsMainTest {
     @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class, true, false);
-    //private UiDevice device;
+    private UiDevice device;
 
     @Before
     public void Before(){
-        //device = UiDevice.getInstance(getInstrumentation());
-        ActivityCompat.setPermissionCompatDelegate(new LocationDelegate());
+        device = UiDevice.getInstance(getInstrumentation());
+        //ActivityCompat.setPermissionCompatDelegate(new LocationDelegate());
     }
 
 
     @Test
     public void canRegister() throws Exception {
-        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
-        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
+
 
         activityActivityTestRule.launchActivity(null);
         try{
@@ -51,12 +53,12 @@ public class FavorsMainTest {
             fail("Can't sleep");
         }
 
-        //UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
-        //UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
 
-        /**/
-
-
+        if(allowButton.exists() && denyButton.exists()){
+            denyButton.click();
+        }
         onView(withId(R.id.registerButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
@@ -66,31 +68,15 @@ public class FavorsMainTest {
     @Test
     public void canLogin() throws Exception {
         activityActivityTestRule.launchActivity(null);
-        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "ALLOW");
-        //assertViewWithTextIsVisible(UiDevice.getInstance(getInstrumentation()), "DENY");
 
-        //denyCurrentPermission(UiDevice.getInstance(getInstrumentation()));
 
-        /*UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
         UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
 
-        if(denyButton.exists()){
+        if(denyButton.exists() && allowButton.exists()){
             denyButton.click();
         }
-        else if(allowButton.exists()){
-            allowButton.click();
-        }*/
 
-        /*UiObject loginButton = device.findObject(new UiSelector().text("LOGIN"));
-        if(loginButton.exists()){
-            loginButton.click();
-        }*/
-        try{
-            Thread.sleep(3000);
-
-        }catch (Exception e){
-            fail("Can't sleep");
-        }
 
         onView(withId(R.id.loginButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
@@ -99,24 +85,6 @@ public class FavorsMainTest {
     }
 
 
-/*
-    public static void assertViewWithTextIsVisible(UiDevice device, String text) {
-        UiObject allowButton = device.findObject(new UiSelector().text(text));
-        if (!allowButton.exists()) {
-            throw new AssertionError("View with text <" + text + "> not found!");
-        }
-    }
-
-    public static void denyCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
-        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
-        denyButton.click();
-    }
-
-    public static void allowCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
-        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
-        allowButton.click();
-    }
-*/
 
     @After
     public void After(){
