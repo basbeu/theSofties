@@ -82,6 +82,11 @@ public class User extends DatabaseHandler {
         }
     }
 
+
+    static public void resetMain() {
+        user.reset();
+    }
+
     public enum UserGender {
         M ,F, DEFAULT;
 
@@ -125,5 +130,7 @@ public class User extends DatabaseHandler {
         static public ObservableField<String> getObservableGenderString(@Nonnull User user){
             return user.getObservableObject(User.StringFields.sex);
         }
+
+
     }
 }
