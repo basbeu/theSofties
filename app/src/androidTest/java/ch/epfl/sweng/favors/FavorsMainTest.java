@@ -50,7 +50,7 @@ public class FavorsMainTest {
         /**/
 
 
-        onView(withId(R.id.registerButton)).perform(click());
+        onView(withId(R.id.registerButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
 
@@ -78,7 +78,8 @@ public class FavorsMainTest {
         if(loginButton.exists()){
             loginButton.click();
         }*/
-        onView(withId(R.id.loginButton)).perform(click());
+
+        onView(withId(R.id.loginButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
 
