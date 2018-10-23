@@ -146,12 +146,15 @@ public class FavorsMain extends AppCompatActivity {
         Intent intent = new Intent(view.getContext(), AuthentificationProcess.class);
         intent.putExtra(AUTHENTIFICATION_ACTION, status);
         startActivity(intent);
+        finish();
     }
 
     private void loggedinView(FavorsMain.Status status){
         Intent intent = new Intent(this, Logged_in_Screen.class);
         intent.putExtra(LOGGED_IN, status);
         startActivity(intent);
+        //avoids that the back button can get to this activity since it is explicitly finished
+        finish();
     }
 
     /**
@@ -269,5 +272,10 @@ public class FavorsMain extends AppCompatActivity {
      */
     private void debugLogs() {
         Log.d("location", "code:1002 - we have a location: (" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude()+(")"));
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
