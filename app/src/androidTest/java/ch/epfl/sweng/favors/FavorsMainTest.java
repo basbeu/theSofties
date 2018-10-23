@@ -59,9 +59,15 @@ public class FavorsMainTest {
         if(allowButton.exists() && denyButton.exists()){
             denyButton.click();
         }
-        onView(withId(R.id.registerButton)).perform(scrollTo(), click());
+
+        UiObject register = device.findObject(new UiSelector().text("REGISTER"));
+
+        /*onView(withId(R.id.registerButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
+        onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));*/
+        if(register.exists()){
+            register.click();
+        }
 
     }
 
@@ -77,10 +83,14 @@ public class FavorsMainTest {
             denyButton.click();
         }
 
+        UiObject login = device.findObject(new UiSelector().text("LOGIN"));
 
-        onView(withId(R.id.loginButton)).perform(scrollTo(), click());
+        if(login.exists()){
+            login.click();
+        }
+        /*onView(withId(R.id.loginButton)).perform(scrollTo(), click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
+        onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));*/
 
     }
 
