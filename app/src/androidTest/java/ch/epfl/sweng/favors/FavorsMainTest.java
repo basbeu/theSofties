@@ -55,8 +55,12 @@ public class FavorsMainTest {
             allowButton.click();
         }
 
+        UiObject registerButton = device.findObject(new UiSelector().text("REGISTER"));
+        if(registerButton.exists()){
+            registerButton.click();
+        }
 
-        onView(withId(R.id.registerButton)).perform(click());
+        //onView(withId(R.id.registerButton)).perform(click());
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));
 
@@ -79,7 +83,10 @@ public class FavorsMainTest {
             allowButton.click();
         }
 
-        onView(withId(R.id.loginButton)).perform(click());
+        UiObject loginButton = device.findObject(new UiSelector().text("LOGIN"));
+        if(loginButton.exists()){
+            loginButton.click();
+        }
         onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
         onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));
 

@@ -36,16 +36,16 @@
                 android:textStyle="bold"
                 android:layout_weight="5"
                 />
-            <TextView
+
+            <Button
                 android:id="@+id/editProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/edit_profile"
-                android:textSize="15sp"
-                android:textStyle="italic"
                 android:gravity="center"
                 android:paddingRight="10sp"
-                />
+                android:text="@string/edit_profile"
+                android:textSize="15sp"
+                android:textStyle="italic" />
 
         </LinearLayout>
 

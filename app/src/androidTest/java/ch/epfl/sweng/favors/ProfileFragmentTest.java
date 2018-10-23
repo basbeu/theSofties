@@ -1,6 +1,9 @@
 package ch.epfl.sweng.favors;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,6 +19,7 @@ import org.mockito.junit.MockitoRule;
 
 import ch.epfl.sweng.favors.database.User;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -37,6 +41,7 @@ public class ProfileFragmentTest {
     private final String FAKEEMAIL = "thisisatestemail@email.com";
     private final String FAKEFIRSTNAME = "Toto";
     private final String FAKELASTNAME = "Tutu";
+    private UiDevice device;
 
     @Before
     public void Before(){
@@ -48,6 +53,7 @@ public class ProfileFragmentTest {
         fakeUser.set(User.StringFields.firstName, FAKEFIRSTNAME);
         fakeUser.set(User.StringFields.lastName, FAKELASTNAME);
         fakeUser.set(User.StringFields.email, FAKEEMAIL);
+        device = UiDevice.getInstance(getInstrumentation());
 
     }
 
@@ -74,6 +80,14 @@ public class ProfileFragmentTest {
     public void email_is_displayed(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profEmail)).check(matches(withText(FAKEEMAIL)));
+    }
+
+    @Test
+    public void editProfile() throws Exception{
+        UiObject editButton = device.findObject(new UiSelector().text("ALLOW"));
+        if(editButton.exists()){
+            editButton.click();
+        }
     }
 
 }
