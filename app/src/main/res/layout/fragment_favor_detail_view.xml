@@ -53,7 +53,7 @@
                 android:id="@+id/favIntrestedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I'm intrested"
+                android:text="I'm interested"
                 android:textSize="20sp"
                 android:layout_marginLeft="35sp" />
             <TextView
