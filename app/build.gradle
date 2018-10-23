@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'jacoco'
+apply plugin: 'com.google.gms.google-services'
+
 
 
 jacoco {
@@ -76,6 +77,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    testImplementation 'com.squareup.assertj:assertj-android:1.1.0'
+    testImplementation 'org.robolectric:robolectric:3.0'
+    testImplementation('org.robolectric:shadows-support-v4:3.0') {
+        exclude module: 'support-v4'
+    }
+    testImplementation 'org.mockito:mockito-all:1.10.19'
+    testImplementation 'net.javacrumbs.json-unit:json-unit-fluent:1.5.6'
+    testImplementation 'com.squareup.assertj:assertj-android-recyclerview-v7:1.1.0@aar'
 }
 
 tasks.withType(Test) {

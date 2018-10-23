@@ -40,6 +40,7 @@ public class ProfileFragmentTest {
 
     @Before
     public void Before(){
+        ExecutionMode.getInstance().setTest(true);
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);

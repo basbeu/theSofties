@@ -4,9 +4,11 @@ import android.databinding.ObservableField;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Map;
 import javax.annotation.Nonnull;
+
+import ch.epfl.sweng.favors.ExecutionMode;
 
 public class User extends DatabaseHandler {
 
@@ -56,6 +58,25 @@ public class User extends DatabaseHandler {
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,instance.getUid());
         this.instance = instance;
+
+        if(!ExecutionMode.getInstance().isTest()){
+            throw new IllegalStateException("This constructor should be used only for testing purpose");
+        }
+
+        if(instance.getUid() != null) {
+            updateFromDb();
+        }
+    }
+
+    public User(FirebaseAuth instance, FirebaseFirestore db){
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,instance.getUid(),db);
+
+        if(!ExecutionMode.getInstance().isTest()){
+            throw new IllegalStateException("This constructor should be used only for testing purpose");
+        }
+
+        this.instance = instance;
         if(instance.getUid() != null) {
             updateFromDb();
         }
@@ -87,21 +108,9 @@ public class User extends DatabaseHandler {
 
             return userGender;
         }
-        /*static public UserGender getGenderFromUser(User user){
-            if(user == null) return DEFAULT;
-            String gender = user.get(User.StringFields.sex);
-            if(genderIsValid(gender)) return DEFAULT;
-            gender = gender.trim().substring(0, 1);
-            if (gender.toUpperCase().equals("M"))
-                return M;
-            else if (gender.toUpperCase().equals("F"))
-               return F;
-            Log.e(TAG,"Failed to parse the gender returned by the database");
-            return DEFAULT;
-        }*/
 
         private static boolean genderIsValid(String gender) {
-            return gender == null || gender.length() == 0;
+            return !(gender == null || gender.length() == 0);
         }
 
         /**

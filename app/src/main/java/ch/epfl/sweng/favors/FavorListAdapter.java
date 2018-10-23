@@ -106,4 +106,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         return favorList.size();
     }
 
+
+
 }
