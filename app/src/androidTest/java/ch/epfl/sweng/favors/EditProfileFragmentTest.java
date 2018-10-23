@@ -22,6 +22,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -70,7 +71,7 @@ public class EditProfileFragmentTest {
     public void userCanEditFirstName() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profFirstNameEdit)).perform(replaceText(FAKENEWFIRSTNAME)).perform(closeSoftKeyboard());
-        onView(withId(R.id.commitChanges)).perform(click());
+        onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
         assertEquals(FAKENEWFIRSTNAME, User.getMain().get(User.StringFields.firstName));
 
     }
@@ -86,7 +87,7 @@ public class EditProfileFragmentTest {
     public void userCanEditLastName() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profLastNameEdit)).perform(replaceText(FAKENEWLASTNAME)).perform(closeSoftKeyboard());
-        onView(withId(R.id.commitChanges)).perform(click());
+        onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
         assertEquals(FAKENEWLASTNAME, User.getMain().get(User.StringFields.lastName));
 
     }
@@ -102,7 +103,7 @@ public class EditProfileFragmentTest {
     public void userCanEditCity() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profCityEdit)).perform(replaceText(FAKENEWCITY)).perform(closeSoftKeyboard());
-        onView(withId(R.id.commitChanges)).perform(click());
+        onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
         assertEquals(FAKENEWCITY, User.getMain().get(User.StringFields.city));
 
     }
@@ -114,11 +115,12 @@ public class EditProfileFragmentTest {
 
     }
 
+
     @Test
     public void userCanEditGender() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profGenderFEdit)).perform(click());
-        onView(withId(R.id.commitChanges)).perform(click());
+        onView(withId(R.id.profGenderFEdit)).perform(scrollTo(), click());
+        onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
         assertEquals("F", User.getMain().get(User.StringFields.sex));
 
     }

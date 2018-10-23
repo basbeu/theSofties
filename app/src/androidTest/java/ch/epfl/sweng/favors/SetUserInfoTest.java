@@ -32,7 +32,8 @@ import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
-
+//TODO: TEST IF TOAST APPEARS
+//
 //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
 public class SetUserInfoTest {
 
