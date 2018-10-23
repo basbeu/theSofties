@@ -32,12 +32,14 @@ import static org.junit.Assert.fail;
 
 public class FavorsMainTest {
     @Rule public ActivityTestRule<FavorsMain> activityActivityTestRule = new ActivityTestRule<>(FavorsMain.class, true, false);
+
     private UiDevice device;
+
+          
 
     @Before
     public void Before(){
         device = UiDevice.getInstance(getInstrumentation());
-        //ActivityCompat.setPermissionCompatDelegate(new LocationDelegate());
     }
 
 
@@ -46,12 +48,6 @@ public class FavorsMainTest {
 
 
         activityActivityTestRule.launchActivity(null);
-        try{
-            Thread.sleep(3000);
-
-        }catch (Exception e){
-            fail("Can't sleep");
-        }
 
         UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
         UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
@@ -62,17 +58,14 @@ public class FavorsMainTest {
 
         UiObject register = device.findObject(new UiSelector().text("REGISTER"));
 
-        /*onView(withId(R.id.registerButton)).perform(scrollTo(), click());
-        onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.loginMessageText)).check(matches(withText("Welcome here! Just some small steps...")));*/
         if(register.exists()){
             register.click();
         }
-
     }
 
     @Test
     public void canLogin() throws Exception {
+
         activityActivityTestRule.launchActivity(null);
 
 
@@ -88,19 +81,12 @@ public class FavorsMainTest {
         if(login.exists()){
             login.click();
         }
-        /*onView(withId(R.id.loginButton)).perform(scrollTo(), click());
-        onView(withId(R.id.authentificationButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.loginMessageText)).check(matches(withText("Please enter your login informations:")));*/
-
     }
+
 
 
 
     @After
     public void After(){
-        ActivityCompat.setPermissionCompatDelegate(null);
     }
-
-
-
 }

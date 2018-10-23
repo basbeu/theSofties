@@ -38,6 +38,10 @@ public class ProfileFragmentTest {
     @Rule public ActivityTestRule<Logged_in_Screen> activityActivityTestRule = new ActivityTestRule<>(Logged_in_Screen.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
+  
+    private FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
+
+  
     // @Mock User fakeUser;
     @Mock private FirebaseUser fbFakeUser;
     @Mock private FirebaseFirestore fstore;
@@ -46,8 +50,6 @@ public class ProfileFragmentTest {
     private final String FAKEFIRSTNAME = "Toto";
     private final String FAKELASTNAME = "Tutu";
     private UiDevice device;
-    private FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
-
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
@@ -100,8 +102,6 @@ public class ProfileFragmentTest {
 
         //onView(withId(R.id.editProfileButton)).perform(click());
 
-
-
-    }
+  }
 
 }
