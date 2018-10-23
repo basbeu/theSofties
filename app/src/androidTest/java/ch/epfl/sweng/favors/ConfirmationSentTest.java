@@ -82,10 +82,11 @@ public class ConfirmationSentTest {
     @Test
     public void resendButtonWorksWithUnvalidUser(){
         when(fbFakeUser.sendEmailVerification()).thenReturn(Tasks.forException(new Exception()));
-        onView(withId(R.id.resendConfirmationMailButton)).perform(click());
         //Wait for the toast to be displayed
         try{
-            Thread.sleep(2000);
+            Thread.sleep(500);
+            onView(withId(R.id.resendConfirmationMailButton)).perform(click());
+            Thread.sleep(500);
             //This line tests if a toast is displayed
             onView(withText("Unable to send email")).inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         }catch(Exception e){

@@ -69,8 +69,6 @@ public class EditProfileFragment extends Fragment {
          //Set the RadioGroup buttons to select the current sex
          displayGender();
 
-         User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
-
          binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
 
          binding.profLastNameEdit.addTextChangedListener(profLastNameEditWatcher);

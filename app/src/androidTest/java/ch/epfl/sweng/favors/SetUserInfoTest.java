@@ -97,6 +97,7 @@ public class SetUserInfoTest {
         Intent intent = new Intent();
         intent.putExtra(FavorsMain.TEST_MODE, "true");
         activityActivityTestRule.launchActivity(intent);
+
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
         when(fakeAuth.getUid()).thenReturn(FAKEUID);
