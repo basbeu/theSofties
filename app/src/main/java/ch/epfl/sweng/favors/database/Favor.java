@@ -2,8 +2,12 @@ package ch.epfl.sweng.favors.database;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import ch.epfl.sweng.favors.ExecutionMode;
 
 /**
  * The Favor class is an extension of the Database handler
@@ -35,6 +39,14 @@ public class Favor extends DatabaseHandler {
         updateFromDb();
     }
 
+    public Favor(String id,FirebaseFirestore db){
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id,db);
+
+        if(!ExecutionMode.getInstance().isTest()){
+            throw new IllegalStateException("This constructor should be used only for testing purpose");
+        }
+    }
 
     @Override
     public void updateOnDb(){

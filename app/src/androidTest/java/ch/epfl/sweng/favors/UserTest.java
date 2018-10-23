@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import ch.epfl.sweng.favors.database.User;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 ;
@@ -39,6 +41,7 @@ public class UserTest {
     @Mock private DocumentSnapshot fakeDocSnap;
 
     private Task<DocumentSnapshot> fakeTask;
+    private Task<Void> fakeSetTask;
     private HashMap<String,Object> data;
 
     private final String FAKE_UID = "sklfklalsdj";
@@ -46,23 +49,26 @@ public class UserTest {
     private final String FAKE_FIRST_NAME = "toto";
     private final String FAKE_LAST_NAME = "foo";
     private final String FAKE_SEX = "M";
+    private final Integer FAKE_TIMESTAMP = 343354;
 
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         fakeTask = Tasks.forResult(fakeDocSnap);
+        fakeSetTask = Tasks.forResult((Void)null);
         data = new HashMap<>();
         data.put(User.StringFields.firstName.toString(),FAKE_FIRST_NAME);
         data.put(User.StringFields.lastName.toString(),FAKE_LAST_NAME);
         data.put(User.StringFields.email.toString(), FAKE_EMAIL);
         data.put(User.StringFields.sex.toString(), FAKE_SEX);
+        data.put(User.IntegerFields.creationTimeStamp.toString(), FAKE_TIMESTAMP);
         when(fakeAuth.getUid()).thenReturn(FAKE_UID);
         when(fakeDb.collection("users")).thenReturn(fakeCollection);
         when(fakeCollection.document(FAKE_UID)).thenReturn(fakeDoc);
         when(fakeDoc.get()).thenReturn(fakeTask);
+        when(fakeDoc.set(any())).thenReturn(fakeSetTask);
         when(fakeDocSnap.getData()).thenReturn(data);
     }
-
 
     @Test
     public void getFirstNameTest(){
@@ -95,12 +101,19 @@ public class UserTest {
     }
 
     @Test
+    public void getTimestampTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, user.get(User.IntegerFields.creationTimeStamp)));
+    }
+
+    @Test
     public void setFirstNameTest(){
         String newFirstName = "tata";
         User user = new User(fakeAuth, fakeDb);
 
         user.updateFromDb().addOnCompleteListener(t->{
             user.set(User.StringFields.firstName, newFirstName);
+            user.updateOnDb();
             assertEquals(newFirstName, user.get(User.StringFields.firstName));
         });
     }
@@ -137,6 +150,17 @@ public class UserTest {
     }
 
     @Test
+    public void setTimestampTest(){
+        Integer newTimestamp = 788484;
+        User user = new User(fakeAuth, fakeDb);
+
+        user.updateFromDb().addOnCompleteListener(t->{
+            user.set(User.IntegerFields.creationTimeStamp, newTimestamp);
+            assertEquals(newTimestamp, user.get(User.IntegerFields.creationTimeStamp));
+        });
+    }
+
+    @Test
     public void getObservableFirstNameTest(){
         User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, user.getObservableObject(User.StringFields.firstName).get()));
@@ -158,5 +182,24 @@ public class UserTest {
     public void getObservableGenderStringTest(){
         User user = new User(fakeAuth, fakeDb);
         user.updateFromDb().addOnCompleteListener(t-> assertEquals(User.UserGender.getGenderFromUser(user).toString(),User.UserGender.getObservableGenderString(user).get()));
+    }
+
+    @Test
+    public void getObservableTimestampTest(){
+        User user = new User(fakeAuth, fakeDb);
+        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, user.getObservableObject(User.IntegerFields.creationTimeStamp).get()));
+    }
+
+
+    @Test(expected = IllegalStateException.class)
+    public void testConstructorTestPurpose1Argument(){
+        ExecutionMode.getInstance().setTest(false);
+        User user = new User(fakeAuth);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testConstructorTestPurpose2Arguments(){
+        ExecutionMode.getInstance().setTest(false);
+        User user = new User(fakeAuth, fakeDb);
     }
 }
