@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 public class EditProfileFragmentTest {
 
-    @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<>(EditProfileFragment.class);
+    @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<EditProfileFragment>(EditProfileFragment.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock private FirebaseUser fbFakeUser;
