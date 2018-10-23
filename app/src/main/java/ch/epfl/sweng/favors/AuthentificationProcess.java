@@ -24,6 +24,8 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 
+import static ch.epfl.sweng.favors.FavorsMain.Status.Login;
+
 
 public class AuthentificationProcess extends Activity {
 
@@ -141,7 +143,10 @@ public class AuthentificationProcess extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        if(!ExecutionMode.getInstance().isTest()){
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        }
+
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
         binding.setElements(this);
         // Check if the email is correct each time a letter was added
@@ -149,9 +154,19 @@ public class AuthentificationProcess extends Activity {
         // Check if the password is correct each time a letter was added
         binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
         // Get the Intent that started this activity and extract the string
-        Bundle bundle = getIntent().getExtras();
-        status = (FavorsMain.Status) bundle.get(FavorsMain.AUTHENTIFICATION_ACTION);
-        setUI(status);
+
+        Bundle bundle;
+
+        if(!ExecutionMode.getInstance().isTest()){
+            bundle = getIntent().getExtras();
+            status = (FavorsMain.Status) bundle.get(FavorsMain.AUTHENTIFICATION_ACTION);
+            setUI(status);
+        }
+        else{
+            setUI(Login);
+        }
+
+
         binding.authentificationButton.setOnClickListener(authentificationButtonListener);
         binding.resetPasswordButton.setOnClickListener(resetButtonListener);
     }
@@ -192,7 +207,7 @@ public class AuthentificationProcess extends Activity {
             requirementsText.set("Wrong password format");
             return;
         }
-        if (status == FavorsMain.Status.Login) {
+        if (status == Login) {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
         else if (status == FavorsMain.Status.Register) {
