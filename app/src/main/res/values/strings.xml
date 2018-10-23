@@ -18,7 +18,7 @@
     <string-array name="sortBy">
         <item>sort by</item>
         <item>location</item>
-        <item>recent</item>
+        <item>deadline</item>
         <item>category</item>
     </string-array>
 

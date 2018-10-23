@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,24 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     public interface OnItemClickListener {
         void onItemClick(Favor item);
+    }
+
+    public void remove(Favor f) {
+        favorList.remove(f);
+        notifyDataSetChanged();
+    }
+
+    public void filter(ObservableList<Favor> favors, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        for (Favor f : favors) {
+            final String title = f.get(Favor.StringFields.title).toLowerCase();
+            final String description = f.get(Favor.StringFields.description).toLowerCase();
+            if (title.contains(lowerCaseQuery) || description.contains(lowerCaseQuery)) {
+            } else {
+                remove(f);
+            }
+        }
     }
 
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
