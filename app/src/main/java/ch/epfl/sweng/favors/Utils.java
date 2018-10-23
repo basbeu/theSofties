@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
 
 public class Utils {
     private static final int MAXPASSWORDLEN = 20;
@@ -79,5 +80,6 @@ public class Utils {
         RuntimeEnvironment.getInstance().isConnected.set(false);
         FirebaseAuth.getInstance().signOut();
         context.startActivity(intent);
+        User.resetMain();
     }
 }
