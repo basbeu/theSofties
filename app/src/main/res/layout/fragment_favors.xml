@@ -15,9 +15,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="60sp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <SearchView
@@ -38,6 +41,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <android.support.design.widget.FloatingActionButton
+
                 android:id="@+id/addNewFavor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +55,7 @@
 
 
         </LinearLayout>
-
+        </ScrollView>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/favorsList"
             android:layout_width="match_parent"
