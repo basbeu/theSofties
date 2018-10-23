@@ -9,7 +9,9 @@ import android.text.Editable;
 import android.util.Log;
 import android.widget.RadioGroup;
 
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
@@ -82,5 +84,23 @@ public class SetUserInfo extends AppCompatActivity {
             Intent intent = new Intent(this, ConfirmationSent.class);
             startActivity(intent);
         });
+    }
+
+    /*
+    Explicitly calls the FavorMain because the back button will not work to go back to FavorMain.
+    This behavior is wanted because we don't want to accidentally have a user reach the login screen when he is logged in
+     */
+    @Override
+    public void onBackPressed() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete();
+        }else {
+            Log.e(TAG, "Failled to delete account that didin't finish registration");
+        }
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, FavorsMain.class);
+        startActivity(intent);
+        finish();
     }
 }

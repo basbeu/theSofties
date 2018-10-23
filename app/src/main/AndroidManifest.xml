@@ -22,6 +22,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            android:noHistory="true"
         </activity>
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
@@ -29,18 +30,23 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            android:noHistory="true"
         </activity>
         <activity
             android:name=".AuthentificationProcess"
-            android:parentActivityName=".FavorsMain" />
+            android:parentActivityName=".FavorsMain"
+            android:noHistory="true"/>
         <activity
             android:name=".Logged_in_Screen"
             android:label="@string/title_activity_logged_in__screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ConfirmationSent"
-            android:label="@string/title_activity_confirmation_sent" />
-        <activity android:name=".SetUserInfo" />
+            android:label="@string/title_activity_confirmation_sent"
+            android:noHistory="true"/>
+        <activity
+            android:name=".SetUserInfo"
+            android:noHistory="true"/>
         <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_test"/>
