@@ -35,6 +35,10 @@ public class User extends DatabaseHandler {
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
+    public void updateUser(){
+        user = new User(instance.getUid());
+        user.set(StringFields.email, instance.getCurrentUser().getEmail());
+    }
 
     public User(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),

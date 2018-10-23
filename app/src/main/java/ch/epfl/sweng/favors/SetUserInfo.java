@@ -19,6 +19,7 @@ import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
 
 public class SetUserInfo extends AppCompatActivity {
 
+
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
 
     public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
@@ -50,13 +51,16 @@ public class SetUserInfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(getIntent().hasExtra(FavorsMain.TEST_MODE)){
+            ExecutionMode.getInstance().setTest(true);
+        }
         if(!ExecutionMode.getInstance().isTest())
-            User.getMain().setMain(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            User.getMain().updateUser();
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
-        if(!ExecutionMode.getInstance().isTest())
-            User.getMain().set(User.StringFields.email, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
         bindUi();
     }
 

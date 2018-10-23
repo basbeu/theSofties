@@ -1,6 +1,10 @@
 package ch.epfl.sweng.favors;
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import com.google.common.util.concurrent.FakeTimeLimiter;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -9,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,12 +36,51 @@ import static junit.framework.TestCase.assertEquals;
 
 import static org.mockito.Mockito.when;
 
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+import java.util.Set;
+
+/**
+ * Used as container to test fragments in isolation with Espresso
+ */
+/*
+@RestrictTo(RestrictTo.Scope.TESTS)
+class SingleFragmentActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FrameLayout content = new FrameLayout(this);
+        content.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        content.setId(R.id.content_frame);
+        setContentView(content);
+    }
+
+    public void setFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content_frame, fragment, "TEST")
+                .commit();
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment).commit();
+    }
+}*/
+
 @RunWith(AndroidJUnit4.class)
 
 //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
 public class SetUserInfoTest {
 
-    @Rule public ActivityTestRule<SetUserInfo> activityActivityTestRule = new ActivityTestRule<SetUserInfo>(SetUserInfo.class);
+    @Rule public ActivityTestRule<SetUserInfo> activityActivityTestRule = new ActivityTestRule<SetUserInfo>(SetUserInfo.class, true,  false);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock private FirebaseUser fbFakeUser;
@@ -50,6 +94,9 @@ public class SetUserInfoTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
+        Intent intent = new Intent();
+        intent.putExtra(FavorsMain.TEST_MODE, "true");
+        activityActivityTestRule.launchActivity(intent);
         User fakeUser = new User(fakeAuth);
         User.setMain(fakeUser);
         when(fakeAuth.getUid()).thenReturn(FAKEUID);
@@ -60,12 +107,12 @@ public class SetUserInfoTest {
         onView(withId(R.id.submit)).perform(click());
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
         when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
+
+
     }
 
    @Test
     public void userHasCorrectFirstName() {
-       activityActivityTestRule.getActivity().
-       ExecutionMode.getInstance().setTest(true);
        assertEquals(FAKEFIRSTNAME, User.getMain().get(User.StringFields.firstName));
     }
     @Test
@@ -80,4 +127,5 @@ public class SetUserInfoTest {
     public void userHasCorrectGender() {
         assertEquals("F", User.getMain().get(User.StringFields.sex));
     }
+
 }

@@ -40,7 +40,7 @@ import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
  * the entry point for the actual app
  */
 public class FavorsMain extends AppCompatActivity {
-
+    public static final String TEST_MODE = "mode-test";
     public static final String TAG = "FavorsApp";
     public ObservableField<String> appName = new ObservableField<>("Favors");
 

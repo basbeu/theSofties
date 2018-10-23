@@ -214,7 +214,6 @@ public class AuthentificationProcess extends Activity {
         }
     }
     private void confirmationSent(FavorsMain.Status status){
-
         Intent intent = new Intent(this, SetUserInfo.class);
         startActivity(intent);
     }
