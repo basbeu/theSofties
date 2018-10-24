@@ -1,6 +1,8 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableField;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,7 +27,6 @@ public abstract class DatabaseHandler {
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
     protected Map<DatabaseBooleanField, ObservableField<Boolean>> booleanData;
     protected Map<DatabaseObjectField, ObservableField<Object>> objectData;
-
 
     protected final String collection;
     protected String documentID;

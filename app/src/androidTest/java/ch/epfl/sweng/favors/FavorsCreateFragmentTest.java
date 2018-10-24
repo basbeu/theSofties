@@ -1,10 +1,22 @@
 package ch.epfl.sweng.favors;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+
+import ch.epfl.sweng.favors.database.Favor;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -12,6 +24,34 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.when;
+
+
+/*@RestrictTo(RestrictTo.Scope.TESTS)
+class SingleFragmentActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FrameLayout content = new FrameLayout(this);
+        content.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        content.setId(R.id.fragment_container);
+        setContentView(content);
+    }
+    public void setFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragment, "TEST")
+                .commit();
+    }
+    public void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
+    public Fragment getFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    }
+}*/
 
 @RunWith(AndroidJUnit4.class)
 public class FavorsCreateFragmentTest {
@@ -19,20 +59,25 @@ public class FavorsCreateFragmentTest {
     @Rule
     public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
 
+    @Mock Favor favor;
+    //Fragment createFrag = new FavorCreateFragment();
+
+    @Before
+    public void Before(){
+        //
+    }
+
     @Test
     public void fragment_can_be_instantiated() {
-
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.createFavorTitle)).check(matches(isDisplayed()));
-        onView(withId(R.id.imageOfFavor)).check(matches(isDisplayed()));
-        onView(withId(R.id.imageView3)).check(matches(isDisplayed()));
-        onView(withId(R.id.floatingActionButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.titleFavor)).check(matches(isDisplayed()));
-        onView(withId(R.id.deadlineFavor)).check(matches(isDisplayed()));
-        onView(withId(R.id.locationFavor)).check(matches(isDisplayed()));
-        onView(withId(R.id.descriptionFavor)).check(matches(isDisplayed()));
-        onView(withId(R.id.categoryFavor)).check(matches(isDisplayed()));
-        onView(withId(R.id.addFavor)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void isStringValidTest(){
+
+        assertEquals(FavorCreateFragment.isStringValid("blablabla"), true);
+
     }
 
     @Test
@@ -52,4 +97,18 @@ public class FavorsCreateFragmentTest {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.locationFavor)).perform(typeText("location")).check(matches(withText("location")));
     }
+
+
+    /*@Test
+    public void allFavorsValidisFalse(){
+
+        mFragmentTestRule.getFragment().allFavorFieldsValid();
+    }*/
+
+    /*@Test
+    public void createFavorIfValidTest(){
+        //mActivityTestRule.getFragment().createFavorIfValid(favor);
+    }*/
+
+
 }

@@ -63,10 +63,12 @@ public class FavorDetailViewTest {
     @Test
         public void reportAbusiveAddToast(){
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.favReportAbusiveAdd)).perform(scrollTo(), click());
+
         try{
             Thread.sleep(2000);
             //This line tests if a toast is displayed
+            onView(withId(R.id.favReportAbusiveAdd)).perform(scrollTo(), click());
+            Thread.sleep(2000);
             onView(withText("issue has been reported! Sorry for the inconvenience")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         } catch(Exception e){
             fail("Can't sleep");

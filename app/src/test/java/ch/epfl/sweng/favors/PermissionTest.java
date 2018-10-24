@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class PermissionTest {
     @Test
     public void permission_isCorrect() {
-        assertEquals(FavorsMain.Permissions.values()[0].ordinal(), FavorsMain.Permissions.LOCATION_REQUEST.ordinal());
+        assertEquals(FavorsMain.Permissions.values()[0].ordinal(), FavorsMain.Permissions.LOCATION_SERVICE.ordinal());
     }
 
 }

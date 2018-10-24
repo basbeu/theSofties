@@ -2,6 +2,10 @@ package ch.epfl.sweng.favors.database;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import ch.epfl.sweng.favors.ExecutionMode;
+
 public class Interest extends DatabaseHandler{
 
     private static final String TAG = "DB_INTEREST";
@@ -24,6 +28,15 @@ public class Interest extends DatabaseHandler{
                 ObjectFields.values(), COLLECTION,null);
     }
 
+    public Interest(String id,FirebaseFirestore db){
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id,db);
+
+        if(!ExecutionMode.getInstance().isTest()){
+            throw new IllegalStateException("This constructor should be used only for testing purpose");
+        }
+    }
+
 
     @Override
     public void updateOnDb(){
@@ -42,5 +55,4 @@ public class Interest extends DatabaseHandler{
             super.updateOnDb();
         }
     }
-
 }
