@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
