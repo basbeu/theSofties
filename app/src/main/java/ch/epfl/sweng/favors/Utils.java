@@ -71,10 +71,10 @@ public class Utils {
         }
     }
 
-    public static void logout(Context context){
+    public static void logout(Context context, FirebaseAuth auth){
         Toast.makeText(context, R.string.seeyou, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(context, FavorsMain.class);
-        FirebaseAuth.getInstance().signOut();
+        auth.signOut();
         context.startActivity(intent);
         User.resetMain();
     }
