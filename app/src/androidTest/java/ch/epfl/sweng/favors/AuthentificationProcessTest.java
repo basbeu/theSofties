@@ -30,6 +30,7 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
@@ -41,6 +42,7 @@ public class AuthentificationProcessTest {
 
     private final String FAKE_EMAIL = "toto@email.com";
     private final String FAKE_PASSWORD = "abcd1234";
+    private final String FAKE_WRONG_EMAIL= "tato@email.com";
 
     @Mock private FirebaseUser fbFakeUser;
     @Mock private FirebaseAuth fakeAuth;
@@ -55,6 +57,7 @@ public class AuthentificationProcessTest {
         User.UserGender.setGender(User.getMain(), User.UserGender.M);
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
         when(fakeAuth.signInWithEmailAndPassword(FAKE_EMAIL,FAKE_PASSWORD)).thenReturn(Tasks.forResult(null));
+        when(fakeAuth.signInWithEmailAndPassword(FAKE_WRONG_EMAIL,FAKE_PASSWORD)).thenReturn(Tasks.forCanceled());
         when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
         when(fbFakeUser.isEmailVerified()).thenReturn(true);
     }
@@ -72,6 +75,22 @@ public class AuthentificationProcessTest {
         // Add button click and see if the function is call if the password if valid or error display if not
         UiObject loginButton = device.findObject(new UiSelector().text("LOGIN"));
         loginButton.click();
+    }
+
+    @Test
+    public void loginFailed() throws Exception{
+        ActivityTestRule<AuthentificationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthentificationProcess.class);
+        Intent intent = new Intent();
+        intent.putExtra(AuthentificationProcess.AUTHENTIFICATION_ACTION, AuthentificationProcess.Action.Login);
+        activityActivityTestRule.launchActivity(intent);
+        // Check if the title correspond to a login title
+        onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
+        onView(withId(R.id.emailTextField)).perform(replaceText(FAKE_WRONG_EMAIL));
+        onView(withId(R.id.passwordTextField)).perform(replaceText(FAKE_PASSWORD));
+        // Add button click and see if the function is call if the password if valid or error display if not
+        UiObject loginButton = device.findObject(new UiSelector().text("LOGIN"));
+        loginButton.click();
+        assertEquals("Wrong email or password or email not verified\nPlease try again",activityActivityTestRule.getActivity().requirementsText.get());
     }
 
     @Test
