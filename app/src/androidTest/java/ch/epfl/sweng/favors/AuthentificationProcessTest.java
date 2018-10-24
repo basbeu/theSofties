@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class AuthentificationProcessTest {
-    //@Rule public ActivityTestRule<AuthentificationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthentificationProcess.class);
+    @Rule public ActivityTestRule<AuthentificationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthentificationProcess.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
@@ -48,17 +49,32 @@ public class AuthentificationProcessTest {
         User.UserGender.setGender(User.getMain(), User.UserGender.M);
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
         when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
-
     }
 
     @Test
     public void login(){
         ActivityTestRule<AuthentificationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthentificationProcess.class);
-        activityActivityTestRule.launchActivity(null);
+        Intent intent = new Intent();
+        intent.putExtra(AuthentificationProcess.AUTHENTIFICATION_ACTION, AuthentificationProcess.Action.Login);
+        activityActivityTestRule.launchActivity(intent);
+        // Check if the title correspond to a login title
+        onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
+        onView(withId(R.id.emailTextField)).perform(replaceText("toto@email.com"));
+        onView(withId(R.id.passwordTextField)).perform(replaceText("abcd1234"));
+        // Add button click and see if the function is call if the password if valid or error display if not
+    }
 
+    @Test
+    public void register(){
+        ActivityTestRule<AuthentificationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthentificationProcess.class);
+        Intent intent = new Intent();
+        intent.putExtra(AuthentificationProcess.AUTHENTIFICATION_ACTION, AuthentificationProcess.Action.Register);
+        activityActivityTestRule.launchActivity(intent);
+        // Check if the title correspond to a register title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
         onView(withId(R.id.emailTextField)).perform(replaceText("toto@email.com"));
         onView(withId(R.id.passwordTextField)).perform(replaceText("abcd1234"));
     }
+
 
 }
