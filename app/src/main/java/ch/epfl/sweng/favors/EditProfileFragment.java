@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
 
@@ -66,8 +68,6 @@ public class EditProfileFragment extends Fragment {
          binding.setElements(this);
          //Set the RadioGroup buttons to select the current sex
          displayGender();
-
-         User.getMain().set(User.StringFields.email, User.getMain().getInstance().getCurrentUser().getEmail());
 
          binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
 

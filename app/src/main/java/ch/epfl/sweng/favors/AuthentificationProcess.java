@@ -24,7 +24,6 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 
-import static ch.epfl.sweng.favors.FavorsMain.Status.Login;
 
 
 public class AuthentificationProcess extends Activity {
@@ -32,10 +31,12 @@ public class AuthentificationProcess extends Activity {
     public static final String TAG = FavorsMain.TAG + "_Auth";
     public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
 
+    public static String AUTHENTIFICATION_ACTION = "AUTHENTIFICATION_ACTION";
+    public enum Action{Login, Register} ;
 
     public LogInRegisterViewBinding binding;
     private FirebaseAuth mAuth;
-    public FavorsMain.Status status;
+    public Action action;
 
     public ObservableField<String> headerText = new ObservableField<>();
     public ObservableField<String> validationButton = new ObservableField<>();
@@ -84,7 +85,7 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void set(boolean value) {
             super.set(value);
-            requirementsText.set(status == FavorsMain.Status.Register && this.get() ? "" : REQUIREMENTS_STRING);
+            requirementsText.set(action == Action.Register && this.get() ? "" : REQUIREMENTS_STRING);
         }
     };
 
@@ -104,7 +105,7 @@ public class AuthentificationProcess extends Activity {
             Log.d(TAG, "createUserWithEmail:success");
             final FirebaseUser user = mAuth.getCurrentUser();
             sendConfirmationMail(user);
-            confirmationSent(status);
+            confirmationSent();
 
         } else {
             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -116,13 +117,9 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
-                RuntimeEnvironment.getInstance().isConnected.set(true);
                 Log.d(TAG, "signInWithEmail:success");
-                final FirebaseUser user = mAuth.getCurrentUser();
-
-                /*  Validation check + Wait 2s + Back to last activity */
-                User.setMain(FirebaseAuth.getInstance().getUid());
-                loggedinView(status);
+                User.getMain().updateUser();
+                loggedinView(action);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                 requirementsText.set("Wrong email or password or email not verified\nPlease try again");
@@ -159,11 +156,11 @@ public class AuthentificationProcess extends Activity {
 
         if(!ExecutionMode.getInstance().isTest()){
             bundle = getIntent().getExtras();
-            status = (FavorsMain.Status) bundle.get(FavorsMain.AUTHENTIFICATION_ACTION);
-            setUI(status);
+            action = (Action) bundle.get(AUTHENTIFICATION_ACTION);
+            setUI(action);
         }
         else{
-            setUI(Login);
+            setUI(Action.Login);
         }
 
 
@@ -174,10 +171,10 @@ public class AuthentificationProcess extends Activity {
     /**
      * Display UI Elements based on the current mode
      *
-     * @param status The current mode
+     * @param action The current mode
      */
-    private void setUI(FavorsMain.Status status){
-        switch(status){
+    private void setUI(Action action){
+        switch(action){
             case Login:
                 headerText.set("Please enter your login informations:");
                 validationButton.set("Login");
@@ -207,29 +204,26 @@ public class AuthentificationProcess extends Activity {
             requirementsText.set("Wrong password format");
             return;
         }
-        if (status == Login) {
+        if (action == Action.Login) {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
-        else if (status == FavorsMain.Status.Register) {
+        else if (action == Action.Register) {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     }
 
-    private void loggedinView(FavorsMain.Status status){
+    private void loggedinView(Action action){
         if(mAuth.getCurrentUser().isEmailVerified()) {
             Intent intent = new Intent(this, Logged_in_Screen.class);
-            intent.putExtra(FavorsMain.LOGGED_IN, status);
             startActivity(intent);
             finish();
         } else {
             Intent intent = new Intent(this, AuthentificationProcess.class);
-            intent.putExtra(FavorsMain.LOGGED_OUT, status);
             startActivity(intent);
         }
     }
-    private void confirmationSent(FavorsMain.Status status){
-
+    private void confirmationSent(){
         Intent intent = new Intent(this, SetUserInfo.class);
         startActivity(intent);
     }

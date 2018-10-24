@@ -76,8 +76,6 @@ public class Utils {
     public static void logout(Context context){
         Toast.makeText(context, R.string.seeyou, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(context, FavorsMain.class);
-        intent.putExtra(FavorsMain.LOGGED_OUT, FavorsMain.Status.Disconnect);
-        RuntimeEnvironment.getInstance().isConnected.set(false);
         FirebaseAuth.getInstance().signOut();
         context.startActivity(intent);
         User.resetMain();
