@@ -68,10 +68,23 @@ public class InterestEntityTest {
     }
 
     @Test
+    public void getTitleFailedTest(){
+        when(fakeDoc.get()).thenReturn(Tasks.forCanceled());
+        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
+    }
+
+    @Test
     public void getLinkedInterestTest(){
         Interest i = new Interest (FAKE_DOC_ID,fakeDb);
         i.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LINKEDINTEREST_OBJECT, i.get(Interest.ObjectFields.linkedInterests)));
     }
+
+    @Test
+    public void setDocId(){
+        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
+        i.set(FAKE_DOC_ID, data);
+    }
+
 
     @Test
     public void setTitleDocIDTest(){
