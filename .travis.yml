@@ -6,7 +6,7 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-22
+    - android-19
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-19
 before_script:
