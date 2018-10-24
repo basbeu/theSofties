@@ -32,7 +32,7 @@ import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
-    private final int MIN_STRING_SIZE = 1;
+    private static final int MIN_STRING_SIZE = 1;
 
     public ObservableBoolean titleValid = new ObservableBoolean(false);
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
@@ -40,7 +40,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
 
 
-    public boolean isStringValid(String s) {
+    public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
     }
 
