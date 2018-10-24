@@ -32,9 +32,6 @@ public class Interest extends DatabaseHandler{
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id,db);
 
-        if(!ExecutionMode.getInstance().isTest()){
-            throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }
     }
 
 

@@ -79,7 +79,7 @@ public class ProfileFragmentTest {
     }
 
     @Test
-    public void lasttName_is_displayed(){
+    public void lastName_is_displayed(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profLastName)).check(matches(withText(FAKELASTNAME)));
     }
@@ -99,7 +99,6 @@ public class ProfileFragmentTest {
 
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.editProfileButton)).check(matches(isDisplayed()));
-
         //onView(withId(R.id.editProfileButton)).perform(click());
 
   }

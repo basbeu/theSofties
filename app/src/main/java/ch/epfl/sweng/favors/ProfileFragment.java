@@ -2,7 +2,6 @@ package ch.epfl.sweng.favors;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
