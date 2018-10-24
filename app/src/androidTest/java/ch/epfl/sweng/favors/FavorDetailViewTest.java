@@ -1,13 +1,18 @@
 package ch.epfl.sweng.favors;
 
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.FakeTimeLimiter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
@@ -18,6 +23,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.util.HashMap;
+
+import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -59,6 +67,28 @@ public class FavorDetailViewTest {
             onView(withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
             onView(withText("We will inform the poster of the add that you are intrested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         }
+
+    @Test
+    public void imageDisplayed(){
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
+    }
+
+
+
+    @Test
+    public void image2Displayed(){
+
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.imageView2)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void tokensAmountDisplayed(){
+        mFragmentTestRule.launchActivity(null);
+
+        onView(withId(R.id.favTokAmmount)).check(matches(isDisplayed()));
+    }
 
     @Test
         public void reportAbusiveAddToast(){
