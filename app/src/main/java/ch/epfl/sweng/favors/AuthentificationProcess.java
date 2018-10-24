@@ -116,6 +116,7 @@ public class AuthentificationProcess extends Activity {
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
+            Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
                 User.getMain().updateUser();
@@ -139,9 +140,11 @@ public class AuthentificationProcess extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
         if(!ExecutionMode.getInstance().isTest()){
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            mAuth = FirebaseAuth.getInstance();
+        }else{
+            mAuth = User.getMain().getInstance();
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
@@ -152,11 +155,10 @@ public class AuthentificationProcess extends Activity {
         binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
         // Get the Intent that started this activity and extract the string
 
-        Bundle bundle;
 
-        if(!ExecutionMode.getInstance().isTest()){
-            bundle = getIntent().getExtras();
-            action = (Action) bundle.get(AUTHENTIFICATION_ACTION);
+        if(getIntent().hasExtra(AUTHENTIFICATION_ACTION)){
+
+            action = (Action) getIntent().getExtras().get(AUTHENTIFICATION_ACTION);
             setUI(action);
         }
         else{
@@ -205,6 +207,7 @@ public class AuthentificationProcess extends Activity {
             return;
         }
         if (action == Action.Login) {
+            Log.d(TAG,"coucou");
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
         else if (action == Action.Register) {
