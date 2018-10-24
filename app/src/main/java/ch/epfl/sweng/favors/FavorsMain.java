@@ -31,32 +31,9 @@ public class FavorsMain extends AppCompatActivity {
 
     public ActivityMainBinding binding;
 
-    public enum Permissions{LOCATION_SERVICE};
-
     private static Context context;
     public static Context getContext(){
         return context;
-    }
-
-    /**
-     * This interface is the contract for receiving the results for permission requests.
-     * @param requestCode - the int that defines which permission was asked for
-     * @param permissions - the actual manifest permissions that are passed on
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        Permissions p = Permissions.values()[requestCode];
-
-        if(p == Permissions.LOCATION_SERVICE){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                LocationHandler.getHandler().permissionFeedback();
-            } else {
-                Toast.makeText(this, "The app requires you to enable Location services!", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
 

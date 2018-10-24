@@ -30,7 +30,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
 
     FragmentFavorsBinding binding;
     ObservableArrayList<Favor> favorList;
-    FavorListAdapter listAdapter;
 
     //RecyclerView favorsListView;
     @Nullable
@@ -49,7 +48,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
         sortBySpinner.setOnItemSelectedListener(this);
 
         //button redirects to creating favor page
-        binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
 
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -86,11 +84,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
 
-    private void updateList(ObservableList<Favor> list){
-        listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
-        binding.favorsList.setAdapter(listAdapter);
-        listAdapter.notifyDataSetChanged();
-    }
+
 
     ObservableList.OnListChangedCallback listCallBack = new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
         @Override
@@ -101,7 +95,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
 
         @Override
         public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-            updateList(sender);
         }
 
         @Override
