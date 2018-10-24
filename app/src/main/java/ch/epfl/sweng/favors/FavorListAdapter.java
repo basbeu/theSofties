@@ -60,13 +60,21 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
     //constructor
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
-        this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
+        if(!ExecutionMode.getInstance().isTest()){
+            this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
+        }
+
         this.fragmentActivity = fragActivity;
-        this.listener = (Favor item) -> {
-            Log.d(TAG,"click recorded");
-            this.sharedViewFavor.select(item);
-            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
-        };
+        if(!ExecutionMode.getInstance().isTest()){
+            this.listener = (Favor item) -> {
+                Log.d(TAG,"click recorded");
+                this.sharedViewFavor.select(item);
+                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            };
+
+
+        }
+
     }
 
 

@@ -1,11 +1,13 @@
 package ch.epfl.sweng.favors;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -67,7 +69,8 @@ public class LocationHandler {
      */
     private boolean requestPermission() {
         if(!checkPermission()){
-            ((AppCompatActivity)FavorsMain.getContext()).requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+            ActivityCompat.requestPermissions((Activity) FavorsMain.getContext(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     FavorsMain.Permissions.LOCATION_SERVICE.ordinal());
             return false;
         }
@@ -75,8 +78,8 @@ public class LocationHandler {
     }
 
     private boolean checkPermission(){
-        if (FavorsMain.getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && FavorsMain.getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return false;
         } else {
             return true;
