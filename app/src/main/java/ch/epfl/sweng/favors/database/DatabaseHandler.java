@@ -96,9 +96,8 @@ public abstract class DatabaseHandler {
     public void updateOnDb(){
         if(documentID != null) {
             db.collection(collection).document(documentID).set(getEncapsulatedObjectOfMaps())
-                    .addOnSuccessListener(aVoid -> updateFromDb()).addOnFailureListener(e -> {
+                    .addOnSuccessListener(aVoid -> updateFromDb());
                 /* Feedback of an error here - Impossible to update user informations */
-            });
         }
         else{
             Log.e(TAG, "Trying to update data on an unknown document");

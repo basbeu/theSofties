@@ -85,9 +85,9 @@ public class User extends DatabaseHandler {
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,instance.getUid(),db);
 
-        if(!ExecutionMode.getInstance().isTest()){
+       /* if(!ExecutionMode.getInstance().isTest()){
             throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }
+        }*/
 
         this.instance = instance;
         if(instance.getUid() != null) {

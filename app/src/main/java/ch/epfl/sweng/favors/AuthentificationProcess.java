@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 
 
@@ -72,7 +71,7 @@ public class AuthentificationProcess extends Activity {
         @Override
         public void onClick(View v) {
 
-            FirebaseAuth.getInstance().sendPasswordResetEmail(binding.emailTextField.getText().toString())
+            mAuth.sendPasswordResetEmail(binding.emailTextField.getText().toString())
                     .addOnCompleteListener(w-> Utils.displayToastOnTaskCompletion(w,AuthentificationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
         }
     };
