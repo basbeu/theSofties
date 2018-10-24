@@ -28,7 +28,7 @@ public class ConfirmationSent extends Activity {
     private void goMain(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, AuthentificationProcess.class);
-        intent.putExtra(FavorsMain.AUTHENTIFICATION_ACTION, FavorsMain.Status.Login);
+        intent.putExtra(AuthentificationProcess.AUTHENTIFICATION_ACTION, AuthentificationProcess.Action.Login);
         startActivity(intent);
     }
 

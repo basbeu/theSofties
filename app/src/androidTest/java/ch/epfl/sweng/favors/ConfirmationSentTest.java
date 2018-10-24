@@ -70,9 +70,10 @@ public class ConfirmationSentTest {
         onView(withId(R.id.resendConfirmationMailButton)).perform(click());
         //Wait for the toast to be displayed
         try{
-            Thread.sleep(2000);
+            Thread.sleep(500);
             //This line tests if a toast is displayed
             onView(withText("Email confirmation sent successfully")).inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+            Thread.sleep(1000);
         }catch(Exception e){
             fail("Can't sleep");
         }

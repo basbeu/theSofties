@@ -16,6 +16,8 @@ public class User extends DatabaseHandler {
     private static final String COLLECTION = "users";
     private FirebaseAuth instance;
 
+    private static Status status = new Status(Status.Values.NotLogged);
+
     private static User user = new User();
     public static User getMain(){
         return user;
@@ -35,16 +37,22 @@ public class User extends DatabaseHandler {
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
+    public boolean isLoggedIn(){
+        return status.get() == Status.Values.Logged;
+    }
+
     public void updateUser(){
         user = new User(instance.getUid());
         user.set(StringFields.email, instance.getCurrentUser().getEmail());
     }
+
 
     public User(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
         instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null){
+            status.loggedInSuccess();
             updateFromDb();
         }
     }
@@ -54,6 +62,7 @@ public class User extends DatabaseHandler {
                 ObjectFields.values(), COLLECTION,id);
         instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null) {
+            status.loggedInSuccess();
             updateFromDb();
         }
     }
@@ -88,6 +97,8 @@ public class User extends DatabaseHandler {
 
 
     static public void resetMain() {
+
+        status.disconnect();
         user.reset();
     }
 
@@ -137,4 +148,29 @@ public class User extends DatabaseHandler {
 
 
     }
+}
+
+class Status extends ObservableField<Status.Values>{
+    private static final String TAG = "User_Status";
+
+    public enum Values{NotLogged, Logged};
+
+    public Status(Status.Values value){
+        super(value);
+    }
+
+    @Override
+    public void set(Status.Values status){
+        Log.e(TAG, "Editing the status of user directly is forbidden");
+    }
+
+    public void loggedInSuccess() {
+        super.set(Values.Logged);
+    }
+
+    public void disconnect(){
+        super.set(Values.NotLogged);
+    }
+
+
 }
