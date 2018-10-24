@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.User;
 
 import static org.junit.Assert.assertEquals;
@@ -135,9 +136,27 @@ public class FavorEntityTest {
     }
 
     @Test
+    public void reset(){
+        Favor favor = new Favor(FAKE_DOC_ID,fakeDb);
+        favor.reset();
+    }
+
+    @Test
     public void getObservableIsOpenTest(){
         Favor favor = new Favor(FAKE_DOC_ID,fakeDb);
         favor.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_IS_OPEN, favor.getObservableObject(Favor.BooleanFields.isOpen).get()));
+    }
+
+
+    @Test
+    public void getFailed(){
+        HashMap<String,Object> empty = new HashMap();
+        Favor f = new Favor(FAKE_DOC_ID,fakeDb);
+        f.set(FAKE_DOC_ID, data);
+        f.get(Favor.StringFields.title);
+        f.get(Favor.ObjectFields.location);
+        f.get(Favor.BooleanFields.isOpen);
+        f.get(Favor.IntegerFields.creationTimestamp);
     }
 
     @Test

@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
 
 public class ConfirmationSent extends Activity {

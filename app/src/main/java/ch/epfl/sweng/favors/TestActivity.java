@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
