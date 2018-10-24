@@ -91,30 +91,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
         html.enabled = true
     }
 
-    def fileFilter = ['**/R.class',
-                      '**/R$*.class',
-                      '**/apidez/com/databinding/databinding/*',
-                      '**/android/databinding/*',
-                      '**/*$ViewInjector*.*',
-                      '**/*$ViewBinder*.*',
-                      '**/BuildConfig.*',
-                      '**/*Application*.*',
-                      '**/*Component*.*',
-                      '**/UiUtils.*',
-                      '**/*Binding*.*',
-                      '**/*Retrofit*.*',
-                      '**/*BR*.*',
-                      '**/*Adapter*.*',
-                      '**/*Fragment*.*',
-                      '**/*Activity*.*',
-                      '**/*Rx*.*',
-                      '**/*ViewHolder*.*',
-                      '**/Manifest*.*',
-                      '**/*$Lambda$*.*',
-                      '**/*Module.*',
-                      '**/*Dagger*.*',
-                      '**/*MembersInjector*.*',
-                      '**/*_Provide*Factory*.*']
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+
     def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
 

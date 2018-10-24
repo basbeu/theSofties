@@ -75,7 +75,7 @@ public class Logged_in_Screen extends AppCompatActivity implements NavigationVie
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
-                Utils.logout(this);
+                Utils.logout(this, User.getMain().getInstance());
                 break;
         }
 
