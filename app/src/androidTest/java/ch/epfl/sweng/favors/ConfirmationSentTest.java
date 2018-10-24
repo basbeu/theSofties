@@ -70,10 +70,9 @@ public class ConfirmationSentTest {
         onView(withId(R.id.resendConfirmationMailButton)).perform(click());
         //Wait for the toast to be displayed
         try{
-            Thread.sleep(500);
+            Thread.sleep(2000);
             //This line tests if a toast is displayed
             onView(withText("Email confirmation sent successfully")).inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-            Thread.sleep(1000);
         }catch(Exception e){
             fail("Can't sleep");
         }
@@ -84,10 +83,10 @@ public class ConfirmationSentTest {
     public void resendButtonWorksWithUnvalidUser(){
         when(fbFakeUser.sendEmailVerification()).thenReturn(Tasks.forException(new Exception()));
         //Wait for the toast to be displayed
+        onView(withId(R.id.resendConfirmationMailButton)).perform(click());
         try{
-            Thread.sleep(500);
-            onView(withId(R.id.resendConfirmationMailButton)).perform(click());
-            Thread.sleep(500);
+            Thread.sleep(2000);
+
             //This line tests if a toast is displayed
             onView(withText("Unable to send email")).inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         }catch(Exception e){

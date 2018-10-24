@@ -21,12 +21,12 @@ public class ConfirmationSent extends Activity {
         Button gotIt = findViewById(R.id.gotItButton);
         gotIt.setOnClickListener(v-> goMain());
         Button ResendConf = findViewById(R.id.resendConfirmationMailButton);
-        ResendConf.setOnClickListener(v -> sendConfirmationMail(FirebaseAuth.getInstance().getCurrentUser()));
+        ResendConf.setOnClickListener(v -> sendConfirmationMail(User.getMain().getInstance().getCurrentUser()));
 
     }
 
     private void goMain(){
-        FirebaseAuth.getInstance().signOut();
+        User.getMain().getInstance().signOut();
         Intent intent = new Intent(this, AuthentificationProcess.class);
         intent.putExtra(AuthentificationProcess.AUTHENTIFICATION_ACTION, AuthentificationProcess.Action.Login);
         startActivity(intent);
