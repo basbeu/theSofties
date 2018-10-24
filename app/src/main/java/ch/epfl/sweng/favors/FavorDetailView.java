@@ -14,7 +14,7 @@ import android.widget.Toast;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 
-
+/*
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -45,6 +45,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         // Required empty public constructor
     }
 
+    /*
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -52,13 +53,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
      * @param favorID ID of the favor that will be used to display details about.
      * @return A new instance of fragment FavorDetailView.
      */
+    /*
     public static FavorDetailView newInstance(String favorID) {
         FavorDetailView fragment = new FavorDetailView();
         Bundle args = new Bundle();
         args.putString(FAVOR_ID, favorID);
         fragment.setArguments(args);
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
