@@ -43,10 +43,10 @@ public class Favor extends DatabaseHandler {
     public Favor(String id,FirebaseFirestore db){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id,db);
-
+/*
         if(!ExecutionMode.getInstance().isTest()){
             throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }
+        }*/
     }
 
     @Override
