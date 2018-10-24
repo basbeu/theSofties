@@ -1,6 +1,10 @@
 package ch.epfl.sweng.favors;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Looper;
+import android.support.test.espresso.assertion.LayoutAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -8,11 +12,20 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.app.ActivityCompat;
 
+import com.google.android.gms.location.LocationServices;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.fail;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
@@ -83,10 +96,4 @@ public class FavorsMainTest {
         }
     }
 
-
-
-
-    @After
-    public void After(){
-    }
 }

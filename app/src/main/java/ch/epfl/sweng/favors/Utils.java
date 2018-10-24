@@ -79,5 +79,6 @@ public class Utils {
         FirebaseAuth.getInstance().signOut();
         context.startActivity(intent);
         User.resetMain();
+        // Finalize current activity ?
     }
 }

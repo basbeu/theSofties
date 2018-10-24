@@ -44,7 +44,7 @@ public class FavorsMain extends AppCompatActivity {
      * @param permissions - the actual manifest permissions that are passed on
      * @param grantResults
      */
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -57,7 +57,7 @@ public class FavorsMain extends AppCompatActivity {
                 Toast.makeText(this, "The app requires you to enable Location services!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
 
     @Override
@@ -66,6 +66,10 @@ public class FavorsMain extends AppCompatActivity {
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setElements(this);
+
+        if(getIntent().hasExtra(FavorsMain.TEST_MODE)){
+            ExecutionMode.getInstance().setTest(true);
+        }
 
         binding.loginButton.setOnClickListener(v-> loginView(AuthentificationProcess.Action.Login,  v));
         binding.registerButton.setOnClickListener(v->loginView(AuthentificationProcess.Action.Register,  v));

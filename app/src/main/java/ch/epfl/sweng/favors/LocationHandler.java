@@ -28,12 +28,12 @@ import java.util.Locale;
 public class LocationHandler {
     private static final String TAG = "LOCATION_HANDLER";
 
-    private static LocationHandler handler = new LocationHandler(true);
+    private static LocationHandler handler = new LocationHandler();
     public static LocationHandler getHandler(){
         return handler;
     }
 
-    private Location lastLocation;
+    /*private Location lastLocation;
     public ObservableField<String> locationCity = new ObservableField<>();
     public ObservableField<GeoPoint> locationPoint = new ObservableField<>();
 
@@ -63,10 +63,7 @@ public class LocationHandler {
         return locationRequest;
     }
 
-    /**
-     * this method checks if we have the permission to access a user's location
-     * @return if we are allowed (boolean)
-     */
+
     private boolean requestPermission() {
         if(!checkPermission()){
             ActivityCompat.requestPermissions((Activity) FavorsMain.getContext(),
@@ -89,12 +86,12 @@ public class LocationHandler {
     public LocationHandler(boolean recurrent){
         if(!ExecutionMode.getInstance().isTest()){
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(FavorsMain.getContext());
-        }
-        if (requestPermission()) {
-            isRecurrent(recurrent);
-        }
-        else{
-            this.recurrent = recurrent;
+            if (requestPermission()) {
+                isRecurrent(recurrent);
+            }
+            else{
+                this.recurrent = recurrent;
+            }
         }
     }
 
@@ -107,13 +104,7 @@ public class LocationHandler {
         else updateLocation();
     }
 
-    /**
-     * Get Location
-     * Helper method for obtaining a location
-     * adds a listener to LocationClient and if there is no location invokes a callback
-     * @param callback for Location
-     * @return the location value that was obtained (value can be ignored)
-     */
+
     public void updateLocation() {
         if(checkPermission()) {
             mFusedLocationClient.getLastLocation().addOnSuccessListener( l -> {
@@ -163,5 +154,5 @@ public class LocationHandler {
             Log.e(TAG, "Failed to get geoPoint information");
         }
         return "Not available";
-    }
+    }*/
 }
