@@ -29,20 +29,21 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class Logged_in_ScreenTest {
+    ViewInteraction appCompatImageButton = onView(
+            allOf(withContentDescription("Open navigation drawer"),
+                    childAtPosition(
+                            allOf(withId(R.id.toolbar),
+                                    childAtPosition(
+                                            withClassName(is("android.widget.LinearLayout")),
+                                            0)),
+                            0),
+                    isDisplayed()));
+
     @Rule
     public ActivityTestRule<Logged_in_Screen> activityActivityTestRule = new ActivityTestRule<>(Logged_in_Screen.class);
     @Test
     public void menu() {
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
         appCompatImageButton.perform(click());
 
         ViewInteraction navigationMenuItemView = onView(
@@ -55,16 +56,7 @@ public class Logged_in_ScreenTest {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        appCompatImageButton2.perform(click());
+        appCompatImageButton.perform(click());
 
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(childAtPosition(
@@ -76,16 +68,7 @@ public class Logged_in_ScreenTest {
                         isDisplayed()));
         navigationMenuItemView2.perform(click());
 
-        ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        appCompatImageButton3.perform(click());
+        appCompatImageButton.perform(click());
 
         ViewInteraction navigationMenuItemView3 = onView(
                 allOf(childAtPosition(
@@ -97,9 +80,10 @@ public class Logged_in_ScreenTest {
                         isDisplayed()));
         navigationMenuItemView3.perform(click());
 
+
+        appCompatImageButton.perform(click());
+
         pressBack();
-
-
     }
 
 
