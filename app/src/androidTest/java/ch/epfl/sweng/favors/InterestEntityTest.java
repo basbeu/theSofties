@@ -15,9 +15,11 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
+import ch.epfl.sweng.favors.database.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,6 +55,7 @@ public class InterestEntityTest {
         data.put(Interest.ObjectFields.linkedInterests.toString(),FAKE_LINKEDINTEREST_OBJECT);
         when(fakeDb.collection("interests")).thenReturn(fakeCollection);
         when(fakeCollection.document(FAKE_DOC_ID)).thenReturn(fakeDoc);
+        when(fakeCollection.add(any(Map.class))).thenReturn(Tasks.forResult(fakeDoc));
         when(fakeDoc.get()).thenReturn(fakeTask);
         when(fakeDoc.set(any())).thenReturn(fakeSetTask);
         when(fakeDocSnap.getData()).thenReturn(data);
@@ -68,6 +71,30 @@ public class InterestEntityTest {
     public void getLinkedInterestTest(){
         Interest i = new Interest (FAKE_DOC_ID,fakeDb);
         i.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LINKEDINTEREST_OBJECT, i.get(Interest.ObjectFields.linkedInterests)));
+    }
+
+    @Test
+    public void setTitleDocIDTest(){
+        String newTitle = "tata";
+        Interest i = new Interest (null,fakeDb);
+
+        i.updateFromDb().addOnCompleteListener(t->{
+            i.set(Interest.StringFields.title, newTitle);
+            i.updateOnDb();
+            assertEquals(newTitle, i.get(Interest.StringFields.title));
+        });
+    }
+
+    @Test
+    public void setTitleTest(){
+        String newTitle = "tata";
+        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
+
+        i.updateFromDb().addOnCompleteListener(t->{
+            i.set(Interest.StringFields.title, newTitle);
+            i.updateOnDb();
+            assertEquals(newTitle, i.get(Interest.StringFields.title));
+        });
     }
 
     @Test(expected = IllegalStateException.class)
