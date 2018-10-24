@@ -202,4 +202,11 @@ public class UserTest {
         ExecutionMode.getInstance().setTest(false);
         User user = new User(fakeAuth, fakeDb);
     }
+
+    @Test
+    public void resetMainTest(){
+        User user = new User(fakeAuth, fakeDb);
+        User.setMain(user);
+        user.resetMain();
+    }
 }

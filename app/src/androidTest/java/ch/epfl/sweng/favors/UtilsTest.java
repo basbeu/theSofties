@@ -1,10 +1,35 @@
 package ch.epfl.sweng.favors;
 
+import android.os.Looper;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 
+import ch.epfl.sweng.favors.database.User;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.when;
 
+@RunWith(AndroidJUnit4.class)
 public class UtilsTest {
+    @Mock private FirebaseAuth fakeAuth;
+
+    @Before
+    public void Before() {
+        ExecutionMode.getInstance().setTest(true);
+    }
+
     @Test
     public void containsCharWithNoChar(){
         String s1 = "12347226";
@@ -111,6 +136,26 @@ public class UtilsTest {
         assertEquals(Boolean.FALSE, Utils.passwordFitsRequirements(p3));
         assertEquals(Boolean.FALSE, Utils.passwordFitsRequirements(p4));
 
+    }
+/*
+    @Test
+    public void logoutTest(){
+        ActivityTestRule<Logged_in_Screen> activityActivityTestRule = new ActivityTestRule<>(Logged_in_Screen.class);
+        activityActivityTestRule.launchActivity(null);
+        Looper.prepare();
+
+        //Mockito.doNothing().when(fakeAuth).signOut();
+        Mockito.doCallRealMethod().when(fakeAuth).signOut();
+        Utils.logout(activityActivityTestRule.getActivity(),fakeAuth);
+    }*/
+
+    @Test
+    public void failingToast(){
+        ActivityTestRule<TestActivity> activityActivityTestRule = new ActivityTestRule<>(TestActivity.class);
+        activityActivityTestRule.launchActivity(null);
+        Looper.prepare();
+
+        Utils.displayToastOnTaskCompletion(Tasks.forCanceled(),activityActivityTestRule.getActivity(),"success","failure");
     }
 
 
