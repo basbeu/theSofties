@@ -3,9 +3,7 @@ package ch.epfl.sweng.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +22,11 @@ import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
  */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
-    private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
+   // private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
 
     public ObservableField<String> title;
     public ObservableField<String> description;
-    public ObservableField<Integer> tokenCost;
+   // public ObservableField<Integer> tokenCost;
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -117,8 +115,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    /*public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
+    }*/
 }

@@ -9,8 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
 
 public class Utils {

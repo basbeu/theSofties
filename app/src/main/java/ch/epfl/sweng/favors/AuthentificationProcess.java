@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 
 
