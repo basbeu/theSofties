@@ -12,12 +12,8 @@ import android.view.View;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
-import ch.epfl.sweng.favors.database.computationModule;
 
 
 /**
@@ -52,12 +48,6 @@ public class FavorsMain extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         Permissions p = Permissions.values()[requestCode];
-        List<Integer> list = new ArrayList<Integer>(5);
-        list.add(1);
-        list.add(1);
-        int r = computationModule.performArrayOfTokensSum((ArrayList)list) + computationModule.retrieveOneUnityperTokenAndSum((ArrayList)list);
-        computationModule.resetTokensArray((ArrayList)list);
-
         if(p == Permissions.LOCATION_SERVICE){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 LocationHandler.getHandler().permissionFeedback();
