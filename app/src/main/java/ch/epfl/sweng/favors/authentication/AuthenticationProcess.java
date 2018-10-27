@@ -161,6 +161,7 @@ public class AuthenticationProcess extends Activity {
             mAuth = User.getMain().getInstance();
         }*/
         }
+        Log.d("TestMode", ExecutionMode.getInstance().isTest() ? "true" : "false");
         mAuth = Authentication.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
@@ -215,20 +216,26 @@ public class AuthenticationProcess extends Activity {
      */
     private void authentification(String email, String password) {
         if(!Utils.isEmailValid(email)){
+            Log.d(TAG,"coucou");
             requirementsText.set("Wrong email format");
             return;
         }
         if(!Utils.passwordFitsRequirements(password)){
+            Log.d(TAG,"coucou");
             requirementsText.set("Wrong password format");
             return;
         }
         if (action == Action.Login) {
-            Log.d(TAG,"coucou");
+            Log.d(TAG,"Login");
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, signInComplete);
         }
         else if (action == Action.Register) {
+            Log.d(TAG,"Register");
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
+        }
+        else{
+            Log.d(TAG,"Aucun");
         }
     }
 

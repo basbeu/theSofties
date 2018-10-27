@@ -7,6 +7,7 @@ public final class ExecutionMode {
     private final static ExecutionMode instance = new ExecutionMode();
 
     private boolean test;
+    private boolean invalidAuthTest;
 
     /**
      * Construct the singleton class
@@ -16,6 +17,7 @@ public final class ExecutionMode {
             throw new IllegalStateException("ExecutionMode already instantiated");
 
         test = false;
+        invalidAuthTest = false;
     }
 
     /**
@@ -38,5 +40,20 @@ public final class ExecutionMode {
      */
     public void setTest(boolean test){
         this.test = test;
+    }
+
+    /**
+     * Setter for the invalid user test mode
+     * @param invalidAuthTest boolean meaning if the current user is invalid(true) or not (false)
+     */
+    public void setInvalidAuthTest(boolean invalidAuthTest) {
+        this.invalidAuthTest = invalidAuthTest;
+    }
+
+    /**
+     * @return true if the user is invalid
+     */
+    public boolean isInvalidAuthTest() {
+        return invalidAuthTest;
     }
 }

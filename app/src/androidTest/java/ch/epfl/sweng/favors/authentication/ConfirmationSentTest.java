@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
@@ -36,22 +38,11 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class ConfirmationSentTest {
     @Rule public ActivityTestRule<ConfirmationSent> activityActivityTestRule = new ActivityTestRule<ConfirmationSent>(ConfirmationSent.class);
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-    @Mock private FirebaseUser fbFakeUser;
-    @Mock private FirebaseAuth fakeAuth;
-    private final String FAKEEMAIL = "thisisatestemail@email.com";
 
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        User fakeUser = new User();
-        User.setMain(fakeUser);
-        User.UserGender.setGender(User.getMain(), User.UserGender.M);
-        when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
-        when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
-
-
+        FakeDatabase.getInstance().createBasicDatabase();
     }
 
     @Test
@@ -67,7 +58,8 @@ public class ConfirmationSentTest {
 
     @Test
     public void resendButtonWorks(){
-        when(fbFakeUser.sendEmailVerification()).thenReturn(Tasks.forResult(null));
+
+        ExecutionMode.getInstance().setInvalidAuthTest(false);
         onView(withId(R.id.resendConfirmationMailButton)).perform(click());
         //Wait for the toast to be displayed
         try{
@@ -82,8 +74,8 @@ public class ConfirmationSentTest {
 
     @Test
     public void resendButtonWorksWithUnvalidUser(){
-        when(fbFakeUser.sendEmailVerification()).thenReturn(Tasks.forException(new Exception()));
         //Wait for the toast to be displayed
+        ExecutionMode.getInstance().setInvalidAuthTest(true);
         onView(withId(R.id.resendConfirmationMailButton)).perform(click());
         try{
             Thread.sleep(2000);

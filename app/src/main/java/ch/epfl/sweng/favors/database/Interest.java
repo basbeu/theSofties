@@ -33,7 +33,9 @@ public class Interest extends DatabaseEntity {
 
     @Override
     public DatabaseEntity copy() {
-        return new Interest(this.documentID);
+        Interest i = new Interest(this.documentID);
+        i.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        return i;
     }
 
     /*public Interest(String id,FirebaseFirestore db){

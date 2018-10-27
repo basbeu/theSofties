@@ -41,7 +41,9 @@ public class Favor extends DatabaseEntity {
 
     @Override
     public DatabaseEntity copy() {
-        return new Favor(this.documentID);
+        Favor f = new Favor(this.documentID);
+        f.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        return f;
     }
 
     /*public Favor(String id,FirebaseFirestore db){

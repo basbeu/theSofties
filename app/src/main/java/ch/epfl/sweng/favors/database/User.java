@@ -77,7 +77,9 @@ public class User extends DatabaseEntity {
 
     @Override
     public DatabaseEntity copy() {
-        return new User(this.documentID);
+        User u = new User(this.documentID);
+        u.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        return u;
     }
 
     /*public User(FirebaseAuth instance){

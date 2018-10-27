@@ -1,9 +1,13 @@
 package ch.epfl.sweng.favors.authentication;
 
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
+
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class FakeAuthentication extends Authentication {
 
@@ -25,12 +29,19 @@ public class FakeAuthentication extends Authentication {
 
     @Override
     public boolean isEmailVerified() {
-        return true;
+        return !ExecutionMode.getInstance().isInvalidAuthTest();
     }
 
     @Override
     public Task<AuthResult> createUserWithEmailAndPassword(String email, String password) {
-        return Tasks.forResult(null);
+        if(!ExecutionMode.getInstance().isInvalidAuthTest()){
+            return Tasks.forResult(null);
+        }
+        else{
+            return Tasks.forException(new Exception());
+        }
+
+
     }
 
     @Override
@@ -40,6 +51,7 @@ public class FakeAuthentication extends Authentication {
 
     @Override
     public Task<AuthResult> signInWithEmailAndPassword(String email, String password) {
+        Log.d("FakeAuth", "Create task");
         return Tasks.forResult(null);
     }
 
@@ -50,12 +62,18 @@ public class FakeAuthentication extends Authentication {
 
     @Override
     public String getUid() {
+        Log.d("FAKEAUTH", UID);
         return UID;
     }
 
     @Override
     public Task<Void> sendEmailVerification() {
-        return Tasks.forResult((Void)null);
+        if(!ExecutionMode.getInstance().isInvalidAuthTest()){
+            return Tasks.forResult((Void)null);
+        }
+        else{
+            return Tasks.forException(new Exception());
+        }
     }
 
     @Override
