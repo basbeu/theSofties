@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
@@ -89,7 +90,7 @@ public class EditProfileFragment extends Fragment {
          });
 
          binding.commitChanges.setOnClickListener((v)-> {
-                User.getMain().updateOnDb();
+             Database.getInstance().updateOnDb(User.getMain());
                 EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
         });
          return binding.getRoot();
