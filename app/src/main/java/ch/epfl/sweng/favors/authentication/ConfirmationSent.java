@@ -24,7 +24,7 @@ public class ConfirmationSent extends Activity {
     }
 
     private void goMain(){
-        User.getMain().getInstance().signOut();
+        Authentication.getInstance().signOut();
         Intent intent = new Intent(this, AuthenticationProcess.class);
         intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Login);
         startActivity(intent);

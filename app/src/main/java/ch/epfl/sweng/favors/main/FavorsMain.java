@@ -73,7 +73,7 @@ public class FavorsMain extends AppCompatActivity {
         binding.registerButton.setOnClickListener(v->loginView(AuthenticationProcess.Action.Register,  v));
 
         // if logged in -> display main view
-        if(User.getMain().isLoggedIn() && Authentication.getInstance().isEmailVerified()){
+        if(Authentication.getInstance().isEmailVerified()){
             loggedinView();
         }
 

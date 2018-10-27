@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.profile;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 
@@ -19,21 +21,24 @@ public class ProfileFragment extends Fragment {
 
     private static final String LOG_TAG = "PROFILE_FRAGMENT";
 
-    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    private User user = new User();
+
+    public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
     //public /**ObservableField<Location>**/Location city = (Location)User.getMain().get(User.ObjectFields.location);
-    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.city);
+    public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city);
     //public ObservableField<Object> location = User.getMain().getObservableObject(User.ObjectFields.location);
     //new ObservableField<>(city.toString());
     //public ObservableField<Object> baseCity = User.getMain().getObservableObject(User.ObjectFields.location);
-    public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
-    public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
+    public ObservableField<String> sex = user.getObservableObject(User.StringFields.sex);
+    public ObservableField<String> email = user.getObservableObject(User.StringFields.email);
 
     FragmentProfileLayoutBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Database.getInstance().updateFromDb(user);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_layout,container,false);
         binding.setElements(this);
 

@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.profile;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Log;
@@ -22,10 +23,12 @@ public class EditProfileFragment extends Fragment {
 
     private static final String TAG = "EDIT_PROFILE_FRAGMENT";
 
-    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.city);
-    public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
+    private User user = new User();
+
+    public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city);
+    public ObservableField<String> sex = user.getObservableObject(User.StringFields.sex);
 
 
     FragmentEditProfileBinding binding;
@@ -33,27 +36,28 @@ public class EditProfileFragment extends Fragment {
     private TextWatcherCustom profFirstNameEditWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.firstName, editable.toString());
+            user.set(User.StringFields.firstName, editable.toString());
         }
     };
 
     private TextWatcherCustom profLastNameEditWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.lastName, editable.toString());
+            user.set(User.StringFields.lastName, editable.toString());
         }
     };
 
     private TextWatcherCustom profCityEditWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.city, editable.toString());
+            user.set(User.StringFields.city, editable.toString());
         }
     };
 
     private void displayGender(){
         //Log.d(TAG, UserGender.getGenderFromUser(User.getMain()).toString());
-        User.UserGender gender = User.UserGender.getGenderFromUser(User.getMain());
+
+        User.UserGender gender = User.UserGender.getGenderFromUser(user);
         Log.d(TAG,gender.toString());
         switch (gender){
             case F: binding.profGenderEdit.check(R.id.profGenderFEdit); break;
@@ -64,11 +68,10 @@ public class EditProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+         Database.getInstance().updateFromDb(user).addOnCompleteListener(t->displayGender());
          binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
          binding.setElements(this);
          //Set the RadioGroup buttons to select the current sex
-         displayGender();
 
          binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
 
@@ -79,10 +82,10 @@ public class EditProfileFragment extends Fragment {
          binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
              switch (checkedId){
                  case R.id.profGenderMEdit:
-                     User.UserGender.setGender(User.getMain(),User.UserGender.M);
+                     User.UserGender.setGender(user,User.UserGender.M);
                      break;
                  case  R.id.profGenderFEdit:
-                     User.UserGender.setGender(User.getMain(), User.UserGender.F);
+                     User.UserGender.setGender(user, User.UserGender.F);
                      break;
                  default:
                      Log.e(TAG, "RadioButton clicked for sex change unidentified");
@@ -90,7 +93,7 @@ public class EditProfileFragment extends Fragment {
          });
 
          binding.commitChanges.setOnClickListener((v)-> {
-             Database.getInstance().updateOnDb(User.getMain());
+             Database.getInstance().updateOnDb(user);
                 EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
         });
          return binding.getRoot();

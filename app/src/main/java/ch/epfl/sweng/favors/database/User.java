@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.annotation.Nonnull;
 
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
@@ -18,57 +19,60 @@ public class User extends DatabaseEntity {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
-    private FirebaseAuth instance;
+    //private FirebaseAuth instance;
 
     private static Status status = new Status(Status.Values.NotLogged);
 
     private static User user = new User();
-    public static User getMain(){
+    /*public static User getMain(){
         return user;
-    }
+    }*/
 
-    public FirebaseAuth getInstance() {
+    /* FirebaseAuth getInstance() {
         return instance;
-    }
+    }*/
 
-    public static void setMain(String id){
+    /*public static void setMain(String id){
         user = new User(id);
     }
-    public static void setMain(User u) {user = u; }
+    public static void setMain(User u) {user = u; }*/
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
     public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
-    public boolean isLoggedIn(){
+    /*public boolean isLoggedIn(){
         return status.get() == Status.Values.Logged;
-    }
+    }*/
 
-    public void updateUser(){
+   /* public void updateUser(){
         user = new User(instance.getUid());
         user.set(StringFields.email, instance.getCurrentUser().getEmail());
-    }
+    }*/
 
 
     public User(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,FirebaseAuth.getInstance().getUid());
-        instance = FirebaseAuth.getInstance();
-        if(instance.getUid() != null){
+                ObjectFields.values(), COLLECTION, Authentication.getInstance().getUid());
+
+        db.updateFromDb(this);
+        //instance = FirebaseAuth.getInstance();
+        /*if(instance.getUid() != null){
             status.loggedInSuccess();
             db.updateFromDb(this);
-        }
+        }*/
     }
 
     public User(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
-        instance = FirebaseAuth.getInstance();
+        db.updateFromDb(this);
+        /*instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null) {
             status.loggedInSuccess();
             db.updateFromDb(this);
-        }
+        }*/
     }
 
     @Override

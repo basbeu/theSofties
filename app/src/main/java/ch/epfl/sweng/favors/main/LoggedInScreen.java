@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.R;
@@ -22,9 +23,10 @@ import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 
 public class LoggedInScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
+    private User user = new User();
+    public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> email = user.getObservableObject(User.StringFields.email);
 
     ActivityLoggedInScreenBinding binding;
     NavHeaderBinding headerBinding;
@@ -78,7 +80,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
-                Utils.logout(this, User.getMain().getInstance());
+                Utils.logout(this, Authentication.getInstance());
                 break;
         }
 

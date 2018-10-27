@@ -26,29 +26,31 @@ public class SetUserInfo extends AppCompatActivity {
 
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
 
-    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.city);
-    public ObservableField<String> sexe = User.getMain().getObservableObject(User.StringFields.sex);
+    private User user = new User();
+
+    public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city);
+    public ObservableField<String> sexe = user.getObservableObject(User.StringFields.sex);
 
     ActivitySetUserInfoBinding binding;
     private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.firstName, editable.toString());
+            user.set(User.StringFields.firstName, editable.toString());
         }
     };
     private TextWatcherCustom lastNameWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.lastName, editable.toString());
+            user.set(User.StringFields.lastName, editable.toString());
         }
     };
 
     private TextWatcherCustom basedLocationWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
-            User.getMain().set(User.StringFields.city, editable.toString());
+            user.set(User.StringFields.city, editable.toString());
         }
     };
 
@@ -59,8 +61,9 @@ public class SetUserInfo extends AppCompatActivity {
         if(getIntent().hasExtra(FavorsMain.TEST_MODE)){
             ExecutionMode.getInstance().setTest(true);
         }
-        if(!ExecutionMode.getInstance().isTest())
-            User.getMain().updateUser();
+        /*if(!ExecutionMode.getInstance().isTest())
+            User.getMain().updateUser();*/
+        user.set(User.StringFields.email, Authentication.getInstance().getEmail());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
@@ -78,10 +81,10 @@ public class SetUserInfo extends AppCompatActivity {
         binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
             switch (checkedId){
                 case R.id.profGenderMEdit:
-                    User.UserGender.setGender(User.getMain(),User.UserGender.M);
+                    User.UserGender.setGender(user,User.UserGender.M);
                     break;
                 case  R.id.profGenderFEdit:
-                    User.UserGender.setGender(User.getMain(), User.UserGender.F);
+                    User.UserGender.setGender(user, User.UserGender.F);
                     break;
                 default:
                     Log.e(TAG, "RadioButton clicked for sex change unidentified");
@@ -89,7 +92,7 @@ public class SetUserInfo extends AppCompatActivity {
         });
 
         binding.submit.setOnClickListener(v->{
-            Database.getInstance().updateOnDb(User.getMain());
+            Database.getInstance().updateOnDb(user);
             Intent intent = new Intent(this, ConfirmationSent.class);
             startActivity(intent);
         });

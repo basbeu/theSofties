@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.database.User;
 
@@ -74,7 +75,7 @@ public class Utils {
         }
     }
 
-    public static void logout(Context context, FirebaseAuth auth){
+    public static void logout(Context context, Authentication auth){
         Toast.makeText(context, R.string.seeyou, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(context, FavorsMain.class);
         auth.signOut();

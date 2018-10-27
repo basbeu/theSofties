@@ -127,7 +127,7 @@ public class AuthenticationProcess extends Activity {
             Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
-                User.getMain().updateUser();
+                //User.getMain().updateUser();
                 loggedinView(action);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
