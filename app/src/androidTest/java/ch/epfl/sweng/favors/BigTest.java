@@ -42,15 +42,14 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class BigTest {
 
-    @Rule
-    public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class);
+    //@Rule public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class);
     private UiDevice device;
 
 
 
     @Before
     public void Before(){
-        device = UiDevice.getInstance(getInstrumentation());
+        //device = UiDevice.getInstance(getInstrumentation());
     }
 
 
@@ -59,7 +58,7 @@ public class BigTest {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
+       /* try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -251,7 +250,7 @@ public class BigTest {
                                         0)),
                         4),
                         isDisplayed()));
-        navigationMenuItemView2.perform(click());
+        navigationMenuItemView2.perform(click());*/
 
     }
 
