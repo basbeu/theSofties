@@ -9,6 +9,7 @@ public class FakeAuthentication extends Authentication {
 
     private static FakeAuthentication auth;
     private static final String UID = "fakeId90";
+    private static final String EMAIL = "toto@mail.com";
 
     private FakeAuthentication(){
 
@@ -28,7 +29,7 @@ public class FakeAuthentication extends Authentication {
     }
 
     @Override
-    public Task<AuthResult> CreateUserWithEmailAndPassword(String email, String password) {
+    public Task<AuthResult> createUserWithEmailAndPassword(String email, String password) {
         return Tasks.forResult(null);
     }
 
@@ -50,5 +51,15 @@ public class FakeAuthentication extends Authentication {
     @Override
     public String getUid() {
         return UID;
+    }
+
+    @Override
+    public Task<Void> sendEmailVerification() {
+        return Tasks.forResult((Void)null);
+    }
+
+    @Override
+    public String getEmail() {
+        return EMAIL;
     }
 }

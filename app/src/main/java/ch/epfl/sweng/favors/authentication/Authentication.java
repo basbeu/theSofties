@@ -22,10 +22,13 @@ public abstract class Authentication {
     }
 
     public abstract boolean isEmailVerified();
-    public abstract Task<AuthResult> CreateUserWithEmailAndPassword(String email, String password);
+    public abstract Task<AuthResult> createUserWithEmailAndPassword(String email, String password);
     public abstract Task<Void> sendPasswordResetEmail(String email);
     public abstract Task<AuthResult> signInWithEmailAndPassword(String email, String password);
     public abstract void signOut();
     public abstract String getUid();
+    public abstract Task<Void>sendEmailVerification();
+    public abstract String getEmail();
+
 
 }

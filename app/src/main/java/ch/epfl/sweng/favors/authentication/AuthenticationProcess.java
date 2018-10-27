@@ -40,7 +40,7 @@ public class AuthenticationProcess extends Activity {
     public enum Action{Login, Register} ;
 
     public LogInRegisterViewBinding binding;
-    private FirebaseAuth mAuth;
+    private Authentication mAuth;
     public Action action;
 
     public ObservableField<String> headerText = new ObservableField<>();
@@ -98,8 +98,9 @@ public class AuthenticationProcess extends Activity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
+        //FirebaseUser currentUser = mAuth.getCurrentUser();
+        //if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
+        if(mAuth.isEmailVerified()){
             headerText.set("You're already logged in");
         }
     }
@@ -108,10 +109,12 @@ public class AuthenticationProcess extends Activity {
         if (task.isSuccessful()) {
 
             Log.d(TAG, "createUserWithEmail:success");
-            final FirebaseUser user = mAuth.getCurrentUser();
+            /*final FirebaseUser user = mAuth.getCurrentUser();
             sendConfirmationMail(user);
             confirmationSent();
-
+*/
+            sendConfirmationMail();
+            confirmationSent();
         } else {
             Log.w(TAG, "createUserWithEmail:failure", task.getException());
             requirementsText.set("Register failed, please try again");
@@ -122,7 +125,7 @@ public class AuthenticationProcess extends Activity {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             Log.d(TAG,"hello");
-            if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
+            if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
                 User.getMain().updateUser();
                 loggedinView(action);
@@ -133,24 +136,32 @@ public class AuthenticationProcess extends Activity {
         }
     };
 
-    private void sendConfirmationMail(final FirebaseUser user){
-        user.sendEmailVerification()
+    private void sendConfirmationMail(){
+        /*user.sendEmailVerification()
                 .addOnCompleteListener(AuthenticationProcess.this, task-> {
                     // Re-enable button
                     findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
                     Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
-                });
+                });*/
+
+        mAuth.sendEmailVerification().addOnCompleteListener(AuthenticationProcess.this, task-> {
+            // Re-enable button
+            findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
+            Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this, "Verification email sent to " + mAuth.getEmail(),"Failed to send verification email.");
+        });
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!ExecutionMode.getInstance().isTest()){
+        if(!ExecutionMode.getInstance().isTest()) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-            mAuth = FirebaseAuth.getInstance();
+            /*mAuth = FirebaseAuth.getInstance();
         }else{
             mAuth = User.getMain().getInstance();
+        }*/
         }
+        mAuth = Authentication.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
         binding.setElements(this);
@@ -222,7 +233,7 @@ public class AuthenticationProcess extends Activity {
     }
 
     private void loggedinView(Action action){
-        if(mAuth.getCurrentUser().isEmailVerified()) {
+        if(mAuth.isEmailVerified()) {
             Intent intent = new Intent(this, LoggedInScreen.class);
             startActivity(intent);
             finish();

@@ -22,11 +22,11 @@ public class FirebaseAuthentication extends Authentication{
 
     @Override
     public boolean isEmailVerified() {
-        return firebaseAuth.getCurrentUser().isEmailVerified();
+        return firebaseAuth.getCurrentUser()!=null && firebaseAuth.getCurrentUser().isEmailVerified();
     }
 
     @Override
-    public Task<AuthResult> CreateUserWithEmailAndPassword(String email, String password) {
+    public Task<AuthResult> createUserWithEmailAndPassword(String email, String password) {
         return firebaseAuth.createUserWithEmailAndPassword(email,password);
     }
 
@@ -37,7 +37,7 @@ public class FirebaseAuthentication extends Authentication{
 
     @Override
     public Task<AuthResult> signInWithEmailAndPassword(String email, String password) {
-        return signInWithEmailAndPassword(email,password);
+        return firebaseAuth.signInWithEmailAndPassword(email,password);
     }
 
     @Override
@@ -48,6 +48,16 @@ public class FirebaseAuthentication extends Authentication{
     @Override
     public String getUid() {
         return firebaseAuth.getUid();
+    }
+
+    @Override
+    public Task<Void> sendEmailVerification() {
+        return firebaseAuth.getCurrentUser().sendEmailVerification();
+    }
+
+    @Override
+    public String getEmail() {
+        return firebaseAuth.getCurrentUser().getEmail();
     }
 
 

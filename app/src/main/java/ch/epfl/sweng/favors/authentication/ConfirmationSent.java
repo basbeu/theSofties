@@ -19,8 +19,8 @@ public class ConfirmationSent extends Activity {
         Button gotIt = findViewById(R.id.gotItButton);
         gotIt.setOnClickListener(v-> goMain());
         Button ResendConf = findViewById(R.id.resendConfirmationMailButton);
-        ResendConf.setOnClickListener(v -> sendConfirmationMail(User.getMain().getInstance().getCurrentUser()));
-
+        //ResendConf.setOnClickListener(v -> sendConfirmationMail(User.getMain().getInstance().getCurrentUser()));
+        ResendConf.setOnClickListener(v->sendConfirmationMail());
     }
 
     private void goMain(){
@@ -30,14 +30,14 @@ public class ConfirmationSent extends Activity {
         startActivity(intent);
     }
 
-    private void sendConfirmationMail(final FirebaseUser user){
-        if(user != null){
-            user.sendEmailVerification().addOnSuccessListener(v-> Toast.makeText(this, "Email confirmation sent successfully", Toast.LENGTH_LONG).show())
+    private void sendConfirmationMail(){
+        //if(user != null){
+            Authentication.getInstance().sendEmailVerification().addOnSuccessListener(v-> Toast.makeText(this, "Email confirmation sent successfully", Toast.LENGTH_LONG).show())
                     .addOnFailureListener(v-> Toast.makeText(this, "Unable to send email", Toast.LENGTH_LONG).show());
-        }
+        /*}
         else{
             Toast.makeText(this, "Unable to send email", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
 }
