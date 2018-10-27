@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         >
-        <activity android:name=".FavorsMain">
+        <activity android:name=".main.FavorsMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +24,7 @@
             </intent-filter>
             android:noHistory="true"
         </activity>
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name=".main.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,22 +33,22 @@
             android:noHistory="true"
         </activity>
         <activity
-            android:name=".AuthentificationProcess"
-            android:parentActivityName=".FavorsMain"
+            android:name=".authentication.AuthenticationProcess"
+            android:parentActivityName=".main.FavorsMain"
             android:noHistory="true"/>
         <activity
-            android:name=".Logged_in_Screen"
+            android:name=".main.LoggedInScreen"
             android:label="@string/title_activity_logged_in__screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ConfirmationSent"
+            android:name=".authentication.ConfirmationSent"
             android:label="@string/title_activity_confirmation_sent"
             android:noHistory="true"/>
         <activity
-            android:name=".SetUserInfo"
+            android:name=".authentication.SetUserInfo"
             android:noHistory="true"/>
         <activity
-            android:name=".TestActivity"
+            android:name=".utils.TestActivity"
             android:label="@string/title_activity_test"/>
     </application>
 

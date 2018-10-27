@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import ch.epfl.sweng.favors.ExecutionMode;
-
 public class Interest extends DatabaseHandler{
 
     private static final String TAG = "DB_INTEREST";

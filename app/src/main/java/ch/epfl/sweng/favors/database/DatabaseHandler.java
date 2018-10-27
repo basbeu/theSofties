@@ -1,8 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableField;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,8 +13,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.favors.FavorsMain;
-import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.main.FavorsMain;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 
 public abstract class DatabaseHandler {

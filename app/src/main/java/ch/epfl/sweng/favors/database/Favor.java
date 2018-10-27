@@ -4,12 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.favors.ExecutionMode;
-
 /**
  * The Favor class is an extension of the Database handler
  */

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
+import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
 
 public class EditProfileFragment extends Fragment {

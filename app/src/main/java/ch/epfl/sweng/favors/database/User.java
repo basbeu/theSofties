@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.annotation.Nonnull;
 
-import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class User extends DatabaseHandler {
 
