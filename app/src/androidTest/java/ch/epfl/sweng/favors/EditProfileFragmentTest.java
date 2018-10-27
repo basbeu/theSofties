@@ -2,11 +2,8 @@ package ch.epfl.sweng.favors;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.common.util.concurrent.FakeTimeLimiter;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import ch.epfl.sweng.favors.profile.EditProfileFragment;
 import ch.epfl.sweng.favors.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
