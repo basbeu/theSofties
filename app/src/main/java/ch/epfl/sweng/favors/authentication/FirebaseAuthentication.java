@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.authentication;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -58,6 +59,14 @@ public class FirebaseAuthentication extends Authentication{
     @Override
     public String getEmail() {
         return firebaseAuth.getCurrentUser().getEmail();
+    }
+
+    @Override
+    public Task<Void> delete() {
+        if(firebaseAuth.getCurrentUser()!=null){
+            return firebaseAuth.getCurrentUser().delete();
+        }
+        return Tasks.forCanceled();
     }
 
 

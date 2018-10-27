@@ -44,14 +44,27 @@ public class FirebaseDatabase extends Database{
      * Update all data currently in the class maps to the database
      */
     public void updateOnDb(DatabaseEntity databaseEntity){
-        if(databaseEntity.documentID != null) {
+        //if(databaseEntity.documentID != null) {
+        if(databaseEntity.documentID == null){
+            // Do the same here if other types of datas
+
+            dbFireStore.collection(databaseEntity.collection).add(databaseEntity.getEncapsulatedObjectOfMaps())
+                    .addOnSuccessListener(docRef -> {
+                        databaseEntity.documentID = docRef.getId();
+                        updateFromDb(databaseEntity);
+                    }).addOnFailureListener(e -> {
+                Log.d(TAG,"failure to push favor to database");
+                /* Feedback of an error here - Impossible to update user informations*/
+            });
+        }else {
             dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).set(databaseEntity.getEncapsulatedObjectOfMaps())
                     .addOnSuccessListener(aVoid -> updateFromDb(databaseEntity));
-            /* Feedback of an error here - Impossible to update user informations */
         }
+            /* Feedback of an error here - Impossible to update user informations */
+       /* }
         else{
             Log.e(TAG, "Trying to update data on an unknown document");
-        }
+        }*/
     }
 
     public Task updateFromDb(DatabaseEntity databaseEntity){

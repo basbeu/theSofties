@@ -62,4 +62,9 @@ public class FakeAuthentication extends Authentication {
     public String getEmail() {
         return EMAIL;
     }
+
+    @Override
+    public Task<Void> delete() {
+        return Tasks.forCanceled();
+    }
 }

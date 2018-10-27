@@ -101,13 +101,15 @@ public class SetUserInfo extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             user.delete();
         }else {
             Log.e(TAG, "Failled to delete account that didin't finish registration");
-        }
-        FirebaseAuth.getInstance().signOut();
+        }*/
+
+        Authentication.getInstance().delete();
+        Authentication.getInstance().signOut();
         Intent intent = new Intent(this, FavorsMain.class);
         startActivity(intent);
         finish();

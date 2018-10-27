@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.R;
@@ -72,7 +73,7 @@ public class FavorsMain extends AppCompatActivity {
         binding.registerButton.setOnClickListener(v->loginView(AuthenticationProcess.Action.Register,  v));
 
         // if logged in -> display main view
-        if(User.getMain().isLoggedIn() && FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+        if(User.getMain().isLoggedIn() && Authentication.getInstance().isEmailVerified()){
             loggedinView();
         }
 

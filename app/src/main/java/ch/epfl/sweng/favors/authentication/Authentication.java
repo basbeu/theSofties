@@ -29,6 +29,7 @@ public abstract class Authentication {
     public abstract String getUid();
     public abstract Task<Void>sendEmailVerification();
     public abstract String getEmail();
+    public abstract Task<Void> delete();
 
 
 }
