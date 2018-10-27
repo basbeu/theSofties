@@ -14,7 +14,7 @@ import java.util.Map;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 @RunWith(AndroidJUnit4.class)
-public class DatabaseHandlerTest {
+public class DatabaseEntityTest {
 
     private enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
 
