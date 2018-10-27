@@ -12,10 +12,10 @@ public final class FavorRequest extends Request{
     private static final String COLLECTION = "favors";
 
     private FavorRequest(){}
-    public ObservableArrayList<Favor> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
+    public static ObservableArrayList<Favor> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
         return db.getList(Favor.class, COLLECTION, element, value, limit, orderBy);
     }
-    public ObservableArrayList<Favor> all(Integer limit, DatabaseStringField orderBy){
+    public static ObservableArrayList<Favor> all(Integer limit, DatabaseStringField orderBy){
         return db.getAll(Favor.class, COLLECTION, limit, orderBy);
     }
 

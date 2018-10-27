@@ -10,10 +10,10 @@ public final class InterestRequest extends Request{
     private static final String COLLECTION = "interests";
 
     private InterestRequest(){}
-    public ObservableArrayList<Interest> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
+    public static ObservableArrayList<Interest> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
         return db.getList(Interest.class, COLLECTION, element, value, limit, orderBy);
     }
-    public ObservableArrayList<Interest> all(Integer limit, DatabaseStringField orderBy){
+    public static ObservableArrayList<Interest> all(Integer limit, DatabaseStringField orderBy){
         return db.getAll(Interest.class, COLLECTION, limit, orderBy);
     }
 

@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
@@ -57,7 +58,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
             newFavor.set(Favor.StringFields.ownerID, FirebaseAuth.getInstance().getUid());
-            newFavor.updateOnDb();
+            Database.getInstance().updateOnDb(newFavor);
             sharedViewFavor.select(newFavor);
             launchToast("Favor created successfully");
             updateUI(true);
