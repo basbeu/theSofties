@@ -2,6 +2,9 @@ package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
 
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+
 public final class InterestRequest extends Request{
     private static final String TAG = "DB_INTEREST_REQUEST";
     private static final String COLLECTION = "interests";

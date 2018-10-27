@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import ch.epfl.sweng.favors.ProfileFragment;
+import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.main.LoggedInScreen;
 import ch.epfl.sweng.favors.database.User;

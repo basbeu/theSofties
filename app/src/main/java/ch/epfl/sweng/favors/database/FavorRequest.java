@@ -2,9 +2,9 @@ package ch.epfl.sweng.favors.database;
 
 
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 
-import java.util.ArrayList;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public final class FavorRequest extends Request{
 

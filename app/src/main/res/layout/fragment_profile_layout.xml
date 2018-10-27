@@ -5,7 +5,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favors.ProfileFragment"
+            type="ch.epfl.sweng.favors.profile.ProfileFragment"
             />
 
     </data>
