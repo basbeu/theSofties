@@ -1,9 +1,14 @@
 package ch.epfl.sweng.favors.authentication;
 
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthResult;
+
 public class FakeAuthentication extends Authentication {
 
     private static FakeAuthentication auth;
+    private static final String UID = "fakeId90";
 
     private FakeAuthentication(){
 
@@ -15,5 +20,35 @@ public class FakeAuthentication extends Authentication {
         }
 
         return auth;
+    }
+
+    @Override
+    public boolean isEmailVerified() {
+        return true;
+    }
+
+    @Override
+    public Task<AuthResult> CreateUserWithEmailAndPassword(String email, String password) {
+        return Tasks.forResult(null);
+    }
+
+    @Override
+    public Task<Void> sendPasswordResetEmail(String email) {
+        return Tasks.forResult((Void)null);
+    }
+
+    @Override
+    public Task<AuthResult> signInWithEmailAndPassword(String email, String password) {
+        return Tasks.forResult(null);
+    }
+
+    @Override
+    public void signOut() {
+
+    }
+
+    @Override
+    public String getUid() {
+        return UID;
     }
 }
