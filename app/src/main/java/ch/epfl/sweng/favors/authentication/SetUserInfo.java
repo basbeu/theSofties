@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
@@ -88,7 +89,7 @@ public class SetUserInfo extends AppCompatActivity {
         });
 
         binding.submit.setOnClickListener(v->{
-            User.getMain().updateOnDb();
+            Database.getInstance().updateOnDb(User.getMain());
             Intent intent = new Intent(this, ConfirmationSent.class);
             startActivity(intent);
         });
