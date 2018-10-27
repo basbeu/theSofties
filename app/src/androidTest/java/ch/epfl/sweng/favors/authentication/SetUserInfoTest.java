@@ -82,7 +82,7 @@ public class SetUserInfoTest {
         intent.putExtra(FavorsMain.TEST_MODE, "true");
         activityActivityTestRule.launchActivity(intent);
 
-        User fakeUser = new User(fakeAuth);
+        User fakeUser = new User();
         User.setMain(fakeUser);
         when(fakeAuth.getUid()).thenReturn(FAKEUID);
         onView(ViewMatchers.withId(R.id.userFirstNameEdit)).perform(replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
