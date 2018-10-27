@@ -10,9 +10,8 @@ import static org.hamcrest.Matchers.is;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import ch.epfl.sweng.favors.database.DatabaseHandler;
+
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
-import ch.epfl.sweng.favors.database.User;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseHandlerTest {
@@ -37,8 +36,8 @@ public class DatabaseHandlerTest {
         assertThat(stringData.get(StringFields.city).get(), is("TEST"));
 
         try {
-            DatabaseHandler db = new User();
-            Method privateResetMap = DatabaseHandler.class.getDeclaredMethod("resetMap", Map.class, Object.class);
+            DatabaseEntity db = new User();
+            Method privateResetMap = DatabaseEntity.class.getDeclaredMethod("resetMap", Map.class, Object.class);
             privateResetMap.setAccessible(true);
             privateResetMap.invoke(db,stringData, "");
             assertThat(stringData.get(StringFields.firstName).get(), is( ""));

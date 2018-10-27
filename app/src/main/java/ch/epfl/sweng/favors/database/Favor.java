@@ -12,7 +12,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 /**
  * The Favor class is an extension of the Database handler
  */
-public class Favor extends DatabaseHandler {
+public class Favor extends DatabaseEntity {
 
     // tag for log messages
     private static final String TAG = "FAVOR";
@@ -36,19 +36,19 @@ public class Favor extends DatabaseHandler {
     public Favor(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
-        updateFromDb();
+        db.updateFromDb(this);
     }
 
-    public Favor(String id,FirebaseFirestore db){
+    /*public Favor(String id,FirebaseFirestore db){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,id,db);
+                ObjectFields.values(), COLLECTION,id, db);
 /*
         if(!ExecutionMode.getInstance().isTest()){
             throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }*/
-    }
+        }
+    }*/
 
-    @Override
+    /*@Override
     public void updateOnDb(){
         if(documentID == null){
              // Do the same here if other types of datas
@@ -59,10 +59,10 @@ public class Favor extends DatabaseHandler {
                         updateFromDb();
                     }).addOnFailureListener(e -> {
                         Log.d(TAG,"failure to push favor to database");
-                /* Feedback of an error here - Impossible to update user informations */
+                /* Feedback of an error here - Impossible to update user informations
             });
         }else{
             super.updateOnDb();
         }
-    }
+    }*/
 }

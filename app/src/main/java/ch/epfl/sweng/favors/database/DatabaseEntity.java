@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableField;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,9 +23,9 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
-public abstract class DatabaseHandler {
+public abstract class DatabaseEntity {
 
-    protected static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    protected static Database db = Database.getInstance(); // = FirebaseFirestore.getInstance();
 
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
@@ -47,9 +48,9 @@ public abstract class DatabaseHandler {
      * @param collection The collection in the database
      * @param documentID If so, the doccumentId in the database
      */
-    public DatabaseHandler(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
-                           DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
-                           String collection, String documentID){
+    public DatabaseEntity(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
+                          DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
+                          String collection, String documentID){
 
         assert(collection != null);
 
@@ -63,15 +64,15 @@ public abstract class DatabaseHandler {
         this.documentID = documentID;
     }
 
-    public DatabaseHandler(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
-                           DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
-                           String collection, String documentID, FirebaseFirestore db) {
+   /* public DatabaseEntity(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
+                          DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
+                          String collection, String documentID, Database db) {
         this(stringFieldsValues, intFieldsValues, booleanFieldsValues, objectFieldsValues,collection,documentID);
         if(!ExecutionMode.getInstance().isTest()){
             throw new IllegalStateException("This constructor should be used only for testing purpose");
         }
         this.db = db;
-    }
+    }*/
 
         /**
          * Init the map with a null value for every possible object of a specific type
@@ -93,19 +94,7 @@ public abstract class DatabaseHandler {
         };
     }
 
-    /**
-     * Update all data currently in the class maps to the database
-     */
-    public void updateOnDb(){
-        if(documentID != null) {
-            db.collection(collection).document(documentID).set(getEncapsulatedObjectOfMaps())
-                    .addOnSuccessListener(aVoid -> updateFromDb());
-                /* Feedback of an error here - Impossible to update user informations */
-        }
-        else{
-            Log.e(TAG, "Trying to update data on an unknown document");
-        }
-    }
+
 
     /**
      * Return a uniform map with all data to send
@@ -123,20 +112,7 @@ public abstract class DatabaseHandler {
         return toSend;
     }
 
-    public Task updateFromDb(){
-        if(documentID == null){return Tasks.forCanceled();}
-        return db.collection(collection).document(documentID)
-                .get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                updateLocalData(document.getData());
-            } else {
-                Toast.makeText(FavorsMain.getContext(), "An error occured while requesting " +
-                        "data from database",Toast.LENGTH_LONG);
-            }
-        });
 
-    }
 
     /**
      * Update local data with a generic content with Objects

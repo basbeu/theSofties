@@ -10,8 +10,8 @@ public final class UserRequest extends Request{
     private static final String COLLECTION = "users";
 
     private UserRequest(){}
-    public static ObservableArrayList<User> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
-        return getList(User.class, COLLECTION, element, value, limit, orderBy);
+    public ObservableArrayList<User> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
+        return db.getList(User.class, COLLECTION, element, value, limit, orderBy);
     }
 
 }

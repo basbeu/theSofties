@@ -9,7 +9,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
-public class Interest extends DatabaseHandler{
+public class Interest extends DatabaseEntity {
 
     private static final String TAG = "DB_INTEREST";
     private static final String COLLECTION = "interests";
@@ -20,25 +20,25 @@ public class Interest extends DatabaseHandler{
     public enum BooleanFields implements DatabaseBooleanField {}
 
 
-    public Interest(String id){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,id);
-        updateFromDb();
-    }
-
     public Interest(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,null);
     }
 
-    public Interest(String id,FirebaseFirestore db){
+    public Interest(String id){
+        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION,id);
+        db.updateFromDb(this);
+    }
+
+    /*public Interest(String id,FirebaseFirestore db){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id,db);
 
-    }
+    }*/
 
 
-    @Override
+    /*@Override
     public void updateOnDb(){
         if(documentID == null){
             // Do the same here if other types of datas
@@ -49,10 +49,10 @@ public class Interest extends DatabaseHandler{
                         updateFromDb();
                     }).addOnFailureListener(e -> {
                 Log.d(TAG,"failure to push interest to database");
-                /* Feedback of an error here - Impossible to update user informations */
+                /* Feedback of an error here - Impossible to update user informations
             });
         }else{
             super.updateOnDb();
         }
-    }
+    }*/
 }

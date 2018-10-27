@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,69 +21,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 public abstract class Request {
 
     private static final String TAG = "DB_REQUEST";
+    protected static Database db = Database.getInstance();
 
-    protected static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-
-    protected static <T extends DatabaseHandler> ObservableArrayList<T> getAll(Class<T> clazz,
-                                                                            String collection,
-                                                                            Integer limit,
-                                                                            DatabaseStringField orderBy){
-        ObservableArrayList<T> result = new ObservableArrayList<>();
-        Query query = db.collection(collection);
-        if(orderBy != null){
-            query = query.orderBy(orderBy.toString());
-        }
-        if(limit != null){
-            query = query.limit(limit);
-        }
-        getList(query, result, clazz);
-        return result;
-    }
-
-    protected static <T extends DatabaseHandler> ObservableArrayList<T> getList(Class<T> clazz,
-                                                                                String collection,
-                                                                                DatabaseField element,
-                                                                                String value,
-                                                                                Integer limit,
-                                                                                DatabaseStringField orderBy){
-        ObservableArrayList<T> result = new ObservableArrayList<>();
-        if(element == null || value == null){return null;}
-        Query query = db.collection(collection).whereEqualTo(element.toString(), value);
-        if(orderBy != null){
-            query = query.orderBy(orderBy.toString());
-        }
-        if(limit != null){
-            query = query.limit(limit);
-        }
-        getList(query, result, clazz);
-        return result;
-    }
-    private static <T extends DatabaseHandler>  void getList(Query query,
-                                                             ObservableArrayList<T> feedbackContainer,
-                                                             Class<T> clazz ){
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Request success", task.getException());
-                    ArrayList<T> tempList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        try{
-                            T documentObject = clazz.newInstance();
-                            documentObject.set(document.getId(), document.getData());
-                            tempList.add(documentObject);
-                        }
-                        catch (Exception e){
-                            Log.e(TAG, "Illegal access exception");
-                        }
-                    }
-                    feedbackContainer.addAll(tempList);
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-
-    }
 }

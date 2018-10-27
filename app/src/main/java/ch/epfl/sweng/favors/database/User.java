@@ -14,7 +14,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
-public class User extends DatabaseHandler {
+public class User extends DatabaseEntity {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
@@ -57,7 +57,7 @@ public class User extends DatabaseHandler {
         instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null){
             status.loggedInSuccess();
-            updateFromDb();
+            db.updateFromDb(this);
         }
     }
 
@@ -67,11 +67,11 @@ public class User extends DatabaseHandler {
         instance = FirebaseAuth.getInstance();
         if(instance.getUid() != null) {
             status.loggedInSuccess();
-            updateFromDb();
+            db.updateFromDb(this);
         }
     }
 
-    public User(FirebaseAuth instance){
+    /*public User(FirebaseAuth instance){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,instance.getUid());
         this.instance = instance;
@@ -83,21 +83,21 @@ public class User extends DatabaseHandler {
         if(instance.getUid() != null) {
             updateFromDb();
         }
-    }
+    }*/
 
-    public User(FirebaseAuth instance, FirebaseFirestore db){
+    /*public User(FirebaseAuth instance, FirebaseFirestore db){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,instance.getUid(),db);
 
        /* if(!ExecutionMode.getInstance().isTest()){
             throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }*/
+        }
 
         this.instance = instance;
         if(instance.getUid() != null) {
             updateFromDb();
         }
-    }
+    }*/
 
 
     static public void resetMain() {
