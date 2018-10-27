@@ -15,8 +15,10 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.User;
 
 import static org.junit.Assert.assertEquals;
@@ -58,6 +60,7 @@ public class FavorEntityTest {
         data.put(Favor.ObjectFields.location.toString(),FAKE_LOCATION_OBJECT);
         when(fakeDb.collection("favors")).thenReturn(fakeCollection);
         when(fakeCollection.document(FAKE_DOC_ID)).thenReturn(fakeDoc);
+        when(fakeCollection.add(any(Map.class))).thenReturn(Tasks.forResult(fakeDoc));
         when(fakeDoc.get()).thenReturn(fakeTask);
         when(fakeDoc.set(any())).thenReturn(fakeSetTask);
         when(fakeDocSnap.getData()).thenReturn(data);
@@ -111,6 +114,17 @@ public class FavorEntityTest {
     }
 
     @Test
+    public void setIsOpenDocIdNullTest(){
+        Boolean newIsOpen = false;
+        Favor favor = new Favor(null,fakeDb);
+        favor.updateFromDb().addOnCompleteListener(t->{
+            favor.set(Favor.BooleanFields.isOpen,newIsOpen);
+            favor.updateOnDb();
+            assertEquals(newIsOpen, favor.get(Favor.BooleanFields.isOpen));
+        });
+    }
+
+    @Test
     public void setObjectLocationTest(){
         Object newObject = new Object();
         Favor favor = new Favor(FAKE_DOC_ID,fakeDb);
@@ -122,9 +136,27 @@ public class FavorEntityTest {
     }
 
     @Test
+    public void reset(){
+        Favor favor = new Favor(FAKE_DOC_ID,fakeDb);
+        favor.reset();
+    }
+
+    @Test
     public void getObservableIsOpenTest(){
         Favor favor = new Favor(FAKE_DOC_ID,fakeDb);
         favor.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_IS_OPEN, favor.getObservableObject(Favor.BooleanFields.isOpen).get()));
+    }
+
+
+    @Test
+    public void getFailed(){
+        HashMap<String,Object> empty = new HashMap();
+        Favor f = new Favor(FAKE_DOC_ID,fakeDb);
+        f.set(FAKE_DOC_ID, data);
+        f.get(Favor.StringFields.title);
+        f.get(Favor.ObjectFields.location);
+        f.get(Favor.BooleanFields.isOpen);
+        f.get(Favor.IntegerFields.creationTimestamp);
     }
 
     @Test

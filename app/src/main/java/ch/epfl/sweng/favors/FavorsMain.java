@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;

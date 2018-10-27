@@ -7,16 +7,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
-import ch.epfl.sweng.favors.database.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.DatabaseHandler;
-import ch.epfl.sweng.favors.database.DatabaseIntField;
-import ch.epfl.sweng.favors.database.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.DatabaseStringField;
 import ch.epfl.sweng.favors.database.User;
 

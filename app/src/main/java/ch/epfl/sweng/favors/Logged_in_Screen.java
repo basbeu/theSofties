@@ -5,13 +5,10 @@ import android.databinding.ObservableField;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;

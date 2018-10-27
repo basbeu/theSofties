@@ -18,13 +18,16 @@ import org.mockito.Mock;
 
 import ch.epfl.sweng.favors.database.Favor;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.Matchers.anything;
 import static org.mockito.Mockito.when;
 
 
@@ -96,6 +99,12 @@ public class FavorsCreateFragmentTest {
     public void changesLocation() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.locationFavor)).perform(typeText("location")).check(matches(withText("location")));
+    }
+
+    @Test
+    public void interestSpinnerTest(){
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.categoryFavor)).perform(click());
     }
 
 
