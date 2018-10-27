@@ -4,7 +4,10 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
+import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public class Interest extends DatabaseHandler{
 

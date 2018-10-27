@@ -4,11 +4,10 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
+import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 /**
  * The Favor class is an extension of the Database handler

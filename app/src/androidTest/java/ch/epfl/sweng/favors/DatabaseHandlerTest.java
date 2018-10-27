@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import ch.epfl.sweng.favors.database.DatabaseHandler;
-import ch.epfl.sweng.favors.database.DatabaseStringField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.database.User;
 
 @RunWith(AndroidJUnit4.class)

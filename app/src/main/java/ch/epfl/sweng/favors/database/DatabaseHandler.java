@@ -1,8 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableField;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,6 +15,11 @@ import java.util.Map;
 
 import ch.epfl.sweng.favors.FavorsMain;
 import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
 public abstract class DatabaseHandler {
@@ -78,7 +81,7 @@ public abstract class DatabaseHandler {
          * @param <V> The type of objects
          * @return An initialised map
          */
-    private <T extends DatabaseField, V> Map<T, ObservableField<V>>  initMap( final T[] possibleValues){
+    private <T extends DatabaseField, V> Map<T, ObservableField<V>>  initMap(final T[] possibleValues){
         if(possibleValues == null || possibleValues.length == 0){return null;}
         return new HashMap<T, ObservableField<V>>(){
             {

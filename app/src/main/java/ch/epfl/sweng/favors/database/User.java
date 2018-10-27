@@ -9,6 +9,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import javax.annotation.Nonnull;
 
 import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
+import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public class User extends DatabaseHandler {
 
@@ -32,8 +36,8 @@ public class User extends DatabaseHandler {
     }
     public static void setMain(User u) {user = u; }
 
-    public enum StringFields implements DatabaseStringField{firstName, lastName, email, sex, pseudo, city}
-    public enum IntegerFields implements DatabaseIntField{creationTimeStamp}
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
+    public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 

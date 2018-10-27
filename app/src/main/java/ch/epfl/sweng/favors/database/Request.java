@@ -12,7 +12,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
 public abstract class Request {

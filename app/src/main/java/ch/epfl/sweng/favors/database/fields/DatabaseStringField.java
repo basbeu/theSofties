@@ -1,4 +1,5 @@
-package ch.epfl.sweng.favors.database;
+package ch.epfl.sweng.favors.database.fields;
+
 
 /**
  * Database Interface for Strings
