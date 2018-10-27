@@ -1,5 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
+import android.provider.ContactsContract;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
@@ -62,25 +64,25 @@ public class InterestEntityTest {
 
     @Test
     public void getTitleTest(){
-        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
-        i.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_TITLE, i.get(Interest.StringFields.title)));
+        Interest i = new Interest (FAKE_DOC_ID);
+        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->assertEquals(FAKE_TITLE, i.get(Interest.StringFields.title)));
     }
 
     @Test
     public void getTitleFailedTest(){
         when(fakeDoc.get()).thenReturn(Tasks.forCanceled());
-        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
+        Interest i = new Interest (FAKE_DOC_ID);
     }
 
     @Test
     public void getLinkedInterestTest(){
-        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
-        i.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LINKEDINTEREST_OBJECT, i.get(Interest.ObjectFields.linkedInterests)));
+        Interest i = new Interest (FAKE_DOC_ID);
+        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->assertEquals(FAKE_LINKEDINTEREST_OBJECT, i.get(Interest.ObjectFields.linkedInterests)));
     }
 
     @Test
     public void setDocId(){
-        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
+        Interest i = new Interest (FAKE_DOC_ID);
         i.set(FAKE_DOC_ID, data);
     }
 
@@ -88,11 +90,11 @@ public class InterestEntityTest {
     @Test
     public void setTitleDocIDTest(){
         String newTitle = "tata";
-        Interest i = new Interest (null,fakeDb);
+        Interest i = new Interest (null);
 
-        i.updateFromDb().addOnCompleteListener(t->{
+        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->{
             i.set(Interest.StringFields.title, newTitle);
-            i.updateOnDb();
+            Database.getInstance().updateOnDb(i);
             assertEquals(newTitle, i.get(Interest.StringFields.title));
         });
     }
@@ -100,18 +102,12 @@ public class InterestEntityTest {
     @Test
     public void setTitleTest(){
         String newTitle = "tata";
-        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
+        Interest i = new Interest (FAKE_DOC_ID);
 
-        i.updateFromDb().addOnCompleteListener(t->{
+        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->{
             i.set(Interest.StringFields.title, newTitle);
-            i.updateOnDb();
+            Database.getInstance().updateOnDb(i);
             assertEquals(newTitle, i.get(Interest.StringFields.title));
         });
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testConstructorTestPurpose(){
-        ExecutionMode.getInstance().setTest(false);
-        Interest i = new Interest (FAKE_DOC_ID,fakeDb);
     }
 }
