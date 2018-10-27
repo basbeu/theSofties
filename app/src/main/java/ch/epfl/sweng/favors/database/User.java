@@ -71,6 +71,11 @@ public class User extends DatabaseEntity {
         }
     }
 
+    @Override
+    public DatabaseEntity copy() {
+        return new User(this.documentID);
+    }
+
     /*public User(FirebaseAuth instance){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,instance.getUid());
