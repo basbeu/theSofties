@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 
-public class EditProfileFragmentTest {
+public class EditProfileFragmentTest {/*
 
     @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<EditProfileFragment>(EditProfileFragment.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -130,5 +130,5 @@ public class EditProfileFragmentTest {
     public void userHasCorrectGender() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profGenderMEdit)).check(matches(withText(User.getMain().get(User.StringFields.sex))));
-    }
+    }*/
 }

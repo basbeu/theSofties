@@ -35,8 +35,6 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class ConfirmationSentTest {
-
-
     @Rule public ActivityTestRule<ConfirmationSent> activityActivityTestRule = new ActivityTestRule<ConfirmationSent>(ConfirmationSent.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -47,7 +45,7 @@ public class ConfirmationSentTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        User fakeUser = new User(fakeAuth);
+        User fakeUser = new User();
         User.setMain(fakeUser);
         User.UserGender.setGender(User.getMain(), User.UserGender.M);
         when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
@@ -96,7 +94,4 @@ public class ConfirmationSentTest {
             fail("Can't sleep");
         }
     }
-
-
-
 }

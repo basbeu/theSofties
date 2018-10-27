@@ -50,7 +50,7 @@ class SingleFragmentActivity extends AppCompatActivity {
 }*/
 
 @RunWith(AndroidJUnit4.class)
-public class FavorsCreateFragmentTest {
+public class FavorsCreateFragmentTest {/*
 
     @Rule
     public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
