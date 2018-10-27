@@ -31,6 +31,11 @@ public class Interest extends DatabaseEntity {
         db.updateFromDb(this);
     }
 
+    @Override
+    public DatabaseEntity copy() {
+        return new Interest(this.documentID);
+    }
+
     /*public Interest(String id,FirebaseFirestore db){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id,db);

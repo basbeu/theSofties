@@ -265,4 +265,6 @@ public abstract class DatabaseEntity {
         return booleanData.get(field);
     }
 
+    public abstract DatabaseEntity copy();
+
 }

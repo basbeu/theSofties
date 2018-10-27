@@ -35,8 +35,13 @@ public class Favor extends DatabaseEntity {
 
     public Favor(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,id);
+                ObjectFields.values(), COLLECTION, id);
         db.updateFromDb(this);
+    }
+
+    @Override
+    public DatabaseEntity copy() {
+        return new Favor(this.documentID);
     }
 
     /*public Favor(String id,FirebaseFirestore db){

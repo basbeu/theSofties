@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public abstract class Database {
 
@@ -28,8 +29,14 @@ public abstract class Database {
 
     public static Database getInstance(){
         if(db == null){
-            db = FirebaseDatabase.getInstance();
+            if(ExecutionMode.getInstance().isTest()){
+                db = FakeDatabase.getInstance();
+            }
+            else{
+                db = FirebaseDatabase.getInstance();
+            }
         }
         return db;
     }
+
 }
