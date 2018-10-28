@@ -85,11 +85,10 @@ public class EditProfileFragmentTest {
     @Test
     public void userCanEditCity() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profCityEdit)).perform(replaceText(FAKENEWCITY)).perform(closeSoftKeyboard());
+        onView(withId(R.id.profCityEdit)).perform(scrollTo(),replaceText(FAKENEWCITY)).perform(closeSoftKeyboard());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
         User user = new User(FakeAuthentication.UID);
         assertEquals(FAKENEWCITY, user.get(User.StringFields.city));
-
     }
 
     @Test
