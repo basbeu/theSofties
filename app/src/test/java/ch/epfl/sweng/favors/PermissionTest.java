@@ -2,6 +2,8 @@ package ch.epfl.sweng.favors;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.favors.main.FavorsMain;
+
 import static org.junit.Assert.*;
 
 /**
