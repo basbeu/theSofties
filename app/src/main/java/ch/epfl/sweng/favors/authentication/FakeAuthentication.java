@@ -12,8 +12,8 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 public class FakeAuthentication extends Authentication {
 
     private static FakeAuthentication auth;
-    private static final String UID = "fakeId90";
-    private static final String EMAIL = "toto@mail.com";
+    public static final String UID = "fakeId90";
+    public static final String EMAIL = "toto@mail.com";
 
     private FakeAuthentication(){
 

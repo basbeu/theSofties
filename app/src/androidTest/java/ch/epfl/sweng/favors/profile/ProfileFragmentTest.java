@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import ch.epfl.sweng.favors.authentication.FakeAuthentication;
+import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.main.LoggedInScreen;
@@ -36,13 +38,13 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class ProfileFragmentTest {
-/*
-    //@Rule public FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
-    @Rule public ActivityTestRule<LoggedInScreen> activityActivityTestRule = new ActivityTestRule<>(LoggedInScreen.class);
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    @Rule public FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
+    //@Rule public ActivityTestRule<LoggedInScreen> activityActivityTestRule = new ActivityTestRule<>(LoggedInScreen.class);
+    //@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
   
-    private FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
+    //private FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
 
   
     // @Mock User fakeUser;
@@ -56,14 +58,15 @@ public class ProfileFragmentTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        User fakeUser = new User(fakeAuth);
-        User.setMain(fakeUser);
-        when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
+        FakeDatabase.getInstance().createBasicDatabase();
+        //User fakeUser = new User(fakeAuth);
+        //User.setMain(fakeUser);
+        /*when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
         when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
         fakeUser.set(User.StringFields.firstName, FAKEFIRSTNAME);
         fakeUser.set(User.StringFields.lastName, FAKELASTNAME);
-        fakeUser.set(User.StringFields.email, FAKEEMAIL);
-        device = UiDevice.getInstance(getInstrumentation());
+        fakeUser.set(User.StringFields.email, FAKEEMAIL);*/
+        //device = UiDevice.getInstance(getInstrumentation());
 
     }
 
@@ -90,7 +93,7 @@ public class ProfileFragmentTest {
     @Test
     public void email_is_displayed(){
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profEmail)).check(matches(withText(FAKEEMAIL)));
+        onView(withId(R.id.profEmail)).check(matches(withText(FakeAuthentication.EMAIL)));
     }
 
     @Test
@@ -100,10 +103,10 @@ public class ProfileFragmentTest {
             editButton.click();
         }*/
 
-     /*   mFragmentTestRule.launchActivity(null);
+        mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.editProfileButton)).check(matches(isDisplayed()));
         //onView(withId(R.id.editProfileButton)).perform(click());
 
-  }*/
+  }
 
 }

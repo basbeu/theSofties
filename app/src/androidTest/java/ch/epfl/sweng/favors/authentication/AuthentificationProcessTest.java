@@ -55,8 +55,8 @@ public class AuthentificationProcessTest {
     public void Before(){
         device = UiDevice.getInstance(getInstrumentation());
         ExecutionMode.getInstance().setTest(true);
-        //FakeDatabase db = (FakeDatabase)Database.getInstance();
-        //db.createBasicDatabase();
+        FakeDatabase db = (FakeDatabase)Database.getInstance();
+        db.createBasicDatabase();
     }
 
     @Test

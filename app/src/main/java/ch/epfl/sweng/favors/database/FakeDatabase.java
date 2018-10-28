@@ -11,6 +11,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 
+import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.main.FavorsMain;
@@ -24,6 +26,7 @@ public class FakeDatabase extends Database{
 
     private FakeDatabase(){
         database = new HashMap<>();
+        //createBasicDatabase();
     }
 
     public static FakeDatabase getInstance(){
@@ -66,6 +69,7 @@ public class FakeDatabase extends Database{
         User u1 = new User("U1");
         User u2 = new User("U2");
         User u3 = new User("U3");
+        User u4 = new User(FakeAuthentication.UID);
 
         u1.set(User.StringFields.firstName, "Toto");
         u1.set(User.StringFields.lastName, "Lolo");
@@ -84,6 +88,12 @@ public class FakeDatabase extends Database{
         u3.set(User.StringFields.email, "harvey.dent@gotham.com");
         u3.set(User.StringFields.city, "Arkham Asylum");
         User.UserGender.setGender(u3, User.UserGender.M);
+
+        u4.set(User.StringFields.firstName, "Fake");
+        u4.set(User.StringFields.lastName,"Auth");
+        u4.set(User.StringFields.email, FakeAuthentication.EMAIL);
+        u4.set(User.StringFields.city, "Fake City");
+        User.UserGender.setGender(u4, User.UserGender.F);
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
@@ -106,6 +116,7 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(u1);
         getInstance().updateOnDb(u2);
         getInstance().updateOnDb(u3);
+        getInstance().updateOnDb(u4);
 
         getInstance().updateOnDb(f1);
         getInstance().updateOnDb(f2);
