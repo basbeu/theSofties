@@ -12,6 +12,7 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
@@ -33,14 +34,31 @@ public class EditProfileFragmentTest {
 
     @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<EditProfileFragment>(EditProfileFragment.class);
 
-    private final String FAKENEWFIRSTNAME = "Charline";
-    private final String FAKENEWLASTNAME = "Montial";
-    private final String FAKENEWCITY = "Corseaux";
+
+    private User u;
+
+    /*private final String FAKE_UID = "sklfklalsdj";
+    private final String FAKE_EMAIL = "thisisatestemail@email.com";
+    private final String FAKE_FIRST_NAME = "toto";
+    private final String FAKE_LAST_NAME = "foo";
+    private final Integer FAKE_TIMESTAMP = 343354;
+    private final String FAKE_CITY = "Corseaux";*/
 
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
+
+        u = new User(FakeAuthentication.getInstance().getUid());
+        /*u.set(User.StringFields.firstName, FAKE_FIRST_NAME);
+        u.set(User.StringFields.lastName, FAKE_LAST_NAME);
+        u.set(User.StringFields.email, FAKE_EMAIL);
+        u.set(User.StringFields.city, FAKE_EMAIL);
+        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+        u.set(User.StringFields.city, FAKE_CITY);
+        User.UserGender.setGender(u, User.UserGender.M);*/
+
+        FakeDatabase.getInstance().updateOnDb(u);
     }
     @Test
     public void fragmentCanBeInstantiated() {
@@ -51,10 +69,16 @@ public class EditProfileFragmentTest {
     @Test
     public void userCanEditFirstName() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profFirstNameEdit)).perform(replaceText(FAKENEWFIRSTNAME)).perform(closeSoftKeyboard());
+        String newFirstName = "tata";
+        onView(withId(R.id.profFirstNameEdit)).perform(replaceText(newFirstName)).perform(closeSoftKeyboard());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
-        User user = new User(FakeAuthentication.UID);
-        assertEquals(FAKENEWFIRSTNAME, user.get(User.StringFields.firstName));
+
+        FakeDatabase.getInstance().updateFromDb(u).addOnSuccessListener(t -> {
+            assertEquals(newFirstName, u.get(User.StringFields.firstName));
+            u.set(User.StringFields.firstName, FakeAuthentication.FIRST_NAME);
+            FakeDatabase.getInstance().updateOnDb(u);
+        });
+
 
     }
 
@@ -62,17 +86,20 @@ public class EditProfileFragmentTest {
     public void userHasCorrectFirstName() {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profFirstNameEdit)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
-
     }
+
 
     @Test
     public void userCanEditLastName() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profLastNameEdit)).perform(replaceText(FAKENEWLASTNAME)).perform(closeSoftKeyboard());
+        String newLastname = "fofofofo";
+        onView(withId(R.id.profLastNameEdit)).perform(replaceText(newLastname)).perform(closeSoftKeyboard());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
-        User user = new User(FakeAuthentication.UID);
-        assertEquals(FAKENEWLASTNAME, user.get(User.StringFields.lastName));
-
+        FakeDatabase.getInstance().updateFromDb(u).addOnSuccessListener(t -> {
+            assertEquals(newLastname, u.get(User.StringFields.lastName));
+            u.set(User.StringFields.lastName, FakeAuthentication.LAST_NAME);
+            FakeDatabase.getInstance().updateOnDb(u);
+        });
     }
 
     @Test
@@ -85,10 +112,14 @@ public class EditProfileFragmentTest {
     @Test
     public void userCanEditCity() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profCityEdit)).perform(scrollTo(),replaceText(FAKENEWCITY)).perform(closeSoftKeyboard());
+        String newCity = "Geneva";
+        onView(withId(R.id.profCityEdit)).perform(replaceText(newCity)).perform(closeSoftKeyboard());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
-        User user = new User(FakeAuthentication.UID);
-        assertEquals(FAKENEWCITY, user.get(User.StringFields.city));
+        FakeDatabase.getInstance().updateFromDb(u).addOnSuccessListener(t -> {
+            assertEquals(newCity, u.get(User.StringFields.city));
+            u.set(User.StringFields.city, FakeAuthentication.CITY);
+            FakeDatabase.getInstance().updateOnDb(u);
+        });
     }
 
     @Test
@@ -104,15 +135,19 @@ public class EditProfileFragmentTest {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profGenderFEdit)).perform(scrollTo(), click());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
-        User user = new User(FakeAuthentication.UID);
-        assertEquals("F", user.get(User.StringFields.sex));
+
+
+        FakeDatabase.getInstance().updateFromDb(u).addOnSuccessListener(t -> {
+            assertEquals("F", u.get(User.StringFields.sex));
+            User.UserGender.setGender(u, FakeAuthentication.GENDER);
+            FakeDatabase.getInstance().updateOnDb(u);
+        });
 
     }
 
     @Test
     public void userHasCorrectGender() {
         mFragmentTestRule.launchActivity(null);
-        User user = new User(FakeAuthentication.UID);
-        onView(withId(R.id.profGenderFEdit)).check(matches(withText(user.get(User.StringFields.sex))));
+        onView(withId(R.id.profGenderFEdit)).check(matches(withText(u.get(User.StringFields.sex))));
     }
 }

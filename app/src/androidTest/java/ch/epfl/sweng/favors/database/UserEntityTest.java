@@ -74,11 +74,12 @@ public class UserEntityTest {
             u.set(User.StringFields.firstName, newFirstName);
             FakeDatabase.getInstance().updateOnDb(u);
             assertEquals(newFirstName, u.get(User.StringFields.firstName));
+            //Reset basic user info for other tests
+            u.set(User.StringFields.firstName, FAKE_FIRST_NAME);
+            FakeDatabase.getInstance().updateOnDb(u);
         });
 
-        //Reset basic user info for other tests
-        u.set(User.StringFields.firstName, FAKE_FIRST_NAME);
-        FakeDatabase.getInstance().updateOnDb(u);
+
     }
 
     @Test
@@ -89,11 +90,12 @@ public class UserEntityTest {
             u.set(User.StringFields.lastName, newLastName);
             FakeDatabase.getInstance().updateOnDb(u);
             assertEquals(newLastName, u.get(User.StringFields.lastName));
+            //Reset basic user info for other tests
+            u.set(User.StringFields.lastName, FAKE_LAST_NAME);
+            FakeDatabase.getInstance().updateOnDb(u);
         });
 
-        //Reset basic user info for other tests
-        u.set(User.StringFields.lastName, FAKE_LAST_NAME);
-        FakeDatabase.getInstance().updateOnDb(u);
+
     }
 
     @Test
@@ -104,11 +106,12 @@ public class UserEntityTest {
             u.set(User.StringFields.email, newEmail);
             FakeDatabase.getInstance().updateOnDb(u);
             assertEquals(newEmail, u.get(User.StringFields.email));
+            //Reset basic user info for other tests
+            u.set(User.StringFields.email, FAKE_EMAIL);
+            FakeDatabase.getInstance().updateOnDb(u);
         });
 
-        //Reset basic user info for other tests
-        u.set(User.StringFields.email, FAKE_EMAIL);
-        FakeDatabase.getInstance().updateOnDb(u);
+
     }
 
     @Test
@@ -117,11 +120,12 @@ public class UserEntityTest {
         FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
             User.UserGender.setGender(u, User.UserGender.F);
             assertEquals(User.UserGender.F,User.UserGender.getGenderFromUser(u));
+            //Reset basic user info for other tests
+            User.UserGender.setGender(u, User.UserGender.M);
+            FakeDatabase.getInstance().updateOnDb(u);
         });
 
-        //Reset basic user info for other tests
-        User.UserGender.setGender(u, User.UserGender.M);
-        FakeDatabase.getInstance().updateOnDb(u);
+
     }
 
     @Test
@@ -132,11 +136,12 @@ public class UserEntityTest {
             u.set(User.IntegerFields.creationTimeStamp, newTimestamp);
             FakeDatabase.getInstance().updateOnDb(u);
             assertEquals(newTimestamp, u.get(User.IntegerFields.creationTimeStamp));
+            //Reset basic user info for other tests
+            u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+            FakeDatabase.getInstance().updateOnDb(u);
         });
 
-        //Reset basic user info for other tests
-        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
-        FakeDatabase.getInstance().updateOnDb(u);
+
 
     }
 
