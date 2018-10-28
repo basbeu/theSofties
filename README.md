@@ -13,6 +13,7 @@ We are 7 computer science and communication system students at EPFL, currently e
 - User support
 - Database access
 - Automated test suite: 80% code coverage
+> A beautiful piece of code, even if perfect, that lacks test cases will get a minimal score on the correctness and maintainability aspects of the grading rubric, so please test thoroughly.
 
 # Build Status
 
