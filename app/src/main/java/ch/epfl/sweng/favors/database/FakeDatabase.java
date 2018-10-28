@@ -14,6 +14,9 @@ import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
+/**
+ * Singleton class that represent a fake DB for testing purpose
+ */
 public class FakeDatabase extends Database{
 
     public static FakeDatabase db = null;
