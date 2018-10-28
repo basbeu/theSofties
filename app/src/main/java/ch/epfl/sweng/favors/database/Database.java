@@ -30,11 +30,11 @@ public abstract class Database {
 
     /**
      *
-     * @param clazz The class that indicate
-     * @param collection
+     * @param clazz The class that indicate the entity type <T>
+     * @param collection Collection in which the entities must be found
      * @param limit The upper bound of the number of elements in the ArrayList
      * @param orderBy StringField that indicates the order in which the ArrayList should be returned
-     * @param <T>
+     * @param <T> Generic type that extends DatabaseEntity
      * @return An observable Arraylist of all the DatabaseEntity of type <T> in the database
      */
     protected abstract <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz,
