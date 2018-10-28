@@ -7,7 +7,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favors.FavorDetailView"
+            type="ch.epfl.sweng.favors.favors.FavorDetailView"
             />
     </data>
 

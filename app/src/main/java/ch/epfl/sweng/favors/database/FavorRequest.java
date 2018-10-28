@@ -2,9 +2,9 @@ package ch.epfl.sweng.favors.database;
 
 
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 
-import java.util.ArrayList;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public final class FavorRequest extends Request{
 
@@ -13,11 +13,9 @@ public final class FavorRequest extends Request{
 
     private FavorRequest(){}
     public static ObservableArrayList<Favor> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
-        return getList(Favor.class, COLLECTION, element, value, limit, orderBy);
+        return db.getList(Favor.class, COLLECTION, element, value, limit, orderBy);
     }
     public static ObservableArrayList<Favor> all(Integer limit, DatabaseStringField orderBy){
-        return getAll(Favor.class, COLLECTION, limit, orderBy);
+        return db.getAll(Favor.class, COLLECTION, limit, orderBy);
     }
-
-
 }
