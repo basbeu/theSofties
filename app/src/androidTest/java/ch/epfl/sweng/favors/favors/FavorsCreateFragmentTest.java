@@ -1,8 +1,11 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.DatePicker;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,9 +22,11 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
+import static java.lang.Thread.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class FavorsCreateFragmentTest {
@@ -70,6 +75,13 @@ public class FavorsCreateFragmentTest {
     public void interestSpinnerTest(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.categoryFavor)).perform(scrollTo(),click());
+    }
+
+    @Test
+    public void testDatePicker() throws InterruptedException {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.deadlineFavor)).perform(scrollTo(), click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2000,10,23));
     }
 
 }
