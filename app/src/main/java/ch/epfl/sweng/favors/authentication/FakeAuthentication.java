@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class FakeAuthentication extends Authentication {
@@ -14,6 +15,10 @@ public class FakeAuthentication extends Authentication {
     private static FakeAuthentication auth;
     public static final String UID = "fakeId90";
     public static final String EMAIL = "toto@mail.com";
+    public static final String FIRST_NAME = "Fake";
+    public static final String LAST_NAME = "Auth";
+    public static final String CITY = "Fake City";
+    public static final User.UserGender GENDER = User.UserGender.F;
 
     private FakeAuthentication(){
 

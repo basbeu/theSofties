@@ -40,34 +40,11 @@ import static org.mockito.Mockito.when;
 public class ProfileFragmentTest {
 
     @Rule public FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
-    //@Rule public ActivityTestRule<LoggedInScreen> activityActivityTestRule = new ActivityTestRule<>(LoggedInScreen.class);
-    //@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-  
-    //private FragmentTestRule<ProfileFragment> mFragmentTestRule = new FragmentTestRule<>(ProfileFragment.class);
-
-  
-    // @Mock User fakeUser;
-    @Mock private FirebaseUser fbFakeUser;
-    @Mock private FirebaseFirestore fstore;
-    @Mock private FirebaseAuth fakeAuth;
-    private final String FAKEEMAIL = "thisisatestemail@email.com";
-    private final String FAKEFIRSTNAME = "Toto";
-    private final String FAKELASTNAME = "Tutu";
-    private UiDevice device;
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
-        //User fakeUser = new User(fakeAuth);
-        //User.setMain(fakeUser);
-        /*when(fakeAuth.getCurrentUser()).thenReturn(fbFakeUser);
-        when(fbFakeUser.getEmail()).thenReturn(FAKEEMAIL);
-        fakeUser.set(User.StringFields.firstName, FAKEFIRSTNAME);
-        fakeUser.set(User.StringFields.lastName, FAKELASTNAME);
-        fakeUser.set(User.StringFields.email, FAKEEMAIL);*/
-        //device = UiDevice.getInstance(getInstrumentation());
-
     }
 
     @Test
@@ -81,13 +58,13 @@ public class ProfileFragmentTest {
     @Test
     public void firstName_is_displayed(){
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profFirstName)).check(matches(withText(FAKEFIRSTNAME)));
+        onView(withId(R.id.profFirstName)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
     }
 
     @Test
     public void lastName_is_displayed(){
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profLastName)).check(matches(withText(FAKELASTNAME)));
+        onView(withId(R.id.profLastName)).check(matches(withText(FakeAuthentication.LAST_NAME)));
     }
 
     @Test
@@ -98,15 +75,8 @@ public class ProfileFragmentTest {
 
     @Test
     public void editProfile(){
-        /*UiObject editButton = device.findObject(new UiSelector().text("EDIT PROFILE"));
-        if(editButton.exists()){
-            editButton.click();
-        }*/
-
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.editProfileButton)).check(matches(isDisplayed()));
-        //onView(withId(R.id.editProfileButton)).perform(click());
-
   }
 
 }

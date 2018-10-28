@@ -89,11 +89,11 @@ public class FakeDatabase extends Database{
         u3.set(User.StringFields.city, "Arkham Asylum");
         User.UserGender.setGender(u3, User.UserGender.M);
 
-        u4.set(User.StringFields.firstName, "Fake");
-        u4.set(User.StringFields.lastName,"Auth");
+        u4.set(User.StringFields.firstName, FakeAuthentication.FIRST_NAME);
+        u4.set(User.StringFields.lastName,FakeAuthentication.LAST_NAME);
         u4.set(User.StringFields.email, FakeAuthentication.EMAIL);
-        u4.set(User.StringFields.city, "Fake City");
-        User.UserGender.setGender(u4, User.UserGender.F);
+        u4.set(User.StringFields.city, FakeAuthentication.CITY);
+        User.UserGender.setGender(u4, FakeAuthentication.GENDER);
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
