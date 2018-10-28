@@ -27,87 +27,51 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class InterestEntityTest {
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-    @Mock
-    private FirebaseFirestore fakeDb;
-    @Mock private CollectionReference fakeCollection;
-    @Mock private DocumentReference fakeDoc;
-    @Mock private DocumentSnapshot fakeDocSnap;
-
-    private Task<DocumentSnapshot> fakeTask;
-    private Task<Void> fakeSetTask;
-    private HashMap<String,Object> data;
 
     private String FAKE_DOC_ID  = "klsafdjdlksdf";
     private String FAKE_TITLE = "Fake title";
     private String FAKE_DESCRIPTION = "This is a fake description";
     private Object FAKE_LINKEDINTEREST_OBJECT = new Object();
 
+    private Interest interest;
+
     @Before
     public void Before() {
         ExecutionMode.getInstance().setTest(true);
-        data = new HashMap<>();
-        fakeTask = Tasks.forResult(fakeDocSnap);
-        fakeSetTask = Tasks.forResult((Void)null);
-        data.put(Interest.StringFields.title.toString(),FAKE_TITLE);
-        data.put(Interest.StringFields.description.toString(),FAKE_DESCRIPTION);
-        data.put(Interest.ObjectFields.linkedInterests.toString(),FAKE_LINKEDINTEREST_OBJECT);
-        when(fakeDb.collection("interests")).thenReturn(fakeCollection);
-        when(fakeCollection.document(FAKE_DOC_ID)).thenReturn(fakeDoc);
-        when(fakeCollection.add(any(Map.class))).thenReturn(Tasks.forResult(fakeDoc));
-        when(fakeDoc.get()).thenReturn(fakeTask);
-        when(fakeDoc.set(any())).thenReturn(fakeSetTask);
-        when(fakeDocSnap.getData()).thenReturn(data);
+        FakeDatabase.getInstance().createBasicDatabase();
+        interest = new Interest(FAKE_DOC_ID);
+        interest.set(Interest.StringFields.title, FAKE_TITLE);
+        interest.set(Interest.StringFields.description, FAKE_DESCRIPTION);
+        interest.set(Interest.ObjectFields.linkedInterests,FAKE_LINKEDINTEREST_OBJECT);
+        FakeDatabase.getInstance().updateOnDb(interest);
     }
 
     @Test
     public void getTitleTest(){
-        Interest i = new Interest (FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->assertEquals(FAKE_TITLE, i.get(Interest.StringFields.title)));
-    }
-
-    @Test
-    public void getTitleFailedTest(){
-        when(fakeDoc.get()).thenReturn(Tasks.forCanceled());
-        Interest i = new Interest (FAKE_DOC_ID);
+        Database.getInstance().updateFromDb(interest).addOnCompleteListener(t->assertEquals(FAKE_TITLE, interest.get(Interest.StringFields.title)));
     }
 
     @Test
     public void getLinkedInterestTest(){
-        Interest i = new Interest (FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->assertEquals(FAKE_LINKEDINTEREST_OBJECT, i.get(Interest.ObjectFields.linkedInterests)));
+        Database.getInstance().updateFromDb(interest).addOnCompleteListener(t->assertEquals(FAKE_LINKEDINTEREST_OBJECT, interest.get(Interest.ObjectFields.linkedInterests)));
     }
 
     @Test
     public void setDocId(){
         Interest i = new Interest (FAKE_DOC_ID);
-        i.set(FAKE_DOC_ID, data);
-    }
-
-
-    @Test
-    public void setTitleDocIDTest(){
-        String newTitle = "tata";
-        Interest i = new Interest (null);
-
-        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->{
-            i.set(Interest.StringFields.title, newTitle);
-            Database.getInstance().updateOnDb(i);
-            assertEquals(newTitle, i.get(Interest.StringFields.title));
-        });
+        i.set(FAKE_DOC_ID, interest.getEncapsulatedObjectOfMaps());
     }
 
     @Test
     public void setTitleTest(){
         String newTitle = "tata";
-        Interest i = new Interest (FAKE_DOC_ID);
 
-        Database.getInstance().updateFromDb(i).addOnCompleteListener(t->{
-            i.set(Interest.StringFields.title, newTitle);
-            Database.getInstance().updateOnDb(i);
-            assertEquals(newTitle, i.get(Interest.StringFields.title));
+        Database.getInstance().updateFromDb(interest).addOnCompleteListener(t->{
+            interest.set(Interest.StringFields.title, newTitle);
+            Database.getInstance().updateOnDb(interest);
+            assertEquals(newTitle, interest.get(Interest.StringFields.title));
         });
+
+        interest.set(Interest.StringFields.title, FAKE_TITLE);
     }
 }
