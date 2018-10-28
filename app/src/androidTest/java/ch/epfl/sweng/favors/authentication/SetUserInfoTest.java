@@ -20,6 +20,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.TestCase.assertEquals;
 
@@ -48,11 +49,11 @@ public class SetUserInfoTest {
         intent.putExtra(FavorsMain.TEST_MODE, "true");
         activityActivityTestRule.launchActivity(intent);
 
-        onView(ViewMatchers.withId(R.id.userFirstNameEdit)).perform(replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
-        onView(withId(R.id.userLastNameEdit)).perform(replaceText(FAKELASTNAME)).perform(closeSoftKeyboard());
-        onView(withId(R.id.userCityEdit)).perform(replaceText(FAKECITY)).perform(closeSoftKeyboard());
-        onView(withId(R.id.profGenderFEdit)).perform(click());
-        onView(withId(R.id.submit)).perform(click());
+        onView(ViewMatchers.withId(R.id.userFirstNameEdit)).perform(scrollTo(),replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
+        onView(withId(R.id.userLastNameEdit)).perform(scrollTo(),replaceText(FAKELASTNAME)).perform(closeSoftKeyboard());
+        onView(withId(R.id.userCityEdit)).perform(scrollTo(),replaceText(FAKECITY)).perform(closeSoftKeyboard());
+        onView(withId(R.id.profGenderFEdit)).perform(scrollTo(),click());
+        onView(withId(R.id.submit)).perform(scrollTo(),click());
         u = new User(Authentication.getInstance().getUid());
     }
 
