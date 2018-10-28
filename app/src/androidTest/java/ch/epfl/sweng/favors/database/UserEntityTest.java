@@ -72,9 +72,10 @@ public class UserEntityTest {
 
         FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
             u.set(User.StringFields.firstName, newFirstName);
-            FakeDatabase.getInstance().updateOnDb(u);
-            assertEquals(newFirstName, u.get(User.StringFields.firstName));
         });
+
+        FakeDatabase.getInstance().updateOnDb(u);
+        assertEquals(newFirstName, u.get(User.StringFields.firstName));
 
         //Reset basic user info for other tests
         u.set(User.StringFields.firstName, FAKE_FIRST_NAME);
@@ -87,9 +88,11 @@ public class UserEntityTest {
 
         FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
             u.set(User.StringFields.lastName, newLastName);
-            FakeDatabase.getInstance().updateOnDb(u);
-            assertEquals(newLastName, u.get(User.StringFields.lastName));
+
         });
+
+        FakeDatabase.getInstance().updateOnDb(u);
+        assertEquals(newLastName, u.get(User.StringFields.lastName));
 
         //Reset basic user info for other tests
         u.set(User.StringFields.lastName, FAKE_LAST_NAME);
@@ -102,9 +105,11 @@ public class UserEntityTest {
 
         FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
             u.set(User.StringFields.email, newEmail);
-            FakeDatabase.getInstance().updateOnDb(u);
-            assertEquals(newEmail, u.get(User.StringFields.email));
+
         });
+
+        FakeDatabase.getInstance().updateOnDb(u);
+        assertEquals(newEmail, u.get(User.StringFields.email));
 
         //Reset basic user info for other tests
         u.set(User.StringFields.email, FAKE_EMAIL);
