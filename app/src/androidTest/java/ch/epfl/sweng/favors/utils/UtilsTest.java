@@ -5,22 +5,15 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-
-import ch.epfl.sweng.favors.utils.ExecutionMode;
-import ch.epfl.sweng.favors.utils.TestActivity;
-import ch.epfl.sweng.favors.utils.Utils;
 
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
-    @Mock private FirebaseAuth fakeAuth;
 
     @Before
     public void Before() {
@@ -143,7 +136,5 @@ public class UtilsTest {
 
         Utils.displayToastOnTaskCompletion(Tasks.forCanceled(),activityActivityTestRule.getActivity(),"success","failure");
     }
-
-
 
 }
