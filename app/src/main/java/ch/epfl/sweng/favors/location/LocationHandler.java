@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.main.FavorsMain;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
  * Owns all request and management facilities related to location
@@ -109,13 +109,6 @@ public class LocationHandler {
         else updateLocation();
     }
 
-    /**
-     * Get Location
-     * Helper method for obtaining a location
-     * adds a listener to LocationClient and if there is no location invokes a callback
-     * @param callback for Location
-     * @return the location value that was obtained (value can be ignored)
-     */
     public void updateLocation() {
         if(checkPermission()) {
             mFusedLocationClient.getLastLocation().addOnSuccessListener( l -> {

@@ -1,21 +1,16 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
-import ch.epfl.sweng.favors.main.FavorsMain;
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
@@ -97,7 +92,6 @@ public class FakeDatabase extends Database{
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
-
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");

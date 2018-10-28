@@ -17,5 +17,4 @@ public final class InterestRequest extends Request{
         return db.getAll(Interest.class, COLLECTION, limit, orderBy);
     }
 
-
 }

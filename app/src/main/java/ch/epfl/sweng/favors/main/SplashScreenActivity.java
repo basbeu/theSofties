@@ -2,8 +2,8 @@ package ch.epfl.sweng.favors.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -22,7 +22,7 @@ public class SplashScreenActivity extends Activity {
         // debug log
         Log.d("version number", versionName);
 
-        // get text view and set the version number in the splash screebn
+        // get text view and set the version number in the splash screen
         TextView textView = findViewById(R.id.versionNumber);
         textView.setText(versionName);
 

@@ -15,7 +15,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
@@ -44,7 +43,6 @@ public class FirebaseDatabase extends Database{
      * Update all data currently in the class maps to the database
      */
     public void updateOnDb(DatabaseEntity databaseEntity){
-        //if(databaseEntity.documentID != null) {
         if(databaseEntity.documentID == null){
             // Do the same here if other types of datas
 
@@ -60,11 +58,7 @@ public class FirebaseDatabase extends Database{
             dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).set(databaseEntity.getEncapsulatedObjectOfMaps())
                     .addOnSuccessListener(aVoid -> updateFromDb(databaseEntity));
         }
-            /* Feedback of an error here - Impossible to update user informations */
-       /* }
-        else{
-            Log.e(TAG, "Trying to update data on an unknown document");
-        }*/
+        /* Feedback of an error here - Impossible to update user informations */
     }
 
     public Task updateFromDb(DatabaseEntity databaseEntity){
@@ -84,9 +78,9 @@ public class FirebaseDatabase extends Database{
 
 
     protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz,
-                                                                              String collection,
-                                                                              Integer limit,
-                                                                              DatabaseStringField orderBy){
+                                                                       String collection,
+                                                                       Integer limit,
+                                                                       DatabaseStringField orderBy){
         ObservableArrayList<T> result = new ObservableArrayList<>();
         Query query = dbFireStore.collection(collection);
         if(orderBy != null){
@@ -100,11 +94,11 @@ public class FirebaseDatabase extends Database{
     }
 
     protected  <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz,
-                                                                               String collection,
-                                                                               DatabaseField element,
-                                                                               String value,
-                                                                               Integer limit,
-                                                                               DatabaseStringField orderBy){
+                                                                         String collection,
+                                                                         DatabaseField element,
+                                                                         String value,
+                                                                         Integer limit,
+                                                                         DatabaseStringField orderBy){
         ObservableArrayList<T> result = new ObservableArrayList<>();
         if(element == null || value == null){return null;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
@@ -118,8 +112,8 @@ public class FirebaseDatabase extends Database{
         return result;
     }
     private  <T extends DatabaseEntity>  void getList(Query query,
-                                                            ObservableArrayList<T> feedbackContainer,
-                                                            Class<T> clazz ){
+                                                      ObservableArrayList<T> feedbackContainer,
+                                                      Class<T> clazz ){
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

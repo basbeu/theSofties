@@ -3,7 +3,6 @@ package ch.epfl.sweng.favors.profile;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Log;
@@ -14,10 +13,9 @@ import android.widget.RadioGroup;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentEditProfileBinding;
-
+import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
 public class EditProfileFragment extends Fragment {
 
@@ -55,8 +53,6 @@ public class EditProfileFragment extends Fragment {
     };
 
     private void displayGender(){
-        //Log.d(TAG, UserGender.getGenderFromUser(User.getMain()).toString());
-
         User.UserGender gender = User.UserGender.getGenderFromUser(user);
         Log.d(TAG,gender.toString());
         switch (gender){
@@ -68,34 +64,31 @@ public class EditProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         Database.getInstance().updateFromDb(user).addOnCompleteListener(t->displayGender());
-         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
-         binding.setElements(this);
-         //Set the RadioGroup buttons to select the current sex
+        Database.getInstance().updateFromDb(user).addOnCompleteListener(t->displayGender());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile,container,false);
+        binding.setElements(this);
 
-         binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
-
-         binding.profLastNameEdit.addTextChangedListener(profLastNameEditWatcher);
-
-         binding.profCityEdit.addTextChangedListener(profCityEditWatcher);
-
-         binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
-             switch (checkedId){
-                 case R.id.profGenderMEdit:
-                     User.UserGender.setGender(user,User.UserGender.M);
-                     break;
-                 case  R.id.profGenderFEdit:
-                     User.UserGender.setGender(user, User.UserGender.F);
-                     break;
-                 default:
-                     Log.e(TAG, "RadioButton clicked for sex change unidentified");
-             }
-         });
-
-         binding.commitChanges.setOnClickListener((v)-> {
-             Database.getInstance().updateOnDb(user);
-                EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
+        //Set the RadioGroup buttons to select the current sex
+        binding.profFirstNameEdit.addTextChangedListener(profFirstNameEditWatcher);
+        binding.profLastNameEdit.addTextChangedListener(profLastNameEditWatcher);
+        binding.profCityEdit.addTextChangedListener(profCityEditWatcher);
+        binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
+            switch (checkedId){
+                case R.id.profGenderMEdit:
+                    User.UserGender.setGender(user,User.UserGender.M);
+                    break;
+                case  R.id.profGenderFEdit:
+                    User.UserGender.setGender(user, User.UserGender.F);
+                    break;
+                default:
+                    Log.e(TAG, "RadioButton clicked for sex change unidentified");
+            }
         });
-         return binding.getRoot();
+
+        binding.commitChanges.setOnClickListener((v)-> {
+            Database.getInstance().updateOnDb(user);
+            EditProfileFragment.this.getActivity().getSupportFragmentManager().popBackStack();
+        });
+        return binding.getRoot();
     }
 }

@@ -1,9 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.util.Log;
-
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
@@ -45,31 +41,4 @@ public class Favor extends DatabaseEntity {
         f.updateLocalData(this.getEncapsulatedObjectOfMaps());
         return f;
     }
-
-    /*public Favor(String id,FirebaseFirestore db){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,id, db);
-/*
-        if(!ExecutionMode.getInstance().isTest()){
-            throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }
-    }*/
-
-    /*@Override
-    public void updateOnDb(){
-        if(documentID == null){
-             // Do the same here if other types of datas
-
-            db.collection(collection).add(getEncapsulatedObjectOfMaps())
-                    .addOnSuccessListener(docRef -> {
-                        documentID = docRef.getId();
-                        updateFromDb();
-                    }).addOnFailureListener(e -> {
-                        Log.d(TAG,"failure to push favor to database");
-                /* Feedback of an error here - Impossible to update user informations
-            });
-        }else{
-            super.updateOnDb();
-        }
-    }*/
 }

@@ -13,21 +13,12 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 
-/*
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link FavorDetailView#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FavorDetailView extends android.support.v4.app.Fragment  {
 
-   // private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
+
+public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     public ObservableField<String> title;
     public ObservableField<String> description;
-   // public ObservableField<Integer> tokenCost;
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -36,30 +27,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String FAVOR_ID = "favorID";
-
     private String currentFavorID;
 
 
     public FavorDetailView() {
         // Required empty public constructor
     }
-
-    /*
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param favorID ID of the favor that will be used to display details about.
-     * @return A new instance of fragment FavorDetailView.
-     */
-    /*
-    public static FavorDetailView newInstance(String favorID) {
-        FavorDetailView fragment = new FavorDetailView();
-        Bundle args = new Bundle();
-        args.putString(FAVOR_ID, favorID);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +49,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 title = newFavor.getObservableObject(Favor.StringFields.title);
                 description = newFavor.getObservableObject(Favor.StringFields.description);
                 //TODO add token cost binding with new database implementation
-                //tokenCost = new ObservableField<>(newFavor.get(Favor.IntegerFields.))
             });
         }
     }
@@ -98,26 +70,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         return binding.getRoot();
     }
 
-
-
     @Override
     public void onDetach() {
         super.onDetach();
         currentFavorID = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    /*public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
 }

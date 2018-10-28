@@ -1,21 +1,12 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableField;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.favors.main.FavorsMain;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
@@ -64,24 +55,14 @@ public abstract class DatabaseEntity {
         this.documentID = documentID;
     }
 
-   /* public DatabaseEntity(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
-                          DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
-                          String collection, String documentID, Database db) {
-        this(stringFieldsValues, intFieldsValues, booleanFieldsValues, objectFieldsValues,collection,documentID);
-        if(!ExecutionMode.getInstance().isTest()){
-            throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }
-        this.db = db;
-    }*/
-
-        /**
-         * Init the map with a null value for every possible object of a specific type
-         *
-         * @param possibleValues An array containing the possible names of this kind of object
-         * @param <T> The field enum type
-         * @param <V> The type of objects
-         * @return An initialised map
-         */
+    /**
+     * Init the map with a null value for every possible object of a specific type
+     *
+     * @param possibleValues An array containing the possible names of this kind of object
+     * @param <T> The field enum type
+     * @param <V> The type of objects
+     * @return An initialised map
+     */
     private <T extends DatabaseField, V> Map<T, ObservableField<V>>  initMap(final T[] possibleValues){
         if(possibleValues == null || possibleValues.length == 0){return null;}
         return new HashMap<T, ObservableField<V>>(){
@@ -93,8 +74,6 @@ public abstract class DatabaseEntity {
 
         };
     }
-
-
 
     /**
      * Return a uniform map with all data to send
@@ -111,8 +90,6 @@ public abstract class DatabaseEntity {
 
         return toSend;
     }
-
-
 
     /**
      * Update local data with a generic content with Objects

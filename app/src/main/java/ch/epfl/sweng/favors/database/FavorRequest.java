@@ -18,6 +18,4 @@ public final class FavorRequest extends Request{
     public static ObservableArrayList<Favor> all(Integer limit, DatabaseStringField orderBy){
         return db.getAll(Favor.class, COLLECTION, limit, orderBy);
     }
-
-
 }

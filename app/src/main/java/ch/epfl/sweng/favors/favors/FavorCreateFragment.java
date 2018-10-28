@@ -1,10 +1,9 @@
 package ch.epfl.sweng.favors.favors;
 
-import android.databinding.ObservableBoolean;
-import android.view.View;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.os.Bundle;
@@ -12,25 +11,25 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.utils.DatePickerFragment;
-import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
+import ch.epfl.sweng.favors.utils.DatePickerFragment;
+import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
 
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
