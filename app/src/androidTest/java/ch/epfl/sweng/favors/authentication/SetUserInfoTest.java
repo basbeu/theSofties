@@ -1,25 +1,19 @@
 package ch.epfl.sweng.favors.authentication;
+
 import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.SetUserInfo;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -27,10 +21,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
-
-import static org.mockito.Mockito.when;
 
 /**
  * Used as container to test fragments in isolation with Espresso
@@ -63,15 +54,13 @@ public class SetUserInfoTest {
         onView(withId(R.id.profGenderFEdit)).perform(click());
         onView(withId(R.id.submit)).perform(click());
         u = new User(Authentication.getInstance().getUid());
-
-
     }
 
-   @Test
+    @Test
     public void userHasCorrectFirstName() {
 
-       Database.getInstance().updateFromDb(u);
-       assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
+        Database.getInstance().updateFromDb(u);
+        assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
     }
     @Test
     public void userHasCorrectLastName() {

@@ -5,13 +5,15 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseEntityTest {

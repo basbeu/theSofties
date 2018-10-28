@@ -2,21 +2,14 @@ package ch.epfl.sweng.favors.favors;
 
 import android.support.test.espresso.matcher.ViewMatchers;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
+import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
-import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -26,7 +19,6 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
@@ -38,19 +30,19 @@ public class FavorDetailViewTest {
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
 
 
-        @Before
-        public void Before(){
-            ExecutionMode.getInstance().setTest(true);
-            FakeDatabase.getInstance().createBasicDatabase();
-        }
+    @Before
+    public void Before(){
+        ExecutionMode.getInstance().setTest(true);
+        FakeDatabase.getInstance().createBasicDatabase();
+    }
 
 
-        @Test
-        public void imInterestedToast(){
-            mFragmentTestRule.launchActivity(null);
-            onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
-            onView(withText("We will inform the poster of the add that you are intrested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-        }
+    @Test
+    public void imInterestedToast(){
+        mFragmentTestRule.launchActivity(null);
+        onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
+        onView(withText("We will inform the poster of the add that you are intrested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
 
     @Test
     public void imageDisplayed(){
@@ -75,7 +67,7 @@ public class FavorDetailViewTest {
     }
 
     @Test
-        public void reportAbusiveAddToast(){
+    public void reportAbusiveAddToast(){
         mFragmentTestRule.launchActivity(null);
 
         try{

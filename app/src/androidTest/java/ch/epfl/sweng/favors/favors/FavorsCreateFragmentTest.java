@@ -7,14 +7,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
-import ch.epfl.sweng.favors.authentication.FakeAuthentication;
+import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
-import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.Favor;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -24,42 +21,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.Matchers.anything;
-
-
-/*@RestrictTo(RestrictTo.Scope.TESTS)
-class SingleFragmentActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FrameLayout content = new FrameLayout(this);
-        content.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        content.setId(R.id.fragment_container);
-        setContentView(content);
-    }
-    public void setFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment, "TEST")
-                .commit();
-    }
-    public void replaceFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment).commit();
-    }
-    public Fragment getFragment() {
-        return getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-    }
-}*/
 
 @RunWith(AndroidJUnit4.class)
 public class FavorsCreateFragmentTest {
 
     @Rule
     public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
-
-    //@Mock Favor favor;
-    //Fragment createFrag = new FavorCreateFragment();
 
     @Before
     public void Before(){
@@ -103,18 +70,5 @@ public class FavorsCreateFragmentTest {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.categoryFavor)).perform(click());
     }
-
-
-    @Test
-    public void allFavorsValidisFalse(){
-
-        //mFragmentTestRule.getFragment().allFavorFieldsValid();
-    }
-
-    @Test
-    public void createFavorIfValidTest(){
-        //mActivityTestRule.getFragment().createFavorIfValid(favor);
-    }
-
 
 }
