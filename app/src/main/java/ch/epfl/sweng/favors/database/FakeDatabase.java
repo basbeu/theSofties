@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -57,7 +58,27 @@ public class FakeDatabase extends Database{
 
     @Override
     protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
-        return new ObservableArrayList<>();
+        ObservableArrayList<T> list = new ObservableArrayList<>();
+        Log.d(TAG, "getAll called : "+ clazz.toString());
+        switch (clazz.toString()){
+            case "class ch.epfl.sweng.favors.database.Interest":
+                Log.d(TAG, "Adding Intrest elements to fake DB");
+               addToList(clazz,(T)database.get("I1"),list);
+               addToList(clazz,(T)database.get("I2"),list);
+               addToList(clazz,(T)database.get("I3"),list);
+        }
+        return list;
+    }
+
+    private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
+        try{
+            T documentObject = clazz.newInstance();
+            documentObject.set(document.documentID, document.getEncapsulatedObjectOfMaps());
+            list.add(documentObject);
+        }
+        catch (Exception e){
+            Log.e(TAG, "Illegal access exception");
+        }
     }
 
     @Override
@@ -116,15 +137,17 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.title, "I am hungry pls hurry");
         f2.set(Favor.StringFields.locationCity, "Tombouctou");
 
-        f1.set(Favor.StringFields.ownerID, "U4");
-        f1.set(Favor.StringFields.category, "Riddle");
-        f1.set(Favor.StringFields.deadline, "12.12.20");
-        f1.set(Favor.StringFields.description, "We're five little items of an everyday sort; you'll find us all in 'a tennis court'");
-        f1.set(Favor.StringFields.title, "TICK TOK");
-        f1.set(Favor.StringFields.locationCity, "Gotham City");
+        f3.set(Favor.StringFields.ownerID, "U4");
+        f3.set(Favor.StringFields.category, "Riddle");
+        f3.set(Favor.StringFields.deadline, "12.12.20");
+        f3.set(Favor.StringFields.description, "We're five little items of an everyday sort; you'll find us all in 'a tennis court'");
+        f3.set(Favor.StringFields.title, "TICK TOK");
+        f3.set(Favor.StringFields.locationCity, "Gotham City");
 
         Interest i1 = new Interest("I1");
         Interest i2 = new Interest("I2");
+        Interest i3 = new Interest("I3");
+
 
         i1.set(Interest.StringFields.title, "DC");
         i1.set(Interest.StringFields.description, "DC Comics");
@@ -132,8 +155,14 @@ public class FakeDatabase extends Database{
         i2.set(Interest.StringFields.title, "MARVEL");
         i2.set(Interest.StringFields.description, "Marvel Comics");
 
+
+        i3.set(Interest.StringFields.title, "SWISS AVIATION");
+        i3.set(Interest.StringFields.description, "Fly to the sky");
+
         getInstance().updateOnDb(i1);
         getInstance().updateOnDb(i2);
+        getInstance().updateOnDb(i3);
+
 
         getInstance().updateOnDb(u1);
         getInstance().updateOnDb(u2);
