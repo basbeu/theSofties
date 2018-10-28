@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import ch.epfl.sweng.favors.authentication.FakeAuthentication;
+import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
@@ -50,17 +53,18 @@ class SingleFragmentActivity extends AppCompatActivity {
 }*/
 
 @RunWith(AndroidJUnit4.class)
-public class FavorsCreateFragmentTest {/*
+public class FavorsCreateFragmentTest {
 
     @Rule
     public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
 
-    @Mock Favor favor;
+    //@Mock Favor favor;
     //Fragment createFrag = new FavorCreateFragment();
 
     @Before
     public void Before(){
-        //
+        ExecutionMode.getInstance().setTest(true);
+        FakeDatabase.getInstance().createBasicDatabase();
     }
 
     @Test
@@ -101,16 +105,16 @@ public class FavorsCreateFragmentTest {/*
     }
 
 
-    /*@Test
+    @Test
     public void allFavorsValidisFalse(){
 
-        mFragmentTestRule.getFragment().allFavorFieldsValid();
-    }*/
+        //mFragmentTestRule.getFragment().allFavorFieldsValid();
+    }
 
-    /*@Test
+    @Test
     public void createFavorIfValidTest(){
         //mActivityTestRule.getFragment().createFavorIfValid(favor);
-    }*/
+    }
 
 
 }

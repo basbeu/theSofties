@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 import ch.epfl.sweng.favors.R;
@@ -30,22 +31,19 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
-public class FavorDetailViewTest {/*
+public class FavorDetailViewTest {
 
     //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
 
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
-        @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-        @Mock private FirebaseUser fbFakeUser;
-        @Mock private FirebaseAuth fakeAuth;
 
         @Before
         public void Before(){
             ExecutionMode.getInstance().setTest(true);
-            User fakeUser = new User(fakeAuth);
-            User.setMain(fakeUser);
+            FakeDatabase.getInstance().createBasicDatabase();
         }
+
 
         @Test
         public void imInterestedToast(){
@@ -90,5 +88,5 @@ public class FavorDetailViewTest {/*
             fail("Can't sleep");
         }
     }
-*/
+
 }

@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.HashMap;
 
+import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
@@ -30,19 +31,9 @@ import static org.mockito.Mockito.when;
 ;
 
 @RunWith(AndroidJUnit4.class)
-public class UserEntityTest {/*
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+public class UserEntityTest {
 
-    @Mock private FirebaseAuth fakeAuth;
-    @Mock private FirebaseFirestore fakeDb;
-    @Mock private CollectionReference fakeCollection;
-    @Mock private DocumentReference fakeDoc;
-    @Mock private DocumentSnapshot fakeDocSnap;
-
-    private Task<DocumentSnapshot> fakeTask;
-    private Task<Void> fakeSetTask;
-    private HashMap<String,Object> data;
+    private User u;
 
     private final String FAKE_UID = "sklfklalsdj";
     private final String FAKE_EMAIL = "thisisatestemail@email.com";
@@ -54,159 +45,146 @@ public class UserEntityTest {/*
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        fakeTask = Tasks.forResult(fakeDocSnap);
-        fakeSetTask = Tasks.forResult((Void)null);
-        data = new HashMap<>();
-        data.put(User.StringFields.firstName.toString(),FAKE_FIRST_NAME);
-        data.put(User.StringFields.lastName.toString(),FAKE_LAST_NAME);
-        data.put(User.StringFields.email.toString(), FAKE_EMAIL);
-        data.put(User.StringFields.sex.toString(), FAKE_SEX);
-        data.put(User.IntegerFields.creationTimeStamp.toString(), FAKE_TIMESTAMP);
-        when(fakeAuth.getUid()).thenReturn(FAKE_UID);
-        when(fakeDb.collection("users")).thenReturn(fakeCollection);
-        when(fakeCollection.document(FAKE_UID)).thenReturn(fakeDoc);
-        when(fakeDoc.get()).thenReturn(fakeTask);
-        when(fakeDoc.set(any())).thenReturn(fakeSetTask);
-        when(fakeDocSnap.getData()).thenReturn(data);
+        FakeDatabase.getInstance().createBasicDatabase();
+
+        u = new User(FAKE_UID);
+        u.set(User.StringFields.firstName, FAKE_FIRST_NAME);
+        u.set(User.StringFields.lastName, FAKE_LAST_NAME);
+        u.set(User.StringFields.email, FAKE_EMAIL);
+        u.set(User.StringFields.city, FAKE_EMAIL);
+        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+        User.UserGender.setGender(u, User.UserGender.M);
+
+        FakeDatabase.getInstance().updateOnDb(u);
     }
 
     @Test
     public void getFirstNameTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, user.get(User.StringFields.firstName)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, u.get(User.StringFields.firstName)));
     }
 
     @Test
     public void getLastNameTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LAST_NAME, user.get(User.StringFields.lastName)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_LAST_NAME, u.get(User.StringFields.lastName)));
     }
 
     @Test
     public void getEmailTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_EMAIL, user.get(User.StringFields.email)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_EMAIL, u.get(User.StringFields.email)));
     }
 
     @Test
     public void getSexTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_SEX, user.get(User.StringFields.sex)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_SEX, u.get(User.StringFields.sex)));
     }
 
     @Test
     public void getGenderTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(User.UserGender.M,User.UserGender.getGenderFromUser(user)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(User.UserGender.M,User.UserGender.getGenderFromUser(u)));
     }
 
     @Test
     public void getTimestampTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, user.get(User.IntegerFields.creationTimeStamp)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, u.get(User.IntegerFields.creationTimeStamp)));
     }
 
     @Test
     public void setFirstNameTest(){
         String newFirstName = "tata";
-        User user = new User(fakeAuth, fakeDb);
 
-        user.updateFromDb().addOnCompleteListener(t->{
-            user.set(User.StringFields.firstName, newFirstName);
-            user.updateOnDb();
-            assertEquals(newFirstName, user.get(User.StringFields.firstName));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
+            u.set(User.StringFields.firstName, newFirstName);
+            FakeDatabase.getInstance().updateOnDb(u);
+            assertEquals(newFirstName, u.get(User.StringFields.firstName));
         });
+
+        //Reset basic user info for other tests
+        u.set(User.StringFields.firstName, FAKE_FIRST_NAME);
+        FakeDatabase.getInstance().updateOnDb(u);
     }
 
     @Test
     public void setLastNameTest(){
         String newLastName = "foofoo";
-        User user = new User(fakeAuth, fakeDb);
 
-        user.updateFromDb().addOnCompleteListener(t->{
-            user.set(User.StringFields.lastName, newLastName);
-            assertEquals(newLastName, user.get(User.StringFields.lastName));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
+            u.set(User.StringFields.lastName, newLastName);
+            FakeDatabase.getInstance().updateOnDb(u);
+            assertEquals(newLastName, u.get(User.StringFields.lastName));
         });
+
+        //Reset basic user info for other tests
+        u.set(User.StringFields.lastName, FAKE_LAST_NAME);
+        FakeDatabase.getInstance().updateOnDb(u);
     }
 
     @Test
     public void setEmailTest(){
         String newEmail = "email@new.com";
-        User user = new User(fakeAuth, fakeDb);
 
-        user.updateFromDb().addOnCompleteListener(t->{
-            user.set(User.StringFields.email, newEmail);
-            assertEquals(newEmail, user.get(User.StringFields.email));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
+            u.set(User.StringFields.email, newEmail);
+            FakeDatabase.getInstance().updateOnDb(u);
+            assertEquals(newEmail, u.get(User.StringFields.email));
         });
+
+        //Reset basic user info for other tests
+        u.set(User.StringFields.email, FAKE_EMAIL);
+        FakeDatabase.getInstance().updateOnDb(u);
     }
 
     @Test
     public void setGenderTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->{
-            User.UserGender.setGender(user, User.UserGender.F);
-            assertEquals(User.UserGender.F,User.UserGender.getGenderFromUser(user));
+
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
+            User.UserGender.setGender(u, User.UserGender.F);
+            assertEquals(User.UserGender.F,User.UserGender.getGenderFromUser(u));
         });
+
+        //Reset basic user info for other tests
+        User.UserGender.setGender(u, User.UserGender.M);
+        FakeDatabase.getInstance().updateOnDb(u);
     }
 
     @Test
     public void setTimestampTest(){
         Integer newTimestamp = 788484;
-        User user = new User(fakeAuth, fakeDb);
 
-        user.updateFromDb().addOnCompleteListener(t->{
-            user.set(User.IntegerFields.creationTimeStamp, newTimestamp);
-            assertEquals(newTimestamp, user.get(User.IntegerFields.creationTimeStamp));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
+            u.set(User.IntegerFields.creationTimeStamp, newTimestamp);
+            FakeDatabase.getInstance().updateOnDb(u);
+            assertEquals(newTimestamp, u.get(User.IntegerFields.creationTimeStamp));
         });
+
+        //Reset basic user info for other tests
+        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+        FakeDatabase.getInstance().updateOnDb(u);
+
     }
 
     @Test
     public void getObservableFirstNameTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, user.getObservableObject(User.StringFields.firstName).get()));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_FIRST_NAME, u.getObservableObject(User.StringFields.firstName).get()));
     }
 
     @Test
     public void getObservableLastNameTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_LAST_NAME, user.getObservableObject(User.StringFields.lastName).get()));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_LAST_NAME, u.getObservableObject(User.StringFields.lastName).get()));
     }
 
     @Test
     public void getObservableEmailTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_EMAIL, user.getObservableObject(User.StringFields.email).get()));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_EMAIL, u.getObservableObject(User.StringFields.email).get()));
     }
 
     @Test
     public void getObservableGenderStringTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t-> assertEquals(User.UserGender.getGenderFromUser(user).toString(),User.UserGender.getObservableGenderString(user).get()));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t-> assertEquals(User.UserGender.getGenderFromUser(u).toString(),User.UserGender.getObservableGenderString(u).get()));
     }
 
     @Test
     public void getObservableTimestampTest(){
-        User user = new User(fakeAuth, fakeDb);
-        user.updateFromDb().addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, user.getObservableObject(User.IntegerFields.creationTimeStamp).get()));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, u.getObservableObject(User.IntegerFields.creationTimeStamp).get()));
     }
 
-
-    @Test(expected = IllegalStateException.class)
-    public void testConstructorTestPurpose1Argument(){
-        ExecutionMode.getInstance().setTest(false);
-        User user = new User(fakeAuth);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testConstructorTestPurpose2Arguments(){
-        ExecutionMode.getInstance().setTest(false);
-        User user = new User(fakeAuth, fakeDb);
-    }
-
-    @Test
-    public void resetMainTest(){
-        User user = new User(fakeAuth, fakeDb);
-        User.setMain(user);
-        user.resetMain();
-    }*/
 }
