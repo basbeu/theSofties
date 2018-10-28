@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.main.LoggedInScreen;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -26,8 +25,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.format;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
