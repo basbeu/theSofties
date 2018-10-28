@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import org.junit.Assert;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.utils.TestActivity;
 
 public class FragmentTestRule<F extends Fragment> extends ActivityTestRule<TestActivity> {
 
