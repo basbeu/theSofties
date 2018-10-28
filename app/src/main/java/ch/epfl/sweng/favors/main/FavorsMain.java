@@ -10,14 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
-import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
-import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
+import ch.epfl.sweng.favors.location.LocationHandler;
 
 
 /**

@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
@@ -78,7 +78,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         }
 
     }
-
 
     @Override
     public FavorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

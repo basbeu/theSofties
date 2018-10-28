@@ -2,24 +2,23 @@ package ch.epfl.sweng.favors.main;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
-import android.support.design.widget.NavigationView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import ch.epfl.sweng.favors.authentication.Authentication;
-import ch.epfl.sweng.favors.favors.FavorsFragment;
-import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.settings.SettingsFragment;
-import ch.epfl.sweng.favors.utils.Utils;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
-
+import ch.epfl.sweng.favors.favors.FavorsFragment;
+import ch.epfl.sweng.favors.profile.ProfileFragment;
+import ch.epfl.sweng.favors.settings.SettingsFragment;
+import ch.epfl.sweng.favors.utils.Utils;
 
 public class LoggedInScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

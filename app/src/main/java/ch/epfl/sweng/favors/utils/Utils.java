@@ -5,15 +5,14 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
-import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.main.FavorsMain;
 
 public class Utils {
     private static final int MAXPASSWORDLEN = 20;

@@ -3,7 +3,6 @@ package ch.epfl.sweng.favors.profile;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,11 +24,7 @@ public class ProfileFragment extends Fragment {
 
     public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
     public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
-    //public /**ObservableField<Location>**/Location city = (Location)User.getMain().get(User.ObjectFields.location);
     public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city);
-    //public ObservableField<Object> location = User.getMain().getObservableObject(User.ObjectFields.location);
-    //new ObservableField<>(city.toString());
-    //public ObservableField<Object> baseCity = User.getMain().getObservableObject(User.ObjectFields.location);
     public ObservableField<String> sex = user.getObservableObject(User.StringFields.sex);
     public ObservableField<String> email = user.getObservableObject(User.StringFields.email);
 
@@ -43,9 +38,9 @@ public class ProfileFragment extends Fragment {
         binding.setElements(this);
 
         binding.editProfileButton.setOnClickListener((v)-> {
-                Fragment fragment = null;
-                fragment = new EditProfileFragment();
-                replaceFragment(fragment);
+            Fragment fragment = null;
+            fragment = new EditProfileFragment();
+            replaceFragment(fragment);
         });
 
         return binding.getRoot();
