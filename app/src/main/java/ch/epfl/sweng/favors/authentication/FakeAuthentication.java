@@ -10,6 +10,10 @@ import com.google.firebase.auth.AuthResult;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
+/**
+ * Singleton class that is a fake authentication for testing purpose
+ */
+
 public class FakeAuthentication extends Authentication {
 
     private static FakeAuthentication auth;
@@ -24,9 +28,12 @@ public class FakeAuthentication extends Authentication {
 
     }
 
+    /**
+     * @return FakeAuthentication the fake authentication for the current session
+     */
     public static FakeAuthentication getInstance(){
         if(auth == null){
-           auth = new FakeAuthentication();
+            auth = new FakeAuthentication();
         }
 
         return auth;

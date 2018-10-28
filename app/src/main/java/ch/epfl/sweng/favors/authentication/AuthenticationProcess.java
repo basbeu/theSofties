@@ -17,19 +17,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.utils.TextWatcherCustom;
-import ch.epfl.sweng.favors.utils.Utils;
+import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.main.LoggedInScreen;
-import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
-
-
+import ch.epfl.sweng.favors.utils.ExecutionMode;
+import ch.epfl.sweng.favors.utils.TextWatcherCustom;
+import ch.epfl.sweng.favors.utils.Utils;
 
 public class AuthenticationProcess extends Activity {
 
@@ -98,8 +93,6 @@ public class AuthenticationProcess extends Activity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        //FirebaseUser currentUser = mAuth.getCurrentUser();
-        //if(currentUser != null && mAuth.getCurrentUser().isEmailVerified()){
         if(mAuth.isEmailVerified()){
             headerText.set("You're already logged in");
         }
@@ -109,10 +102,7 @@ public class AuthenticationProcess extends Activity {
         if (task.isSuccessful()) {
 
             Log.d(TAG, "createUserWithEmail:success");
-            /*final FirebaseUser user = mAuth.getCurrentUser();
-            sendConfirmationMail(user);
-            confirmationSent();
-*/
+
             sendConfirmationMail();
             confirmationSent();
         } else {
@@ -127,7 +117,6 @@ public class AuthenticationProcess extends Activity {
             Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
-                //User.getMain().updateUser();
                 loggedinView(action);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -137,12 +126,6 @@ public class AuthenticationProcess extends Activity {
     };
 
     private void sendConfirmationMail(){
-        /*user.sendEmailVerification()
-                .addOnCompleteListener(AuthenticationProcess.this, task-> {
-                    // Re-enable button
-                    findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
-                    Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this, "Verification email sent to " + user.getEmail(),"Failed to send verification email.");
-                });*/
 
         mAuth.sendEmailVerification().addOnCompleteListener(AuthenticationProcess.this, task-> {
             // Re-enable button
@@ -156,10 +139,6 @@ public class AuthenticationProcess extends Activity {
         super.onCreate(savedInstanceState);
         if(!ExecutionMode.getInstance().isTest()) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-            /*mAuth = FirebaseAuth.getInstance();
-        }else{
-            mAuth = User.getMain().getInstance();
-        }*/
         }
         Log.d("TestMode", ExecutionMode.getInstance().isTest() ? "true" : "false");
         mAuth = Authentication.getInstance();

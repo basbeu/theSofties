@@ -5,6 +5,9 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Singleton class that represents the authentication with Firebase
+ */
 public class FirebaseAuthentication extends Authentication{
     private static FirebaseAuthentication auth;
     private FirebaseAuth firebaseAuth;
@@ -13,6 +16,9 @@ public class FirebaseAuthentication extends Authentication{
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * @return FirebaseAuthentication the instance of authentication for the current session
+     */
     public static FirebaseAuthentication getInstance(){
         if(auth == null){
             auth = new FirebaseAuthentication();

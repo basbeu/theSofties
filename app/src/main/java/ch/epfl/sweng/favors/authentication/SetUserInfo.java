@@ -3,23 +3,19 @@ package ch.epfl.sweng.favors.authentication;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
 import android.widget.RadioGroup;
 
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.utils.TextWatcherCustom;
-import ch.epfl.sweng.favors.main.FavorsMain;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
+import ch.epfl.sweng.favors.main.FavorsMain;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
+import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
 public class SetUserInfo extends AppCompatActivity {
 
@@ -61,8 +57,6 @@ public class SetUserInfo extends AppCompatActivity {
         if(getIntent().hasExtra(FavorsMain.TEST_MODE)){
             ExecutionMode.getInstance().setTest(true);
         }
-        /*if(!ExecutionMode.getInstance().isTest())
-            User.getMain().updateUser();*/
         user.set(User.StringFields.email, Authentication.getInstance().getEmail());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
@@ -104,13 +98,6 @@ public class SetUserInfo extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            user.delete();
-        }else {
-            Log.e(TAG, "Failled to delete account that didin't finish registration");
-        }*/
-
         Authentication.getInstance().delete();
         Authentication.getInstance().signOut();
         Intent intent = new Intent(this, FavorsMain.class);
