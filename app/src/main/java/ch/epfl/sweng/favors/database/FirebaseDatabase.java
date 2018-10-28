@@ -32,6 +32,9 @@ public class FirebaseDatabase extends Database{
     }
 
 
+    /**
+     * @return The current FirebaseDatabase or a new one if not yet instantiated
+     */
     public static FirebaseDatabase getInstance(){
         if(db == null){
             db = new FirebaseDatabase();
@@ -39,9 +42,8 @@ public class FirebaseDatabase extends Database{
 
         return db;
     }
-    /**
-     * Update all data currently in the class maps to the database
-     */
+
+    @Override
     public void updateOnDb(DatabaseEntity databaseEntity){
         if(databaseEntity.documentID == null){
             // Do the same here if other types of datas
@@ -61,6 +63,7 @@ public class FirebaseDatabase extends Database{
         /* Feedback of an error here - Impossible to update user informations */
     }
 
+    @Override
     public Task updateFromDb(DatabaseEntity databaseEntity){
         if(databaseEntity.documentID == null){return Tasks.forCanceled();}
         return dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID)
@@ -76,7 +79,7 @@ public class FirebaseDatabase extends Database{
 
     }
 
-
+    @Override
     protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz,
                                                                        String collection,
                                                                        Integer limit,
@@ -93,6 +96,7 @@ public class FirebaseDatabase extends Database{
         return result;
     }
 
+    @Override
     protected  <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz,
                                                                          String collection,
                                                                          DatabaseField element,
@@ -111,6 +115,14 @@ public class FirebaseDatabase extends Database{
         getList(query, result, clazz);
         return result;
     }
+
+    /**
+     *
+     * @param query
+     * @param feedbackContainer
+     * @param clazz
+     * @param <T>
+     */
     private  <T extends DatabaseEntity>  void getList(Query query,
                                                       ObservableArrayList<T> feedbackContainer,
                                                       Class<T> clazz ){

@@ -24,9 +24,11 @@ public class FakeDatabase extends Database{
 
     private FakeDatabase(){
         database = new HashMap<>();
-        //createBasicDatabase();
     }
 
+    /**
+     * @return The current FakeDatabase or a new one if not yet instantiated
+     */
     public static FakeDatabase getInstance(){
         if(db == null){
             db = new FakeDatabase();
@@ -63,6 +65,9 @@ public class FakeDatabase extends Database{
         return new ObservableArrayList<>();
     }
 
+    /**
+     * Fills the FakeDatabase with a few users and favors
+     */
     public void createBasicDatabase(){
         User u1 = new User("U1");
         User u2 = new User("U2");
