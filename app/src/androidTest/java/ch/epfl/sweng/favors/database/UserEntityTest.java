@@ -30,7 +30,6 @@ import static org.mockito.Mockito.when;
 
 ;
 
-@RunWith(AndroidJUnit4.class)
 public class UserEntityTest {
 
     private User u;

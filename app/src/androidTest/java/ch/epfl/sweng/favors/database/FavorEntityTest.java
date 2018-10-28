@@ -1,5 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
@@ -10,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -26,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class FavorEntityTest {/*
+public class FavorEntityTest {
 
 
     private Favor f;
@@ -42,53 +45,60 @@ public class FavorEntityTest {/*
     public void Before() {
         ExecutionMode.getInstance().setTest(true);
         f = new Favor(FAKE_DOC_ID);
+
+        f.set(Favor.StringFields.ownerID, FAKE_OWNER_ID);
+        f.set(Favor.StringFields.description, FAKE_DESCRIPTION);
+        f.set(Favor.StringFields.title, FAKE_TITLE);
+        f.set(Favor.StringFields.locationCity, FAKE_LOCATION_CITY);
+        f.set(Favor.BooleanFields.isOpen, FAKE_IS_OPEN);
+        f.set(Favor.ObjectFields.location, FAKE_LOCATION_OBJECT);
+
+        FakeDatabase.getInstance().updateOnDb(f);
     }
 
     @Test
     public void getTitleTest(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_TITLE, favor.get(Favor.StringFields.title)));
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_TITLE, f.get(Favor.StringFields.title)));
     }
 
     @Test
     public void getOwnerIdTest(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_OWNER_ID, favor.get(Favor.StringFields.ownerID)));
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_OWNER_ID, f.get(Favor.StringFields.ownerID)));
     }
 
     @Test
     public void getDescriptionTest(){;
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_DESCRIPTION, favor.get(Favor.StringFields.description)));
+
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_DESCRIPTION, f.get(Favor.StringFields.description)));
     }
 
     @Test
     public void getLocationCityTest(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_LOCATION_CITY, favor.get(Favor.StringFields.locationCity)));
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_LOCATION_CITY, f.get(Favor.StringFields.locationCity)));
     }
 
     @Test
     public void getObjectLocationTest(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_LOCATION_OBJECT, favor.get(Favor.ObjectFields.location)));
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_LOCATION_OBJECT, f.get(Favor.ObjectFields.location)));
     }
 
     @Test
     public void getIsOpenTest(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_IS_OPEN, favor.get(Favor.BooleanFields.isOpen)));
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_IS_OPEN, f.get(Favor.BooleanFields.isOpen)));
     }
 
     @Test
     public void setIsOpenTest(){
         Boolean newIsOpen = false;
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->{
-            favor.set(Favor.BooleanFields.isOpen,newIsOpen);
-            Database.getInstance().updateOnDb(favor);
-            assertEquals(newIsOpen, favor.get(Favor.BooleanFields.isOpen));
+
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->{
+            f.set(Favor.BooleanFields.isOpen,newIsOpen);
+            Database.getInstance().updateOnDb(f);
+            assertEquals(newIsOpen, f.get(Favor.BooleanFields.isOpen));
         });
+
+        //Set original data for other tests
+        f.set(Favor.BooleanFields.isOpen, FAKE_IS_OPEN);
     }
 
     @Test
@@ -105,12 +115,15 @@ public class FavorEntityTest {/*
     @Test
     public void setObjectLocationTest(){
         Object newObject = new Object();
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->{
-            favor.set(Favor.ObjectFields.location,newObject);
-            Database.getInstance().updateOnDb(favor);
-            assertEquals(newObject, favor.get(Favor.ObjectFields.location));
+
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->{
+            f.set(Favor.ObjectFields.location,newObject);
+            Database.getInstance().updateOnDb(f);
+            assertEquals(newObject, f.get(Favor.ObjectFields.location));
         });
+
+        //Set original data for other tests
+        f.set(Favor.ObjectFields.location, FAKE_LOCATION_OBJECT);
     }
 
     @Test
@@ -121,25 +134,13 @@ public class FavorEntityTest {/*
 
     @Test
     public void getObservableIsOpenTest(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_IS_OPEN, favor.getObservableObject(Favor.BooleanFields.isOpen).get()));
+
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_IS_OPEN, f.getObservableObject(Favor.BooleanFields.isOpen).get()));
     }
 
-
-    @Test
-    public void getFailed(){
-        HashMap<String,Object> empty = new HashMap();
-        Favor f = new Favor(FAKE_DOC_ID);
-        f.set(FAKE_DOC_ID, data);
-        f.get(Favor.StringFields.title);
-        f.get(Favor.ObjectFields.location);
-        f.get(Favor.BooleanFields.isOpen);
-        f.get(Favor.IntegerFields.creationTimestamp);
-    }
 
     @Test
     public void getObservableLocationObject(){
-        Favor favor = new Favor(FAKE_DOC_ID);
-        Database.getInstance().updateFromDb(favor).addOnCompleteListener(t->assertEquals(FAKE_LOCATION_OBJECT, favor.getObservableObject(Favor.ObjectFields.location).get()));
-    }*/
+        Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_LOCATION_OBJECT, f.getObservableObject(Favor.ObjectFields.location).get()));
+    }
 }
