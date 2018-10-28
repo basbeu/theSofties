@@ -42,7 +42,7 @@ public class ConfirmationSentTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        FakeDatabase.getInstance().createBasicDatabase();
+        //FakeDatabase.getInstance().createBasicDatabase();
     }
 
     @Test
