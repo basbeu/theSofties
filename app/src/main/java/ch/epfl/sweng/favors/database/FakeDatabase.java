@@ -100,6 +100,7 @@ public class FakeDatabase extends Database{
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
+        Favor f3 = new Favor("F3");
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");
@@ -115,6 +116,25 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.title, "I am hungry pls hurry");
         f2.set(Favor.StringFields.locationCity, "Tombouctou");
 
+        f1.set(Favor.StringFields.ownerID, "U4");
+        f1.set(Favor.StringFields.category, "Riddle");
+        f1.set(Favor.StringFields.deadline, "12.12.20");
+        f1.set(Favor.StringFields.description, "We're five little items of an everyday sort; you'll find us all in 'a tennis court'");
+        f1.set(Favor.StringFields.title, "TICK TOK");
+        f1.set(Favor.StringFields.locationCity, "Gotham City");
+
+        Interest i1 = new Interest("I1");
+        Interest i2 = new Interest("I2");
+
+        i1.set(Interest.StringFields.title, "DC");
+        i1.set(Interest.StringFields.description, "DC Comics");
+
+        i2.set(Interest.StringFields.title, "MARVEL");
+        i2.set(Interest.StringFields.description, "Marvel Comics");
+
+        getInstance().updateOnDb(i1);
+        getInstance().updateOnDb(i2);
+
         getInstance().updateOnDb(u1);
         getInstance().updateOnDb(u2);
         getInstance().updateOnDb(u3);
@@ -122,5 +142,6 @@ public class FakeDatabase extends Database{
 
         getInstance().updateOnDb(f1);
         getInstance().updateOnDb(f2);
+        getInstance().updateOnDb(f3);
     }
 }
