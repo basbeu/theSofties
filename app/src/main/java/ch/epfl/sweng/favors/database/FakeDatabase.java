@@ -21,6 +21,7 @@ import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
  */
 public class FakeDatabase extends Database{
 
+    public static final String LAST_FAVOR_TITLE = "Unify String Theroy";
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
 
@@ -67,10 +68,16 @@ public class FakeDatabase extends Database{
                 Log.d(TAG, "getAll called : "+ clazz.toString());
                 switch (clazz.toString()){
                     case "class ch.epfl.sweng.favors.database.Interest":
-                        Log.d(TAG, "Adding Intrest elements to fake DB");
+                        Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
                         addToList(clazz,(T)database.get("I1"),list);
                         addToList(clazz,(T)database.get("I2"),list);
                         addToList(clazz,(T)database.get("I3"),list);
+                        break;
+                    case "class ch.epfl.sweng.favors.database.Favor":
+                        Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
+                        addToList(clazz,(T)database.get("F1"),list);
+                        addToList(clazz,(T)database.get("F2"),list);
+                        addToList(clazz,(T)database.get("F3"),list);
                 }
             },500);
         return list;
@@ -128,6 +135,9 @@ public class FakeDatabase extends Database{
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
         Favor f3 = new Favor("F3");
+        Favor f4 = new Favor("F4");
+        Favor f5 = new Favor("F5");
+        Favor f6 = new Favor("F6");
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");
@@ -143,12 +153,19 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.title, "I am hungry pls hurry");
         f2.set(Favor.StringFields.locationCity, "Tombouctou");
 
-        f3.set(Favor.StringFields.ownerID, "U4");
+        f3.set(Favor.StringFields.ownerID, "U3");
         f3.set(Favor.StringFields.category, "Riddle");
         f3.set(Favor.StringFields.deadline, "12.12.20");
         f3.set(Favor.StringFields.description, "We're five little items of an everyday sort; you'll find us all in 'a tennis court'");
         f3.set(Favor.StringFields.title, "TICK TOK");
         f3.set(Favor.StringFields.locationCity, "Gotham City");
+
+        f4.set(Favor.StringFields.ownerID, "U3");
+        f4.set(Favor.StringFields.category, "Homework");
+        f4.set(Favor.StringFields.deadline, "12.12.20");
+        f4.set(Favor.StringFields.description, "A bit of help with physics");
+        f4.set(Favor.StringFields.title, "Unify String Theroy");
+        f4.set(Favor.StringFields.locationCity, "Caltech");
 
         Interest i1 = new Interest("I1");
         Interest i2 = new Interest("I2");
@@ -178,5 +195,6 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(f1);
         getInstance().updateOnDb(f2);
         getInstance().updateOnDb(f3);
+        getInstance().updateOnDb(f4);
     }
 }
