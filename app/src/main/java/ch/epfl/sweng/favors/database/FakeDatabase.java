@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -59,14 +60,19 @@ public class FakeDatabase extends Database{
     @Override
     protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
         ObservableArrayList<T> list = new ObservableArrayList<>();
-        Log.d(TAG, "getAll called : "+ clazz.toString());
-        switch (clazz.toString()){
-            case "class ch.epfl.sweng.favors.database.Interest":
-                Log.d(TAG, "Adding Intrest elements to fake DB");
-               addToList(clazz,(T)database.get("I1"),list);
-               addToList(clazz,(T)database.get("I2"),list);
-               addToList(clazz,(T)database.get("I3"),list);
-        }
+
+
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+                Log.d(TAG, "getAll called : "+ clazz.toString());
+                switch (clazz.toString()){
+                    case "class ch.epfl.sweng.favors.database.Interest":
+                        Log.d(TAG, "Adding Intrest elements to fake DB");
+                        addToList(clazz,(T)database.get("I1"),list);
+                        addToList(clazz,(T)database.get("I2"),list);
+                        addToList(clazz,(T)database.get("I3"),list);
+                }
+            },500);
         return list;
     }
 

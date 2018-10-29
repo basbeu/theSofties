@@ -56,7 +56,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
             newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
             newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-            newFavor.set(Favor.StringFields.category, ExecutionMode.getInstance().isTest()? "TEST":binding.categoryFavor.getSelectedItem().toString());
+            newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
             Database.getInstance().updateOnDb(newFavor);
