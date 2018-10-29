@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
@@ -98,14 +99,15 @@ public class LocationHandler {
         lastLocation = l;
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
-
+        User.setLocation(locationPoint.get());
+        Log.d("location", "code:1000 - successfully obtained location of user - recurrent: " + recurrent);
         return true;
     }
 
     private String getReadableLocation(GeoPoint geoPoint){
 
         if (geoPoint == null) {
-            Log.e(TAG, "Location geopoint don't have any content");
+            Log.e(TAG, "Location geopoint does not have any content");
             return "Not available";
         }
         if(!ExecutionMode.getInstance().isTest()) {
