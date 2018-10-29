@@ -41,7 +41,7 @@ public class LocationHandler {
     public ObservableField<String> locationCity = new ObservableField<>();
     public ObservableField<GeoPoint> locationPoint = new ObservableField<>();
 
-    protected static ch.epfl.sweng.favors.location.Location location = ch.epfl.sweng.favors.location.Location.getInstance();
+    protected ch.epfl.sweng.favors.location.Location location = ch.epfl.sweng.favors.location.Location.getInstance();
 
     private boolean recurrent = false;
 

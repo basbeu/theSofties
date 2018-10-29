@@ -11,6 +11,17 @@ import java.util.Map;
 
 public class FakeLocationClient extends Location{
 
+    public static FakeLocationClient getInstance(){
+        if(location == null){
+            location = new FakeLocationClient();
+        }
+
+        return location;
+    }
+
+    public static FakeLocationClient location = null;
+
+
     public FakeLocationClient(){}
 
     public void removeLocationUpdates(){

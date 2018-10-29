@@ -21,9 +21,20 @@ public class FusedLocationClient extends Location{
 
     private FusedLocationProviderClient mFusedLocationClient;
 
+    public static FusedLocationClient location = null;
+
+
     public FusedLocationClient(){
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(FavorsMain.getContext());
         requestPermission();
+    }
+
+    public static FusedLocationClient getInstance(){
+        if(location == null){
+            location = new FusedLocationClient();
+        }
+
+        return location;
     }
 
     /**

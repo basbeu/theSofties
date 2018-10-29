@@ -16,6 +16,7 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.FavorsFragment;
+import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.settings.SettingsFragment;
 import ch.epfl.sweng.favors.utils.Utils;
@@ -25,7 +26,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     private User user = new User();
     public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
     public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> email = user.getObservableObject(User.StringFields.email);
+    public ObservableField<String> location = LocationHandler.getHandler().locationCity;
 
     ActivityLoggedInScreenBinding binding;
     NavHeaderBinding headerBinding;
