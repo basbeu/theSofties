@@ -5,6 +5,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
+import android.view.View;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,15 +23,18 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class AuthentificationProcessTest {
 
     private UiDevice device;
-
 
     @Before
     public void Before(){
@@ -115,4 +119,11 @@ public class AuthentificationProcessTest {
 
     }
 
+    @Test
+    public void backButtonGoesToMain() {
+        ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
+        activityActivityTestRule.launchActivity(null);
+        activityActivityTestRule.getActivity().onBackPressed();
+        onView(withId(R.id.welcomeMessageText)).check(matches(isDisplayed()));
+    }
 }
