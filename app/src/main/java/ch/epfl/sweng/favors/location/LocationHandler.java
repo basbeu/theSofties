@@ -34,8 +34,18 @@ public class LocationHandler {
     private static final String TAG = "LOCATION_HANDLER";
 
     private static LocationHandler handler = new LocationHandler(true);
+    private static LocationHandler handlerNonRec = new LocationHandler(false);
     public static LocationHandler getHandler(){
         return handler;
+    }
+
+    // overload getHandler in order to provide method to get non recurrent handler
+    public static LocationHandler getHandler(Boolean recurrent){
+        if(recurrent) {
+            return handler;
+        } else {
+            return handlerNonRec;
+        }
     }
 
     private Location lastLocation;
@@ -100,6 +110,7 @@ public class LocationHandler {
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
         User.setLocation(locationPoint.get());
+//        User.setCity(locationCity.get());
         Log.d("location", "code:1000 - successfully obtained location of user - recurrent: " + recurrent);
         return true;
     }
