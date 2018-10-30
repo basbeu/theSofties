@@ -19,6 +19,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     public ObservableField<String> title;
     public ObservableField<String> description;
+    public ObservableField<String> location;
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -43,11 +44,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             localFavor = new Favor(currentFavorID);
             title = localFavor.getObservableObject(Favor.StringFields.title);
             description = localFavor.getObservableObject(Favor.StringFields.description);
+            location = localFavor.getObservableObject(Favor.StringFields.locationCity);
         }
         else {
             model.getFavor().observe(this, newFavor -> {
                 title = newFavor.getObservableObject(Favor.StringFields.title);
                 description = newFavor.getObservableObject(Favor.StringFields.description);
+                location = newFavor.getObservableObject(Favor.StringFields.locationCity);
                 //TODO add token cost binding with new database implementation
             });
         }

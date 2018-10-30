@@ -28,6 +28,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
+import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
@@ -43,7 +44,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
 
-
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
     }
@@ -58,6 +58,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
             newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
+            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
             Database.getInstance().updateOnDb(newFavor);
             sharedViewFavor.select(newFavor);
@@ -152,6 +153,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
+
     }
     //*************************END OF TEST  *******************
 
@@ -189,6 +191,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.locationFavor.addTextChangedListener(locationFavorTextWatcher);
+//        TextView locationFavor = itemView.findViewById(R.id.locationFavor);
+
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
 

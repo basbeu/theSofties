@@ -110,7 +110,8 @@ public class LocationHandler {
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
         User.setLocation(locationPoint.get());
-//        User.setCity(locationCity.get());
+        // if desired the user city can automatically be updated every time location changes
+        // User.setCity(locationCity.get());
         Log.d("location", "code:1000 - successfully obtained location of user - recurrent: " + recurrent);
         return true;
     }

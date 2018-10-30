@@ -54,7 +54,11 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             if(favor.get(Favor.IntegerFields.creationTimestamp) != null)
                 timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
             if(favor.get(Favor.StringFields.description) != null)
-                description.setText(favor.get(Favor.StringFields.description));
+                description.setText(favor.get(Favor.StringFields.locationCity));
+            if(favor.get(Favor.StringFields.locationCity) != null)
+                location.setText(favor.get(Favor.StringFields.description));
+//            if(favor.get(Favor.ObjectFields.location) != null)
+//                location.setText(favor.get(Favor.ObjectFields.location).toString());
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
     }
