@@ -75,8 +75,11 @@ public class LocationHandler {
         float distance = distanceTo(geo);
         String output;
         int switchToMeters = 2500;
+        int switchToInt = 100000;
         if (distance == Float.MAX_VALUE) {
             return "There is no Location";
+        } else if (distance > switchToInt) {
+            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + "skm";
         } else if (distance > switchToMeters) {
             output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + "km";
         } else {

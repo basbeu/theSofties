@@ -183,7 +183,7 @@ public class UtilsTest {
 
     @Test
     public void datePickerDate(){
-        Date d = Utils.getDateFromDatePicker(7,8,1961);
+        Date d = Utils.getDateFromDatePicker(7,8,4000);
         String f = Utils.getFavorDate(d);
         assertEquals("7.Sep", f);
     }

@@ -119,7 +119,7 @@ public class Utils {
     }
 
     public static String getFullDate(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat("dd.MM.YYYY", Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return df.format(date);
     }
 
