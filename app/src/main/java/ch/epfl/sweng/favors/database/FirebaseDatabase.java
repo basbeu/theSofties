@@ -25,12 +25,15 @@ import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 public class FirebaseDatabase extends Database{
 
     private static FirebaseDatabase db = null;
-    private FirebaseFirestore dbFireStore = null;
+    private static FirebaseFirestore dbFireStore = null;
 
     private FirebaseDatabase(){
         dbFireStore = FirebaseFirestore.getInstance();
     }
 
+    public static void setFirebaseTest(FirebaseFirestore newFireStore) {
+        dbFireStore = newFireStore;
+    }
 
     /**
      * @return The current FirebaseDatabase or a new one if not yet instantiated
