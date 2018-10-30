@@ -161,8 +161,15 @@ public class UtilsTest {
     }
 
     @Test
-    public void favorFormat(){
+    public void favorFormatDate(){
         Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFavorDate(d);
+        assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void datePickerDate(){
+        Date d = Utils.getDateFromDatePicker(7,8,1961);
         String f = Utils.getFavorDate(d);
         assertEquals("7.Sep", f);
     }

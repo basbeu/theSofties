@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -119,5 +120,19 @@ public class Utils {
     public static String getFavorDate(Date date) {
         SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
         return df.format(date);
+    }
+
+    /**
+     * get Date from Datepicker
+     * @param day
+     * @param month
+     * @param year
+     * @return
+     */
+    public static Date getDateFromDatePicker(int day, int month, int year){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        return calendar.getTime();
     }
 }

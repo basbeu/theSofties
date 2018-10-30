@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
 
+    private DatePickerFragment date = new DatePickerFragment();
+
     public ObservableBoolean titleValid = new ObservableBoolean(false);
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
@@ -64,8 +67,11 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
             newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+
             newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+            Log.d("Database: Favor", "Favor pushed to database");
             Database.getInstance().updateOnDb(newFavor);
             sharedViewFavor.select(newFavor);
             launchToast("Favor created successfully");
@@ -222,7 +228,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
 
     private void showDatePicker() {
-        DatePickerFragment date = new DatePickerFragment();
         /**
          * Set Up Current Date Into dialog
          */
