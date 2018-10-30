@@ -34,4 +34,9 @@ public class DatePickerFragment extends DialogFragment {
     public Date getDate() {
         return date;
     }
+
+    public void setDate(int day, int month, int year) {
+        date = Utils.getDateFromDatePicker(day, month, year);
+    }
+
 }

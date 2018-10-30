@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
@@ -117,7 +118,24 @@ public class Utils {
         return Integer.toString(day);
     }
 
+    public static String getFullDate(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.YYYY", Locale.getDefault());
+        return df.format(date);
+    }
+
+    final static long DAYS = 864000000; // mili
+    final static long DAY = 86400000;
+
     public static String getFavorDate(Date date) {
+        Date today = new Date();
+        long difference = date.getTime()-today.getTime();
+        if(date.before(today)) {
+            return "expired";
+        } else if (getFullDate(date).equals(getFullDate(today))) {
+            return "today";
+        } else if (difference < DAYS) {
+            return difference/DAY + " days";
+        }
         SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
         return df.format(date);
     }

@@ -246,6 +246,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> {
         TextView textView = binding.deadlineFavor;
+        date.setDate(dayOfMonth, monthOfYear, year);
         textView.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
                 + "-" + String.valueOf(year));
 

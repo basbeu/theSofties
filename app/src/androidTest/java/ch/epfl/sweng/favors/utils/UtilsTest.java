@@ -164,7 +164,21 @@ public class UtilsTest {
     public void favorFormatDate(){
         Date d = new Date(new Long("1536344819000"));
         String f = Utils.getFavorDate(d);
+        assertEquals("expired", f);
+    }
+
+    @Test
+    public void favorFormatDate2(){
+        Date d = new Date(new Long("153640875500000"));
+        String f = Utils.getFavorDate(d);
         assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void favorFullDate(){
+        Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFullDate(d);
+        assertEquals("07.09.2018", f);
     }
 
     @Test

@@ -54,12 +54,12 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             Favor favor = item;
             if(favor.get(Favor.StringFields.title) != null)
                 title.setText(favor.get(Favor.StringFields.title));
-            if(favor.get(Favor.ObjectFields.creationTimestamp) != null) {
-                Date d = (Date)favor.get(Favor.ObjectFields.creationTimestamp);
+            if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
+                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
                 timestamp.setText(Utils.getFavorDate(d));
 //                if (d != null) { timestamp.setText(Utils.getFavorDate(d)); }
             } else {
-                timestamp.setText("18.Oct");
+                timestamp.setText("--");
             }
             if(favor.get(Favor.StringFields.description) != null)
                 description.setText(favor.get(Favor.StringFields.locationCity));
