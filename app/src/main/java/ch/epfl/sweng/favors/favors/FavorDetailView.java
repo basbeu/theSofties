@@ -24,6 +24,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<String> location;
+    public ObservableField<String> category;
     public ObservableField<Object> geo;
     public ObservableField<String> distance = new ObservableField<>();
 
@@ -52,6 +53,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             localFavor = new Favor(currentFavorID);
             title = localFavor.getObservableObject(Favor.StringFields.title);
             description = localFavor.getObservableObject(Favor.StringFields.description);
+            category = localFavor.getObservableObject(Favor.StringFields.category);
             location = localFavor.getObservableObject(Favor.StringFields.locationCity);
             geo = localFavor.getObservableObject(Favor.ObjectFields.location);
             distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
@@ -61,6 +63,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             model.getFavor().observe(this, newFavor -> {
                 title = newFavor.getObservableObject(Favor.StringFields.title);
                 description = newFavor.getObservableObject(Favor.StringFields.description);
+                category = newFavor.getObservableObject(Favor.StringFields.category);
                 location = newFavor.getObservableObject(Favor.StringFields.locationCity);
                 geo = newFavor.getObservableObject(Favor.ObjectFields.location);
                 distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));

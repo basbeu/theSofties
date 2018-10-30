@@ -35,32 +35,41 @@
     <LinearLayout
         android:id="@+id/locationBlob"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/location"
-            android:layout_width="179dp"
+            android:id="@+id/description"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:text="Location"
+            android:text="Description"
             android:textColor="#000000"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="textEnd" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/location"
+                android:layout_weight="1"
+                android:textAlignment="textEnd" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/locationBlob"
-        android:text="Description"
-        android:textColor="#000000"
-        android:textSize="16dp" />
 </RelativeLayout>

@@ -79,7 +79,7 @@ public class LocationHandler {
         if (distance == Float.MAX_VALUE) {
             return "There is no Location";
         } else if (distance > switchToInt) {
-            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + "skm";
+            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + "km";
         } else if (distance > switchToMeters) {
             output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + "km";
         } else {

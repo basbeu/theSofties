@@ -45,6 +45,13 @@
             android:layout_margin="35sp"
             android:text="@{elements.description}" />
 
+        <TextView
+            android:id="@+id/favCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{elements.category}"
+            android:textAlignment="textEnd" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
