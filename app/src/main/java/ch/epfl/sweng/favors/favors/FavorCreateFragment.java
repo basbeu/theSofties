@@ -28,6 +28,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
+import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -187,6 +188,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         favorDescription = newFavor.getObservableObject(Favor.StringFields.description);
         locationCity = newFavor.getObservableObject(Favor.StringFields.locationCity);
         deadline = newFavor.getObservableObject(Favor.StringFields.deadline);
+
+
+        locationCity.set(LocationHandler.getHandler().locationCity.get());
 
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
