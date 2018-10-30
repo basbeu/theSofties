@@ -15,7 +15,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 @RunWith(AndroidJUnit4.class)
-public class SetingsFragmentTest {
+public class SettingsFragmentTest {
 
     @Rule
     public FragmentTestRule<SettingsFragment> mFragmentTestRule = new FragmentTestRule<>(SettingsFragment.class);

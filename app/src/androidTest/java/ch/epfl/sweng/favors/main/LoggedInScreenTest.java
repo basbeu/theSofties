@@ -88,7 +88,7 @@ public class LoggedInScreenTest {
     }
 
 
-    private static Matcher<View> childAtPosition(
+    public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
         return new TypeSafeMatcher<View>() {
