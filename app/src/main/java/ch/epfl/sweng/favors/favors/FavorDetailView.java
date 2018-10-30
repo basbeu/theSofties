@@ -4,10 +4,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.GeoPoint;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
@@ -20,6 +23,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<String> location;
+    public ObservableField<Object> distance;
+
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -45,12 +50,18 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             title = localFavor.getObservableObject(Favor.StringFields.title);
             description = localFavor.getObservableObject(Favor.StringFields.description);
             location = localFavor.getObservableObject(Favor.StringFields.locationCity);
+//            distance = new ObservableField<>(localFavor.getObservableObject(Favor.ObjectFields.location).get().toString());
+//            distance = new ObservableField<>(localFavor.get(Favor.ObjectFields.location).toString());
+
         }
         else {
             model.getFavor().observe(this, newFavor -> {
                 title = newFavor.getObservableObject(Favor.StringFields.title);
                 description = newFavor.getObservableObject(Favor.StringFields.description);
                 location = newFavor.getObservableObject(Favor.StringFields.locationCity);
+//                Log.d("DebugRemove", localFavor.get(Favor.ObjectFields.location).toString());
+//                distance = new ObservableField<>(localFavor.get(Favor.ObjectFields.location).toString());
+                distance = newFavor.getObservableObject(Favor.ObjectFields.location);
                 //TODO add token cost binding with new database implementation
             });
         }

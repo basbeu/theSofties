@@ -52,11 +52,20 @@
 
             <TextView
                 android:id="@+id/favLocation"
-                android:layout_width="match_parent"
+                android:layout_width="152dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10sp"
                 android:text="@{elements.location}"
                 android:textAlignment="viewStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/favDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:text="@{elements.distance.toString()}"
                 android:textSize="18sp" />
         </LinearLayout>
 
