@@ -59,7 +59,6 @@ public class User extends DatabaseEntity {
      */
     static public void setLocation(@Nonnull GeoPoint geo){
         Database.getInstance().updateFromDb(user);
-        Log.d("DebugInfo", "username: "+user.get(StringFields.lastName)+ " location: "+geo.toString());
         if (user.get(StringFields.lastName) != null
                 && user.get(StringFields.email) != null
                     && user.get(StringFields.sex) != null) {
@@ -68,20 +67,16 @@ public class User extends DatabaseEntity {
         }
     }
 
-    /**
-     * Sets the current city
-     * @param city the city that will be stored in the database
-     */
+//    /**
+//     * Sets the current city
+//     * @param city the city that will be stored in the database
+//     */
 //    static public void setCity(@Nonnull String city){
 //        Database.getInstance().updateFromDb(user);
 //        if (user != null) {
 //            user.set(StringFields.city, city);
 //            Database.getInstance().updateOnDb(user);
 //        }
-//    }
-
-//    static public ObservableField<Object> getObservableLocationObject(@Nonnull User user){
-//        return user.getObservableObject(ObjectFields.location);
 //    }
 
     public enum UserGender {

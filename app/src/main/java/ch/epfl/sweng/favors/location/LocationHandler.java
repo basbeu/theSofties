@@ -78,8 +78,8 @@ public class LocationHandler {
     private LocationRequest locationRequest(){
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10 * 1000); // 60 seconds
-        locationRequest.setFastestInterval(5 * 1000); // 30 seconds
+        locationRequest.setInterval(60 * 1000); // 60 seconds
+        locationRequest.setFastestInterval(30 * 1000); // 30 seconds
         return locationRequest;
     }
 
@@ -112,7 +112,7 @@ public class LocationHandler {
         User.setLocation(locationPoint.get());
         // if desired the user city can automatically be updated every time location changes
         // User.setCity(locationCity.get());
-        Log.d("location", "code:1000 - successfully obtained location of user - recurrent: " + recurrent);
+        Log.d("location", "code:1000 - successfully obtained location of user");
         return true;
     }
 

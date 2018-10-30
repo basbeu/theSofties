@@ -50,8 +50,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             title = localFavor.getObservableObject(Favor.StringFields.title);
             description = localFavor.getObservableObject(Favor.StringFields.description);
             location = localFavor.getObservableObject(Favor.StringFields.locationCity);
-//            distance = new ObservableField<>(localFavor.getObservableObject(Favor.ObjectFields.location).get().toString());
-//            distance = new ObservableField<>(localFavor.get(Favor.ObjectFields.location).toString());
+            distance = localFavor.getObservableObject(Favor.ObjectFields.location);
 
         }
         else {
@@ -59,8 +58,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 title = newFavor.getObservableObject(Favor.StringFields.title);
                 description = newFavor.getObservableObject(Favor.StringFields.description);
                 location = newFavor.getObservableObject(Favor.StringFields.locationCity);
-//                Log.d("DebugRemove", localFavor.get(Favor.ObjectFields.location).toString());
-//                distance = new ObservableField<>(localFavor.get(Favor.ObjectFields.location).toString());
                 distance = newFavor.getObservableObject(Favor.ObjectFields.location);
                 //TODO add token cost binding with new database implementation
             });
