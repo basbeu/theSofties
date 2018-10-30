@@ -129,6 +129,11 @@ public class EditProfileFragmentTest {
 
     }
 
+    @Test
+    public void userHasCorrectGender() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profGenderFEdit)).check(matches(withText(u.get(User.StringFields.sex))));
+    }
 
     @Test
     public void userCanEditGender() {
@@ -143,11 +148,5 @@ public class EditProfileFragmentTest {
             FakeDatabase.getInstance().updateOnDb(u);
         });
 
-    }
-
-    @Test
-    public void userHasCorrectGender() {
-        mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profGenderFEdit)).check(matches(withText(u.get(User.StringFields.sex))));
     }
 }

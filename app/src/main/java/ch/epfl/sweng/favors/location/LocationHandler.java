@@ -51,6 +51,7 @@ public class LocationHandler {
     private Location lastLocation;
     public ObservableField<String> locationCity = new ObservableField<>();
     public ObservableField<GeoPoint> locationPoint = new ObservableField<>();
+    public ObservableField<Location> locationUser = new ObservableField<>();
 
     protected ch.epfl.sweng.favors.location.Location location = ch.epfl.sweng.favors.location.Location.getInstance();
 
@@ -109,6 +110,7 @@ public class LocationHandler {
         lastLocation = l;
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
+        locationUser.set(lastLocation);
         User.setLocation(locationPoint.get());
         // if desired the user city can automatically be updated every time location changes
         // User.setCity(locationCity.get());

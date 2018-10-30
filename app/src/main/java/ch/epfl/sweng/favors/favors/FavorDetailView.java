@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ import com.google.firebase.firestore.GeoPoint;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
-
+import ch.epfl.sweng.favors.location.LocationHandler;
 
 
 public class FavorDetailView extends android.support.v4.app.Fragment  {
@@ -23,8 +24,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<String> location;
-    public ObservableField<Object> distance;
+    public ObservableField<Object> geo;
+    public ObservableField<String> distance = new ObservableField<>();
 
+    private Location favLocation;
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -32,7 +35,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String FAVOR_ID = "favorID";
+    public static final String FAVOR_ID = "favorID";
     private String currentFavorID;
 
 
@@ -50,7 +53,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             title = localFavor.getObservableObject(Favor.StringFields.title);
             description = localFavor.getObservableObject(Favor.StringFields.description);
             location = localFavor.getObservableObject(Favor.StringFields.locationCity);
-            distance = localFavor.getObservableObject(Favor.ObjectFields.location);
+            geo = localFavor.getObservableObject(Favor.ObjectFields.location);
+
+            favLocation = new Location("favor");
+            favLocation.setLatitude(((GeoPoint)geo.get()).getLatitude());
+            favLocation.setLongitude(((GeoPoint)geo.get()).getLongitude());
+
+            Float d = LocationHandler.getHandler().locationUser.get().distanceTo(favLocation);
+            distance.set(d.toString());
 
         }
         else {
@@ -58,7 +68,25 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 title = newFavor.getObservableObject(Favor.StringFields.title);
                 description = newFavor.getObservableObject(Favor.StringFields.description);
                 location = newFavor.getObservableObject(Favor.StringFields.locationCity);
-                distance = newFavor.getObservableObject(Favor.ObjectFields.location);
+                geo = newFavor.getObservableObject(Favor.ObjectFields.location);
+
+                GeoPoint g = (GeoPoint)geo.get();
+                if(g != null) {
+                    favLocation = new Location("favor");
+                    favLocation.setLatitude(((GeoPoint) geo.get()).getLatitude());
+                    favLocation.setLongitude(((GeoPoint) geo.get()).getLongitude());
+                    Log.d("DebugRemove",""+favLocation.getLatitude());
+                }
+
+                Location l = LocationHandler.getHandler().locationUser.get();
+                if(l != null && favLocation != null) {
+                    Log.d("DebugRemove","test User location: "+l.getLatitude());
+                    Float d = l.distanceTo(favLocation)/1000; //km
+                    Log.d("DebugRemove", d.toString());
+                    distance.set(d.toString()+"km away");
+                } else {
+                    distance.set("We don't know");
+                }
                 //TODO add token cost binding with new database implementation
             });
         }
