@@ -6,6 +6,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,5 +87,37 @@ public class Utils {
         auth.signOut();
         context.startActivity(intent);
         User.resetMain();
+    }
+
+    public static String getYear(Date date) {
+//        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        int year  = localDate.getYear();
+//        int month = localDate.getMonthValue();
+//        int day   = localDate.getDayOfMonth();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; //Add one to month {0 - 11}
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return Integer.toString(year);
+    }
+
+    public static String getMonth(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int month = calendar.get(Calendar.MONTH) + 1; //Add one to month {0 - 11}
+        return Integer.toString(month);
+    }
+
+    public static String getDay(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return Integer.toString(day);
+    }
+
+    public static String getFavorDate(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
+        return df.format(date);
     }
 }

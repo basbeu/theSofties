@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Date;
+
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -135,6 +137,34 @@ public class UtilsTest {
         Looper.prepare();
 
         Utils.displayToastOnTaskCompletion(Tasks.forCanceled(),activityActivityTestRule.getActivity(),"success","failure");
+    }
+
+    @Test
+    public void getYearWorks(){
+        Date d = new Date(new Long("1536344819000"));
+        String year = Utils.getYear(d);
+        assertEquals("2018", year);
+    }
+
+    @Test
+    public void getMonthWorks(){
+        Date d = new Date(new Long("1536344819000"));
+        String year = Utils.getMonth(d);
+        assertEquals("9", year);
+    }
+
+    @Test
+    public void getDayWorks(){
+        Date d = new Date(new Long("1536344819000"));
+        String year = Utils.getDay(d);
+        assertEquals("7", year);
+    }
+
+    @Test
+    public void favorFormat(){
+        Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFavorDate(d);
+        assertEquals("7.Sep", f);
     }
 
 }

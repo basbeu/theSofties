@@ -66,14 +66,14 @@ public class LocationHandler {
             favLocation.setLatitude(geo.getLatitude());
             favLocation.setLongitude(geo.getLongitude());
             distance = l.distanceTo(favLocation);
-            Log.d("DebugRemove", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude() + ", UserLocation " +l.getLatitude());
+            Log.d("DebugRemove", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude()+", "+favLocation.getLongitude() + ", UserLocation " +l.getLatitude()+","+l.getLongitude());
         }
         return distance;
     }
 
     public static String distanceBetween(GeoPoint geo) {
         float distance = distanceTo(geo);
-        String output = "";
+        String output;
         int switchToMeters = 2500;
         if (distance == Float.MAX_VALUE) {
             return "There is no Location";

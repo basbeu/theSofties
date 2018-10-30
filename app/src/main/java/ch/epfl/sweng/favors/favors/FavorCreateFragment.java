@@ -18,8 +18,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -33,6 +36,7 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
+import com.google.firebase.Timestamp;
 
 
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
@@ -59,6 +63,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
             newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
+            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
             newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
             Database.getInstance().updateOnDb(newFavor);
@@ -189,13 +194,11 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         locationCity = newFavor.getObservableObject(Favor.StringFields.locationCity);
         deadline = newFavor.getObservableObject(Favor.StringFields.deadline);
 
-
         locationCity.set(LocationHandler.getHandler().locationCity.get());
 
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.locationFavor.addTextChangedListener(locationFavorTextWatcher);
-//        TextView locationFavor = itemView.findViewById(R.id.locationFavor);
 
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));

@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
+import ch.epfl.sweng.favors.utils.Utils;
 
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
@@ -51,8 +54,14 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             Favor favor = item;
             if(favor.get(Favor.StringFields.title) != null)
                 title.setText(favor.get(Favor.StringFields.title));
-            if(favor.get(Favor.IntegerFields.creationTimestamp) != null)
-                timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
+            if(favor.get(Favor.ObjectFields.creationTimestamp) != null) {
+                Date d = (Date)favor.get(Favor.ObjectFields.creationTimestamp);
+                if (d != null) {
+                    timestamp.setText(Utils.getFavorDate(d));
+                }
+            } else {
+                timestamp.setText("18.Oct");
+            }
             if(favor.get(Favor.StringFields.description) != null)
                 description.setText(favor.get(Favor.StringFields.locationCity));
             if(favor.get(Favor.StringFields.locationCity) != null)
