@@ -15,6 +15,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
@@ -39,22 +41,27 @@ public class LocationHandler {
     public ObservableField<String> locationCity = new ObservableField<>();
     public ObservableField<GeoPoint> locationPoint = new ObservableField<>();
 
-    private FusedLocationProviderClient mFusedLocationClient;
+    protected ch.epfl.sweng.favors.location.Location location = ch.epfl.sweng.favors.location.Location.getInstance();
 
     private boolean recurrent = false;
 
     public void isRecurrent(boolean newValue){
-        if (checkPermission()) {
-            if (!newValue && recurrent) {
-                mFusedLocationClient.removeLocationUpdates(locationCallback);
-            }
-            if (newValue && !recurrent) {
-                mFusedLocationClient.requestLocationUpdates(locationRequest(), locationCallback, null);
-            }
+        if (!newValue && recurrent) {
+            location.removeLocationUpdates();
+        }
+        if (newValue && !recurrent) {
+            location.requestLocationUpdates(locationRequest(), successListerner);
         }
         recurrent = newValue;
     }
 
+
+    public void permissionFeedback(){
+        if(recurrent) {
+            location.requestLocationUpdates(locationRequest(), successListerner);
+        }
+        else updateLocation();
+    }
 
 
     private LocationRequest locationRequest(){
@@ -65,71 +72,23 @@ public class LocationHandler {
         return locationRequest;
     }
 
-    /**
-     * this method checks if we have the permission to access a user's location
-     * @return if we are allowed (boolean)
-     */
-    private boolean requestPermission() {
-        if(!checkPermission()){
-            ActivityCompat.requestPermissions((Activity) FavorsMain.getContext(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    FavorsMain.Permissions.LOCATION_SERVICE.ordinal());
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkPermission(){
-        if (ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     public LocationHandler(boolean recurrent){
-        if(!ExecutionMode.getInstance().isTest()){
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(FavorsMain.getContext());
-        }
-        if (requestPermission()) {
-            isRecurrent(recurrent);
-        }
-        else{
-            this.recurrent = recurrent;
-        }
+        isRecurrent(recurrent);
     }
 
-    public void permissionFeedback(){
-        if(recurrent) {
-            if(checkPermission()) {
-                mFusedLocationClient.requestLocationUpdates(locationRequest(), locationCallback, null);
-            }
-        }
-        else updateLocation();
-    }
-
-    public void updateLocation() {
-        if(checkPermission()) {
-            mFusedLocationClient.getLastLocation().addOnSuccessListener( l -> {
-                updateLocationInformations(l);
-            });
-        }
-    }
-
-    private LocationCallback locationCallback = new LocationCallback() {
+    OnSuccessListener<Location> successListerner = new OnSuccessListener<Location>() {
         @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Log.d(TAG, "CB called");
-            if (locationResult == null) {
-                Log.e(TAG, "No location provided by GPS");
-                return;
-            }
-            for (Location l : locationResult.getLocations()) {
-                updateLocationInformations(l);
-            }
+        public void onSuccess(Location location) {
+            updateLocationInformations(location);
         }
     };
+
+    public void updateLocation() {
+        location.getLastLocation(successListerner);
+    }
+
+
     private boolean updateLocationInformations(Location l){
         if (l == null) {
             Log.e(TAG, "Location object is missing in location update request");
@@ -149,14 +108,19 @@ public class LocationHandler {
             Log.e(TAG, "Location geopoint don't have any content");
             return "Not available";
         }
-
-        Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
-            if (addresses.size() > 0) return addresses.get(0).getLocality();
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to get geoPoint information");
+        if(!ExecutionMode.getInstance().isTest()) {
+            Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
+            try {
+                List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
+                if (addresses.size() > 0) return addresses.get(0).getLocality();
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to get geoPoint information");
+            }
+            return "Not available";
         }
-        return "Not available";
+        else{
+            return  "Fake Lausanne";
+        }
+
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import ch.epfl.sweng.favors.BuildConfig;
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class SplashScreenActivity extends Activity {
 
@@ -25,7 +26,6 @@ public class SplashScreenActivity extends Activity {
         // get text view and set the version number in the splash screen
         TextView textView = findViewById(R.id.versionNumber);
         textView.setText(versionName);
-
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(getApplicationContext(), FavorsMain.class);
             startActivity(intent);
