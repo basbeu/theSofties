@@ -17,6 +17,8 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
+import ch.epfl.sweng.favors.favors.FavorListAdapter;
+import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 
 
@@ -75,6 +77,7 @@ public class FavorsMain extends AppCompatActivity {
         // if logged in -> display main view
         if(Authentication.getInstance().isEmailVerified()){
             loggedinView();
+//            favorListView();
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -97,6 +100,12 @@ public class FavorsMain extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+//    private void favorListView(){
+//        Intent intent = new Intent(this, FavorsFragment.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
     @Override
     public void onBackPressed() {

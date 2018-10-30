@@ -57,25 +57,36 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
         public void bind(final Favor item, final OnItemClickListener listener){
             Favor favor = item;
-            if(favor.get(Favor.StringFields.title) != null)
-                title.setText(favor.get(Favor.StringFields.title));
-            if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
-                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
-                timestamp.setText(Utils.getFavorDate(d));
-//                if (d != null) { timestamp.setText(Utils.getFavorDate(d)); }
-            } else { timestamp.setText("--"); }
-            if(favor.get(Favor.StringFields.description) != null)
-                description.setText(favor.get(Favor.StringFields.description));
+            setTitleAndDescription(favor);
+            setTimestamp(favor);
+            setLocation(favor);
+            itemView.setOnClickListener(v -> listener.onItemClick(item));
+        }
+
+        private void setLocation(Favor favor) {
             if(favor.get(Favor.StringFields.locationCity) != null)
                 location.setText(favor.get(Favor.StringFields.locationCity));
             if(favor.get(Favor.ObjectFields.location) != null) {
                 ObservableField<Object> geo = favor.getObservableObject(Favor.ObjectFields.location);
                 distance.setText(LocationHandler.distanceBetween((GeoPoint)geo.get()));
             } else { distance.setText("--"); }
-//            if(favor.get(Favor.ObjectFields.location) != null)
-//                location.setText(favor.get(Favor.ObjectFields.location).toString());
-            itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
+
+        private void setTitleAndDescription(Favor favor) {
+            if(favor.get(Favor.StringFields.title) != null)
+                title.setText(favor.get(Favor.StringFields.title));
+            if(favor.get(Favor.StringFields.description) != null)
+                description.setText(favor.get(Favor.StringFields.description));
+            setLocation(favor);
+        }
+
+        private void setTimestamp(Favor favor) {
+            if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
+                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
+                timestamp.setText(Utils.getFavorDate(d));
+            } else { timestamp.setText("--"); }
+        }
+
     }
 
     //constructor

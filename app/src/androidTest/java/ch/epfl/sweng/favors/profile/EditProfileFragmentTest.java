@@ -67,6 +67,13 @@ public class EditProfileFragmentTest {
     }
 
     @Test
+    public void userHasCorrectFirstName() {
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.profFirstNameEdit)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
+
+    }
+
+    @Test
     public void userCanEditFirstName() {
         mFragmentTestRule.launchActivity(null);
         String newFirstName = "tata";
@@ -83,11 +90,11 @@ public class EditProfileFragmentTest {
     }
 
     @Test
-    public void userHasCorrectFirstName() {
+    public void userHasCorrectLastName() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profFirstNameEdit)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
-    }
+        onView(withId(R.id.profLastNameEdit)).check(matches(withText(FakeAuthentication.LAST_NAME)));
 
+    }
 
     @Test
     public void userCanEditLastName() {
@@ -100,13 +107,6 @@ public class EditProfileFragmentTest {
             u.set(User.StringFields.lastName, FakeAuthentication.LAST_NAME);
             FakeDatabase.getInstance().updateOnDb(u);
         });
-    }
-
-    @Test
-    public void userHasCorrectLastName() {
-        mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profLastNameEdit)).check(matches(withText(FakeAuthentication.LAST_NAME)));
-
     }
 
     @Test
