@@ -54,7 +54,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             description = localFavor.getObservableObject(Favor.StringFields.description);
             location = localFavor.getObservableObject(Favor.StringFields.locationCity);
             geo = localFavor.getObservableObject(Favor.ObjectFields.location);
-            LocationHandler.distanceBetween((GeoPoint)geo.get());
+            distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
 
         }
         else {
@@ -63,24 +63,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 description = newFavor.getObservableObject(Favor.StringFields.description);
                 location = newFavor.getObservableObject(Favor.StringFields.locationCity);
                 geo = newFavor.getObservableObject(Favor.ObjectFields.location);
-                LocationHandler.distanceBetween((GeoPoint)geo.get());
-
-//                if(g != null) {
-//                    favLocation = new Location("favor");
-//                    favLocation.setLatitude(((GeoPoint) geo.get()).getLatitude());
-//                    favLocation.setLongitude(((GeoPoint) geo.get()).getLongitude());
-//                    Log.d("DebugRemove",""+favLocation.getLatitude());
-//                }
-//
-//                Location l = LocationHandler.getHandler().locationUser.get();
-//                if(l != null && favLocation != null) {
-//                    Log.d("DebugRemove","test User location: "+l.getLatitude());
-//                    Float d = l.distanceTo(favLocation)/1000; //km
-//                    Log.d("DebugRemove", d.toString());
-//                    distance.set(d.toString()+"km away");
-//                } else {
-//                    distance.set("We don't know");
-//                }
+                distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
                 //TODO add token cost binding with new database implementation
             });
         }

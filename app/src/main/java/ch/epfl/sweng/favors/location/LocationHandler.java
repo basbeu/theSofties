@@ -60,17 +60,13 @@ public class LocationHandler {
     public static float distanceTo(GeoPoint geo) {
         Location favLocation = new Location("favor");
         float distance = Float.MAX_VALUE;
-        if(geo != null) {
-            favLocation.setLatitude(geo.getLatitude());
-            favLocation.setLongitude(geo.getLongitude());
-            Log.d("DebugRemove",""+favLocation.getLatitude());
-        }
 
         Location l = LocationHandler.getHandler().locationUser.get();
-        if(l != null && favLocation != null) {
-            Log.d("DebugRemove", "test User location: " + l.getLatitude());
+        if(l != null && geo != null) {
+            favLocation.setLatitude(geo.getLatitude());
+            favLocation.setLongitude(geo.getLongitude());
             distance = l.distanceTo(favLocation);
-            Log.d("DebugRemove", "" + distance);
+            Log.d("DebugRemove", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude() + ", UserLocation " +l.getLatitude());
         }
         return distance;
     }
@@ -80,13 +76,13 @@ public class LocationHandler {
         String output = "";
         int switchToMeters = 2500;
         if (distance == Float.MAX_VALUE) {
-            output = "There is no Location";
+            return "There is no Location";
         } else if (distance > switchToMeters) {
-            output = (distance/1000) + "km";
+            output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + "km";
         } else {
-            output = distance + "m";
+            output = String.format(Locale.getDefault(), "%.0f", distance) + "m";
         }
-        return output;
+        return output + " away";
     }
 
     public void isRecurrent(boolean newValue){
