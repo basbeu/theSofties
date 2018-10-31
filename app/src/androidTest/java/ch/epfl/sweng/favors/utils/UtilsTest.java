@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import java.util.Date;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
@@ -200,6 +201,14 @@ public class UtilsTest {
         Date d = Utils.getDateFromDatePicker(7,8,4000);
         String f = Utils.getFavorDate(d);
         assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void differenceTest(){
+        Date d1 = new Date();
+        Date d2 = new Date();
+        long diff = Utils.getDifference(d1, d1);
+        assertTrue(Math.abs(diff)<1000);
     }
 
 }

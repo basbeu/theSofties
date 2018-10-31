@@ -123,12 +123,12 @@ public class Utils {
         return df.format(date);
     }
 
-    final static long DAYS = 864000000; // mili
+    final static long DAYS = 432000000; // mili
     final static long DAY = 86400000;
 
     public static String getFavorDate(Date date) {
         Date today = new Date();
-        long difference = date.getTime()-today.getTime();
+        long difference = getDifference(date, today);
         if(date.before(today)) {
             return "expired";
         } else if (getFullDate(date).equals(getFullDate(today))) {
@@ -156,7 +156,7 @@ public class Utils {
 
     public static String getFavorDateAlternative(Date date) {
         Date today = new Date();
-        long difference = date.getTime()-today.getTime();
+        long difference = getDifference(date, today);
         if(date.before(today)) {
             return "done";
         } else if (getFullDate(date).equals(getFullDate(today))) {
@@ -166,6 +166,11 @@ public class Utils {
         }
         SimpleDateFormat df = new SimpleDateFormat("d.M.yy", Locale.getDefault());
         return df.format(date);
+    }
+
+    public static long getDifference(Date d1, Date d2) {
+        long difference = d1.getTime()-d2.getTime();
+        return difference;
     }
 
 
