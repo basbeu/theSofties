@@ -1,19 +1,14 @@
 package ch.epfl.sweng.favors.database;
 
-import android.util.Log;
-
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.favors.ExecutionMode;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
+import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 /**
  * The Favor class is an extension of the Database handler
  */
-public class Favor extends DatabaseHandler {
+public class Favor extends DatabaseEntity {
 
     // tag for log messages
     private static final String TAG = "FAVOR";
@@ -36,34 +31,14 @@ public class Favor extends DatabaseHandler {
 
     public Favor(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,id);
-        updateFromDb();
-    }
-
-    public Favor(String id,FirebaseFirestore db){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,id,db);
-/*
-        if(!ExecutionMode.getInstance().isTest()){
-            throw new IllegalStateException("This constructor should be used only for testing purpose");
-        }*/
+                ObjectFields.values(), COLLECTION, id);
+        db.updateFromDb(this);
     }
 
     @Override
-    public void updateOnDb(){
-        if(documentID == null){
-             // Do the same here if other types of datas
-
-            db.collection(collection).add(getEncapsulatedObjectOfMaps())
-                    .addOnSuccessListener(docRef -> {
-                        documentID = docRef.getId();
-                        updateFromDb();
-                    }).addOnFailureListener(e -> {
-                        Log.d(TAG,"failure to push favor to database");
-                /* Feedback of an error here - Impossible to update user informations */
-            });
-        }else{
-            super.updateOnDb();
-        }
+    public DatabaseEntity copy() {
+        Favor f = new Favor(this.documentID);
+        f.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        return f;
     }
 }

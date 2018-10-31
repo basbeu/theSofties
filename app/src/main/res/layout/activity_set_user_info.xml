@@ -5,97 +5,101 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favors.SetUserInfo"
+            type="ch.epfl.sweng.favors.authentication.SetUserInfo"
             />
 
     </data>
 
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="ch.epfl.sweng.favors.SetUserInfo">
+        android:layout_height="wrap_content">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="ch.epfl.sweng.favors.authentication.SetUserInfo">
 
-        <EditText
-            android:id="@+id/userFirstNameEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:ems="10"
-            android:hint="First name"
-            android:inputType="textPersonName"
-            android:text="@{elements.firstName}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/userLastNameEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginRight="1dp"
-            android:ems="10"
-            android:hint="Last name"
-            android:inputType="textPersonName"
-            android:text="@{elements.lastName}"
-            app:layout_constraintEnd_toEndOf="@+id/userFirstNameEdit"
-            app:layout_constraintTop_toBottomOf="@+id/userFirstNameEdit" />
-
-        <EditText
-            android:id="@+id/userCityEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="23dp"
-            android:ems="10"
-            android:hint="City"
-            android:inputType="textPersonName"
-            android:text="@{elements.baseCity}"
-            app:layout_constraintStart_toStartOf="@+id/userLastNameEdit"
-            app:layout_constraintTop_toBottomOf="@+id/userLastNameEdit" />
-
-        <RadioGroup
-            android:id="@+id/prof_gender_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="59dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/userCityEdit"
-            app:layout_constraintTop_toBottomOf="@+id/userCityEdit">
-
-            <RadioButton
-                android:id="@+id/profGenderMEdit"
+            <EditText
+                android:id="@+id/userFirstNameEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:gravity="right"
-                android:padding="10sp"
-                android:text="M" />
+                android:layout_marginTop="90dp"
+                android:ems="10"
+                android:hint="First name"
+                android:inputType="textPersonName"
+                android:text="@{elements.firstName}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <RadioButton
-                android:id="@+id/profGenderFEdit"
+            <EditText
+                android:id="@+id/userLastNameEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:gravity="left"
-                android:padding="10sp"
-                android:text="F" />
-        </RadioGroup>
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                android:ems="10"
+                android:hint="Last name"
+                android:inputType="textPersonName"
+                android:text="@{elements.lastName}"
+                app:layout_constraintEnd_toEndOf="@+id/userFirstNameEdit"
+                app:layout_constraintTop_toBottomOf="@+id/userFirstNameEdit" />
 
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="submit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prof_gender_edit" />
-    </android.support.constraint.ConstraintLayout>
+            <EditText
+                android:id="@+id/userCityEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="23dp"
+                android:ems="10"
+                android:hint="City"
+                android:inputType="textPersonName"
+                android:text="@{elements.baseCity}"
+                app:layout_constraintStart_toStartOf="@+id/userLastNameEdit"
+                app:layout_constraintTop_toBottomOf="@+id/userLastNameEdit" />
 
+            <RadioGroup
+                android:id="@+id/prof_gender_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="59dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@+id/userCityEdit"
+                app:layout_constraintTop_toBottomOf="@+id/userCityEdit">
+
+                <RadioButton
+                    android:id="@+id/profGenderMEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10sp"
+                    android:gravity="right"
+                    android:padding="10sp"
+                    android:text="M" />
+
+                <RadioButton
+                    android:id="@+id/profGenderFEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10sp"
+                    android:gravity="left"
+                    android:padding="10sp"
+                    android:text="F" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="submit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/prof_gender_edit" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </layout>
