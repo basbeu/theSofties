@@ -59,12 +59,12 @@ public class FavorDetailViewTest {
         onView(withId(R.id.imageView2)).check(matches(isDisplayed()));
     }
 
-   /* @Test
+   @Test
     public void tokensAmountDisplayed(){
         mFragmentTestRule.launchActivity(null);
 
         onView(withId(R.id.favTokAmmount)).check(matches(isDisplayed()));
-    }*/
+    }
 
     @Test
     public void reportAbusiveAddToast(){
