@@ -66,12 +66,12 @@ public class EditProfileFragmentTest {
         onView(ViewMatchers.withId(R.id.editProfileTitle)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void userHasCorrectFirstName() {
-        mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profFirstNameEdit)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
-
-    }
+//    @Test
+//    public void userHasCorrectFirstName() {
+//        mFragmentTestRule.launchActivity(null);
+//        onView(withId(R.id.profFirstNameEdit)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
+//
+//    }
 
     @Test
     public void userCanEditFirstName() {
