@@ -82,7 +82,7 @@ public class AuthentificationProcessTest {
         onView(withId(R.id.profileTitle)).check(matches(isDisplayed()));
     }
 
-   /* @Test
+    @Test
     public void logOutToast() {
         ExecutionMode.getInstance().setInvalidAuthTest(false);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
@@ -119,7 +119,7 @@ public class AuthentificationProcessTest {
         navigationMenuItemView.perform(click());
         onView(withText("See you soon !")).
                 inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-    }*/
+    }
     @Test
     public void loginFailed() throws Exception{
         ExecutionMode.getInstance().setInvalidAuthTest(true);
