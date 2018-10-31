@@ -21,7 +21,7 @@ import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
  */
 public class FakeDatabase extends Database{
 
-    public static final String LAST_FAVOR_TITLE = "Unify String Theroy";
+    public static final String LAST_FAVOR_TITLE = "Flash needs some help";
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
 
@@ -72,12 +72,18 @@ public class FakeDatabase extends Database{
                         addToList(clazz,(T)database.get("I1"),list);
                         addToList(clazz,(T)database.get("I2"),list);
                         addToList(clazz,(T)database.get("I3"),list);
+                        addToList(clazz,(T)database.get("I4"),list);
+                        addToList(clazz,(T)database.get("I5"),list);
                         break;
                     case "class ch.epfl.sweng.favors.database.Favor":
                         Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
                         addToList(clazz,(T)database.get("F1"),list);
                         addToList(clazz,(T)database.get("F2"),list);
                         addToList(clazz,(T)database.get("F3"),list);
+                        addToList(clazz,(T)database.get("F4"),list);
+                        addToList(clazz,(T)database.get("F5"),list);
+                        addToList(clazz,(T)database.get("F6"),list);
+                        addToList(clazz,(T)database.get("F7"),list);
                 }
             },500);
         return list;
@@ -138,6 +144,7 @@ public class FakeDatabase extends Database{
         Favor f4 = new Favor("F4");
         Favor f5 = new Favor("F5");
         Favor f6 = new Favor("F6");
+        Favor f7 = new Favor("F7");
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");
@@ -167,9 +174,33 @@ public class FakeDatabase extends Database{
         f4.set(Favor.StringFields.title, "Unify String Theroy");
         f4.set(Favor.StringFields.locationCity, "Caltech");
 
+        f5.set(Favor.StringFields.ownerID, "U3");
+        f5.set(Favor.StringFields.category, "Save the World");
+        f5.set(Favor.StringFields.deadline, "12.12.20");
+        f5.set(Favor.StringFields.description, "Help me stop Lex Luther");
+        f5.set(Favor.StringFields.title, "Help Superman");
+        f5.set(Favor.StringFields.locationCity, "US");
+
+        f6.set(Favor.StringFields.ownerID, "U3");
+        f6.set(Favor.StringFields.category, "Assasin");
+        f6.set(Favor.StringFields.deadline, "12.12.20");
+        f6.set(Favor.StringFields.description, "Stop the League of Assassins from overtaking the city");
+        f6.set(Favor.StringFields.title, "League Help");
+        f6.set(Favor.StringFields.locationCity, "DC world");
+
+        f7.set(Favor.StringFields.ownerID, "U3");
+        f7.set(Favor.StringFields.category, "The Flash");
+        f7.set(Favor.StringFields.deadline, "12.12.20");
+        f7.set(Favor.StringFields.description, "Stop Salazar from detroying the world");
+        f7.set(Favor.StringFields.title, "Flash needs some help");
+        f7.set(Favor.StringFields.locationCity, "DC world");
+
+
         Interest i1 = new Interest("I1");
         Interest i2 = new Interest("I2");
         Interest i3 = new Interest("I3");
+        Interest i4 = new Interest("I4");
+        Interest i5 = new Interest("I5");
 
 
         i1.set(Interest.StringFields.title, "DC");
@@ -182,9 +213,17 @@ public class FakeDatabase extends Database{
         i3.set(Interest.StringFields.title, "SWISS AVIATION");
         i3.set(Interest.StringFields.description, "Fly to the sky");
 
+        i4.set(Interest.StringFields.title, "Marvel comics");
+        i4.set(Interest.StringFields.description, "Comics are great");
+
+        i5.set(Interest.StringFields.title, "Edelweiss");
+        i5.set(Interest.StringFields.description, "Yet another great airline");
+
         getInstance().updateOnDb(i1);
         getInstance().updateOnDb(i2);
         getInstance().updateOnDb(i3);
+        getInstance().updateOnDb(i4);
+        getInstance().updateOnDb(i5);
 
 
         getInstance().updateOnDb(u1);
@@ -196,5 +235,68 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(f2);
         getInstance().updateOnDb(f3);
         getInstance().updateOnDb(f4);
+        getInstance().updateOnDb(f5);
+        getInstance().updateOnDb(f6);
+        getInstance().updateOnDb(f7);
+
+    }
+
+    /**
+     * This method can be used to add extra elements to the DB.
+     */
+    public void addExtraToDb(){
+        Favor fNew = new Favor("newFavor");
+        Favor fNew2 = new Favor("newFavor2");
+
+        fNew.set(Favor.StringFields.ownerID, "U3");
+        fNew.set(Favor.StringFields.category, "Test Writter");
+        fNew.set(Favor.StringFields.deadline, "12.12.20");
+        fNew.set(Favor.StringFields.description, "Hel me get to 80% test coverage");
+        fNew.set(Favor.StringFields.title, "help with tests");
+        fNew.set(Favor.StringFields.locationCity, "EPFL");
+
+        fNew2.set(Favor.StringFields.ownerID, "U3");
+        fNew2.set(Favor.StringFields.category, "Hack The Blue Smurf Institute");
+        fNew2.set(Favor.StringFields.deadline, "12.12.20");
+        fNew2.set(Favor.StringFields.description, "We all want to be blue");
+        fNew2.set(Favor.StringFields.title, "Smurf, Smurf, more Smurf");
+        fNew2.set(Favor.StringFields.locationCity, "Smurf World");
+
+        User uNew = new User("uNew");
+
+        uNew.set(User.StringFields.firstName, "Oliver");
+        uNew.set(User.StringFields.lastName, "Queen");
+        uNew.set(User.StringFields.email, "oliver.queen@queencorp.com");
+        uNew.set(User.StringFields.city, "Starling City");
+        User.UserGender.setGender(uNew, User.UserGender.M);
+
+
+
+        Interest iNew = new Interest("iNew");
+
+        iNew.set(Interest.StringFields.title, "DC");
+        iNew.set(Interest.StringFields.description, "DC Comics");
+
+        getInstance().updateOnDb(uNew);
+        getInstance().updateOnDb(iNew);
+        getInstance().updateOnDb(fNew);
+        getInstance().updateOnDb(fNew2);
+    }
+
+    /**
+     * This is the tear down method of addExtra method.
+     */
+    public void removeExtraFromDB(){
+        database.remove("iNew");
+        database.remove("uNew");
+        database.remove("newFavor");
+        database.remove("newFavor2");
+    }
+
+    /**
+     * This empties the fakeDatabase. Allows for proper teardown of tests.
+     */
+    public void cleanUp(){
+        database = new HashMap<>();
     }
 }

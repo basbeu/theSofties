@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.main;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -15,6 +17,8 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
+import ch.epfl.sweng.favors.favors.FavorListAdapter;
+import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 
 
@@ -73,6 +77,13 @@ public class FavorsMain extends AppCompatActivity {
         // if logged in -> display main view
         if(Authentication.getInstance().isEmailVerified()){
             loggedinView();
+//            favorListView();
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // request permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Permissions.LOCATION_SERVICE.ordinal());
         }
 
     }
@@ -89,6 +100,12 @@ public class FavorsMain extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+//    private void favorListView(){
+//        Intent intent = new Intent(this, FavorsFragment.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
     @Override
     public void onBackPressed() {

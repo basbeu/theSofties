@@ -97,6 +97,7 @@ public class FavorEntityTest {
         Database.getInstance().updateFromDb(f).addOnCompleteListener(t->{
             f.set(Favor.ObjectFields.location,newObject);
             Database.getInstance().updateOnDb(f);
+
             assertEquals(newObject, f.get(Favor.ObjectFields.location));
         });
 

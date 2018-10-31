@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.favors;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +34,7 @@ public class FavorListTest {
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
+        FakeDatabase.getInstance().addExtraToDb();
     }
 
     @Test
@@ -44,5 +46,10 @@ public class FavorListTest {
 
     private static DataInteraction onEntry(String string) {
         return onData(hasEntry(equalTo(FakeDatabase.LAST_FAVOR_TITLE),is(string)));
+    }
+
+    @After
+    public void tearDown(){
+        FakeDatabase.getInstance().removeExtraFromDB();
     }
 }

@@ -1,5 +1,7 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
@@ -80,5 +82,14 @@ public class FavorDetailViewTest {
             fail("Can't sleep");
         }
     }
+
+//    @Test
+//    public void setFieldsTest(){
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FavorDetailView.FAVOR_ID,"F1");
+//        mFragmentTestRule.launchActivity(new Intent(bundle));
+//
+//        onView(withId(R.id.favTokAmmount)).check(matches(isDisplayed()));
+//    }
 
 }
