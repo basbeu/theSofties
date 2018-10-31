@@ -2,10 +2,19 @@ package ch.epfl.sweng.favors.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,4 +90,88 @@ public class Utils {
         context.startActivity(intent);
         User.resetMain();
     }
+
+    public static String getYear(Date date) {
+//        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        int year  = localDate.getYear();
+//        int month = localDate.getMonthValue();
+//        int day   = localDate.getDayOfMonth();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; //Add one to month {0 - 11}
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return Integer.toString(year);
+    }
+
+    public static String getMonth(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int month = calendar.get(Calendar.MONTH) + 1; //Add one to month {0 - 11}
+        return Integer.toString(month);
+    }
+
+    public static String getDay(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return Integer.toString(day);
+    }
+
+    public static String getFullDate(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        return df.format(date);
+    }
+
+    final static long DAYS = 432000000; // mili
+    final static long DAY = 86400000;
+
+    public static String getFavorDate(Date date) {
+        Date today = new Date();
+        long difference = getDifference(date, today);
+        if(date.before(today)) {
+            return "expired";
+        } else if (getFullDate(date).equals(getFullDate(today))) {
+            return "today";
+        } else if (difference < DAYS) {
+            return difference/DAY + " days";
+        }
+        SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
+        return df.format(date);
+    }
+
+    /**
+     * get Date from Datepicker
+     * @param day
+     * @param month
+     * @param year
+     * @return
+     */
+    public static Date getDateFromDatePicker(int day, int month, int year){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        return calendar.getTime();
+    }
+
+    public static String getFavorDateAlternative(Date date) {
+        Date today = new Date();
+        long difference = getDifference(date, today);
+        if(date.before(today)) {
+            return "done";
+        } else if (getFullDate(date).equals(getFullDate(today))) {
+            return "hurry";
+        } else if (difference < DAYS) {
+            return difference/DAY + " days";
+        }
+        SimpleDateFormat df = new SimpleDateFormat("d.M.yy", Locale.getDefault());
+        return df.format(date);
+    }
+
+    public static long getDifference(Date d1, Date d2) {
+        long difference = d1.getTime()-d2.getTime();
+        return difference;
+    }
+
+
 }

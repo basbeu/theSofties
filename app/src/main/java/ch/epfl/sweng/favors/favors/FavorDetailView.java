@@ -3,22 +3,31 @@ package ch.epfl.sweng.favors.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
-
+import ch.epfl.sweng.favors.location.LocationHandler;
 
 
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     public ObservableField<String> title;
     public ObservableField<String> description;
+    public ObservableField<String> location;
+    public ObservableField<String> category;
+    public ObservableField<Object> geo;
+    public ObservableField<String> distance = new ObservableField<>();
+
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -26,7 +35,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String FAVOR_ID = "favorID";
+    public static final String FAVOR_ID = "favorID";
     private String currentFavorID;
 
 
@@ -41,16 +50,23 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         if(savedInstanceState != null) {
             currentFavorID = savedInstanceState.getString(FAVOR_ID);
             localFavor = new Favor(currentFavorID);
-            title = localFavor.getObservableObject(Favor.StringFields.title);
-            description = localFavor.getObservableObject(Favor.StringFields.description);
+            setFields(localFavor);
         }
         else {
             model.getFavor().observe(this, newFavor -> {
-                title = newFavor.getObservableObject(Favor.StringFields.title);
-                description = newFavor.getObservableObject(Favor.StringFields.description);
+                setFields(newFavor);
                 //TODO add token cost binding with new database implementation
             });
         }
+    }
+
+    private void setFields(Favor favor) {
+        title = favor.getObservableObject(Favor.StringFields.title);
+        description = favor.getObservableObject(Favor.StringFields.description);
+        category = favor.getObservableObject(Favor.StringFields.category);
+        location = favor.getObservableObject(Favor.StringFields.locationCity);
+        geo = favor.getObservableObject(Favor.ObjectFields.location);
+        distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
     }
 
     @Override

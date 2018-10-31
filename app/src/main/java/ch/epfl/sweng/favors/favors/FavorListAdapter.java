@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,9 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.Date;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
+import ch.epfl.sweng.favors.utils.Utils;
 
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
@@ -26,7 +33,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
     }
 
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title, timestamp, location, description;
+        public TextView title, timestamp, location, description, distance;
         public FavorListAdapter adapter;
         public Favor selectedFavor = null;
 
@@ -37,6 +44,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             timestamp = itemView.findViewById(R.id.timestamp);
             location = itemView.findViewById(R.id.location);
             description = itemView.findViewById(R.id.description);
+            distance = itemView.findViewById(R.id.distance);
             this.adapter = adapter;
         }
 
@@ -49,14 +57,36 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
         public void bind(final Favor item, final OnItemClickListener listener){
             Favor favor = item;
-            if(favor.get(Favor.StringFields.title) != null)
-                title.setText(favor.get(Favor.StringFields.title));
-            if(favor.get(Favor.IntegerFields.creationTimestamp) != null)
-                timestamp.setText(favor.get(Favor.IntegerFields.creationTimestamp));
-            if(favor.get(Favor.StringFields.description) != null)
-                description.setText(favor.get(Favor.StringFields.description));
+            setTitleAndDescription(favor);
+            setTimestamp(favor);
+            setLocation(favor);
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
+
+        private void setLocation(Favor favor) {
+            if(favor.get(Favor.StringFields.locationCity) != null)
+                location.setText(favor.get(Favor.StringFields.locationCity));
+            if(favor.get(Favor.ObjectFields.location) != null) {
+                ObservableField<Object> geo = favor.getObservableObject(Favor.ObjectFields.location);
+                distance.setText(LocationHandler.distanceBetween((GeoPoint)geo.get()));
+            } else { distance.setText("--"); }
+        }
+
+        private void setTitleAndDescription(Favor favor) {
+            if(favor.get(Favor.StringFields.title) != null)
+                title.setText(favor.get(Favor.StringFields.title));
+            if(favor.get(Favor.StringFields.description) != null)
+                description.setText(favor.get(Favor.StringFields.description));
+            setLocation(favor);
+        }
+
+        private void setTimestamp(Favor favor) {
+            if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
+                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
+                timestamp.setText(Utils.getFavorDate(d));
+            } else { timestamp.setText("--"); }
+        }
+
     }
 
     //constructor
