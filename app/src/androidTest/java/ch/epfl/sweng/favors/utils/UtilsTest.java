@@ -175,6 +175,20 @@ public class UtilsTest {
     }
 
     @Test
+    public void favorFormatDateA(){
+        Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFavorDateAlternative(d);
+        assertEquals("done", f);
+    }
+
+    @Test
+    public void favorFormatDateA2(){
+        Date d = new Date(new Long("153640875500000"));
+        String f = Utils.getFavorDateAlternative(d);
+        assertEquals("7.9.38", f);
+    }
+
+    @Test
     public void favorFullDate(){
         Date d = new Date(new Long("1536344819000"));
         String f = Utils.getFullDate(d);

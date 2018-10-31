@@ -153,4 +153,20 @@ public class Utils {
 
         return calendar.getTime();
     }
+
+    public static String getFavorDateAlternative(Date date) {
+        Date today = new Date();
+        long difference = date.getTime()-today.getTime();
+        if(date.before(today)) {
+            return "done";
+        } else if (getFullDate(date).equals(getFullDate(today))) {
+            return "hurry";
+        } else if (difference < DAYS) {
+            return difference/DAY + " days";
+        }
+        SimpleDateFormat df = new SimpleDateFormat("d.M.yy", Locale.getDefault());
+        return df.format(date);
+    }
+
+
 }
