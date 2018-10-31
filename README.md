@@ -65,7 +65,27 @@ We are 7 computer science and communication system students at EPFL, currently e
 - favor list with UI for searching & sorting, as well as asking for a new favor
 - location, distance, category, etc. are recorded alongside favor
 
+### Sprint 4
 
+#### Scrum master : Jeremy, presenter: Charlyn
+
+- added tests to raise coverage from 40% to 69%
+- fix behavior of back button
+
+### Sprint 5
+
+#### Srum master: Jeniffer, presenter: Alexander
+
+- added location functionality, autopopulate the favor creation location, autopopulate new user location, sort by distance
+- added tests
+- build a professional testDatabase for firesbase testing
+
+### Sprint 6
+
+#### scrum master: Andrea, presenter: Bastien
+
+- increase code coverage to pass 80%
+- send email to user to notify them of a intrest in help
 
 # Tests
 
