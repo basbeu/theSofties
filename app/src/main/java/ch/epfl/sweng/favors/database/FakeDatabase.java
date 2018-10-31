@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.database;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.os.Handler;
+import android.support.annotation.IntRange;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -145,6 +146,10 @@ public class FakeDatabase extends Database{
         Favor f5 = new Favor("F5");
         Favor f6 = new Favor("F6");
         Favor f7 = new Favor("F7");
+        Favor f8 = new Favor("F8");
+        Favor f9 = new Favor("F9");
+        Favor f10 = new Favor("F10");
+
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");
@@ -196,6 +201,28 @@ public class FakeDatabase extends Database{
         f7.set(Favor.StringFields.locationCity, "DC world");
 
 
+        f8.set(Favor.StringFields.ownerID, "U3");
+        f8.set(Favor.StringFields.category, "Supergirl");
+        f8.set(Favor.StringFields.deadline, "12.12.20");
+        f8.set(Favor.StringFields.description, "Destroy kryptoninite on earth");
+        f8.set(Favor.StringFields.title, "make use gods again");
+        f8.set(Favor.StringFields.locationCity, "DC world");
+
+        f9.set(Favor.StringFields.ownerID, "U3");
+        f9.set(Favor.StringFields.category, "The Breacher");
+        f9.set(Favor.StringFields.deadline, "12.12.20");
+        f9.set(Favor.StringFields.description, "Improve my Vibe glasses");
+        f9.set(Favor.StringFields.title, "Flash needs some help");
+        f9.set(Favor.StringFields.locationCity, "DC world");
+
+        f10.set(Favor.StringFields.ownerID, "U3");
+        f10.set(Favor.StringFields.category, "The Legends");
+        f10.set(Favor.StringFields.deadline, "12.12.20");
+        f10.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
+        f10.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
+        f10.set(Favor.StringFields.locationCity, "The Timeline");
+
+
         Interest i1 = new Interest("I1");
         Interest i2 = new Interest("I2");
         Interest i3 = new Interest("I3");
@@ -238,6 +265,9 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(f5);
         getInstance().updateOnDb(f6);
         getInstance().updateOnDb(f7);
+        getInstance().updateOnDb(f8);
+        getInstance().updateOnDb(f9);
+        getInstance().updateOnDb(f10);
 
     }
 
@@ -263,6 +293,7 @@ public class FakeDatabase extends Database{
         fNew2.set(Favor.StringFields.locationCity, "Smurf World");
 
         User uNew = new User("uNew");
+        User uNew2 = new User("uNew2");
 
         uNew.set(User.StringFields.firstName, "Oliver");
         uNew.set(User.StringFields.lastName, "Queen");
@@ -270,15 +301,25 @@ public class FakeDatabase extends Database{
         uNew.set(User.StringFields.city, "Starling City");
         User.UserGender.setGender(uNew, User.UserGender.M);
 
-
+        uNew2.set(User.StringFields.firstName, "Barry");
+        uNew2.set(User.StringFields.lastName, "Allen");
+        uNew2.set(User.StringFields.email, "barry.allen@ccpd.com");
+        uNew2.set(User.StringFields.city, "Starling City");
+        User.UserGender.setGender(uNew2, User.UserGender.M);
 
         Interest iNew = new Interest("iNew");
+        Interest iNew2 = new Interest("iNew2");
 
         iNew.set(Interest.StringFields.title, "DC");
         iNew.set(Interest.StringFields.description, "DC Comics");
 
+        iNew.set(Interest.StringFields.title, "Speedforce");
+        iNew.set(Interest.StringFields.description, "DC Comics");
+
         getInstance().updateOnDb(uNew);
+        getInstance().updateOnDb(uNew2);
         getInstance().updateOnDb(iNew);
+        getInstance().updateOnDb(iNew2);
         getInstance().updateOnDb(fNew);
         getInstance().updateOnDb(fNew2);
     }
@@ -288,7 +329,9 @@ public class FakeDatabase extends Database{
      */
     public void removeExtraFromDB(){
         database.remove("iNew");
+        database.remove("iNew2");
         database.remove("uNew");
+        database.remove("uNew2");
         database.remove("newFavor");
         database.remove("newFavor2");
     }
