@@ -10,7 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Date;
+
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
@@ -135,6 +138,77 @@ public class UtilsTest {
         Looper.prepare();
 
         Utils.displayToastOnTaskCompletion(Tasks.forCanceled(),activityActivityTestRule.getActivity(),"success","failure");
+    }
+
+    @Test
+    public void getYearWorks(){
+        Date d = new Date(new Long("1536344819000"));
+        String year = Utils.getYear(d);
+        assertEquals("2018", year);
+    }
+
+    @Test
+    public void getMonthWorks(){
+        Date d = new Date(new Long("1536344819000"));
+        String year = Utils.getMonth(d);
+        assertEquals("9", year);
+    }
+
+    @Test
+    public void getDayWorks(){
+        Date d = new Date(new Long("1536344819000"));
+        String year = Utils.getDay(d);
+        assertEquals("7", year);
+    }
+
+    @Test
+    public void favorFormatDate(){
+        Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFavorDate(d);
+        assertEquals("expired", f);
+    }
+
+    @Test
+    public void favorFormatDate2(){
+        Date d = new Date(new Long("153640875500000"));
+        String f = Utils.getFavorDate(d);
+        assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void favorFormatDateA(){
+        Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFavorDateAlternative(d);
+        assertEquals("done", f);
+    }
+
+    @Test
+    public void favorFormatDateA2(){
+        Date d = new Date(new Long("153640875500000"));
+        String f = Utils.getFavorDateAlternative(d);
+        assertEquals("7.9.38", f);
+    }
+
+    @Test
+    public void favorFullDate(){
+        Date d = new Date(new Long("1536344819000"));
+        String f = Utils.getFullDate(d);
+        assertEquals("07.09.2018", f);
+    }
+
+    @Test
+    public void datePickerDate(){
+        Date d = Utils.getDateFromDatePicker(7,8,4000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void differenceTest(){
+        Date d1 = new Date();
+        Date d2 = new Date();
+        long diff = Utils.getDifference(d1, d1);
+        assertTrue(Math.abs(diff)<1000);
     }
 
 }

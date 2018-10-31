@@ -26,16 +26,16 @@
             android:orientation="horizontal"
             android:layout_gravity="top"
             >
+
             <TextView
                 android:id="@+id/profileTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:textStyle="bold"
                 android:layout_weight="5"
-                />
+                android:paddingTop="12dp"
+                android:text="Your Profile"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/editProfileButton"

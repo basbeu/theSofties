@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -28,9 +32,12 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
+import ch.epfl.sweng.favors.location.Location;
+import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
+import com.google.firebase.Timestamp;
 
 
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
@@ -38,11 +45,12 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
 
+    private DatePickerFragment date = new DatePickerFragment();
+
     public ObservableBoolean titleValid = new ObservableBoolean(false);
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
-
 
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
@@ -58,7 +66,12 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
             newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
+            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+
+            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+            Log.d("Database: Favor", "Favor pushed to database");
             Database.getInstance().updateOnDb(newFavor);
             sharedViewFavor.select(newFavor);
             launchToast("Favor created successfully");
@@ -152,6 +165,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
+
     }
     //*************************END OF TEST  *******************
 
@@ -186,9 +200,12 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         locationCity = newFavor.getObservableObject(Favor.StringFields.locationCity);
         deadline = newFavor.getObservableObject(Favor.StringFields.deadline);
 
+        locationCity.set(LocationHandler.getHandler().locationCity.get());
+
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.locationFavor.addTextChangedListener(locationFavorTextWatcher);
+
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
 
@@ -211,7 +228,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
 
     private void showDatePicker() {
-        DatePickerFragment date = new DatePickerFragment();
         /**
          * Set Up Current Date Into dialog
          */
@@ -230,6 +246,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> {
         TextView textView = binding.deadlineFavor;
+        date.setDate(dayOfMonth, monthOfYear, year);
         textView.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
                 + "-" + String.valueOf(year));
 

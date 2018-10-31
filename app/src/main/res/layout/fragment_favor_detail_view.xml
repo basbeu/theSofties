@@ -14,18 +14,19 @@
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/favTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@{elements.title}"
-        android:textSize="30sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/favTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@{elements.title}"
+            android:textSize="30sp" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -34,56 +35,93 @@
             android:layout_gravity="center"
             android:contentDescription="image"
             android:padding="10sp"
-            android:src="@drawable/test_image"
+            android:src="@drawable/test_image2"
             app:srcCompat="@drawable/test_image" />
 
-    <TextView
-        android:id="@+id/favDescription"
-        android:layout_margin="35sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@{elements.description}"
-        />
+        <TextView
+            android:id="@+id/favDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="35sp"
+            android:text="@{elements.description}"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/favCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:text="@{elements.category}"
+            android:textAlignment="textEnd" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/favLocation"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:paddingLeft="30dp"
+                android:text="@{elements.location}"
+                android:textAlignment="viewStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/favDistance"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="@{elements.distance}"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/favIntrestedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="35sp"
                 android:text="I'm interested"
-                android:textSize="20sp"
-                android:layout_marginLeft="35sp" />
+                android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/favTokAmmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="100"
                 android:layout_marginLeft="70sp"
-                />
+                android:text="100"
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="38sp"
                 android:layout_height="38sp"
-                android:src="@drawable/favor_token_img"
                 android:layout_marginLeft="10sp"
-                />
+                android:src="@drawable/favor_token_img" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/favReportAbusiveAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:layout_gravity="center"
+            android:layout_margin="40sp"
             android:text="Report abusive add"
-            android:layout_margin="40sp"/>
+            android:textStyle="bold" />
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>
 
 </layout>
