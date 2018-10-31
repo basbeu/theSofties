@@ -23,8 +23,7 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
-public final class Utils {
-
+public class Utils {
     private static final int MAXPASSWORDLEN = 20;
     private static final int MINPASSWORDLEN = 8;
 
