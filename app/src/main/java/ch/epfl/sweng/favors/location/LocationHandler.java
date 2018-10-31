@@ -15,12 +15,15 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
@@ -31,105 +34,104 @@ public class LocationHandler {
     private static final String TAG = "LOCATION_HANDLER";
 
     private static LocationHandler handler = new LocationHandler(true);
+    private static LocationHandler handlerNonRec = new LocationHandler(false);
     public static LocationHandler getHandler(){
         return handler;
+    }
+
+    // overload getHandler in order to provide method to get non recurrent handler
+    public static LocationHandler getHandler(Boolean recurrent){
+        if(recurrent) {
+            return handler;
+        } else {
+            return handlerNonRec;
+        }
     }
 
     private Location lastLocation;
     public ObservableField<String> locationCity = new ObservableField<>();
     public ObservableField<GeoPoint> locationPoint = new ObservableField<>();
+    public ObservableField<Location> locationUser = new ObservableField<>();
 
-    private FusedLocationProviderClient mFusedLocationClient;
+    protected ch.epfl.sweng.favors.location.Location location = ch.epfl.sweng.favors.location.Location.getInstance();
 
     private boolean recurrent = false;
 
+    public static float distanceTo(GeoPoint geo) {
+        Location favLocation = new Location("favor");
+        float distance = Float.MAX_VALUE;
+
+        Location l = LocationHandler.getHandler().locationUser.get();
+        if(l != null && geo != null) {
+            favLocation.setLatitude(geo.getLatitude());
+            favLocation.setLongitude(geo.getLongitude());
+            distance = l.distanceTo(favLocation);
+            Log.d("DebugRemove", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude()+", "+favLocation.getLongitude() + ", UserLocation " +l.getLatitude()+","+l.getLongitude());
+        }
+        return distance;
+    }
+
+    public static String distanceBetween(GeoPoint geo) {
+        float distance = distanceTo(geo);
+        String output;
+        int switchToMeters = 2500;
+        int switchToInt = 100000;
+        if (distance == Float.MAX_VALUE) {
+            return "There is no Location";
+        } else if (distance > switchToInt) {
+            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + "km";
+        } else if (distance > switchToMeters) {
+            output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + "km";
+        } else {
+            output = String.format(Locale.getDefault(), "%.0f", distance) + "m";
+        }
+        return output + " away";
+    }
+
     public void isRecurrent(boolean newValue){
-        if (checkPermission()) {
-            if (!newValue && recurrent) {
-                mFusedLocationClient.removeLocationUpdates(locationCallback);
-            }
-            if (newValue && !recurrent) {
-                mFusedLocationClient.requestLocationUpdates(locationRequest(), locationCallback, null);
-            }
+        if (!newValue && recurrent) {
+            location.removeLocationUpdates();
+        }
+        if (newValue && !recurrent) {
+            location.requestLocationUpdates(locationRequest(), successListerner);
         }
         recurrent = newValue;
     }
 
 
-
-    private LocationRequest locationRequest(){
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10 * 1000); // 60 seconds
-        locationRequest.setFastestInterval(5 * 1000); // 30 seconds
-        return locationRequest;
-    }
-
-    /**
-     * this method checks if we have the permission to access a user's location
-     * @return if we are allowed (boolean)
-     */
-    private boolean requestPermission() {
-        if(!checkPermission()){
-            ActivityCompat.requestPermissions((Activity) FavorsMain.getContext(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    FavorsMain.Permissions.LOCATION_SERVICE.ordinal());
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkPermission(){
-        if (ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public LocationHandler(boolean recurrent){
-        if(!ExecutionMode.getInstance().isTest()){
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(FavorsMain.getContext());
-        }
-        if (requestPermission()) {
-            isRecurrent(recurrent);
-        }
-        else{
-            this.recurrent = recurrent;
-        }
-    }
-
     public void permissionFeedback(){
         if(recurrent) {
-            if(checkPermission()) {
-                mFusedLocationClient.requestLocationUpdates(locationRequest(), locationCallback, null);
-            }
+            location.requestLocationUpdates(locationRequest(), successListerner);
         }
         else updateLocation();
     }
 
-    public void updateLocation() {
-        if(checkPermission()) {
-            mFusedLocationClient.getLastLocation().addOnSuccessListener( l -> {
-                updateLocationInformations(l);
-            });
-        }
+
+    private LocationRequest locationRequest(){
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(60 * 1000); // 60 seconds
+        locationRequest.setFastestInterval(30 * 1000); // 30 seconds
+        return locationRequest;
     }
 
-    private LocationCallback locationCallback = new LocationCallback() {
+
+    public LocationHandler(boolean recurrent){
+        isRecurrent(recurrent);
+    }
+
+    OnSuccessListener<Location> successListerner = new OnSuccessListener<Location>() {
         @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Log.d(TAG, "CB called");
-            if (locationResult == null) {
-                Log.e(TAG, "No location provided by GPS");
-                return;
-            }
-            for (Location l : locationResult.getLocations()) {
-                updateLocationInformations(l);
-            }
+        public void onSuccess(Location location) {
+            updateLocationInformations(location);
         }
     };
+
+    public void updateLocation() {
+        location.getLastLocation(successListerner);
+    }
+
+
     private boolean updateLocationInformations(Location l){
         if (l == null) {
             Log.e(TAG, "Location object is missing in location update request");
@@ -139,24 +141,33 @@ public class LocationHandler {
         lastLocation = l;
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
-
+        locationUser.set(lastLocation);
+        User.setLocation(locationPoint.get());
+        // if desired the user city can automatically be updated every time location changes
+        // User.setCity(locationCity.get());
+        Log.d("location", "code:1000 - successfully obtained location of user");
         return true;
     }
 
     private String getReadableLocation(GeoPoint geoPoint){
 
         if (geoPoint == null) {
-            Log.e(TAG, "Location geopoint don't have any content");
+            Log.e(TAG, "Location geopoint does not have any content");
             return "Not available";
         }
-
-        Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
-            if (addresses.size() > 0) return addresses.get(0).getLocality();
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to get geoPoint information");
+        if(!ExecutionMode.getInstance().isTest()) {
+            Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
+            try {
+                List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
+                if (addresses.size() > 0) return addresses.get(0).getLocality();
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to get geoPoint information");
+            }
+            return "Not available";
         }
-        return "Not available";
+        else{
+            return  "Fake Lausanne";
+        }
+
     }
 }

@@ -3,6 +3,8 @@ package ch.epfl.sweng.favors.database;
 import android.databinding.ObservableField;
 import android.util.Log;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import javax.annotation.Nonnull;
 
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -51,6 +53,32 @@ public class User extends DatabaseEntity {
         user.reset();
     }
 
+    /**
+     * Sets the current location of the user
+     * @param geo the geopoint that will be stored in the database
+     */
+    static public void setLocation(@Nonnull GeoPoint geo){
+        Database.getInstance().updateFromDb(user);
+        if (user.get(StringFields.lastName) != null
+                && user.get(StringFields.email) != null
+                    && user.get(StringFields.sex) != null) {
+            user.set(ObjectFields.location, geo);
+            Database.getInstance().updateOnDb(user);
+        }
+    }
+
+//    /**
+//     * Sets the current city
+//     * @param city the city that will be stored in the database
+//     */
+//    static public void setCity(@Nonnull String city){
+//        Database.getInstance().updateFromDb(user);
+//        if (user != null) {
+//            user.set(StringFields.city, city);
+//            Database.getInstance().updateOnDb(user);
+//        }
+//    }
+
     public enum UserGender {
         M ,F, DEFAULT;
 
@@ -94,8 +122,6 @@ public class User extends DatabaseEntity {
         static public ObservableField<String> getObservableGenderString(@Nonnull User user){
             return user.getObservableObject(User.StringFields.sex);
         }
-
-
     }
 }
 

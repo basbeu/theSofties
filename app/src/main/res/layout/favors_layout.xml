@@ -123,6 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="43dp"
             android:layout_marginTop="20sp"
+            android:text="@{elements.locationCity}"
             android:hint="@string/locationFavor"
             android:inputType="text"
             android:layout_marginEnd="35dp"
