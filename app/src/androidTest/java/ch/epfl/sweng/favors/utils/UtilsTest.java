@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.utils;
 
+import android.content.Context;
 import android.os.Looper;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -10,7 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.favors.authentication.Authentication;
+
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
@@ -132,9 +136,28 @@ public class UtilsTest {
     public void failingToast(){
         ActivityTestRule<TestActivity> activityActivityTestRule = new ActivityTestRule<>(TestActivity.class);
         activityActivityTestRule.launchActivity(null);
-        Looper.prepare();
+
+        if (Looper.myLooper() == null)
+        {
+            Looper.prepare();
+        }
 
         Utils.displayToastOnTaskCompletion(Tasks.forCanceled(),activityActivityTestRule.getActivity(),"success","failure");
+    }
+
+    @Test
+    public void canLogout(){
+        ActivityTestRule<TestActivity> activityActivityTestRule = new ActivityTestRule<>(TestActivity.class);
+        activityActivityTestRule.launchActivity(null);
+
+        if (Looper.myLooper() == null)
+        {
+            Looper.prepare();
+        }
+
+        Authentication auth = mock(Authentication.class);
+
+        Utils.logout(activityActivityTestRule.getActivity(), auth);
     }
 
 }
