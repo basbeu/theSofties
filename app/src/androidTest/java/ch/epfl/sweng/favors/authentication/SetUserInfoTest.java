@@ -60,23 +60,28 @@ public class SetUserInfoTest {
     @Test
     public void userHasCorrectFirstName() {
 
-        Database.getInstance().updateFromDb(u);
-        assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
+        });
+
     }
     @Test
     public void userHasCorrectLastName() {
-        Database.getInstance().updateFromDb(u);
-        assertEquals(FAKELASTNAME, u.get(User.StringFields.lastName));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals(FAKELASTNAME, u.get(User.StringFields.lastName));
+        });
     }
     @Test
     public void userHasCorrectCity() {
-        Database.getInstance().updateFromDb(u);
-        assertEquals(FAKECITY, u.get(User.StringFields.city));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals(FAKECITY, u.get(User.StringFields.city));
+        });
     }
     @Test
     public void userHasCorrectGender() {
-        Database.getInstance().updateFromDb(u);
-        assertEquals("F", u.get(User.StringFields.sex));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals("F", u.get(User.StringFields.sex));
+        });
     }
 
 }
