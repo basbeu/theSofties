@@ -142,14 +142,14 @@ public class BigTestNew1 {
         textView.check(matches(withText("Eudes")));
 
         ViewInteraction textView4 = onView(
-                allOf(withId(R.id.profileTitle), withText("Profile"),
+                allOf(withId(R.id.profileTitle), withText("Your Profile"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 0),
                         isDisplayed()));
-        textView4.check(matches(withText("Profile")));
+        textView4.check(matches(withText("Your Profile")));
 
 
         ViewInteraction textView6 = onView(
