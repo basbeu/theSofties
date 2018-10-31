@@ -21,7 +21,7 @@ import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
  */
 public class FakeDatabase extends Database{
 
-    public static final String LAST_FAVOR_TITLE = "Unify String Theroy";
+    public static final String LAST_FAVOR_TITLE = "Flash needs some help";
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
 
@@ -246,6 +246,7 @@ public class FakeDatabase extends Database{
      */
     public void addExtraToDb(){
         Favor fNew = new Favor("newFavor");
+        Favor fNew2 = new Favor("newFavor2");
 
         fNew.set(Favor.StringFields.ownerID, "U3");
         fNew.set(Favor.StringFields.category, "Test Writter");
@@ -254,7 +255,12 @@ public class FakeDatabase extends Database{
         fNew.set(Favor.StringFields.title, "help with tests");
         fNew.set(Favor.StringFields.locationCity, "EPFL");
 
-        getInstance().updateOnDb(fNew);
+        fNew2.set(Favor.StringFields.ownerID, "U3");
+        fNew2.set(Favor.StringFields.category, "Hack The Blue Smurf Institute");
+        fNew2.set(Favor.StringFields.deadline, "12.12.20");
+        fNew2.set(Favor.StringFields.description, "We all want to be blue");
+        fNew2.set(Favor.StringFields.title, "Smurf, Smurf, more Smurf");
+        fNew2.set(Favor.StringFields.locationCity, "Smurf World");
 
         User uNew = new User("uNew");
 
@@ -264,14 +270,17 @@ public class FakeDatabase extends Database{
         uNew.set(User.StringFields.city, "Starling City");
         User.UserGender.setGender(uNew, User.UserGender.M);
 
-        getInstance().updateOnDb(uNew);
 
 
         Interest iNew = new Interest("iNew");
+
         iNew.set(Interest.StringFields.title, "DC");
         iNew.set(Interest.StringFields.description, "DC Comics");
 
+        getInstance().updateOnDb(uNew);
         getInstance().updateOnDb(iNew);
+        getInstance().updateOnDb(fNew);
+        getInstance().updateOnDb(fNew2);
     }
 
     /**
@@ -281,5 +290,13 @@ public class FakeDatabase extends Database{
         database.remove("iNew");
         database.remove("uNew");
         database.remove("newFavor");
+        database.remove("newFavor2");
+    }
+
+    /**
+     * This empties the fakeDatabase. Allows for proper teardown of tests.
+     */
+    public void cleanUp(){
+        database = new HashMap<>();
     }
 }
