@@ -84,7 +84,7 @@ public class FavorDetailViewTest {
     }
 
 //    @Test
-//    public void unpackFromBundle(){
+//    public void setFieldsTest(){
 //        Bundle bundle = new Bundle();
 //        bundle.putString(FavorDetailView.FAVOR_ID,"F1");
 //        mFragmentTestRule.launchActivity(new Intent(bundle));

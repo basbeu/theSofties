@@ -28,7 +28,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<Object> geo;
     public ObservableField<String> distance = new ObservableField<>();
 
-    private Location favLocation;
     private Favor localFavor;
 
     FragmentFavorDetailViewBinding binding;
@@ -51,25 +50,23 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         if(savedInstanceState != null) {
             currentFavorID = savedInstanceState.getString(FAVOR_ID);
             localFavor = new Favor(currentFavorID);
-            title = localFavor.getObservableObject(Favor.StringFields.title);
-            description = localFavor.getObservableObject(Favor.StringFields.description);
-            category = localFavor.getObservableObject(Favor.StringFields.category);
-            location = localFavor.getObservableObject(Favor.StringFields.locationCity);
-            geo = localFavor.getObservableObject(Favor.ObjectFields.location);
-            distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
-
+            setFields(localFavor);
         }
         else {
             model.getFavor().observe(this, newFavor -> {
-                title = newFavor.getObservableObject(Favor.StringFields.title);
-                description = newFavor.getObservableObject(Favor.StringFields.description);
-                category = newFavor.getObservableObject(Favor.StringFields.category);
-                location = newFavor.getObservableObject(Favor.StringFields.locationCity);
-                geo = newFavor.getObservableObject(Favor.ObjectFields.location);
-                distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
+                setFields(newFavor);
                 //TODO add token cost binding with new database implementation
             });
         }
+    }
+
+    private void setFields(Favor favor) {
+        title = favor.getObservableObject(Favor.StringFields.title);
+        description = favor.getObservableObject(Favor.StringFields.description);
+        category = favor.getObservableObject(Favor.StringFields.category);
+        location = favor.getObservableObject(Favor.StringFields.locationCity);
+        geo = favor.getObservableObject(Favor.ObjectFields.location);
+        distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
     }
 
     @Override
