@@ -63,4 +63,10 @@ public class FavorsMainTest {
             login.click();
         }
     }
+
+    @Test
+    public void getsContext() {
+        activityActivityTestRule.launchActivity(null);
+        FavorsMain.getContext();
+    }
 }

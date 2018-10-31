@@ -115,4 +115,12 @@ public class AuthentificationProcessTest {
 
     }
 
+    @Test
+    public void backButtonGoesToMain() {
+        ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
+        activityActivityTestRule.launchActivity(null);
+        activityActivityTestRule.getActivity().onBackPressed();
+        onView(withId(R.id.welcomeMessageText)).check(matches(isDisplayed()));
+    }
+
 }
