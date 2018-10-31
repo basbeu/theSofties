@@ -43,6 +43,7 @@ public class BigTestNew1 {
     @Before
     public void setUp(){
         ExecutionMode.getInstance().setTest(true);
+        ExecutionMode.getInstance().setInvalidAuthTest(false);
     }
 
     @Rule
