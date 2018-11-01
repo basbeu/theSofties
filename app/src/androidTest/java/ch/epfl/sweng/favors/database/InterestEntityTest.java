@@ -51,8 +51,9 @@ public class InterestEntityTest {
             interest.set(Interest.StringFields.title, newTitle);
             Database.getInstance().updateOnDb(interest);
             assertEquals(newTitle, interest.get(Interest.StringFields.title));
+            interest.set(Interest.StringFields.title, FAKE_TITLE);
         });
 
-        interest.set(Interest.StringFields.title, FAKE_TITLE);
+
     }
 }
