@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,7 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 
 public class SplashScreenActivityTest {
-    public final ActivityTestRule<SplashScreenActivity> mActivityRule = new ActivityTestRule<>(SplashScreenActivity.class);
+    @Rule public final ActivityTestRule<SplashScreenActivity> mActivityRule = new ActivityTestRule<>(SplashScreenActivity.class);
 
     @Before
     public void Before(){
@@ -30,7 +31,7 @@ public class SplashScreenActivityTest {
 
     @Test
     public void testSplashScreen() {
-        mActivityRule.launchActivity(null);
+        //mActivityRule.launchActivity(null);
         onView(withId(R.id.logoFavors)).check(matches(isDisplayed()));
     }
 }

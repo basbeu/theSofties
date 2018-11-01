@@ -5,6 +5,9 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -21,6 +24,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -39,23 +43,32 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class BigTestAuth {
 
+    private UiDevice device;
+
     @Rule
     public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class);
 
     @Before
     public void setUp(){
+        device = UiDevice.getInstance(getInstrumentation());
         ExecutionMode.getInstance().setTest(true);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
     }
     @Test
-    public void bigTestAuth() {
+    public void bigTestAuth() throws Exception{
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(7000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+
+        if(allowButton.exists()){
+            allowButton.click();
         }
 
         ViewInteraction appCompatButton = onView(
@@ -135,13 +148,13 @@ public class BigTestAuth {
 
         pressBack();
 
-        pressBack();
+        //pressBack();
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(7000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -159,7 +172,7 @@ public class BigTestAuth {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
