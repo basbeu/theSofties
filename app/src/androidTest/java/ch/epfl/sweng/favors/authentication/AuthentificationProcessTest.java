@@ -162,6 +162,12 @@ public class AuthentificationProcessTest {
                         4),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
+        try{
+            Thread.sleep(1000);
+        }catch(Exception e){
+            
+        }
+
         onView(withText("See you soon !")).
                 inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
