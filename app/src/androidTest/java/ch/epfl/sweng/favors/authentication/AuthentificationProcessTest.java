@@ -130,48 +130,6 @@ public class AuthentificationProcessTest {
 
     }
 
-    @Test
-    public void logOutToast() {
-        ExecutionMode.getInstance().setInvalidAuthTest(false);
-        ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
-        Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Login);
-        activityActivityTestRule.launchActivity(intent);
-        // Check if the title correspond to a login title
-        onView(ViewMatchers.withId(R.id.loginMessageText)).check(matches(isDisplayed()));
-        //login process
-        onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("bruce.wayne@waynecorp.com")).perform(closeSoftKeyboard());
-        onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("tatata666")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-        ViewInteraction navigationMenuItemView = onView(
-                allOf(childAtPosition(
-                        allOf(withId(R.id.design_navigation_view),
-                                childAtPosition(
-                                        withId(R.id.nav_view),
-                                        0)),
-                        4),
-                        isDisplayed()));
-        navigationMenuItemView.perform(click());
-        try{
-            Thread.sleep(1000);
-        }catch(Exception e){
-            
-        }
-
-        onView(withText("See you soon !")).
-                inRoot(withDecorView(not(is(activityActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-    }
-
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
