@@ -77,7 +77,7 @@ public class EditProfileFragmentTest {
     public void userCanEditFirstName() {
         mFragmentTestRule.launchActivity(null);
         String newFirstName = "tata";
-        onView(withId(R.id.profFirstNameEdit)).perform(replaceText(newFirstName)).perform(closeSoftKeyboard());
+        onView(withId(R.id.profFirstNameEdit)).perform(scrollTo(), replaceText(newFirstName)).perform(closeSoftKeyboard());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
 
         FakeDatabase.getInstance().updateFromDb(u).addOnSuccessListener(t -> {
@@ -138,7 +138,7 @@ public class EditProfileFragmentTest {
     @Test
     public void userCanEditGender() {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profGenderFEdit)).perform(scrollTo(), click());
+        onView(withId(R.id.profGenderFEdit)).perform(scrollTo(), click()).perform(closeSoftKeyboard());
         onView(withId(R.id.commitChanges)).perform(scrollTo(), click());
 
 
