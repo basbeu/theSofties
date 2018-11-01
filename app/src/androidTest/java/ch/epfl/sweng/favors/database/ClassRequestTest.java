@@ -1,9 +1,15 @@
 package ch.epfl.sweng.favors.database;
+import android.os.Looper;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 public class ClassRequestTest {
     @Test
     public void getsAllFromList() {
+        if (Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
         //favors
         assertEquals(FavorRequest.all(null, null),
                 Request.db.getAll(Favor.class, "favors", null, null));
