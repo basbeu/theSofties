@@ -5,6 +5,9 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -19,8 +22,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -40,24 +45,35 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class BigTestNew1 {
 
+    private UiDevice device;
+
     @Before
     public void setUp(){
+        device = UiDevice.getInstance(getInstrumentation());
         ExecutionMode.getInstance().setTest(true);
         ExecutionMode.getInstance().setInvalidAuthTest(false);
+        FakeDatabase.getInstance().createBasicDatabase();
     }
 
     @Rule
     public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class);
 
     @Test
-    public void bigTestNew1() {
+    public void bigTestNew1() throws Exception{
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(7000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
+
+        if(allowButton.exists() && denyButton.exists()){
+            denyButton.click();
         }
 
         ViewInteraction appCompatButton = onView(
@@ -74,7 +90,7 @@ public class BigTestNew1 {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(7000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

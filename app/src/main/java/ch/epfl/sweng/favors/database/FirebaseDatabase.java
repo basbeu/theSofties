@@ -25,7 +25,7 @@ import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 public class FirebaseDatabase extends Database{
 
     private static FirebaseDatabase db = null;
-    private FirebaseFirestore dbFireStore = null;
+    private static FirebaseFirestore dbFireStore = null;
 
     private FirebaseDatabase(){
         dbFireStore = FirebaseFirestore.getInstance();
@@ -41,6 +41,10 @@ public class FirebaseDatabase extends Database{
         }
 
         return db;
+    }
+
+    public static void setFirebaseTest(FirebaseFirestore newFireStore) {
+        dbFireStore = newFireStore;
     }
 
     @Override
@@ -149,5 +153,10 @@ public class FirebaseDatabase extends Database{
             }
         });
 
+    }
+
+    public void cleanUp(){
+        db = null;
+        dbFireStore = null;
     }
 }

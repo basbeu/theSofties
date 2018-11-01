@@ -73,10 +73,11 @@ public class FavorEntityTest {
             f.set(Favor.BooleanFields.isOpen,newIsOpen);
             Database.getInstance().updateOnDb(f);
             assertEquals(newIsOpen, f.get(Favor.BooleanFields.isOpen));
+            //Set original data for other tests
+            f.set(Favor.BooleanFields.isOpen, FAKE_IS_OPEN);
         });
 
-        //Set original data for other tests
-        f.set(Favor.BooleanFields.isOpen, FAKE_IS_OPEN);
+
     }
 
     @Test
@@ -99,10 +100,11 @@ public class FavorEntityTest {
             Database.getInstance().updateOnDb(f);
 
             assertEquals(newObject, f.get(Favor.ObjectFields.location));
+            //Set original data for other tests
+            f.set(Favor.ObjectFields.location, FAKE_LOCATION_OBJECT);
         });
 
-        //Set original data for other tests
-        f.set(Favor.ObjectFields.location, FAKE_LOCATION_OBJECT);
+
     }
 
     @Test

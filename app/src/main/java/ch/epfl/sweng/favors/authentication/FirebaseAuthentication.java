@@ -1,9 +1,13 @@
 package ch.epfl.sweng.favors.authentication;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
  * Singleton class that represents the authentication with Firebase
@@ -15,6 +19,19 @@ public class FirebaseAuthentication extends Authentication{
     private FirebaseAuthentication(){
         firebaseAuth = FirebaseAuth.getInstance();
     }
+    private FirebaseAuthentication(FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
+        Log.d("DEBUG_TEST", "I am here");
+    }
+
+    public static void setFirebase(FirebaseAuth firebaseAuth){
+        if(!ExecutionMode.getInstance().isTest()) throw new IllegalStateException();
+        Log.d("DEBUG_TEST", "I am here2");
+        if(auth == null) new FirebaseAuthentication(firebaseAuth);
+        else throw new IllegalStateException();
+    }
+
+
 
     /**
      * @return FirebaseAuthentication the instance of authentication for the current session
@@ -23,7 +40,6 @@ public class FirebaseAuthentication extends Authentication{
         if(auth == null){
             auth = new FirebaseAuthentication();
         }
-
         return auth;
     }
 
@@ -59,12 +75,18 @@ public class FirebaseAuthentication extends Authentication{
 
     @Override
     public Task<Void> sendEmailVerification() {
-        return firebaseAuth.getCurrentUser().sendEmailVerification();
+        if(firebaseAuth.getCurrentUser()!=null) {
+            return firebaseAuth.getCurrentUser().sendEmailVerification();
+        }
+        return null;
     }
 
     @Override
     public String getEmail() {
-        return firebaseAuth.getCurrentUser().getEmail();
+        if(firebaseAuth.getCurrentUser()!=null) {
+            return firebaseAuth.getCurrentUser().getEmail();
+        }
+        return null;
     }
 
     @Override
@@ -73,6 +95,11 @@ public class FirebaseAuthentication extends Authentication{
             return firebaseAuth.getCurrentUser().delete();
         }
         return Tasks.forCanceled();
+    }
+
+    public void cleanUp(){
+        auth = null;
+        firebaseAuth = null;
     }
 
 
