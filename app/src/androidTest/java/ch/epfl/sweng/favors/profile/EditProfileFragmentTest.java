@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
@@ -46,6 +47,7 @@ public class EditProfileFragmentTest {
 
     @Before
     public void Before(){
+        Database.cleanUpAll();
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
 

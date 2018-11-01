@@ -33,10 +33,9 @@ public class FavorsMainTest {
         activityActivityTestRule.launchActivity(null);
 
         UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
-        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
 
-        if(allowButton.exists() && denyButton.exists()){
-            denyButton.click();
+        if(allowButton.exists()){
+            allowButton.click();
         }
 
         UiObject register = device.findObject(new UiSelector().text("REGISTER"));
@@ -51,10 +50,9 @@ public class FavorsMainTest {
         activityActivityTestRule.launchActivity(null);
 
         UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
-        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
 
-        if(denyButton.exists() && allowButton.exists()){
-            denyButton.click();
+        if(allowButton.exists()){
+            allowButton.click();
         }
 
         UiObject login = device.findObject(new UiSelector().text("LOGIN"));
@@ -62,5 +60,16 @@ public class FavorsMainTest {
         if(login.exists()){
             login.click();
         }
+    }
+
+    @Test
+    public void getsContext() throws Exception{
+        activityActivityTestRule.launchActivity(null);
+        UiObject allowButton = device.findObject(new UiSelector().text("ALLOW"));
+
+        if(allowButton.exists()){
+            allowButton.click();
+        }
+        FavorsMain.getContext();
     }
 }
