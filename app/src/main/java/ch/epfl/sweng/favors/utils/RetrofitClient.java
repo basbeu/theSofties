@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
 
-    private static final String BASE_URL = "https://api.mailgun.net/v3/sandbox46ad37de76854cb8b884cfb8a56f532f.mailgun.org/";
+    private static final String BASE_URL = "https://api.mailgun.net/v3/favors.services/";
 
     private static final String API_USERNAME = "api";
 
