@@ -40,7 +40,7 @@ public class FavorDetailViewTest {
     }
 
 
-    @Ignore
+    @Ignore("Testing interface not available")
     @Test
     public void imInterestedToast(){
         mFragmentTestRule.launchActivity(null);
