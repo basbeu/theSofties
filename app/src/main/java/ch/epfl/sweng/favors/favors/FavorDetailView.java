@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,12 +18,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.utils.Utils;
 
 
 public class FavorDetailView extends android.support.v4.app.Fragment  {
@@ -90,8 +94,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("OWNERID", ownerId.get());
             //TODO get the email address from user corresponding to ownerID
-            String userMail = "";
-            Intent i = new Intent(Intent.ACTION_SEND);
+            ObservableArrayList<User> user = UserRequest.getList(User.StringFields.email, ownerId.get(), null, null);
+            String userMail = user.get(0).getObservableObject(User.StringFields.email).get();
+            /*Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
             i.putExtra(Intent.EXTRA_EMAIL  , new String[]{userMail});
             i.putExtra(Intent.EXTRA_SUBJECT, "Your favor");
@@ -100,8 +105,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 startActivity(Intent.createChooser(i, "Send mail..."));
             } catch (android.content.ActivityNotFoundException ex) {
                 Toast.makeText(this.getContext(), "There are no email clients installed...", Toast.LENGTH_SHORT).show();
-            }
+            }*/
+            Utils.sendEmail(Authentication.getInstance().getEmail(), userMail, "Interested", "I will help you");
         });
+
 
         return binding.getRoot();
     }

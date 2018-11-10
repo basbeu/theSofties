@@ -8,6 +8,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -22,6 +26,13 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static java.net.HttpURLConnection.HTTP_OK;
 
 public final class Utils {
     private static final int MAXPASSWORDLEN = 20;
@@ -171,6 +182,32 @@ public final class Utils {
     public static long getDifference(Date d1, Date d2) {
         long difference = d1.getTime()-d2.getTime();
         return difference;
+    }
+
+    public static void sendEmail(String from, String to, String subject, String message){
+
+        RetrofitClient.getInstance()
+                .getApi()
+                .sendEmail(from, to, subject, message)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() == HTTP_OK) {
+                            try {
+                                JSONObject obj = new JSONObject(response.body().string());
+                                //Toast.makeText(this.getClass(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                            } catch (JSONException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        //Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
     }
 
 
