@@ -43,7 +43,7 @@ public class FavorDetailViewTest {
     public void imInterestedToast(){
         mFragmentTestRule.launchActivity(null);
         onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
-        onView(withText("We will inform the poster of the add that you are intrested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText("We will inform the poster of the add that you are interested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
     @Test

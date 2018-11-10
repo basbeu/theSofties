@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.databinding.ObservableList;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     private String currentFavorID;
 
 
+
+
     public FavorDetailView() {
         // Required empty public constructor
     }
@@ -92,21 +95,44 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         });
 
         binding.favIntrestedButton.setOnClickListener((l)->{
-            Log.d("OWNERID", ownerId.get());
+            Log.d("SENDTO", "Clicked");
+
+
             //TODO get the email address from user corresponding to ownerID
-            ObservableArrayList<User> user = UserRequest.getList(User.StringFields.email, ownerId.get(), null, null);
-            String userMail = user.get(0).getObservableObject(User.StringFields.email).get();
-            /*Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{userMail});
-            i.putExtra(Intent.EXTRA_SUBJECT, "Your favor");
-            i.putExtra(Intent.EXTRA_TEXT   , "I will help :)");
-            try {
-                startActivity(Intent.createChooser(i, "Send mail..."));
-            } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(this.getContext(), "There are no email clients installed...", Toast.LENGTH_SHORT).show();
-            }*/
-            Utils.sendEmail(Authentication.getInstance().getEmail(), userMail, "Interested", "I will help you");
+            UserRequest.getList(User.StringFields.email, ownerId.get(), 1, null).addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
+                @Override
+                public void onChanged(ObservableList<User> sender) {
+                    Log.d("SENDTO", "1");
+                }
+                @Override
+                public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
+                    Log.d("SENDTO", "2");
+                }
+                @Override
+                public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
+                    String userMail = sender.get(0).getObservableObject(User.StringFields.email).get();
+                    Log.d("SENDTO", userMail);
+                    Utils.sendEmail(Authentication.getInstance().getEmail(), userMail,
+                            "Someone is interested for : "+title.get(),
+                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
+                            getActivity(),
+                            "We will inform the poster of the add that you are interested to help!",
+                            "Sorry an error occured, try again later...");
+
+                }
+                @Override
+                public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
+                    Log.d("SENDTO", "3");
+                }
+                @Override
+                public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
+                    Log.d("SENDTO", "4");
+                }
+            });
+
+
+
+
         });
 
 

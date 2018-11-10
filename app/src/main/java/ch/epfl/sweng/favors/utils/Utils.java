@@ -184,7 +184,7 @@ public final class Utils {
         return difference;
     }
 
-    public static void sendEmail(String from, String to, String subject, String message){
+    public static void sendEmail(String from, String to, String subject, String message, Context context, String successMsg, String failureMsg){
 
         RetrofitClient.getInstance()
                 .getApi()
@@ -195,16 +195,20 @@ public final class Utils {
                         if (response.code() == HTTP_OK) {
                             try {
                                 JSONObject obj = new JSONObject(response.body().string());
-                                //Toast.makeText(this.getClass(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, successMsg, Toast.LENGTH_LONG).show();
                             } catch (JSONException | IOException e) {
+                                Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
                             }
+                        }
+                        else{
+                            Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        //Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
                     }
                 });
 
