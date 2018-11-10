@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 
 import com.google.android.gms.tasks.Task;
 
@@ -59,6 +60,10 @@ public abstract class Database {
                                                                                  String value,
                                                                                  Integer limit,
                                                                                  DatabaseStringField orderBy);
+
+    protected abstract <T extends DatabaseEntity> ObservableField<T> getWithId(Class<T> clazz,
+                                                                       String collection,
+                                                                       String value);
 
 
     /**

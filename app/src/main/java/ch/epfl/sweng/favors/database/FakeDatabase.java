@@ -106,6 +106,11 @@ public class FakeDatabase extends Database{
         return new ObservableArrayList<>();
     }
 
+    @Override
+    protected  <T extends DatabaseEntity> ObservableField<T> getWithId(Class<T> clazz,String collection, String value){
+        return new ObservableField<>();
+    }
+
     /**
      * Fills the FakeDatabase with a few users and favors
      */

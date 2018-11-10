@@ -1,13 +1,17 @@
 package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -120,6 +124,17 @@ public class FirebaseDatabase extends Database{
         return result;
     }
 
+    @Override
+    protected  <T extends DatabaseEntity> ObservableField<T> getWithId(Class<T> clazz,
+                                                                         String collection,
+                                                                         String value){
+        ObservableField<T> result = new ObservableField<>();
+        if(value == null){return null;}
+        DocumentReference query = dbFireStore.collection(collection).document(value);
+        getElement(query, result, clazz);
+        return result;
+    }
+
     /**
      *
      * @param query
@@ -150,6 +165,29 @@ public class FirebaseDatabase extends Database{
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+            }
+        });
+
+    }
+
+    private  <T extends DatabaseEntity>  void getElement(DocumentReference query,
+                                                      ObservableField<T> feedbackContainer,
+                                                      Class<T> clazz ){
+        query.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            public void onSuccess(DocumentSnapshot document) {
+                if (document.exists()) {
+                    try{
+                        T documentObject = clazz.newInstance();
+                        documentObject.set(document.getId(), document.getData());
+                        feedbackContainer.set(documentObject);
+                    }
+                    catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                } else {
+                    System.out.println("No such document!");
+                }
+
             }
         });
 
