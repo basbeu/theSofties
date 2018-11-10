@@ -38,7 +38,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> category;
     public ObservableField<Object> geo;
     public ObservableField<String> distance = new ObservableField<>();
-    public ObservableField<String> ownerId;
+    public ObservableField<String> ownerEmail;
 
     private Favor localFavor;
 
@@ -80,7 +80,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         category = favor.getObservableObject(Favor.StringFields.category);
         location = favor.getObservableObject(Favor.StringFields.locationCity);
         geo = favor.getObservableObject(Favor.ObjectFields.location);
-        ownerId = favor.getObservableObject(Favor.StringFields.ownerID);
+        ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
     }
 
@@ -96,10 +96,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("SENDTO", "Clicked");
-
+            Utils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
+                    "Someone is interested for : "+title.get(),
+                    "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
+                    getActivity(),
+                    "We will inform the poster of the add that you are interested to help!",
+                    "Sorry an error occured, try again later...");
 
             //TODO get the email address from user corresponding to ownerID
-            UserRequest.getList(User.StringFields.email, ownerId.get(), 1, null).addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
+            /*UserRequest.getList(User.StringFields.email, ownerId.get(), 1, null).addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
                 @Override
                 public void onChanged(ObservableList<User> sender) {
                     Log.d("SENDTO", "1");
@@ -128,10 +133,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
                     Log.d("SENDTO", "4");
                 }
-            });
-
-
-
+            });*/
 
         });
 
