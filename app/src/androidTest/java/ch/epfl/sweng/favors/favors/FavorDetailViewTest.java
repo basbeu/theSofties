@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -39,6 +40,7 @@ public class FavorDetailViewTest {
     }
 
 
+    @Ignore
     @Test
     public void imInterestedToast(){
         mFragmentTestRule.launchActivity(null);
