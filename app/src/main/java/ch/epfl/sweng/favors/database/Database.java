@@ -76,4 +76,12 @@ public abstract class Database {
         return db;
     }
 
+    public abstract void cleanUp();
+
+    public static void cleanUpAll(){
+        if(db != null){
+            db.cleanUp();
+            db = null;
+        }
+    }
 }

@@ -135,7 +135,10 @@ public class UtilsTest {
     public void failingToast(){
         ActivityTestRule<TestActivity> activityActivityTestRule = new ActivityTestRule<>(TestActivity.class);
         activityActivityTestRule.launchActivity(null);
-        Looper.prepare();
+        if (Looper.myLooper() == null)
+        {
+            Looper.prepare();
+        }
 
         Utils.displayToastOnTaskCompletion(Tasks.forCanceled(),activityActivityTestRule.getActivity(),"success","failure");
     }
