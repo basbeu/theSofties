@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.utils.Retrofit;
+package ch.epfl.sweng.favors.utils.email;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

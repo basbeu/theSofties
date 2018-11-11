@@ -1,11 +1,17 @@
-package ch.epfl.sweng.favors.utils.Retrofit;
+package ch.epfl.sweng.favors.utils.email;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+/**
+ * Provides the utilities that allow for the sending of emails.
+ */
 public class EmailUtils {
     /**
      * Sends an email to `to` originating from `from`.
+     *
+     * Testing details implementation:
+     * If ExecutionMode.getInstance().setInvalidAuthTest(true) then the email will fail to be send and toast for a failed message will be shown
      *
      * @param from - the originating source of the email
      * @param to - whom the email will be send

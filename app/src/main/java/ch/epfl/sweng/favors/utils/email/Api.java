@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.utils.Retrofit;
+package ch.epfl.sweng.favors.utils.email;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
