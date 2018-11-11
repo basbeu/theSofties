@@ -28,7 +28,7 @@ abstract class RetrofitDispatcher {
 
     abstract retrofit2.Retrofit getClient();
 
-    abstract Api getApi() ;
+    abstract RetrofitApi getApi() ;
 
     abstract Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg);
 }

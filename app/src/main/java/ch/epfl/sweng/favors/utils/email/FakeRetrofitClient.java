@@ -30,8 +30,8 @@ import retrofit2.Retrofit;
     }
 
     @Override
-    public Api getApi() {
-        return new Api() {
+    public RetrofitApi getApi() {
+        return new RetrofitApi() {
             @Override
             public Call<ResponseBody> sendEmail(String from, String to, String subject, String text) {
                 return new Call<ResponseBody>() {
