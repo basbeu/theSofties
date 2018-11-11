@@ -73,8 +73,8 @@ import static java.net.HttpURLConnection.HTTP_OK;
         return retrofit;
     }
 
-    public Api getApi() {
-        return retrofit.create(Api.class);
+    public RetrofitApi getApi() {
+        return retrofit.create(RetrofitApi.class);
     }
 
     @NonNull

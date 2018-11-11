@@ -93,39 +93,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     getActivity(),
                     "We will inform the poster of the add that you are interested to help!",
                     "Sorry an error occured, try again later...");
-
-            //TODO get the email address from user corresponding to ownerID
-            /*UserRequest.getList(User.StringFields.email, ownerId.get(), 1, null).addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
-                @Override
-                public void onChanged(ObservableList<User> sender) {
-                    Log.d("SENDTO", "1");
-                }
-                @Override
-                public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
-                    Log.d("SENDTO", "2");
-                }
-                @Override
-                public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
-                    String userMail = sender.get(0).getObservableObject(User.StringFields.email).get();
-                    Log.d("SENDTO", userMail);
-                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), userMail,
-                            "Someone is interested for : "+title.get(),
-                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
-                            getActivity(),
-                            "We will inform the poster of the add that you are interested to help!",
-                            "Sorry an error occured, try again later...");
-
-                }
-                @Override
-                public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
-                    Log.d("SENDTO", "3");
-                }
-                @Override
-                public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
-                    Log.d("SENDTO", "4");
-                }
-            });*/
-
         });
 
 
