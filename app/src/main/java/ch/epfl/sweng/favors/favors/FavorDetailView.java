@@ -74,7 +74,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
     }
 
-    private void setFields(Favor favor) {
+    public void setFields(Favor favor) {
         title = favor.getObservableObject(Favor.StringFields.title);
         description = favor.getObservableObject(Favor.StringFields.description);
         category = favor.getObservableObject(Favor.StringFields.category);

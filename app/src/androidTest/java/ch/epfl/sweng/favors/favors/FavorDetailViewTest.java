@@ -3,6 +3,10 @@ package ch.epfl.sweng.favors.favors;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -10,10 +14,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -28,13 +35,17 @@ import static org.junit.Assert.fail;
 
 public class FavorDetailViewTest {
 
+    private UiDevice device;
+
     //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
 
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
+    @Rule public FragmentTestRule<FavorsFragment> listFragmentTestRule = new FragmentTestRule<FavorsFragment>(FavorsFragment.class);
 
 
     @Before
     public void Before(){
+        device = UiDevice.getInstance(getInstrumentation());
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
     }
@@ -42,8 +53,29 @@ public class FavorDetailViewTest {
 
     //@Ignore("Testing interface not available")
     @Test
-    public void imInterestedToast(){
+    public void imInterestedToast() throws UiObjectNotFoundException{
         mFragmentTestRule.launchActivity(null);
+
+        Favor f1 = new Favor("F1");
+
+        f1.set(Favor.StringFields.ownerID, "U3");
+        f1.set(Favor.StringFields.category, "Hand help");
+        f1.set(Favor.StringFields.deadline, "12.12.20");
+        f1.set(Favor.StringFields.description, "I need help to get rid of an old friend.");
+        f1.set(Favor.StringFields.title, "KILL THE BATMAN");
+        f1.set(Favor.StringFields.locationCity, "Gotham City");
+        f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+
+        Database.getInstance().updateOnDb(f1);
+
+        mFragmentTestRule.getFragment().setFields(f1);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
         onView(withText("We will inform the poster of the add that you are interested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
