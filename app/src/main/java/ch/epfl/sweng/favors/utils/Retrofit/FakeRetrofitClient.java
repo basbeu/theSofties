@@ -36,39 +36,25 @@ public class FakeRetrofitClient extends RetrofitDispatcher {
             public Call<ResponseBody> sendEmail(String from, String to, String subject, String text) {
                 return new Call<ResponseBody>() {
                     @Override
-                    public Response<ResponseBody> execute() throws IOException {
-                        return null;
-                    }
+                    public Response<ResponseBody> execute() throws IOException { return null; }
 
                     @Override
-                    public void enqueue(Callback<ResponseBody> callback) {
-                        callback.onFailure(null,null);
-                    }
+                    public void enqueue(Callback<ResponseBody> callback) { callback.onFailure(null,null); }
 
                     @Override
-                    public boolean isExecuted() {
-                        return false;
-                    }
+                    public boolean isExecuted() { return true; }
 
                     @Override
-                    public void cancel() {
-
-                    }
+                    public void cancel() { }
 
                     @Override
-                    public boolean isCanceled() {
-                        return false;
-                    }
+                    public boolean isCanceled() {return false;}
 
                     @Override
-                    public Call<ResponseBody> clone() {
-                        return null;
-                    }
+                    public Call<ResponseBody> clone() {return null; }
 
                     @Override
-                    public Request request() {
-                        return null;
-                    }
+                    public Request request() { return null;}
                 };
             }
         };
