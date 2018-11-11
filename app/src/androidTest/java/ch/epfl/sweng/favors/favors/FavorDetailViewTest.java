@@ -40,12 +40,10 @@ public class FavorDetailViewTest {
     //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
 
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
-    @Rule public FragmentTestRule<FavorsFragment> listFragmentTestRule = new FragmentTestRule<FavorsFragment>(FavorsFragment.class);
 
 
     @Before
     public void Before(){
-        device = UiDevice.getInstance(getInstrumentation());
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
     }
@@ -53,7 +51,8 @@ public class FavorDetailViewTest {
 
     //@Ignore("Testing interface not available")
     @Test
-    public void imInterestedToast() throws UiObjectNotFoundException{
+    public void imInterestedToast(){
+
         mFragmentTestRule.launchActivity(null);
 
         Favor f1 = new Favor("F1");
@@ -68,7 +67,14 @@ public class FavorDetailViewTest {
 
         Database.getInstance().updateOnDb(f1);
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         mFragmentTestRule.getFragment().setFields(f1);
+
 
         try {
             Thread.sleep(2000);
