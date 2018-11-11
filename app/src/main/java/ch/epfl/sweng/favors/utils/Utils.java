@@ -3,8 +3,6 @@ package ch.epfl.sweng.favors.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -14,8 +12,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -28,6 +24,8 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
+import ch.epfl.sweng.favors.utils.Retrofit.RetrofitClient;
+import ch.epfl.sweng.favors.utils.Retrofit.RetrofitDispatcher;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,33 +196,14 @@ public final class Utils {
      */
     public static void sendEmail(@NonNull String from,@NonNull String to, String subject, String message,@NonNull Context context,@NonNull String successMsg,@NonNull String failureMsg){
 
-        RetrofitClient.getInstance()
+        RetrofitDispatcher.getInstance()
                 .getApi()
                 .sendEmail(from, to, subject, message)
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.code() == HTTP_OK) {
-                            try {
-                                JSONObject obj = new JSONObject(response.body().string());
-                                Toast.makeText(context, successMsg, Toast.LENGTH_LONG).show();
-                            } catch (JSONException | IOException e) {
-                                Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
-                        }
-                        else{
-                            Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
-                    }
-                });
+                .enqueue(RetrofitDispatcher.getInstance().getCallback(context, successMsg, failureMsg));
 
     }
+
+
 
 
 }

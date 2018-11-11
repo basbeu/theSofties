@@ -1,6 +1,12 @@
-package ch.epfl.sweng.favors.utils;
+package ch.epfl.sweng.favors.utils.Retrofit;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Base64;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -8,10 +14,15 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+import static java.net.HttpURLConnection.HTTP_OK;
+
+public class RetrofitClient extends RetrofitDispatcher{
 
 
     private static final String BASE_URL = "https://api.mailgun.net/v3/favors.services/";
@@ -64,5 +75,31 @@ public class RetrofitClient {
 
     public Api getApi() {
         return retrofit.create(Api.class);
+    }
+
+    @NonNull
+    public Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
+        return new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.code() == HTTP_OK) {
+                    try {
+                        JSONObject obj = new JSONObject(response.body().string());
+                        Toast.makeText(context, successMsg, Toast.LENGTH_LONG).show();
+                    } catch (JSONException | IOException e) {
+                        Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, failureMsg, Toast.LENGTH_LONG).show();
+            }
+        };
     }
 }
