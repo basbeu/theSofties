@@ -11,6 +11,7 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,6 +33,14 @@ public class FakeRetroFitClientTest {
         assertEquals(true, isExecuted);
         Request request = RetrofitDispatcher.getInstance().getApi().sendEmail("from", "to", "subject", "test").request();
         assertEquals(null, request);
+        boolean canceled = RetrofitDispatcher.getInstance().getApi().sendEmail("from", "to", "subject", "test").isCanceled();
+        assertEquals(false, canceled);
+    }
+
+    @Test
+    public void getClientReturnsNull(){
+        Retrofit client = RetrofitDispatcher.getInstance().getClient();
+        assertEquals(null, client);
     }
 
     @After
