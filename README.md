@@ -82,10 +82,12 @@ We are 7 computer science and communication system students at EPFL, currently e
 
 ### Sprint 6
 
-#### scrum master: Andrea, presenter: Bastien
+#### Scrum master: Andrea, presenter: Bastien
 
 - increase code coverage to pass 80% (accomplished on November 1st) 
 - send email to user to notify them of a interest in help
+- purchased domain name favors.services
+- made dummy webstie to replace 404 error on website access www.favors.services
 
 # Tests
 
@@ -120,6 +122,8 @@ code example goes here
 This feature enables emails to be send to a specified source from anywhere in the app.
 
 ```java
+import ch.epfl.sweng.favors.utils.email.EmailUtils;
+
  /**
      * Sends an email to `to` originating from `from`.
      *
@@ -131,7 +135,7 @@ This feature enables emails to be send to a specified source from anywhere in th
      * @param successMsg - text that will be displayed as a toast if the email is successfully send
      * @param failureMsg - text that will be displayed as a toast if the email fails to be send
      */
-Utils.sendEmail("SOURCE_EMAIL", "DESTINATION_EMAIL,
+EmailUtils.sendEmail("SOURCE_EMAIL", "DESTINATION_EMAIL,
                     "AN AMAZING SUBJECT",
                     "MAIN BODY OF THE MESSAGE",
                     getActivity(),
