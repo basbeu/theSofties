@@ -86,6 +86,10 @@ We are 7 computer science and communication system students at EPFL, currently e
 
 - increase code coverage to pass 80% (accomplished on November 1st) 
 - send email to user to notify them of a interest in help
+- acquired domain name. **favors.services**
+- set up MailGun integration
+- made dummy website www.favors.services
+
 
 # Tests
 
