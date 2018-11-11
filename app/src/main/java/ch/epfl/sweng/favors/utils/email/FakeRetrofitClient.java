@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.utils.Retrofit;
+package ch.epfl.sweng.favors.utils.email;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -60,6 +60,10 @@ import retrofit2.Retrofit;
         };
     }
 
+
+    /*
+    This method allows for the testing of the send email. The result depends on the execution mode that is called
+     */
     @Override
     public Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
         return new Callback<ResponseBody>() {
