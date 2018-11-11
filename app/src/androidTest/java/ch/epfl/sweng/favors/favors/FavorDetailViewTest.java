@@ -87,6 +87,46 @@ public class FavorDetailViewTest {
     }
 
     @Test
+    public void imInterestedToastFailed(){
+
+        ExecutionMode.getInstance().setInvalidAuthTest(true);
+
+        mFragmentTestRule.launchActivity(null);
+
+        Favor f1 = new Favor("F1");
+
+        f1.set(Favor.StringFields.ownerID, "U3");
+        f1.set(Favor.StringFields.category, "Hand help");
+        f1.set(Favor.StringFields.deadline, "12.12.20");
+        f1.set(Favor.StringFields.description, "I need help to get rid of an old friend.");
+        f1.set(Favor.StringFields.title, "KILL THE BATMAN");
+        f1.set(Favor.StringFields.locationCity, "Gotham City");
+        f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+
+        Database.getInstance().updateOnDb(f1);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mFragmentTestRule.getFragment().setFields(f1);
+
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
+        onView(withText("Sorry an error occured, try again later...")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+        ExecutionMode.getInstance().setInvalidAuthTest(false);
+    }
+
+    @Test
     public void imageDisplayed(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.imageView)).perform(scrollTo()).check(matches(isDisplayed()));
