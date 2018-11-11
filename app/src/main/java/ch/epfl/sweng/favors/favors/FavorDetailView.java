@@ -1,12 +1,8 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
-import android.databinding.ObservableList;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,20 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
-import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.FirebaseDatabase;
-import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.utils.Utils;
+import ch.epfl.sweng.favors.utils.email.EmailUtils;
+
 
 
 public class FavorDetailView extends android.support.v4.app.Fragment  {
@@ -96,7 +87,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("SENDTO", "Clicked");
-            Utils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
+            EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
                     "Someone is interested for : "+title.get(),
                     "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
                     getActivity(),
@@ -117,7 +108,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
                     String userMail = sender.get(0).getObservableObject(User.StringFields.email).get();
                     Log.d("SENDTO", userMail);
-                    Utils.sendEmail(Authentication.getInstance().getEmail(), userMail,
+                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), userMail,
                             "Someone is interested for : "+title.get(),
                             "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
                             getActivity(),

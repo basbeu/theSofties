@@ -7,11 +7,14 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import okhttp3.ResponseBody;
 import retrofit2.Callback;
 
-public abstract class RetrofitDispatcher {
+/**
+ * Allows for access to the retrofitClient to send and receive emails
+ */
+abstract class RetrofitDispatcher {
 
     private static RetrofitDispatcher mInstance;
 
-    public static synchronized RetrofitDispatcher getInstance() {
+    static synchronized RetrofitDispatcher getInstance() {
         if (mInstance == null) {
             if(ExecutionMode.getInstance().isTest()) {
                 mInstance = FakeRetrofitClient.getInstance();
@@ -23,9 +26,9 @@ public abstract class RetrofitDispatcher {
         return mInstance;
     }
 
-    public abstract retrofit2.Retrofit getClient();
+    abstract retrofit2.Retrofit getClient();
 
-    public abstract Api getApi() ;
+    abstract Api getApi() ;
 
-    public abstract Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg);
+    abstract Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg);
 }

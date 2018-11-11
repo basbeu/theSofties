@@ -24,14 +24,7 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
-import ch.epfl.sweng.favors.utils.Retrofit.RetrofitClient;
-import ch.epfl.sweng.favors.utils.Retrofit.RetrofitDispatcher;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static java.net.HttpURLConnection.HTTP_OK;
 
 public final class Utils {
     private static final int MAXPASSWORDLEN = 20;
@@ -182,28 +175,6 @@ public final class Utils {
         long difference = d1.getTime()-d2.getTime();
         return difference;
     }
-
-    /**
-     * Sends an email to `to` originating from `from`.
-     *
-     * @param from - the originating source of the email
-     * @param to - whom the email will be send
-     * @param subject - subject/header of the email
-     * @param message - the main body of the email
-     * @param context - the current context that is using this method
-     * @param successMsg - text that will be displayed as a toast if the email is successfully send
-     * @param failureMsg - text that will be displayed as a toast if the email fails to be send
-     */
-    public static void sendEmail(@NonNull String from,@NonNull String to, String subject, String message,@NonNull Context context,@NonNull String successMsg,@NonNull String failureMsg){
-
-        RetrofitDispatcher.getInstance()
-                .getApi()
-                .sendEmail(from, to, subject, message)
-                .enqueue(RetrofitDispatcher.getInstance().getCallback(context, successMsg, failureMsg));
-
-    }
-
-
 
 
 }
