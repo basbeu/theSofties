@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
-public class RetrofitClient extends RetrofitDispatcher{
+ class RetrofitClient extends RetrofitDispatcher{
 
 
     private static final String BASE_URL = "https://api.mailgun.net/v3/favors.services/";

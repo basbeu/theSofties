@@ -6,8 +6,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface Api {
-
+interface Api {
     @FormUrlEncoded
     @POST("messages")
     Call<ResponseBody> sendEmail(
@@ -16,5 +15,4 @@ public interface Api {
             @Field("subject") String subject,
             @Field("text") String text
     );
-
 }

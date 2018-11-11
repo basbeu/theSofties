@@ -14,7 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class FakeRetrofitClient extends RetrofitDispatcher {
+ class FakeRetrofitClient extends RetrofitDispatcher {
     private static FakeRetrofitClient mInstance;
 
     public static synchronized FakeRetrofitClient getInstance() {

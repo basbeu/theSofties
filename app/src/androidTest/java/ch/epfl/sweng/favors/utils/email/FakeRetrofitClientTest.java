@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.utils;
+package ch.epfl.sweng.favors.utils.email;
 
 import org.junit.After;
 import org.junit.Before;
@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import ch.epfl.sweng.favors.utils.Retrofit.RetrofitDispatcher;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 
 import static org.junit.Assert.assertEquals;
 
-public class FakeRetroFitClientTest {
+public class FakeRetrofitClientTest {
 
     @Before
     public void before(){
