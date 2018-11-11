@@ -2,15 +2,16 @@ package ch.epfl.sweng.favors.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.DatePicker;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,6 +23,8 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.main.FavorsMain;
+
+
 
 public final class Utils {
     private static final int MAXPASSWORDLEN = 20;
