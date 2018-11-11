@@ -70,6 +70,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
 
             newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
+            newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
             Log.d("Database: Favor", "Favor pushed to database");
             Database.getInstance().updateOnDb(newFavor);
