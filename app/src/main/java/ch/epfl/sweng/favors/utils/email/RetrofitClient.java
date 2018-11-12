@@ -29,7 +29,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
     private static final String API_USERNAME = "api";
 
-    private static final String API_PASSWORD = "3b8cc2b3c0107c42a11cb08cecfe5c6d-4412457b-89b86f77";
+    private static final String API_PASSWORD = "";
 
     private static final String AUTH = "Basic " + Base64.encodeToString((API_USERNAME+":"+API_PASSWORD).getBytes(), Base64.NO_WRAP);
 
