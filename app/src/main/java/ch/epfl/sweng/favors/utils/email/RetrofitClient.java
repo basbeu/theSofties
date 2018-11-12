@@ -27,7 +27,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
  class RetrofitClient extends RetrofitDispatcher{
 
 
-    private static final String BASE_URL = "https://api.mailgun.net/v3/favors.services/";
+    private static final String BASE_URL = "https://api.mailgun.net/v3/myfavors.xyz/";
 
     private static final String API_USERNAME = "api";
 
