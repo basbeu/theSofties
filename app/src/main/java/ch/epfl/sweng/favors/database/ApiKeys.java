@@ -2,6 +2,10 @@ package ch.epfl.sweng.favors.database;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.Tasks;
+
+import java.util.concurrent.ExecutionException;
+
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
@@ -29,10 +33,13 @@ public class ApiKeys extends DatabaseEntity {
         if (mInstance != null) throw new UnsupportedOperationException("Instance already exists");
     }
 
+    /**
+     * You need to call Database.getInstance.updateFromDb(apiKey) to be sure that the key is loaded
+     * @return An API key object
+     */
     public static synchronized ApiKeys getInstance() {
         if (mInstance == null) {
             mInstance = new ApiKeys();
-            db.updateFromDb(mInstance);
         }
         return mInstance;
     }
