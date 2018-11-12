@@ -13,6 +13,7 @@
     <string name="confirmationSent">Please check your e-mails to confirm your inscription.</string>
     <string name="resetPassword">Reset password</string>
     <string name="resendConfirmation">Resend confirmation.</string>
+    <string name="favorPosterDetailViewTitle">Who is the poster?</string>
     <string name="gotit">Got it !</string>
     <string name="next">Next</string>
     <string-array name="sortBy">

@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
         else {
             model.getFavor().observe(this, newFavor -> {
+                localFavor = newFavor;
                 setFields(newFavor);
                 //TODO add token cost binding with new database implementation
             });
@@ -80,10 +82,17 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view,container,false);
         binding.setElements(this);
-
-        binding.favReportAbusiveAdd.setOnClickListener((l)->{
-            Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
-        });
+        binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
+                FavorPosterDetailView mFrag = new FavorPosterDetailView();
+                Bundle bundle = new Bundle();
+                if(localFavor.get(Favor.StringFields.ownerEmail) == null){
+                    System.out.println("HOORAY");
+                }
+                bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
+                mFrag.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        mFrag).addToBackStack(null).commit();});
+        binding.favReportAbusiveAdd.setOnClickListener(l-> Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show());
 
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("SENDTO", "Clicked");
