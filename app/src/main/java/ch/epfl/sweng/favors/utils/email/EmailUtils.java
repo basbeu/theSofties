@@ -28,6 +28,7 @@ public class EmailUtils {
      */
     public static void sendEmail(@NonNull String from, @NonNull String to, String subject, String message, @NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg){
 
+        //Ensure that API Keys are up to date before calling the API
         ApiKeys key = ApiKeys.getInstance();
         Database.getInstance().updateFromDb(key).addOnCompleteListener(t->{
 
