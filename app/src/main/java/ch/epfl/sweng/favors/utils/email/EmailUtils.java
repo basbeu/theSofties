@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors.utils.email;
 
 import android.content.Context;
-import android.databinding.Observable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -29,12 +28,6 @@ public class EmailUtils {
     public static void sendEmail(@NonNull String from, @NonNull String to, String subject, String message, @NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg){
 
         ApiKeys key = ApiKeys.getInstance();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         Log.d(TAG, key.get(ApiKeys.StringFields.mailGun));
 
         RetrofitDispatcher.getInstance()
