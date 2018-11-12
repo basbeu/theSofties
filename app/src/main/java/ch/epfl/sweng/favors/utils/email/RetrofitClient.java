@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import ch.epfl.sweng.favors.database.ApiKeys;
+import ch.epfl.sweng.favors.database.Database;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -29,7 +31,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
     private static final String API_USERNAME = "api";
 
-    private static final String API_PASSWORD = "API_KEY";
+    private static final String API_PASSWORD = ApiKeys.getInstance().get(ApiKeys.StringFields.mailGun);
 
     private static final String AUTH = "Basic " + Base64.encodeToString((API_USERNAME+":"+API_PASSWORD).getBytes(), Base64.NO_WRAP);
 
