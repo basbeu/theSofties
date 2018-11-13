@@ -5,11 +5,15 @@ import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Tasks;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
+import ch.epfl.sweng.favors.database.ApiKeys;
+import ch.epfl.sweng.favors.database.Database;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,14 +26,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
- class RetrofitClient extends RetrofitDispatcher{
+class RetrofitClient extends RetrofitDispatcher{
 
 
-    private static final String BASE_URL = "https://api.mailgun.net/v3/favors.services/";
+    private static final String BASE_URL = "https://api.mailgun.net/v3/myfavors.xyz/";
 
     private static final String API_USERNAME = "api";
 
-    private static final String API_PASSWORD = "";
+    private static final String API_PASSWORD = ApiKeys.getInstance().get(ApiKeys.StringFields.mailGun);
 
     private static final String AUTH = "Basic " + Base64.encodeToString((API_USERNAME+":"+API_PASSWORD).getBytes(), Base64.NO_WRAP);
 
@@ -37,6 +41,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
     private Retrofit retrofit;
 
     private RetrofitClient() {
+
         OkHttpClient okClient = new OkHttpClient.Builder()
                 .addInterceptor(
                         new Interceptor() {
@@ -74,6 +79,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
     }
 
     public RetrofitApi getApi() {
+
         return retrofit.create(RetrofitApi.class);
     }
 
