@@ -28,8 +28,6 @@ public class FavorListTest {
     @Rule
     public FragmentTestRule<FavorsFragment> mFragmentTestRule = new FragmentTestRule<FavorsFragment>(FavorsFragment.class);
 
-
-
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);

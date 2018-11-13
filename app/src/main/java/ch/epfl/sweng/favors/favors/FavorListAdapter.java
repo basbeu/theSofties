@@ -9,11 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
@@ -21,8 +25,9 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
-public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
+public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder> implements Filterable {
     private ObservableArrayList<Favor> favorList;
+    private ObservableArrayList<Favor> filteredFavorList;
     private SharedViewFavor sharedViewFavor;
     private FragmentActivity fragmentActivity;
     private OnItemClickListener listener;
@@ -35,7 +40,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, timestamp, location, description, distance;
         public FavorListAdapter adapter;
-        public Favor selectedFavor = null;
 
         public FavorViewHolder(View itemView, FavorListAdapter adapter) {
             super(itemView);
@@ -46,10 +50,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             description = itemView.findViewById(R.id.description);
             distance = itemView.findViewById(R.id.distance);
             this.adapter = adapter;
-        }
-
-        public void setFavor(Favor f) {
-            this.selectedFavor = f;
         }
 
         @Override
@@ -87,11 +87,13 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             } else { timestamp.setText("--"); }
         }
 
+
     }
 
     //constructor
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
+        this.filteredFavorList = favorList;
         if(!ExecutionMode.getInstance().isTest()){
             this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
         }
@@ -110,6 +112,39 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
     }
 
     @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredFavorList = favorList;
+                } else {
+                    ObservableArrayList<Favor> filteredList = new ObservableArrayList<>();
+                    for (Favor f : favorList) {
+                        //see if input matches title or description
+                        if (f.get(Favor.StringFields.title).toLowerCase().contains(charString.toLowerCase()) || f.get(Favor.StringFields.description).contains(charSequence)) {
+                            filteredList.add(f);
+                        }
+                    }
+
+                    filteredFavorList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredFavorList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredFavorList = (ObservableArrayList<Favor>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    @Override
     public FavorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //set layout to itemView using Layout inflater
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favor_item, parent, false);
@@ -118,12 +153,12 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     @Override
     public void onBindViewHolder(FavorViewHolder holder, int position) {
-        holder.bind(favorList.get(position), listener);
+        holder.bind(filteredFavorList.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        return favorList.size();
+        return filteredFavorList.size();
     }
 
 }
