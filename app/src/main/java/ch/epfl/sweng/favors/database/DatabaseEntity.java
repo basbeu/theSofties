@@ -1,10 +1,12 @@
 package ch.epfl.sweng.favors.database;
 
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
@@ -14,7 +16,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
-public abstract class DatabaseEntity {
+public abstract class DatabaseEntity implements Observable {
 
     protected static Database db = Database.getInstance(); // = FirebaseFirestore.getInstance();
 
@@ -105,6 +107,7 @@ public abstract class DatabaseEntity {
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
         convertObjectMapToTypedMap(incommingData, intData, Integer.class);
+        notifyContentChange();
     }
 
     /**
@@ -157,6 +160,7 @@ public abstract class DatabaseEntity {
             resetMap(objectData, null);
         if(intData != null)
             resetMap(intData,null);
+        notifyContentChange();
     }
 
     /**
@@ -173,6 +177,21 @@ public abstract class DatabaseEntity {
         }
     }
 
+    List<OnPropertyChangedCallback> callbacks;
+    @Override
+    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        assert(callback != null);
+        callbacks.add(callback);
+    }
+    @Override
+    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.remove(callback);
+    }
+    private void notifyContentChange(){
+        for (OnPropertyChangedCallback callback : callbacks){
+            callback.notify();
+        }
+    }
 
     public void set(String id, Map<String, Object> content){
         this.documentID =id;

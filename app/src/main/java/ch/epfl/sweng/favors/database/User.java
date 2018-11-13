@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.util.Log;
 
@@ -13,7 +14,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
-public class User extends DatabaseEntity {
+public class User extends DatabaseEntity{
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";

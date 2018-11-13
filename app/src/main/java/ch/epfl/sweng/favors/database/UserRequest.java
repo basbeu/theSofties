@@ -15,7 +15,10 @@ public final class UserRequest extends Request{
         return db.getList(User.class, COLLECTION, element, value, limit, orderBy);
     }
 
-    public static ObservableField<User> getUserInformations(String value){
-        return db.getWithId(User.class, COLLECTION, value);
+    public static User getWithId(String value){
+        return db.getElement(User.class, COLLECTION, value);
+    }
+    public static User getWithEmail(String email){
+        return db.getElement(User.class, COLLECTION, User.StringFields.email, email);
     }
 }

@@ -101,14 +101,86 @@ public class FakeDatabase extends Database{
         }
     }
 
-    @Override
-    protected <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz, String collection, DatabaseField element, String value, Integer limit, DatabaseStringField orderBy) {
-        return new ObservableArrayList<>();
-    }
+
 
     @Override
-    protected  <T extends DatabaseEntity> ObservableField<T> getWithId(Class<T> clazz,String collection, String value){
-        return new ObservableField<>();
+    protected  <T extends DatabaseEntity> void updateList(ObservableArrayList<T> list, Class<T> clazz,
+                                                          String collection,
+                                                          DatabaseField element,
+                                                          String value,
+                                                          Integer limit,
+                                                          DatabaseStringField orderBy){
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+            Log.d(TAG, "getAll called : "+ clazz.toString());
+            switch (clazz.toString()){
+                case "class ch.epfl.sweng.favors.database.Interest":
+                    Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
+                    addToList(clazz,(T)database.get("I1"),list);
+                    addToList(clazz,(T)database.get("I2"),list);
+                    addToList(clazz,(T)database.get("I3"),list);
+                    addToList(clazz,(T)database.get("I4"),list);
+                    addToList(clazz,(T)database.get("I5"),list);
+                    break;
+                case "class ch.epfl.sweng.favors.database.Favor":
+                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
+                    addToList(clazz,(T)database.get("F1"),list);
+                    addToList(clazz,(T)database.get("F2"),list);
+                    addToList(clazz,(T)database.get("F3"),list);
+                    addToList(clazz,(T)database.get("F4"),list);
+                    addToList(clazz,(T)database.get("F5"),list);
+                    addToList(clazz,(T)database.get("F6"),list);
+                    addToList(clazz,(T)database.get("F7"),list);
+            }
+        },500);
+    }
+
+
+
+    @Override
+    protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
+                                                             String value){
+
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+            Log.d(TAG, "getAll called : "+ clazz.toString());
+            switch (clazz.toString()){
+                case "class ch.epfl.sweng.favors.database.Interest":
+                    Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
+
+                    toUpdate.set("I1", ((T)database.get("I1")).getEncapsulatedObjectOfMaps());
+
+                    break;
+                case "class ch.epfl.sweng.favors.database.Favor":
+                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
+                    toUpdate.set("F1", ((T)database.get("F1")).getEncapsulatedObjectOfMaps());
+
+            }
+        },500);
+    }
+
+
+
+
+    @Override
+    protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
+                                                             DatabaseField element, String value){
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+            Log.d(TAG, "getAll called : "+ clazz.toString());
+            switch (clazz.toString()){
+                case "class ch.epfl.sweng.favors.database.Interest":
+                    Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
+
+                    toUpdate.set("I1", ((T)database.get("I1")).getEncapsulatedObjectOfMaps());
+
+                    break;
+                case "class ch.epfl.sweng.favors.database.Favor":
+                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
+                    toUpdate.set("F1", ((T)database.get("F1")).getEncapsulatedObjectOfMaps());
+
+            }
+        },500);
     }
 
     /**
