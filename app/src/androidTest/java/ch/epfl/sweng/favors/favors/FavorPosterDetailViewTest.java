@@ -51,6 +51,7 @@ public class FavorPosterDetailViewTest {
 
     private UiDevice device;
 
+    //@Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
     public static final String fakePosterEmail = "ownerEMAIL";
 
@@ -67,8 +68,9 @@ public class FavorPosterDetailViewTest {
     //@Ignore("Testing interface not available")
 
     @Test
-    public void titleIsCorrectlyDisplayed() {
+    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
         mFragmentTestRule.launchActivity(null);
+
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
         @Test
@@ -77,7 +79,7 @@ public class FavorPosterDetailViewTest {
         onView(withId(R.id.profilePic)).check(matches(isDisplayed()));
     }
 
-    @Test
+   /* @Test
     public void testBackButton(){
         try {
             sleep(1000);
@@ -85,6 +87,6 @@ public class FavorPosterDetailViewTest {
         }
         Espresso.pressBackUnconditionally();
         intended(hasComponent(new ComponentName(getTargetContext(), FavorDetailView.class)));
-    }
+    }*/
 
 }

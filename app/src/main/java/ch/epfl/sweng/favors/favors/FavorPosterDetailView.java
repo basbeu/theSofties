@@ -21,6 +21,7 @@ import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentFavorPosterDetailViewBinding;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     FragmentFavorDetailViewBinding binding;
@@ -43,42 +44,55 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         Log.w("TAG","BEFORE THE SAVEDINSTANCE LOOP ");
             Log.w("TAG","IN THE SAVEDINSTANCE LOOP ");
+
+
+        if(!ExecutionMode.getInstance().isTest()){
+
             ownerEmail = getArguments().getString(OWNER_EMAIL);
-        Log.w("TAG",ownerEmail);
-        ObservableList<User> ownerIdList = UserRequest.getList(User.StringFields.email, ownerEmail, null, null);
-           ownerIdList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
-               @Override
-               public void onChanged(ObservableList<User> sender) {
+            Log.w("TAG",ownerEmail);
 
-               }
+            ObservableList<User> ownerIdList = UserRequest.getList(User.StringFields.email, ownerEmail, null, null);
+            ownerIdList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
+                @Override
+                public void onChanged(ObservableList<User> sender) {
 
-               @Override
-               public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
-                   Log.w("TAG","ON ITEM RANGE CHANGED ENTERED");
-
-               }
-
-               @Override
-               public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
-                   Log.w("TAG","BEFORE DA LOOP");
-                if(sender.isEmpty() == false){
-                    User favorOwner = sender.get(0);
-                    firstName.set(favorOwner.get(User.StringFields.firstName));
-                    lastName.set(favorOwner.get(User.StringFields.lastName));
-                    sex.set(favorOwner.get(User.StringFields.sex));
                 }
-               }
 
-               @Override
-               public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
+                @Override
+                public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
+                    Log.w("TAG","ON ITEM RANGE CHANGED ENTERED");
 
-               }
+                }
 
-               @Override
-               public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
+                @Override
+                public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
+                    Log.w("TAG","BEFORE DA LOOP");
+                    if(sender.isEmpty() == false){
+                        User favorOwner = sender.get(0);
+                        firstName.set(favorOwner.get(User.StringFields.firstName));
+                        lastName.set(favorOwner.get(User.StringFields.lastName));
+                        sex.set(favorOwner.get(User.StringFields.sex));
+                    }
+                }
 
-               }
-           });
+                @Override
+                public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
+
+                }
+
+                @Override
+                public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
+
+                }
+            });
+        }
+
+        else{
+            firstName.set("Toto");
+            lastName.set("Tata");
+            sex.set("M");
+        }
+
 
         }
 
