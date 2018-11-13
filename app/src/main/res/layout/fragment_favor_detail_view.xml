@@ -68,7 +68,7 @@
                 android:layout_gravity="right"
                 android:contentDescription="image"
                 android:padding="10sp"
-                android:src="@drawable/shopping_cart" />
+                android:src="@{elements.category}"/>
 
         </LinearLayout>
         <LinearLayout

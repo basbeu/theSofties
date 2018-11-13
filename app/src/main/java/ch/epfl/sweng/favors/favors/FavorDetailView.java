@@ -1,13 +1,16 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.GeoPoint;
@@ -103,6 +106,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public void onDetach() {
         super.onDetach();
         currentFavorID = null;
+    }
+    
+    @BindingAdapter("android:src")
+    public static void setImageUri(ImageView view, String imageName) {
+        if (imageName == null) {
+            view.setImageURI(null);
+        } else {
+            view.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+imageName.toLowerCase()));
+        }
     }
 
 }
