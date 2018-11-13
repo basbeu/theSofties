@@ -214,4 +214,9 @@ public class UtilsTest {
         assertTrue(Math.abs(diff)<1000);
     }
 
+    @Test
+    public void CreateUtils(){
+        new Utils();
+    }
+
 }
