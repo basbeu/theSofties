@@ -82,11 +82,9 @@ public class FavorPosterDetailViewTest {
 
     @Test
     public void isOk(){
-        Intent mIntent = new Intent();
-        mIntent.putExtra(FavorPosterDetailView.OWNER_EMAIL, fakePosterEmail);
-        mFragmentTestRule.launchActivity(mIntent);
+        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_EMAIL, fakePosterEmail));
         try {
-            sleep(3000);
+            sleep(1000);
         } catch (InterruptedException e) {
         }
         onView(withId(R.id.posterFirstName)).check(matches(withText("Bruce")));

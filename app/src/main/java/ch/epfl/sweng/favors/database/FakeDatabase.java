@@ -4,12 +4,16 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.os.Handler;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
@@ -63,34 +67,24 @@ public class FakeDatabase extends Database{
     protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
         ObservableArrayList<T> list = new ObservableArrayList<>();
 
-
         Handler handler = new Handler();
         handler.postDelayed(()->{
-                Log.d(TAG, "getAll called : "+ clazz.toString());
-                switch (clazz.toString()){
-                    case "class ch.epfl.sweng.favors.database.Interest":
-                        Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
-                        addToList(clazz,(T)database.get("I1"),list);
-                        addToList(clazz,(T)database.get("I2"),list);
-                        addToList(clazz,(T)database.get("I3"),list);
-                        addToList(clazz,(T)database.get("I4"),list);
-                        addToList(clazz,(T)database.get("I5"),list);
-                        break;
-                    case "class ch.epfl.sweng.favors.database.Favor":
-                        Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
-                        addToList(clazz,(T)database.get("F1"),list);
-                        addToList(clazz,(T)database.get("F2"),list);
-                        addToList(clazz,(T)database.get("F3"),list);
-                        addToList(clazz,(T)database.get("F4"),list);
-                        addToList(clazz,(T)database.get("F5"),list);
-                        addToList(clazz,(T)database.get("F6"),list);
-                        addToList(clazz,(T)database.get("F7"),list);
-                    case "class ch.epfl.sweng.favors.database.User":
-                        addToList(clazz,(T)database.get("U1"),list);
-                        addToList(clazz,(T)database.get("U2"),list);
-                        addToList(clazz,(T)database.get("U3"),list);
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity)) {
+                    try {
+                        T temp = clazz.newInstance();
+                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        list.add(temp);
+                    } catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
                 }
-            },500);
+
+            }
+
+
+        },500);
+
         return list;
     }
 
@@ -106,99 +100,92 @@ public class FakeDatabase extends Database{
     }
 
 
-
+    /**
+     * Updates a list with the all elements of the database having the @value for the @key
+     *
+     * @param list The list to fulfill
+     * @param clazz The object type
+     * @param collection Not used here, only for real db interactions
+     * @param value The value we want to have for the key
+     * @param <T> The object type
+     */
     @Override
     protected  <T extends DatabaseEntity> void updateList(ObservableArrayList<T> list, Class<T> clazz,
                                                           String collection,
-                                                          DatabaseField element,
+                                                          DatabaseField key,
                                                           String value,
                                                           Integer limit,
                                                           DatabaseStringField orderBy){
         Handler handler = new Handler();
         handler.postDelayed(()->{
-            Log.d(TAG, "getAll called : "+ clazz.toString());
-            switch (clazz.toString()){
-                case "class ch.epfl.sweng.favors.database.Interest":
-                    addToList(clazz,(T)database.get("I1"),list);
-                    addToList(clazz,(T)database.get("I2"),list);
-                    addToList(clazz,(T)database.get("I3"),list);
-                    addToList(clazz,(T)database.get("I4"),list);
-                    addToList(clazz,(T)database.get("I5"),list);
-                    break;
-                case "class ch.epfl.sweng.favors.database.Favor":
-                    addToList(clazz,(T)database.get("F1"),list);
-                    addToList(clazz,(T)database.get("F2"),list);
-                    addToList(clazz,(T)database.get("F3"),list);
-                    addToList(clazz,(T)database.get("F4"),list);
-                    addToList(clazz,(T)database.get("F5"),list);
-                    addToList(clazz,(T)database.get("F6"),list);
-                    addToList(clazz,(T)database.get("F7"),list);
-                case "class ch.epfl.sweng.favors.database.User":
-                    addToList(clazz,(T)database.get("U1"),list);
-                    addToList(clazz,(T)database.get("U2"),list);
-                    addToList(clazz,(T)database.get("U3"),list);
-
+            list.clear();
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
+                    try {
+                        T temp = clazz.newInstance();
+                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        list.add(temp);
+                    } catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                }
             }
+
         },500);
     }
 
 
-
+    /**
+     * Updates an object with the element of the database having the @value as documentID
+     *
+     * @param toUpdate The element to update
+     * @param clazz The object type
+     * @param collection Not used here, only for real db interactions
+     * @param value The value we want to have for the key
+     * @param <T> The object type
+     */
     @Override
     protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
                                                              String value){
 
         Handler handler = new Handler();
         handler.postDelayed(()->{
-            Log.d(TAG, "getAll called : "+ clazz.toString());
-            switch (clazz.toString()){
-                case "class ch.epfl.sweng.favors.database.Interest":
-                    Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
-
-                    toUpdate.set("I1", ((T)database.get("I1")).getEncapsulatedObjectOfMaps());
-
-                    break;
-                case "class ch.epfl.sweng.favors.database.Favor":
-                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
-                    toUpdate.set("F1", ((T)database.get("F1")).getEncapsulatedObjectOfMaps());
-                case "class ch.epfl.sweng.favors.database.User":
-                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
-                    toUpdate.set("U1", ((T)database.get("U1")).getEncapsulatedObjectOfMaps());
-
+            toUpdate.reset();
+            DatabaseEntity output = database.get(value);
+            if(clazz.isInstance(output)){
+                toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
+            }
+            else{
+                Log.d(TAG, "The element with id " + value + " wasn't found on db.");
             }
         },500);
     }
 
 
-
-
+    /**
+     * Updates an object with the first element of the database having the @value for the @key
+     *
+     * @param toUpdate The element to update
+     * @param clazz The object type
+     * @param collection Not used here, only for real db interactions
+     * @param key The key of the element to check
+     * @param value The value we want to have for the key
+     * @param <T> The object type
+     */
     @Override
     protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField element, String value){
+                                                             DatabaseField key, String value){
         Handler handler = new Handler();
         handler.postDelayed(()->{
-            Log.d(TAG, "getAll called : "+ clazz.toString());
-            switch (clazz.toString()){
-                case "class ch.epfl.sweng.favors.database.Interest":
-                    Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
-
-                    toUpdate.set("I1", ((T)database.get("I1")).getEncapsulatedObjectOfMaps());
-
-                    break;
-                case "class ch.epfl.sweng.favors.database.Favor":
-                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
-                    toUpdate.set("F1", ((T)database.get("F1")).getEncapsulatedObjectOfMaps());
-                case "class ch.epfl.sweng.favors.database.User":
-                    for(DatabaseEntity entity : database.values()){
-                        if(entity instanceof User){
-                            if(entity.get((DatabaseStringField) element) == value){
-                                toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                            }
-                        }
-                    }
-
-
+            toUpdate.reset();
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
+                    toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                    return;
+                }
             }
+            Log.d(TAG, "The element if type "+ key.toString()
+                    +" with id " + value + " wasn't found on db.");
         },500);
     }
 
