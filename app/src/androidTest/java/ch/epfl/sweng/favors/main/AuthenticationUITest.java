@@ -41,7 +41,7 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class BigTestAuth {
+public class AuthenticationUITest {
 
     private UiDevice device;
 

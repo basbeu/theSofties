@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class BigTestNew1 {
+public class SplashScreenUITest {
 
     private UiDevice device;
 

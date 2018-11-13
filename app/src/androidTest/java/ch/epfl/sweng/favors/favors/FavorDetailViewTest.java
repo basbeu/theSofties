@@ -37,8 +37,6 @@ public class FavorDetailViewTest {
 
     private UiDevice device;
 
-    //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
-
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
 
 
