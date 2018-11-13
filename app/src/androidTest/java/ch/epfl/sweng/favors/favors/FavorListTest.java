@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
@@ -15,13 +16,11 @@ import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
-
 
 public class FavorListTest {
 
@@ -40,6 +39,12 @@ public class FavorListTest {
         mFragmentTestRule.launchActivity(null);
         Thread.sleep(5000);
         onView(ViewMatchers.withText(FakeDatabase.LAST_FAVOR_TITLE)).check(doesNotExist());
+    }
+
+    @Test
+    public void canInsertSearchText() throws InterruptedException {
+        mFragmentTestRule.launchActivity(null);
+        onView(ViewMatchers.withId(R.id.searchFavor)).perform(typeText("Searching..."));
     }
 
     private static DataInteraction onEntry(String string) {
