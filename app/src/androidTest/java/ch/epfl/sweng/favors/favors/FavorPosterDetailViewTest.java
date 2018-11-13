@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.Favor;
@@ -53,7 +54,7 @@ public class FavorPosterDetailViewTest {
 
     //@Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
-    public static final String fakePosterEmail = "ownerEMAIL";
+    public static final String fakePosterEmail = "bruce.wayne@waynecorp.com";
 
     @Before
     public void Before(){
@@ -73,20 +74,33 @@ public class FavorPosterDetailViewTest {
 
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
-        @Test
+    @Test
     public void profilePictureDisplayed(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profilePic)).check(matches(isDisplayed()));
     }
 
-   /* @Test
+    @Test
+    public void isOk(){
+        Intent mIntent = new Intent();
+        mIntent.putExtra(FavorPosterDetailView.OWNER_EMAIL, fakePosterEmail);
+        mFragmentTestRule.launchActivity(mIntent);
+        try {
+            sleep(3000);
+        } catch (InterruptedException e) {
+        }
+        onView(withId(R.id.posterFirstName)).check(matches(withText("Bruce")));
+    }
+
+   @Test
     public void testBackButton(){
+       mFragmentTestRule.launchActivity(null);
         try {
             sleep(1000);
         } catch (InterruptedException e) {
         }
         Espresso.pressBackUnconditionally();
         intended(hasComponent(new ComponentName(getTargetContext(), FavorDetailView.class)));
-    }*/
+    }
 
 }

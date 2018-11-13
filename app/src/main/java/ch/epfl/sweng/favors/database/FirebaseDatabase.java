@@ -112,22 +112,31 @@ public class FirebaseDatabase extends Database{
             if (task.isSuccessful()) {
                 Log.d(TAG, "Request success", task.getException());
                 ArrayList<T> tempList = new ArrayList<>();
-                for (QueryDocumentSnapshot document : (List<QueryDocumentSnapshot>) task.getResult()) {
-                    try{
-                        if(firstElement != null ){
-                            firstElement.set(document.getId(), document.getData());
-                        }
-                        if(list != null){
-                            T documentObject = clazz.newInstance();
-                            documentObject.set(document.getId(), document.getData());
-                            tempList.add(documentObject);
-                        }
-                    }
-                    catch (Exception e){
-                        Log.e(TAG, "Illegal access exception");
+                if(task.getResult() instanceof DocumentSnapshot){
+                    DocumentSnapshot document = (DocumentSnapshot) task.getResult();
+                    if(firstElement != null ){
+                        firstElement.set(document.getId(), document.getData());
                     }
                 }
-                list.addAll(tempList);
+                else if(task.getResult() instanceof QuerySnapshot){
+                    for (QueryDocumentSnapshot document : (QuerySnapshot) task.getResult()) {
+                        try {
+                            if (firstElement != null) {
+                                firstElement.set(document.getId(), document.getData());
+                            }
+                            if (list != null) {
+                                T documentObject = clazz.newInstance();
+                                documentObject.set(document.getId(), document.getData());
+                                tempList.add(documentObject);
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Illegal access exception");
+                        }
+                    }
+                    if (list != null) {
+                        list.addAll(tempList);
+                    }
+                }
             } else {
                 Log.d(TAG, "get failed with ", task.getException());
             }

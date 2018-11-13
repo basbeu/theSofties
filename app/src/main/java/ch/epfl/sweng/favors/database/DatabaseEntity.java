@@ -5,6 +5,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,7 +184,7 @@ public abstract class DatabaseEntity implements Observable {
         }
     }
 
-    List<OnPropertyChangedCallback> callbacks;
+    List<OnPropertyChangedCallback> callbacks = new ArrayList<>();
     @Override
     public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
         assert(callback != null);

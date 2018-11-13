@@ -85,6 +85,10 @@ public class FakeDatabase extends Database{
                         addToList(clazz,(T)database.get("F5"),list);
                         addToList(clazz,(T)database.get("F6"),list);
                         addToList(clazz,(T)database.get("F7"),list);
+                    case "class ch.epfl.sweng.favors.database.User":
+                        addToList(clazz,(T)database.get("U1"),list);
+                        addToList(clazz,(T)database.get("U2"),list);
+                        addToList(clazz,(T)database.get("U3"),list);
                 }
             },500);
         return list;
@@ -115,7 +119,6 @@ public class FakeDatabase extends Database{
             Log.d(TAG, "getAll called : "+ clazz.toString());
             switch (clazz.toString()){
                 case "class ch.epfl.sweng.favors.database.Interest":
-                    Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
                     addToList(clazz,(T)database.get("I1"),list);
                     addToList(clazz,(T)database.get("I2"),list);
                     addToList(clazz,(T)database.get("I3"),list);
@@ -123,7 +126,6 @@ public class FakeDatabase extends Database{
                     addToList(clazz,(T)database.get("I5"),list);
                     break;
                 case "class ch.epfl.sweng.favors.database.Favor":
-                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
                     addToList(clazz,(T)database.get("F1"),list);
                     addToList(clazz,(T)database.get("F2"),list);
                     addToList(clazz,(T)database.get("F3"),list);
@@ -131,6 +133,11 @@ public class FakeDatabase extends Database{
                     addToList(clazz,(T)database.get("F5"),list);
                     addToList(clazz,(T)database.get("F6"),list);
                     addToList(clazz,(T)database.get("F7"),list);
+                case "class ch.epfl.sweng.favors.database.User":
+                    addToList(clazz,(T)database.get("U1"),list);
+                    addToList(clazz,(T)database.get("U2"),list);
+                    addToList(clazz,(T)database.get("U3"),list);
+
             }
         },500);
     }
@@ -154,6 +161,9 @@ public class FakeDatabase extends Database{
                 case "class ch.epfl.sweng.favors.database.Favor":
                     Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
                     toUpdate.set("F1", ((T)database.get("F1")).getEncapsulatedObjectOfMaps());
+                case "class ch.epfl.sweng.favors.database.User":
+                    Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
+                    toUpdate.set("U1", ((T)database.get("U1")).getEncapsulatedObjectOfMaps());
 
             }
         },500);
@@ -178,6 +188,15 @@ public class FakeDatabase extends Database{
                 case "class ch.epfl.sweng.favors.database.Favor":
                     Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
                     toUpdate.set("F1", ((T)database.get("F1")).getEncapsulatedObjectOfMaps());
+                case "class ch.epfl.sweng.favors.database.User":
+                    for(DatabaseEntity entity : database.values()){
+                        if(entity instanceof User){
+                            if(entity.get((DatabaseStringField) element) == value){
+                                toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                            }
+                        }
+                    }
+
 
             }
         },500);

@@ -84,9 +84,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.setElements(this);
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
                 FavorPosterDetailView mFrag = new FavorPosterDetailView();
-                Bundle bundle = new Bundle();
-                bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
-                mFrag.setArguments(bundle);
+            Bundle bundle = new Bundle();
+            bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
+            mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();});
         binding.favReportAbusiveAdd.setOnClickListener(l-> Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show());
