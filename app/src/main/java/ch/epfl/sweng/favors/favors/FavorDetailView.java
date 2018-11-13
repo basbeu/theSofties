@@ -107,13 +107,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         super.onDetach();
         currentFavorID = null;
     }
-    
+
     @BindingAdapter("android:src")
     public static void setImageUri(ImageView view, String imageName) {
         if (imageName == null) {
             view.setImageURI(null);
         } else {
-            view.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+imageName.toLowerCase()));
+            view.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+imageName.toLowerCase().replaceAll("\\s","")));
         }
     }
 
