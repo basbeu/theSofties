@@ -88,7 +88,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("SENDTO", "Clicked");
             EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
-                    "Someone is interested for : "+title.get(),
+                    "Someone is interested in: "+title.get(),
                     "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
                     getActivity(),
                     "We will inform the poster of the add that you are interested to help!",
