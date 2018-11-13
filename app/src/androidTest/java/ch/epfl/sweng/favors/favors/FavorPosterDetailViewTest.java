@@ -52,21 +52,16 @@ public class FavorPosterDetailViewTest {
 
     private UiDevice device;
 
-    //@Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
-    public static final String fakePosterEmail = "bruce.wayne@waynecorp.com";
+
+    public static final String fakePosterEmail = "bruce.wayne@waynecorp.com"; // Email of the profile we want to show
 
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-       FakeDatabase.getInstance().createBasicDatabase();
-       device = UiDevice.getInstance(getInstrumentation());
-      // Mockito.when(mFragmentTestRule.getArguments().getString(OWNER_EMAIL)).thenReturn(fakePosterEmail);
-
+        FakeDatabase.getInstance().createBasicDatabase();
+        device = UiDevice.getInstance(getInstrumentation());
     }
-
-
-    //@Ignore("Testing interface not available")
 
     @Test
     public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
@@ -81,24 +76,17 @@ public class FavorPosterDetailViewTest {
     }
 
     @Test
-    public void isOk(){
+    public void posterDetailsAreOk(){
         mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_EMAIL, fakePosterEmail));
         try {
             sleep(1000);
         } catch (InterruptedException e) {
+
         }
         onView(withId(R.id.posterFirstName)).check(matches(withText("Bruce")));
-    }
-
-   @Test
-    public void testBackButton(){
-       mFragmentTestRule.launchActivity(null);
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-        }
-        Espresso.pressBackUnconditionally();
-        intended(hasComponent(new ComponentName(getTargetContext(), FavorDetailView.class)));
+        onView(withId(R.id.posterLastName)).check(matches(withText("Wayne")));
+        onView(withId(R.id.gender)).check(matches(withText("M")));
+        onView(withId(R.id.okButton)).check(matches(isDisplayed()));
     }
 
 }
