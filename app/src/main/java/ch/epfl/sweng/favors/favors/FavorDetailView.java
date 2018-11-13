@@ -85,7 +85,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.setElements(this);
 
         binding.favReportAbusiveAdd.setOnClickListener((l)->{
-            Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
+
+            EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
+                    "Abusive favors : "+title.get(),
+                    "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
+                    getActivity(),
+                    "issue has been reported! Sorry for the inconvenience",
+                    "Sorry an error occured, try again later...");
         });
 
         binding.favIntrestedButton.setOnClickListener((l)->{
