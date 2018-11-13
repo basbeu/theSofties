@@ -28,6 +28,8 @@ public abstract class DatabaseEntity implements Observable {
     protected final String collection;
     protected String documentID;
 
+    public enum UpdateType{DATA, FROM_DB, FROM_REQUEST};
+
     private final static String TAG = "Favors_DatabaseHandler";
 
     /**
@@ -107,6 +109,10 @@ public abstract class DatabaseEntity implements Observable {
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
         convertObjectMapToTypedMap(incommingData, intData, Integer.class);
+        for (OnPropertyChangedCallback callback : callbacks){
+            callback.onPropertyChanged(this, UpdateType.FROM_DB.ordinal());
+        }
+
         notifyContentChange();
     }
 
@@ -189,13 +195,16 @@ public abstract class DatabaseEntity implements Observable {
     }
     private void notifyContentChange(){
         for (OnPropertyChangedCallback callback : callbacks){
-            callback.notify();
+            callback.onPropertyChanged(this, UpdateType.DATA.ordinal());
         }
     }
 
     public void set(String id, Map<String, Object> content){
         this.documentID =id;
         this.updateLocalData(content);
+        for (OnPropertyChangedCallback callback : callbacks){
+            callback.onPropertyChanged(this, UpdateType.FROM_REQUEST.ordinal());
+        }
     }
 
     /*
@@ -210,6 +219,7 @@ public abstract class DatabaseEntity implements Observable {
 
     public void set(DatabaseStringField field, String value){
         stringData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<String> getObservableObject(DatabaseStringField field){
@@ -225,6 +235,7 @@ public abstract class DatabaseEntity implements Observable {
 
     public void set(DatabaseObjectField field, Object value){
         objectData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<Object> getObservableObject(DatabaseObjectField field){
@@ -240,6 +251,7 @@ public abstract class DatabaseEntity implements Observable {
 
     public void set(DatabaseIntField field, Integer value){
         intData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<Integer> getObservableObject(DatabaseIntField field){
@@ -255,6 +267,7 @@ public abstract class DatabaseEntity implements Observable {
 
     public void set(DatabaseBooleanField field, Boolean value){
         booleanData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<Boolean> getObservableObject(DatabaseBooleanField field){

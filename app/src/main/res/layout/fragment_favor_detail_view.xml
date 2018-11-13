@@ -46,6 +46,14 @@
             android:text="@{elements.description}"
             android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/favorPosterDetailViewAccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:text="@string/favorPosterDetailViewTitle"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/favCategory"
             android:layout_width="match_parent"

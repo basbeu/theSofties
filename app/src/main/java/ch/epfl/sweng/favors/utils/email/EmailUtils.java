@@ -1,12 +1,17 @@
 package ch.epfl.sweng.favors.utils.email;
 
 import android.content.Context;
+import android.databinding.Observable;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import ch.epfl.sweng.favors.database.ApiKeys;
 
 /**
  * Provides the utilities that allow for the sending of emails.
  */
 public class EmailUtils {
+    private static String TAG = "EMAIL_UTILS";
     /**
      * Sends an email to `to` originating from `from`.
      *
@@ -22,6 +27,15 @@ public class EmailUtils {
      * @param failureMsg - text that will be displayed as a toast if the email fails to be send
      */
     public static void sendEmail(@NonNull String from, @NonNull String to, String subject, String message, @NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg){
+
+        ApiKeys key = ApiKeys.getInstance();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, key.get(ApiKeys.StringFields.mailGun));
 
         RetrofitDispatcher.getInstance()
                 .getApi()
