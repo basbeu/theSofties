@@ -1,52 +1,29 @@
 package ch.epfl.sweng.favors.favors;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
-
-import com.google.android.gms.tasks.Tasks;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.FakeAuthentication;
-import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
-import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.favors.favors.FavorPosterDetailView.OWNER_EMAIL;
 import static java.lang.Thread.sleep;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.fail;
 
-//TOTEST: OK BUTTON (acts like Backbutton) AND CHECK WHAT ARE INSIDE FIELDS; SEE PROFILE AND EDIT PROFILE FOR MORE TESTS
-//TEST WHO IS THE POSTER BUTTON IN FAVOR DETAIL VIEW TEST CLASS
 
 public class FavorPosterDetailViewTest {
 
@@ -86,6 +63,7 @@ public class FavorPosterDetailViewTest {
         onView(withId(R.id.posterFirstName)).check(matches(withText("Bruce")));
         onView(withId(R.id.posterLastName)).check(matches(withText("Wayne")));
         onView(withId(R.id.gender)).check(matches(withText("M")));
+        onView(withId(R.id.okButton)).perform(scrollTo());
         onView(withId(R.id.okButton)).check(matches(isDisplayed()));
     }
 
