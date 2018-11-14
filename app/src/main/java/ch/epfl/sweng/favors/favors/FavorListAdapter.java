@@ -41,10 +41,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, timestamp, location, description, distance;
-        public 
-          
-          
-          iconCategory;
+        public ImageView iconCategory;
         public FavorListAdapter adapter;
 
         public FavorViewHolder(View itemView, FavorListAdapter adapter) {
