@@ -37,7 +37,7 @@ public class FavorListTest {
     }
 
     @Test
-    public void start_fragment() throws InterruptedException {
+    public void startFragment() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
         Thread.sleep(2000);
         onView(ViewMatchers.withText(FakeDatabase.LAST_FAVOR_TITLE)).check(doesNotExist());

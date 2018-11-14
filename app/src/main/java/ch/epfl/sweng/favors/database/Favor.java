@@ -26,8 +26,8 @@ public class Favor extends DatabaseEntity {
      */
     public Favor(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION,null);
-    }
+                ObjectFields.values(), COLLECTION,"null");
+        }
 
     public Favor(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
@@ -38,7 +38,7 @@ public class Favor extends DatabaseEntity {
     @Override
     public DatabaseEntity copy() {
         Favor f = new Favor();
-        this.set(this.documentID, this.getEncapsulatedObjectOfMaps());
+        f.set(this.documentID, this.getEncapsulatedObjectOfMaps());
         return f;
     }
 }
