@@ -48,9 +48,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        // entry point when logged in
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-            binding.navView.setCheckedItem(R.id.profile);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).commit();
+            binding.navView.setCheckedItem(R.id.favors);
         }
 
     }

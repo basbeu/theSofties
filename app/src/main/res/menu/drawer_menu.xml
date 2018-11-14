@@ -5,13 +5,15 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/profile"
-            android:icon="@drawable/profilelogo"
-            android:title="@string/profile"/>
-        <item
             android:id="@+id/favors"
+            android:checked="true"
             android:icon="@drawable/databaselogo"
-            android:title="@string/app_name"/>
+            android:title="@string/app_name" />
+        <item
+            android:id="@+id/profile"
+            android:checked="false"
+            android:icon="@drawable/profilelogo"
+            android:title="@string/profile" />
         <item
             android:id="@+id/settings"
             android:icon="@drawable/settingslogo"
@@ -21,5 +23,5 @@
     <item
         android:id="@+id/logout"
         android:icon="@drawable/logoutlogo"
-        android:title="@string/logout"/>
+        android:title="@string/logout" />
 </menu>
