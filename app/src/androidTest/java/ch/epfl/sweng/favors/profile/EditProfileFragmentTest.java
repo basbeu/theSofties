@@ -36,7 +36,6 @@ public class EditProfileFragmentTest {
 
     @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<EditProfileFragment>(EditProfileFragment.class);
 
-
     private User u;
 
     /*private final String FAKE_UID = "sklfklalsdj";
