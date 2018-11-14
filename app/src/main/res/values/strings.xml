@@ -31,7 +31,7 @@
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="city">City</string>
+    <string name="city">City:</string>
     <string name="sex">Sex</string>
     <string name="add_a_new_favor">Add a new Favor</string>
     <string name="titleFavor">Favor Title</string>
@@ -43,4 +43,5 @@
     <string name="categoryFavor">Add Favor Category</string>
     <string name="title_activity_confirmation_sent">ConfirmationSent</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="nameFavors">Favors</string>
 </resources>
