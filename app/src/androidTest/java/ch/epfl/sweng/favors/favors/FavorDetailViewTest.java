@@ -148,17 +148,38 @@ public class FavorDetailViewTest {
 
     @Test
     public void reportAbusiveAddToast(){
+
         mFragmentTestRule.launchActivity(null);
 
-        try{
+        Favor f1 = new Favor("F1");
+
+        f1.set(Favor.StringFields.ownerID, "U3");
+        f1.set(Favor.StringFields.category, "Hand help");
+        f1.set(Favor.StringFields.deadline, "12.12.20");
+        f1.set(Favor.StringFields.description, "I need help to get rid of an old friend.");
+        f1.set(Favor.StringFields.title, "KILL THE BATMAN");
+        f1.set(Favor.StringFields.locationCity, "Gotham City");
+        f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+
+        Database.getInstance().updateOnDb(f1);
+
+        try {
             Thread.sleep(2000);
-            //This line tests if a toast is displayed
-            onView(withId(R.id.favReportAbusiveAdd)).perform(scrollTo(), click());
-            Thread.sleep(2000);
-            onView(withText("issue has been reported! Sorry for the inconvenience")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-        } catch(Exception e){
-            fail("Can't sleep");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        mFragmentTestRule.getFragment().setFields(f1);
+
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.favReportAbusiveAdd)).perform(scrollTo(), click());
+        onView(withText("issue has been reported! Sorry for the inconvenience")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
 //    @Test
