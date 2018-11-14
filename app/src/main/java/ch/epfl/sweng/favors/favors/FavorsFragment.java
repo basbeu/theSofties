@@ -102,7 +102,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
                     updateList(sender);
                 }
             });
-
         }
 
         @Override
