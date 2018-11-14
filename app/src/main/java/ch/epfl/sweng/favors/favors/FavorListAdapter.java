@@ -27,7 +27,11 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
+/**
+ * Class that represents the graphical list view to display Favors
+ */
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder> implements Filterable {
+
     private ObservableArrayList<Favor> favorList;
     private ObservableArrayList<Favor> filteredFavorList;
     private SharedViewFavor sharedViewFavor;
@@ -39,8 +43,11 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         void onItemClick(Favor item);
     }
 
+    /**
+     * Class that represents a single row in the list of Favor
+     */
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title, timestamp, location, description, distance;
+        public TextView title, timestamp, location, description, distance, category;
         public ImageView iconCategory;
         public FavorListAdapter adapter;
 
@@ -52,6 +59,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             location = itemView.findViewById(R.id.location);
             description = itemView.findViewById(R.id.description);
             distance = itemView.findViewById(R.id.distance);
+            category = itemView.findViewById(R.id.category);
             iconCategory = itemView.findViewById(R.id.iconCategory);
             this.adapter = adapter;
         }
@@ -61,7 +69,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
         public void bind(final Favor item, final OnItemClickListener listener){
             Favor favor = item;
-            setTitleAndDescription(favor);
+            setStringFields(favor);
             setTimestamp(favor);
             setLocation(favor);
             setIconCategory(favor);
@@ -77,12 +85,21 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             } else { distance.setText("--"); }
         }
 
-        private void setTitleAndDescription(Favor favor) {
+        /**
+         * Sets all the StringFields of a Favor
+         * currently:
+         * Title
+         * Description
+         * Category
+         * @param favor the relevant favor
+         */
+        private void setStringFields(Favor favor) {
             if(favor.get(Favor.StringFields.title) != null)
                 title.setText(favor.get(Favor.StringFields.title));
             if(favor.get(Favor.StringFields.description) != null)
                 description.setText(favor.get(Favor.StringFields.description));
-            setLocation(favor);
+            if(favor.get(Favor.StringFields.category) != null)
+                category.setText(favor.get(Favor.StringFields.category));
         }
 
         private void setTimestamp(Favor favor) {
