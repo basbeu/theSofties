@@ -41,13 +41,14 @@ public class User extends DatabaseEntity{
     public User(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
-        db.updateFromDb(this);
+        if(db != null) db.updateFromDb(this);
     }
+
 
     @Override
     public DatabaseEntity copy() {
-        User u = new User(this.documentID);
-        u.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        User u = new User();
+        u.set(this.documentID, this.getEncapsulatedObjectOfMaps());
         return u;
     }
 

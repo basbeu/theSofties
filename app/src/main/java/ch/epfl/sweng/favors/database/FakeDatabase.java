@@ -45,7 +45,6 @@ public class FakeDatabase extends Database{
         if(db == null){
             db = new FakeDatabase();
         }
-
         return db;
     }
 
@@ -120,11 +119,13 @@ public class FakeDatabase extends Database{
                                                           String value,
                                                           Integer limit,
                                                           DatabaseStringField orderBy){
+        Log.w(TAG, "Calling with " + collection + " "+ key.toString() +" "+ value);
+
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             list.clear();
             for(DatabaseEntity entity : database.values()) {
-                if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
+                if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key) != null && entity.get((DatabaseStringField) key).equals(value)) {
                     try {
                         T temp = clazz.newInstance();
                         temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
@@ -200,10 +201,14 @@ public class FakeDatabase extends Database{
      * Fills the FakeDatabase with a few users and favors
      */
     public void createBasicDatabase(){
-        User u1 = new User("U1");
-        User u2 = new User("U2");
-        User u3 = new User("U3");
-        User u4 = new User(FakeAuthentication.UID);
+        User u1 = new User();
+        u1.setId("U1");
+        User u2 = new User();
+        u2.setId("U2");
+        User u3 = new User();
+        u3.setId("U3");
+        User u4 = new User();
+        u4.setId(FakeAuthentication.UID);
 
         u1.set(User.StringFields.firstName, "Toto");
         u1.set(User.StringFields.lastName, "Lolo");
@@ -229,17 +234,26 @@ public class FakeDatabase extends Database{
         u4.set(User.StringFields.city, FakeAuthentication.CITY);
         User.UserGender.setGender(u4, FakeAuthentication.GENDER);
 
-        Favor f1 = new Favor("F1");
-        Favor f2 = new Favor("F2");
-        Favor f3 = new Favor("F3");
-        Favor f4 = new Favor("F4");
-        Favor f5 = new Favor("F5");
-        Favor f6 = new Favor("F6");
-        Favor f7 = new Favor("F7");
-        Favor f8 = new Favor("F8");
-        Favor f9 = new Favor("F9");
-        Favor f10 = new Favor("F10");
-
+        Favor f1 = new Favor();
+        f1.setId("F1");
+        Favor f2 = new Favor();
+        f2.setId("F2");
+        Favor f3 = new Favor();
+        f3.setId("F3");
+        Favor f4 = new Favor();
+        f4.setId("F4");
+        Favor f5 = new Favor();
+        f5.setId("F5");
+        Favor f6 = new Favor();
+        f6.setId("F6");
+        Favor f7 = new Favor();
+        f7.setId("F7");
+        Favor f8 = new Favor();
+        f8.setId("F8");
+        Favor f9 = new Favor();
+        f9.setId("F9");
+        Favor f10 = new Favor();
+        f10.setId("F10");
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");
@@ -323,11 +337,16 @@ public class FakeDatabase extends Database{
         f10.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
 
 
-        Interest i1 = new Interest("I1");
-        Interest i2 = new Interest("I2");
-        Interest i3 = new Interest("I3");
-        Interest i4 = new Interest("I4");
-        Interest i5 = new Interest("I5");
+        Interest i1 = new Interest();
+        i1.setId("I1");
+        Interest i2 = new Interest();
+        i2.setId("I2");
+        Interest i3 = new Interest();
+        i3.setId("I3");
+        Interest i4 = new Interest();
+        i4.setId("I4");
+        Interest i5 = new Interest();
+        i5.setId("I5");
 
 
         i1.set(Interest.StringFields.title, "DC");

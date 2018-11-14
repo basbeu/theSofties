@@ -34,13 +34,12 @@ public class FavorListTest {
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
-        FakeDatabase.getInstance().addExtraToDb();
     }
 
     @Test
     public void start_fragment() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         onView(ViewMatchers.withText(FakeDatabase.LAST_FAVOR_TITLE)).check(doesNotExist());
     }
 

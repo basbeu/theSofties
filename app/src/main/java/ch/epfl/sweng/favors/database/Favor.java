@@ -32,13 +32,13 @@ public class Favor extends DatabaseEntity {
     public Favor(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, id);
-        db.updateFromDb(this);
+        if(db != null) db.updateFromDb(this);
     }
 
     @Override
     public DatabaseEntity copy() {
-        Favor f = new Favor(this.documentID);
-        f.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        Favor f = new Favor();
+        this.set(this.documentID, this.getEncapsulatedObjectOfMaps());
         return f;
     }
 }

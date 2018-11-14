@@ -33,6 +33,10 @@ public abstract class DatabaseEntity implements Observable {
 
     private final static String TAG = "Favors_DatabaseHandler";
 
+    public void setId(String documentId){
+        this.documentID = documentId;
+    }
+
     /**
      * Init a database object with all fields that are possible for the instanced collection in the database
      *

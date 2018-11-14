@@ -1,5 +1,8 @@
 package ch.epfl.sweng.favors.utils;
 
+import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.FakeDatabase;
+
 /**
  * Singleton class that give the execution Mode of the app : Test, Normal
  */
