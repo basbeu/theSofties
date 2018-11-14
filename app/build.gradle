@@ -19,7 +19,7 @@ android {
         dataBinding {
             enabled = true
         }
-        versionName "0.5.a2-favorLocation"
+        versionName "0.6.a2-favorList"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
