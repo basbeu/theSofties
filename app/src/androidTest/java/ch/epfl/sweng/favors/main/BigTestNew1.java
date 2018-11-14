@@ -185,26 +185,24 @@ public class BigTestNew1 {
 //                        isDisplayed()));
 //        textView.check(matches(withText("Eudes")));
 
-//        ViewInteraction textView4 = onView(
-//                allOf(withId(R.id.profileTitle), withText("Your Profile"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-//                                        0),
-//                                0),
-//                        isDisplayed()));
-//        textView4.check(matches(withText("Your Profile")));
-
-
+        ViewInteraction textView4 = onView(
+                allOf(withId(R.id.profileTitle), withText("Jean's Profile"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textView4.check(matches(withText("Jean's Profile")));
 //        ViewInteraction textView6 = onView(
-//                allOf(withId(R.id.profFirstName), withText("Jean"),
+//                allOf(withId(R.id.profileTitle), withText("Jean's Profile"),
 //                        childAtPosition(
 //                                childAtPosition(
 //                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
 //                                        0),
 //                                1),
 //                        isDisplayed()));
-//        textView6.check(matches(withText("Jean")));
+//        textView6.check(matches(withText("Jean's Profile")));
 
         ViewInteraction button = onView(
                 allOf(withId(R.id.editProfileButton),
