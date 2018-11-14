@@ -29,12 +29,11 @@ public class RequestTest {
     @Test
     public void userRequests(){
         // Try to get all men users
-        Looper.prepare();
         ObservableList<User> someUsersList = UserRequest.getList(User.StringFields.sex, "M",  null, null);
         User user1 = UserRequest.getWithEmail("harvey.dent@gotham.com");
         User user2 = UserRequest.getWithId("U1");
         try {
-            sleep(2000);
+            sleep(1000);
         } catch (InterruptedException e) {
 
         }
@@ -51,11 +50,27 @@ public class RequestTest {
 
     @Test
     public void favorsRequests(){
+        ObservableList<Favor> someFavorsList = FavorRequest.getList(Favor.StringFields.ownerID, "U3",  null, null);
+        ObservableList<Favor> allFavorsList = FavorRequest.all(null, null);
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
 
+        }
+        assertEquals(someFavorsList.size(), 9);
+        assertEquals(allFavorsList.size(), 10);
     }
 
     @Test
     public void interestsRequests(){
+        ObservableList<Interest> someInterestsList = InterestRequest.getList(Interest.StringFields.title, "SWISS AVIATION",  null, null);
+        ObservableList<Interest> allInterestsList = InterestRequest.all( null, null);
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
 
+        }
+        assertEquals(someInterestsList.size(), 1);
+        assertEquals(allInterestsList.size(), 5);
     }
 }
