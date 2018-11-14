@@ -64,7 +64,7 @@ public class FavorListTest {
         mFragmentTestRule.launchActivity(null);
 
 
-        onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click())/*.perform(pressKey(KeyEvent.KEYCODE_ENTER))*/;
+        //onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click())/*.perform(pressKey(KeyEvent.KEYCODE_ENTER))*/;
         onView(ViewMatchers.withId(R.id.searchFavor)).perform(typeText("KILL"));
         //Thread.sleep(5000);
 
