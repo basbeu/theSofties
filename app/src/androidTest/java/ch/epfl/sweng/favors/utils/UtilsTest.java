@@ -10,8 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 
+import ch.epfl.sweng.favors.utils.email.RetrofitClient;
+
+import static ch.epfl.sweng.favors.authentication.FakeAuthentication.getInstance;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
@@ -217,6 +222,19 @@ public class UtilsTest {
     @Test
     public void CreateUtils(){
         new Utils();
+    }
+
+    @Test
+    public void RetrofitClient() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        // With reflection
+//        Class c = Class.forName("ch.epfl.sweng.favors.utils.email.RetrofitClient");
+//        Method m = c.getDeclaredMethod("getInstance");
+//        m.setAccessible(true);
+//        Object i = c.newInstance();
+//        Object r = m.invoke(i);
+
+        RetrofitClient.getInstance();
+
     }
 
 }

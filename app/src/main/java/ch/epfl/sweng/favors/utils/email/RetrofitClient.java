@@ -26,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
-class RetrofitClient extends RetrofitDispatcher{
+public class RetrofitClient extends RetrofitDispatcher{
 
 
     private static final String BASE_URL = "https://api.mailgun.net/v3/myfavors.xyz/";
@@ -40,7 +40,8 @@ class RetrofitClient extends RetrofitDispatcher{
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 
-    private RetrofitClient() {
+    // FIXME use java reflection instead of public
+    public RetrofitClient() {
 
         OkHttpClient okClient = new OkHttpClient.Builder()
                 .addInterceptor(
