@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.database;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -30,8 +31,11 @@ public class FakeDatabase extends Database{
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
 
+    HandlerThread handlerThread = new HandlerThread("background-thread");
+
     private FakeDatabase(){
         database = new HashMap<>();
+        handlerThread.start();
     }
 
     /**
@@ -67,7 +71,7 @@ public class FakeDatabase extends Database{
     protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
         ObservableArrayList<T> list = new ObservableArrayList<>();
 
-        Handler handler = new Handler();
+        Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity)) {
@@ -116,7 +120,7 @@ public class FakeDatabase extends Database{
                                                           String value,
                                                           Integer limit,
                                                           DatabaseStringField orderBy){
-        Handler handler = new Handler();
+        Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             list.clear();
             for(DatabaseEntity entity : database.values()) {
@@ -148,9 +152,10 @@ public class FakeDatabase extends Database{
     protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
                                                              String value){
 
-        Handler handler = new Handler();
+        Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             toUpdate.reset();
+
             DatabaseEntity output = database.get(value);
             if(clazz.isInstance(output)){
                 toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
@@ -175,9 +180,11 @@ public class FakeDatabase extends Database{
     @Override
     protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
                                                              DatabaseField key, String value){
-        Handler handler = new Handler();
+
+        Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             toUpdate.reset();
+
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
                     toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());

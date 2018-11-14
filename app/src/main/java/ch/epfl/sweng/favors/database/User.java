@@ -21,7 +21,11 @@ public class User extends DatabaseEntity{
 
     private static Status status = new Status(Status.Values.NotLogged);
 
-    private static User user = new User();
+    private static User user = new User(Authentication.getInstance().getUid());
+    public static User getMain(){
+        return user;
+    }
+
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
     public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
@@ -30,9 +34,8 @@ public class User extends DatabaseEntity{
 
     public User(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION, Authentication.getInstance().getUid());
+                ObjectFields.values(), COLLECTION, "null");
 
-        db.updateFromDb(this);
     }
 
     public User(String id){

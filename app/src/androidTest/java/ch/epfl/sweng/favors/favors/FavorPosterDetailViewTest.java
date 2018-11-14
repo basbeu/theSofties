@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,8 +28,6 @@ import static java.lang.Thread.sleep;
 
 public class FavorPosterDetailViewTest {
 
-    private UiDevice device;
-
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
 
     public static final String fakePosterEmail = "bruce.wayne@waynecorp.com"; // Email of the profile we want to show
@@ -37,7 +36,6 @@ public class FavorPosterDetailViewTest {
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
-        device = UiDevice.getInstance(getInstrumentation());
     }
 
     @Test

@@ -23,12 +23,12 @@ public class SetUserInfo extends AppCompatActivity {
 
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
 
-    private User user = new User();
+    private User user = new User(Authentication.getInstance().getUid());
 
     public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
     public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
     public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city); // LocationHandler.getHandler().locationCity;
-//    public ObservableField<String> sexe = user.getObservableObject(User.StringFields.sex);
+
 
     ActivitySetUserInfoBinding binding;
     private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {

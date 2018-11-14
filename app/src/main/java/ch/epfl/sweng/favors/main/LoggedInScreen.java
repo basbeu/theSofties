@@ -23,9 +23,8 @@ import ch.epfl.sweng.favors.utils.Utils;
 
 public class LoggedInScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private User user = new User();
-    public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
-    public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
     public ObservableField<String> location = LocationHandler.getHandler().locationCity;
 
     ActivityLoggedInScreenBinding binding;
