@@ -23,7 +23,9 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
-// FIXME what does this class do, Reviewer please PR it
+/**
+ * Class that represents the graphical list view to display Favors
+ */
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
     private SharedViewFavor sharedViewFavor;
@@ -35,13 +37,15 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         void onItemClick(Favor item);
     }
 
+    /**
+     * Class that represents a single row in the list of Favor
+     */
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, timestamp, location, description, distance, category;
         public ImageView iconCategory;
         public FavorListAdapter adapter;
         public Favor selectedFavor = null;
 
-        // FIXME what is that, Reviewer please PR it
         public FavorViewHolder(View itemView, FavorListAdapter adapter) {
             super(itemView);
             //initialize TextViews
