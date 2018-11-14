@@ -1,13 +1,16 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.GeoPoint;
@@ -82,7 +85,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.setElements(this);
 
         binding.favReportAbusiveAdd.setOnClickListener((l)->{
-            Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
+
+            EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
+                    "Abusive favors : "+title.get(),
+                    "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
+                    getActivity(),
+                    "issue has been reported! Sorry for the inconvenience",
+                    "Sorry an error occured, try again later...");
         });
 
         binding.favIntrestedButton.setOnClickListener((l)->{
@@ -103,6 +113,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public void onDetach() {
         super.onDetach();
         currentFavorID = null;
+    }
+
+    @BindingAdapter("android:src")
+    public static void setImageUri(ImageView view, String imageName) {
+        if (imageName == null) {
+            view.setImageURI(null);
+        } else {
+            view.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+imageName.toLowerCase().replaceAll("\\s","")));
+        }
     }
 
 }
