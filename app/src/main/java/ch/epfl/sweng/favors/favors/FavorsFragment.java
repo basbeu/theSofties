@@ -18,7 +18,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.databinding.FragmentFavorsBinding;
 
-
+// FIXME what does this class do
 public class FavorsFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "FAVOR_FRAGMENT";
 
