@@ -24,9 +24,13 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
 /**
+<<<<<<< HEAD
  * FavorListAdapter
  * sets the fields that shpould be visible in the ListView
  * favor_item.xml (item of list) and fragment_favors.xml (list)
+=======
+ * Class that represents the graphical list view to display Favors
+>>>>>>> master
  */
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
@@ -39,6 +43,9 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         void onItemClick(Favor item);
     }
 
+    /**
+     * Class that represents a single row in the list of Favor
+     */
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, timestamp, location, description, distance, category;
         public ImageView iconCategory;
