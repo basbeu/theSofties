@@ -1,7 +1,13 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.support.test.espresso.DataInteraction;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewDebug;
+import android.widget.AutoCompleteTextView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,13 +22,25 @@ import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressKey;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 public class FavorListTest {
+
+    private static String TAG = "FAVOR_LIST_TEST";
 
     @Rule
     public FragmentTestRule<FavorsFragment> mFragmentTestRule = new FragmentTestRule<FavorsFragment>(FavorsFragment.class);
@@ -44,7 +62,41 @@ public class FavorListTest {
     @Test
     public void canInsertSearchText() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        onView(ViewMatchers.withId(R.id.searchFavor)).perform(typeText("Searching..."));
+
+
+        onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click())/*.perform(pressKey(KeyEvent.KEYCODE_ENTER))*/;
+        onView(ViewMatchers.withId(R.id.searchFavor)).perform(typeText("KILL"));
+        //Thread.sleep(5000);
+
+        //Log.i(TAG, Integer.toString(mFragmentTestRule.getFragment().listAdapter.getItemCount()));
+    }
+
+    @Test
+    public void canSortByLocation() throws InterruptedException{
+        mFragmentTestRule.launchActivity(null);
+
+        onView(ViewMatchers.withId(R.id.sortBySpinner)).perform(scrollTo(), click());
+        onData(allOf(is(instanceOf(String.class)), is("location"))).perform(click());
+        onView(ViewMatchers.withId(R.id.sortBySpinner)).check(matches(withSpinnerText(containsString("location"))));
+        Thread.sleep(5000);
+    }
+
+    @Test
+    public void canSortByRecent() {
+        mFragmentTestRule.launchActivity(null);
+
+        onView(ViewMatchers.withId(R.id.sortBySpinner)).perform(scrollTo(), click());
+        onData(allOf(is(instanceOf(String.class)), is("recent"))).perform(click());
+        onView(ViewMatchers.withId(R.id.sortBySpinner)).check(matches(withSpinnerText(containsString("recent"))));
+    }
+
+    @Test
+    public void canSortByCategory() {
+        mFragmentTestRule.launchActivity(null);
+
+        onView(ViewMatchers.withId(R.id.sortBySpinner)).perform(scrollTo(), click());
+        onData(allOf(is(instanceOf(String.class)), is("category"))).perform(click());
+        onView(ViewMatchers.withId(R.id.sortBySpinner)).check(matches(withSpinnerText(containsString("category"))));
     }
 
     private static DataInteraction onEntry(String string) {
