@@ -132,10 +132,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
                 this.sharedViewFavor.select(item);
                 fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
             };
-
-
         }
-
     }
 
     @Override
@@ -147,10 +144,13 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
                 if (charString.isEmpty()) {
                     filteredFavorList = favorList;
                 } else {
+                    String searchText = charString.toLowerCase();
                     ObservableArrayList<Favor> filteredList = new ObservableArrayList<>();
                     for (Favor f : favorList) {
                         //see if input matches title or description
-                        if (f.get(Favor.StringFields.title).toLowerCase().contains(charString.toLowerCase()) || f.get(Favor.StringFields.description).contains(charSequence)) {
+                        if (f.get(Favor.StringFields.title).toLowerCase().contains(searchText)
+                                || f.get(Favor.StringFields.description).toLowerCase().contains(searchText)
+                                || f.get(Favor.StringFields.category).toLowerCase().contains(searchText)) {
                             filteredList.add(f);
                         }
                     }

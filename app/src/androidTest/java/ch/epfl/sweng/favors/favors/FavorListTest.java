@@ -62,23 +62,19 @@ public class FavorListTest {
     @Test
     public void canInsertSearchText() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-
-
-        //onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click())/*.perform(pressKey(KeyEvent.KEYCODE_ENTER))*/;
-        onView(ViewMatchers.withId(R.id.searchFavor)).perform(typeText("KILL"));
+        onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click(), typeText("KILL"));
         //Thread.sleep(5000);
 
         //Log.i(TAG, Integer.toString(mFragmentTestRule.getFragment().listAdapter.getItemCount()));
     }
 
     @Test
-    public void canSortByLocation() throws InterruptedException{
+    public void canSortByLocation() {
         mFragmentTestRule.launchActivity(null);
 
         onView(ViewMatchers.withId(R.id.sortBySpinner)).perform(scrollTo(), click());
         onData(allOf(is(instanceOf(String.class)), is("location"))).perform(click());
         onView(ViewMatchers.withId(R.id.sortBySpinner)).check(matches(withSpinnerText(containsString("location"))));
-        Thread.sleep(5000);
     }
 
     @Test

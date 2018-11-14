@@ -88,8 +88,6 @@ public class EditProfileFragmentTest {
             u.set(User.StringFields.firstName, FakeAuthentication.FIRST_NAME);
             FakeDatabase.getInstance().updateOnDb(u);
         });
-
-
     }
 
     @Test
