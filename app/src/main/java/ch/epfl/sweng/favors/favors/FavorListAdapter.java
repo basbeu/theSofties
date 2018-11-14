@@ -3,12 +3,14 @@ package ch.epfl.sweng.favors.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.GeoPoint;
@@ -35,6 +37,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, timestamp, location, description, distance, category;
+        public ImageView iconCategory;
         public FavorListAdapter adapter;
         public Favor selectedFavor = null;
 
@@ -48,6 +51,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             description = itemView.findViewById(R.id.description);
             distance = itemView.findViewById(R.id.distance);
             category = itemView.findViewById(R.id.category);
+            iconCategory = itemView.findViewById(R.id.iconCategory);
             this.adapter = adapter;
         }
 
@@ -63,6 +67,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             setStringFields(favor);
             setTimestamp(favor);
             setLocation(favor);
+            setIconCategory(favor);
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 
@@ -97,6 +102,12 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
                 Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
                 timestamp.setText(Utils.getFavorDate(d));
             } else { timestamp.setText("--"); }
+        }
+
+        private void setIconCategory(Favor favor){
+            if(favor.get(Favor.StringFields.category) != null){
+                iconCategory.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+favor.get(Favor.StringFields.category).toLowerCase().replaceAll("\\s","")));
+            }
         }
 
     }

@@ -38,24 +38,26 @@
 
         <EditText
             android:id="@+id/emailTextField"
-            android:layout_width="wrap_content"
+            android:layout_width="285dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/email"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.38"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginMessageText" />
 
         <EditText
             android:id="@+id/passwordTextField"
-            android:layout_width="wrap_content"
+            android:layout_width="288dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.38"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailTextField" />
 
