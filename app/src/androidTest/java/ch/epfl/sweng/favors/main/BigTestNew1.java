@@ -149,15 +149,15 @@ public class BigTestNew1 {
                                 5)));
         appCompatEditText3.perform(scrollTo(), replaceText("Lausanne"), closeSoftKeyboard());
 
-        ViewInteraction appCompatRadioButton2 = onView(
-                allOf(withId(R.id.profGenderFEdit), withText("F"),
-                        childAtPosition(
-                                allOf(withId(R.id.prof_gender_edit),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                1)));
-        appCompatRadioButton2.perform(scrollTo(), click());
+//        ViewInteraction appCompatRadioButton2 = onView(
+//                allOf(withId(R.id.profGenderFEdit), withText("F"),
+//                        childAtPosition(
+//                                allOf(withId(R.id.prof_gender_edit),
+//                                        childAtPosition(
+//                                                withClassName(is("android.widget.LinearLayout")),
+//                                                0)),
+//                                1)));
+//        appCompatRadioButton2.perform(scrollTo(), click());
 
         ViewInteraction appCompatRadioButton = onView(
                 allOf(withId(R.id.profGenderMEdit), withText("M"),
