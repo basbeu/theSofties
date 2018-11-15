@@ -1,11 +1,15 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +23,8 @@ import java.util.Map;
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+import ch.epfl.sweng.favors.favors.FavorCreateFragment;
+import ch.epfl.sweng.favors.main.FavorsMain;
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
@@ -77,7 +83,12 @@ public class FakeDatabase extends Database{
                     try {
                         T temp = clazz.newInstance();
                         temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        list.add(temp);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.add(temp);
+                            }
+                        });
                     } catch (Exception e){
                         Log.e(TAG, "Illegal access exception");
                     }
@@ -127,7 +138,12 @@ public class FakeDatabase extends Database{
                     try {
                         T temp = clazz.newInstance();
                         temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        list.add(temp);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.add(temp);
+                            }
+                        });
                     } catch (Exception e){
                         Log.e(TAG, "Illegal access exception");
                     }
@@ -157,7 +173,13 @@ public class FakeDatabase extends Database{
 
             DatabaseEntity output = database.get(value);
             if(clazz.isInstance(output)){
-                toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
+                    }
+                });
+
             }
             else{
                 Log.d(TAG, "The element with id " + value + " wasn't found on db.");
@@ -186,7 +208,13 @@ public class FakeDatabase extends Database{
 
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
-                    toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        }
+                    });
+
                     return;
                 }
             }

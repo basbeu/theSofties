@@ -96,12 +96,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment implements A
 
         @Override
         public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    updateList(sender);
-                }
-            });
+            updateList(sender);
         }
 
         @Override

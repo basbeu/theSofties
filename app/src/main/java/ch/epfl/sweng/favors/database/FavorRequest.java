@@ -3,6 +3,8 @@ package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -17,5 +19,8 @@ public final class FavorRequest extends Request{
     }
     public static ObservableArrayList<Favor> all(Integer limit, DatabaseStringField orderBy){
         return db.getAll(Favor.class, COLLECTION, limit, orderBy);
+    }
+    public static ObservableArrayList<Favor> withLocation(GeoPoint geoPoint, Integer limit, DatabaseStringField orderBy){
+        return null;
     }
 }

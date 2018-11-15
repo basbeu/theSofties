@@ -34,6 +34,7 @@ import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
@@ -117,7 +118,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
                 }
                 if (adapter == null) {
 
-                    adapter = new ArrayAdapter<String>((FavorCreateFragment.this).getActivity(), android.R.layout.simple_spinner_item, interestsTitles);
+                    adapter = new ArrayAdapter<String>(FavorsMain.getContext(), android.R.layout.simple_spinner_item, interestsTitles);
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     spinner.setAdapter(adapter);
                 } else {

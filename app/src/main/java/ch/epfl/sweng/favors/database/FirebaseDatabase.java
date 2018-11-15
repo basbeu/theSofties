@@ -143,13 +143,14 @@ public class FirebaseDatabase extends Database{
         }
     }
 
-    void addParametersToQuery(Query query, Integer limit, DatabaseStringField orderBy){
+    Query addParametersToQuery(Query query, Integer limit, DatabaseStringField orderBy){
         if(orderBy != null){
             query = query.orderBy(orderBy.toString());
         }
         if(limit != null){
             query = query.limit(limit);
         }
+        return query;
     }
 
     @Override
@@ -159,7 +160,7 @@ public class FirebaseDatabase extends Database{
                                                                        DatabaseStringField orderBy){
         ObservableArrayList<T> list = new ObservableArrayList<>();
         Query query = dbFireStore.collection(collection);
-        addParametersToQuery(query, limit, orderBy);
+        query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
         return list;
     }
@@ -174,7 +175,7 @@ public class FirebaseDatabase extends Database{
                                                                          DatabaseStringField orderBy){
         if(element == null || value == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
-        addParametersToQuery(query, limit, orderBy);
+        query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
     }
 
