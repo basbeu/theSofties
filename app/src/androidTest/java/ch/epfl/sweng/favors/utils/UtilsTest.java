@@ -10,13 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Date;
 
-import ch.epfl.sweng.favors.utils.email.RetrofitClient;
-
-import static ch.epfl.sweng.favors.authentication.FakeAuthentication.getInstance;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
