@@ -98,6 +98,7 @@ public class FavorsCreateFragmentTest {
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2000,10,23));
     }
 
+    @Test
     public void createFavor() throws UiObjectNotFoundException, InterruptedException {
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.titleFavor)).perform(typeText("Test Expert")).perform(closeSoftKeyboard()).check(matches(withText("Test Expert")));

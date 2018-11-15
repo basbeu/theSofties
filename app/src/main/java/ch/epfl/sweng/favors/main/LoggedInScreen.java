@@ -50,7 +50,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         toggle.syncState();
 
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home()).commit();
             binding.navView.setCheckedItem(R.id.favors);
         }
 
@@ -75,7 +75,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
             case R.id.favors:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home()).addToBackStack(null).commit();
                 break;
             case R.id.myfavors:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyFavorsFragment()).addToBackStack(null).commit();

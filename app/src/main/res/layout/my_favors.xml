@@ -41,7 +41,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="@color/browser_actions_bg_grey"
-                app:layout_constraintStart_toStartOf="@id/sortBySpinner"
                 app:srcCompat="@android:drawable/ic_input_add" />
 
 
