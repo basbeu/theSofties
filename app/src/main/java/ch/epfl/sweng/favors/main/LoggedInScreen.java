@@ -16,6 +16,7 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.FavorsFragment;
+import ch.epfl.sweng.favors.favors.MyFavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.settings.SettingsFragment;
@@ -47,9 +48,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-            binding.navView.setCheckedItem(R.id.profile);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).commit();
+            binding.navView.setCheckedItem(R.id.favors);
         }
 
     }
@@ -74,6 +76,9 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.favors:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.myfavors:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyFavorsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
