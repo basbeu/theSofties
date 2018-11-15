@@ -107,7 +107,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
                       '**/*Retrofit*.*',
                       '**/*BR*.*',
                       '**/*Rx*.*',
-                      '**/*ViewHolder*.*',
                       '**/Manifest*.*',
                       '**/*$Lambda$*.*',
                       '**/*Module.*',
