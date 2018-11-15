@@ -224,17 +224,6 @@ public class UtilsTest {
         new Utils();
     }
 
-    @Test
-    public void RetrofitClient() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        // With reflection
-//        Class c = Class.forName("ch.epfl.sweng.favors.utils.email.RetrofitClient");
-//        Method m = c.getDeclaredMethod("getInstance");
-//        m.setAccessible(true);
-//        Object i = c.newInstance();
-//        Object r = m.invoke(i);
 
-        RetrofitClient.getInstance();
-
-    }
 
 }

@@ -26,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
-public class RetrofitClient extends RetrofitDispatcher{
+class RetrofitClient extends RetrofitDispatcher{
 
 
     private static final String BASE_URL = "https://api.mailgun.net/v3/myfavors.xyz/";
@@ -40,14 +40,10 @@ public class RetrofitClient extends RetrofitDispatcher{
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 
-    // FIXME use java reflection instead of public
-    public RetrofitClient() {
+    private RetrofitClient() {
 
         OkHttpClient okClient = new OkHttpClient.Builder()
-                .addInterceptor(
-                        new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
+                .addInterceptor((chain)-> {
                                 Request original = chain.request();
 
                                 //Adding basic auth
@@ -57,8 +53,7 @@ public class RetrofitClient extends RetrofitDispatcher{
 
                                 Request request = requestBuilder.build();
                                 return chain.proceed(request);
-                            }
-                        })
+                            })
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -68,24 +63,24 @@ public class RetrofitClient extends RetrofitDispatcher{
                 .build();
     }
 
-    public static synchronized RetrofitClient getInstance() {
+    static synchronized RetrofitClient getInstance() {
         if (mInstance == null) {
             mInstance = new RetrofitClient();
         }
         return mInstance;
     }
 
-    public Retrofit getClient() {
+    Retrofit getClient() {
         return retrofit;
     }
 
-    public RetrofitApi getApi() {
+    RetrofitApi getApi() {
 
         return retrofit.create(RetrofitApi.class);
     }
 
     @NonNull
-    public Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
+    Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
         return new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
