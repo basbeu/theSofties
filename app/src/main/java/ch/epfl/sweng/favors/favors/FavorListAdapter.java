@@ -24,7 +24,10 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
 /**
+ * FavorListAdapter
  * Class that represents the graphical list view to display Favors
+ * sets the fields that shpould be visible in the ListView
+ * favor_item.xml (item of list) and fragment_favors.xml (list)
  */
 public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
     private ObservableArrayList<Favor> favorList;
@@ -46,6 +49,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         public FavorListAdapter adapter;
         public Favor selectedFavor = null;
 
+        // FIXME ObservableFields
         public FavorViewHolder(View itemView, FavorListAdapter adapter) {
             super(itemView);
             //initialize TextViews
@@ -74,11 +78,17 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 
+        /**
+         * sets the location city and
+         * the current distance to a favor
+         * @param favor
+         */
         private void setLocation(Favor favor) {
             if(favor.get(Favor.StringFields.locationCity) != null)
                 location.setText(favor.get(Favor.StringFields.locationCity));
             if(favor.get(Favor.ObjectFields.location) != null) {
                 ObservableField<Object> geo = favor.getObservableObject(Favor.ObjectFields.location);
+                // distanceBetween two
                 distance.setText(LocationHandler.distanceBetween((GeoPoint)geo.get()));
             } else { distance.setText("--"); }
         }
@@ -98,6 +108,10 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
                 category.setText(favor.get(Favor.StringFields.category));
         }
 
+        /**
+         * sets the timestamp fetched from the db
+         * @param favor
+         */
         private void setTimestamp(Favor favor) {
             if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
                 Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
@@ -105,6 +119,10 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             } else { timestamp.setText("--"); }
         }
 
+        /**
+         * sets the icon category
+         * @param favor
+         */
         private void setIconCategory(Favor favor){
             if(favor.get(Favor.StringFields.category) != null){
                 iconCategory.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+favor.get(Favor.StringFields.category).toLowerCase().replaceAll("\\s","")));
@@ -113,22 +131,25 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     }
 
-    //constructor
+    /**
+     * Constructor for a FavorListAdapter
+     * @param fragActivity
+     * @param favorList
+     */
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
-        if(!ExecutionMode.getInstance().isTest()){
+        if(!ExecutionMode.getInstance().isTest()) {
             this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
         }
 
         this.fragmentActivity = fragActivity;
+
         if(!ExecutionMode.getInstance().isTest()){
             this.listener = (Favor item) -> {
                 Log.d(TAG,"click recorded");
                 this.sharedViewFavor.select(item);
                 fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
             };
-
-
         }
 
     }

@@ -66,7 +66,7 @@ public class LocationHandler {
             favLocation.setLatitude(geo.getLatitude());
             favLocation.setLongitude(geo.getLongitude());
             distance = l.distanceTo(favLocation);
-            Log.d("DebugRemove", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude()+", "+favLocation.getLongitude() + ", UserLocation " +l.getLatitude()+","+l.getLongitude());
+            Log.d("Location Debug", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude()+", "+favLocation.getLongitude() + ", UserLocation " +l.getLatitude()+","+l.getLongitude());
         }
         return distance;
     }

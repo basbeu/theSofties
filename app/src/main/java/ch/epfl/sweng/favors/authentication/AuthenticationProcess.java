@@ -213,9 +213,6 @@ public class AuthenticationProcess extends Activity {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, registerComplete);
             mAuth.createUserWithEmailAndPassword(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
-        else{
-            Log.d(TAG,"Aucun");
-        }
     }
 
     private void loggedinView(Action action){

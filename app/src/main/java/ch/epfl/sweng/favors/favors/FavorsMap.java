@@ -1,20 +1,24 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
 
 /**
@@ -24,6 +28,7 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     private static final String TAG = "FAVORS_MAP";
 
     FavorsMapBinding binding;
+    ObservableArrayList<Favor> favorList;
 
     @Nullable
     @Override
@@ -31,6 +36,14 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_map,container,false);
         binding.setElements(this);
 
+        binding.mapView.onCreate(savedInstanceState);
+        binding.mapView.onResume();
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        binding.mapView.getMapAsync(this);
 
         return binding.getRoot();
     }
@@ -55,7 +68,6 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));

@@ -39,17 +39,17 @@ public class ProfileFragmentTest {
     }
 
 
-    @Test
-    public void firstName_is_displayed(){
-        mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profFirstName)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
-    }
-
-    @Test
-    public void lastName_is_displayed(){
-        mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profLastName)).check(matches(withText(FakeAuthentication.LAST_NAME)));
-    }
+//    @Test
+//    public void firstName_is_displayed(){
+//        mFragmentTestRule.launchActivity(null);
+//        onView(withId(R.id.profFirstName)).check(matches(withText(FakeAuthentication.FIRST_NAME)));
+//    }
+//
+//    @Test
+//    public void lastName_is_displayed(){
+//        mFragmentTestRule.launchActivity(null);
+//        onView(withId(R.id.profLastName)).check(matches(withText(FakeAuthentication.LAST_NAME)));
+//    }
 
     @Test
     public void email_is_displayed(){

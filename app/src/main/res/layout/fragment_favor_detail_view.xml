@@ -26,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@{elements.title}"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                tools:text="Title" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -36,7 +37,7 @@
                 android:contentDescription="image"
                 android:padding="10sp"
                 android:src="@drawable/test_image2"
-                app:srcCompat="@drawable/test_image" />
+                app:srcCompat="@drawable/test_image2" />
 
             <TextView
                 android:id="@+id/favDescription"
@@ -44,7 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="35sp"
                 android:text="@{elements.description}"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:text="Description" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +61,8 @@
                     android:paddingLeft="40dp"
                     android:paddingRight="90dp"
                     android:text="@{elements.category}"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    tools:text="category" />
 
                 <ImageView
                     android:id="@+id/iconCategory"
@@ -84,7 +87,8 @@
                     android:paddingLeft="30dp"
                     android:text="@{elements.location}"
                     android:textAlignment="viewStart"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:text="Location" />
 
                 <TextView
                     android:id="@+id/favDistance"
@@ -96,7 +100,8 @@
                     android:paddingRight="30dp"
                     android:text="@{elements.distance}"
                     android:textAlignment="textEnd"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:text="Distance" />
             </LinearLayout>
 
             <LinearLayout
@@ -127,6 +132,7 @@
                     android:layout_marginLeft="10sp"
                     android:src="@drawable/favor_token_img" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/favorPosterDetailViewAccess"
                 android:layout_width="wrap_content"
@@ -137,12 +143,13 @@
                 android:text="@{elements.posterName}"
                 android:textStyle="bold" />
 
+
             <TextView
                 android:id="@+id/favReportAbusiveAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="20sp"
+                android:layout_margin="40sp"
                 android:text="Report abusive add"
                 android:textStyle="bold" />
 

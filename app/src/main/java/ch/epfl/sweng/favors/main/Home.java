@@ -27,6 +27,9 @@ public class Home extends android.support.v4.app.Fragment  {
     FavorListAdapter listAdapter;
     HomeBinding binding;
 
+
+
+
     public ObservableField<String> userName = User.getMain().getObservableObject(User.StringFields.firstName);
 
     @Nullable

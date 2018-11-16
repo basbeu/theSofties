@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.profile;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,8 @@ public class ProfileFragment extends Fragment {
     public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.city);
     public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
     public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
+    public ObservableField<String> profileName =  new ObservableField<>();// new ObservableField<>(user.getObservableObject(User.StringFields.firstName).get() + "'s Profile");
+
 
     FragmentProfileLayoutBinding binding;
 
@@ -41,7 +44,18 @@ public class ProfileFragment extends Fragment {
             replaceFragment(fragment);
         });
 
+        updateTitle();
+
         return binding.getRoot();
+    }
+
+    private void updateTitle(){
+        firstName.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                profileName.set(firstName.get() + "'s Profile");
+            }
+        });
     }
 
     public void replaceFragment(Fragment someFragment) {

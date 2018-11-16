@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -26,7 +25,11 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 
-
+/**
+ * FavorDetailView
+ * when you click on a Favor in the ListAdapter
+ * fragment_favor_detail_view.xml
+ */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     public ObservableField<String> title;
@@ -80,8 +83,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         geo = favor.getObservableObject(Favor.ObjectFields.location);
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
-
         posterName = UserRequest.getWithEmail(ownerEmail.get()).getObservableObject(User.StringFields.firstName);
+
     }
 
     @Override

@@ -40,7 +40,10 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import com.google.firebase.Timestamp;
 
-
+/**
+ * Favor Create Fragment
+ * favors_layout.xml is the corresponding view
+ */
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
