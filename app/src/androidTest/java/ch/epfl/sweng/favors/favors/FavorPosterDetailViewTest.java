@@ -70,7 +70,6 @@ public class FavorPosterDetailViewTest {
     @Test
     public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
         mFragmentTestRule.launchActivity(null);
-
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
         @Test
