@@ -41,7 +41,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
      * Class that represents a single row in the list of Favor
      */
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title, timestamp, location, description, distance, category;
+        public TextView title, timestamp, location, distance, category;
         public ImageView iconCategory;
         public FavorListAdapter adapter;
         public Favor selectedFavor = null;
@@ -52,7 +52,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             title = itemView.findViewById(R.id.title);
             timestamp = itemView.findViewById(R.id.timestamp);
             location = itemView.findViewById(R.id.location);
-            description = itemView.findViewById(R.id.description);
             distance = itemView.findViewById(R.id.distance);
             category = itemView.findViewById(R.id.category);
             iconCategory = itemView.findViewById(R.id.iconCategory);
@@ -95,8 +94,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         private void setStringFields(Favor favor) {
             if(favor.get(Favor.StringFields.title) != null)
                 title.setText(favor.get(Favor.StringFields.title));
-            if(favor.get(Favor.StringFields.description) != null)
-                description.setText(favor.get(Favor.StringFields.description));
             if(favor.get(Favor.StringFields.category) != null)
                 category.setText(favor.get(Favor.StringFields.category));
         }

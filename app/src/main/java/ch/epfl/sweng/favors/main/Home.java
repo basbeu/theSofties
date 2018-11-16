@@ -19,7 +19,6 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.HomeBinding;
-import ch.epfl.sweng.favors.favors.FavorDetailView;
 import ch.epfl.sweng.favors.favors.FavorListAdapter;
 import ch.epfl.sweng.favors.favors.FavorsFragment;
 

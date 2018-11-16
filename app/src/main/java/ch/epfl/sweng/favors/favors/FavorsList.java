@@ -14,36 +14,72 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
-import ch.epfl.sweng.favors.databinding.MyFavorsBinding;
+import ch.epfl.sweng.favors.databinding.FavorsListBinding;
 
 /**
  * Fragment that displays the list of favor and allows User to sort it and to search in it
  */
-public class MyFavorsFragment extends android.support.v4.app.Fragment {
-    private static final String TAG = "FAVORS_LIST";
+public class FavorsList extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener {
+    private static final String TAG = "FAVORS_FRAGMENT";
 
-    MyFavorsBinding binding;
+    FavorsListBinding binding;
     ObservableArrayList<Favor> favorList;
     FavorListAdapter listAdapter;
 
     @Nullable
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.my_favors,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.favors_list,container,false);
         binding.setElements(this);
 
+        //Spinner for sorting criteria
+        Spinner sortBySpinner = binding.sortBySpinner;
+
+        //create Spinner Adapter from resource list
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.sortBy, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(adapter);
+        sortBySpinner.setOnItemSelectedListener(this);
+
+        //button redirects to creating favor page
         binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
 
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        favorList = FavorRequest.getList(Favor.StringFields.ownerID, Authentication.getInstance().getUid(), null, null);
-        favorList.addOnListChangedCallback(listCallBack);
 
         return binding.getRoot();
     }
+
+    /**
+     *
+     * Sorts the favors list according to sort criteria
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                favorList = FavorRequest.all(null, null);
+            case 1: //location
+                favorList = FavorRequest.all(null, Favor.StringFields.locationCity);
+                break;
+            case 2: //recent
+                favorList = FavorRequest.all(null, null);
+                break;
+            case 3: //category
+                favorList = FavorRequest.all(null, Favor.StringFields.category);
+                break;
+            default: break;
+        }
+        favorList.addOnListChangedCallback(listCallBack);
+    }
+
+    /**
+     *
+     * Takes the favors list from the data base
+     */
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     private void updateList(ObservableList<Favor> list){
         listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
