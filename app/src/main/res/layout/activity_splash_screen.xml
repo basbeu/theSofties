@@ -5,7 +5,7 @@
     android:id="@+id/splashLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/whiteSmoke"
     tools:context="ch.epfl.sweng.favors.main.SplashScreenActivity">
 
     <ImageView
@@ -19,14 +19,13 @@
     <TextView
         android:id="@+id/versionNumber"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_below="@+id/logoFavors"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="71dp"
+        android:layout_marginBottom="60dp"
         android:hint="version number"
-        android:textColor="@color/browser_actions_bg_grey"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="24sp"
         app:fontFamily="sans-serif" />
 

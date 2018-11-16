@@ -25,12 +25,12 @@ import retrofit2.Retrofit;
     }
 
     @Override
-    public Retrofit getClient() {
+    Retrofit getClient() {
         return null;
     }
 
     @Override
-    public RetrofitApi getApi() {
+    RetrofitApi getApi() {
         return new RetrofitApi() {
             @Override
             public Call<ResponseBody> sendEmail(String from, String to, String subject, String text) {
@@ -65,7 +65,7 @@ import retrofit2.Retrofit;
     This method allows for the testing of the send email. The result depends on the execution mode that is called
      */
     @Override
-    public Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
+    Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
         return new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
