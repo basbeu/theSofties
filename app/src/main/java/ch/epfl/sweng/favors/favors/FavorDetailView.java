@@ -98,10 +98,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();});
-        
         binding.favReportAbusiveAdd.setOnClickListener((l)->{
             //Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
-
             EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
                     "Abusive favors : "+title.get(),
                     "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
@@ -109,7 +107,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     "issue has been reported! Sorry for the inconvenience",
                     "Sorry an error occured, try again later...");
         });
-
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("SENDTO", "Clicked");
             EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
@@ -119,8 +116,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     "We will inform the poster of the add that you are interested to help!",
                     "Sorry an error occured, try again later...");
         });
-
-
         return binding.getRoot();
     }
 
