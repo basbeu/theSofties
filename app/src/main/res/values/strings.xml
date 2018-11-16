@@ -44,4 +44,5 @@
     <string name="categoryFavor">Add Favor Category</string>
     <string name="title_activity_confirmation_sent">ConfirmationSent</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
