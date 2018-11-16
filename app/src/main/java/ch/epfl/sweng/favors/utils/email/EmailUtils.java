@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import ch.epfl.sweng.favors.database.ApiKeys;
+import ch.epfl.sweng.favors.database.Database;
 
 /**
  * Provides the utilities that allow for the sending of emails.
@@ -28,18 +29,15 @@ public class EmailUtils {
      */
     public static void sendEmail(@NonNull String from, @NonNull String to, String subject, String message, @NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg){
 
+        //Ensure that API Keys are up to date before calling the API
         ApiKeys key = ApiKeys.getInstance();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Database.getInstance().updateFromDb(key).addOnCompleteListener(t->{
 
-        Log.d(TAG, key.get(ApiKeys.StringFields.mailGun));
+            RetrofitDispatcher.getInstance()
+                    .getApi()
+                    .sendEmail(from, to, subject, message)
+                    .enqueue(RetrofitDispatcher.getInstance().getCallback(context, successMsg, failureMsg));
+        });
 
-        RetrofitDispatcher.getInstance()
-                .getApi()
-                .sendEmail(from, to, subject, message)
-                .enqueue(RetrofitDispatcher.getInstance().getCallback(context, successMsg, failureMsg));
     }
 }

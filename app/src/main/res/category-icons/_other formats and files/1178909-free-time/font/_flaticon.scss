@@ -1,0 +1,139 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 23/10/2018 14:53
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-001-sleep:before { content: "\f100"; }
+.flaticon-002-bandage:before { content: "\f101"; }
+.flaticon-003-wine-bottle:before { content: "\f102"; }
+.flaticon-004-bed:before { content: "\f103"; }
+.flaticon-005-pillow:before { content: "\f104"; }
+.flaticon-006-ping-pong:before { content: "\f105"; }
+.flaticon-007-jump-rope:before { content: "\f106"; }
+.flaticon-008-exercise:before { content: "\f107"; }
+.flaticon-009-dumbbell:before { content: "\f108"; }
+.flaticon-010-sneakers:before { content: "\f109"; }
+.flaticon-011-weight:before { content: "\f10a"; }
+.flaticon-012-dumbbell-1:before { content: "\f10b"; }
+.flaticon-013-dumbbells:before { content: "\f10c"; }
+.flaticon-014-heart-rate:before { content: "\f10d"; }
+.flaticon-015-bowling:before { content: "\f10e"; }
+.flaticon-016-ball:before { content: "\f10f"; }
+.flaticon-017-kite:before { content: "\f110"; }
+.flaticon-018-swimming-pool:before { content: "\f111"; }
+.flaticon-019-bbq:before { content: "\f112"; }
+.flaticon-020-picnic:before { content: "\f113"; }
+.flaticon-021-fire:before { content: "\f114"; }
+.flaticon-022-theatre:before { content: "\f115"; }
+.flaticon-023-cleaning:before { content: "\f116"; }
+.flaticon-024-card-game:before { content: "\f117"; }
+.flaticon-025-party:before { content: "\f118"; }
+.flaticon-026-balloons:before { content: "\f119"; }
+.flaticon-027-hot-air-balloon:before { content: "\f11a"; }
+.flaticon-028-paper-cup:before { content: "\f11b"; }
+.flaticon-029-church:before { content: "\f11c"; }
+.flaticon-030-ferris-wheel:before { content: "\f11d"; }
+.flaticon-031-boat:before { content: "\f11e"; }
+.flaticon-032-cocktail:before { content: "\f11f"; }
+.flaticon-033-fireplace:before { content: "\f120"; }
+.flaticon-034-coffee:before { content: "\f121"; }
+.flaticon-035-cake:before { content: "\f122"; }
+.flaticon-036-washing-machine:before { content: "\f123"; }
+.flaticon-037-fishing:before { content: "\f124"; }
+.flaticon-038-camp:before { content: "\f125"; }
+.flaticon-039-music:before { content: "\f126"; }
+.flaticon-040-camper-van:before { content: "\f127"; }
+.flaticon-041-tent:before { content: "\f128"; }
+.flaticon-042-chat:before { content: "\f129"; }
+.flaticon-043-speak:before { content: "\f12a"; }
+.flaticon-044-video:before { content: "\f12b"; }
+.flaticon-045-picture:before { content: "\f12c"; }
+.flaticon-046-slot-machine:before { content: "\f12d"; }
+.flaticon-047-laptop:before { content: "\f12e"; }
+.flaticon-048-baseball:before { content: "\f12f"; }
+.flaticon-049-video-games:before { content: "\f130"; }
+.flaticon-050-console:before { content: "\f131"; }
+    
+    $font-Flaticon-001-sleep: "\f100";
+    $font-Flaticon-002-bandage: "\f101";
+    $font-Flaticon-003-wine-bottle: "\f102";
+    $font-Flaticon-004-bed: "\f103";
+    $font-Flaticon-005-pillow: "\f104";
+    $font-Flaticon-006-ping-pong: "\f105";
+    $font-Flaticon-007-jump-rope: "\f106";
+    $font-Flaticon-008-exercise: "\f107";
+    $font-Flaticon-009-dumbbell: "\f108";
+    $font-Flaticon-010-sneakers: "\f109";
+    $font-Flaticon-011-weight: "\f10a";
+    $font-Flaticon-012-dumbbell-1: "\f10b";
+    $font-Flaticon-013-dumbbells: "\f10c";
+    $font-Flaticon-014-heart-rate: "\f10d";
+    $font-Flaticon-015-bowling: "\f10e";
+    $font-Flaticon-016-ball: "\f10f";
+    $font-Flaticon-017-kite: "\f110";
+    $font-Flaticon-018-swimming-pool: "\f111";
+    $font-Flaticon-019-bbq: "\f112";
+    $font-Flaticon-020-picnic: "\f113";
+    $font-Flaticon-021-fire: "\f114";
+    $font-Flaticon-022-theatre: "\f115";
+    $font-Flaticon-023-cleaning: "\f116";
+    $font-Flaticon-024-card-game: "\f117";
+    $font-Flaticon-025-party: "\f118";
+    $font-Flaticon-026-balloons: "\f119";
+    $font-Flaticon-027-hot-air-balloon: "\f11a";
+    $font-Flaticon-028-paper-cup: "\f11b";
+    $font-Flaticon-029-church: "\f11c";
+    $font-Flaticon-030-ferris-wheel: "\f11d";
+    $font-Flaticon-031-boat: "\f11e";
+    $font-Flaticon-032-cocktail: "\f11f";
+    $font-Flaticon-033-fireplace: "\f120";
+    $font-Flaticon-034-coffee: "\f121";
+    $font-Flaticon-035-cake: "\f122";
+    $font-Flaticon-036-washing-machine: "\f123";
+    $font-Flaticon-037-fishing: "\f124";
+    $font-Flaticon-038-camp: "\f125";
+    $font-Flaticon-039-music: "\f126";
+    $font-Flaticon-040-camper-van: "\f127";
+    $font-Flaticon-041-tent: "\f128";
+    $font-Flaticon-042-chat: "\f129";
+    $font-Flaticon-043-speak: "\f12a";
+    $font-Flaticon-044-video: "\f12b";
+    $font-Flaticon-045-picture: "\f12c";
+    $font-Flaticon-046-slot-machine: "\f12d";
+    $font-Flaticon-047-laptop: "\f12e";
+    $font-Flaticon-048-baseball: "\f12f";
+    $font-Flaticon-049-video-games: "\f130";
+    $font-Flaticon-050-console: "\f131";

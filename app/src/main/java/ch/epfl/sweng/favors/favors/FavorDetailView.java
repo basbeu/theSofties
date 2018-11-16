@@ -1,15 +1,17 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -21,7 +23,11 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 
-
+/**
+ * FavorDetailView
+ * when you click on a Favor in the ListAdapter
+ * fragment_favor_detail_view.xml
+ */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     public ObservableField<String> title;
@@ -31,6 +37,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<Object> geo;
     public ObservableField<String> distance = new ObservableField<>();
     public ObservableField<String> ownerEmail;
+    public ObservableField<String> user;
 
     private Favor localFavor;
 
@@ -75,6 +82,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         geo = favor.getObservableObject(Favor.ObjectFields.location);
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
+        //user.set();
     }
 
     @Override
@@ -91,47 +99,25 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                         mFrag).addToBackStack(null).commit();});
         binding.favReportAbusiveAdd.setOnClickListener(l-> Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show());
 
+        binding.favReportAbusiveAdd.setOnClickListener((l)->{
+            //Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
+
+            EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
+                    "Abusive favors : "+title.get(),
+                    "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
+                    getActivity(),
+                    "issue has been reported! Sorry for the inconvenience",
+                    "Sorry an error occured, try again later...");
+        });
+
         binding.favIntrestedButton.setOnClickListener((l)->{
             Log.d("SENDTO", "Clicked");
             EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
-                    "Someone is interested for : "+title.get(),
+                    "Someone is interested in: "+title.get(),
                     "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
                     getActivity(),
                     "We will inform the poster of the add that you are interested to help!",
                     "Sorry an error occured, try again later...");
-
-            //TODO get the email address from user corresponding to ownerID
-            /*UserRequest.getList(User.StringFields.email, ownerId.get(), 1, null).addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
-                @Override
-                public void onChanged(ObservableList<User> sender) {
-                    Log.d("SENDTO", "1");
-                }
-                @Override
-                public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
-                    Log.d("SENDTO", "2");
-                }
-                @Override
-                public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
-                    String userMail = sender.get(0).getObservableObject(User.StringFields.email).get();
-                    Log.d("SENDTO", userMail);
-                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), userMail,
-                            "Someone is interested for : "+title.get(),
-                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
-                            getActivity(),
-                            "We will inform the poster of the add that you are interested to help!",
-                            "Sorry an error occured, try again later...");
-
-                }
-                @Override
-                public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
-                    Log.d("SENDTO", "3");
-                }
-                @Override
-                public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
-                    Log.d("SENDTO", "4");
-                }
-            });*/
-
         });
 
 
@@ -142,6 +128,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public void onDetach() {
         super.onDetach();
         currentFavorID = null;
+    }
+
+    @BindingAdapter("android:src")
+    public static void setImageUri(ImageView view, String imageName) {
+        if (imageName == null) {
+            view.setImageURI(null);
+        } else {
+            view.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+imageName.toLowerCase().replaceAll("\\s","")));
+        }
     }
 
 }

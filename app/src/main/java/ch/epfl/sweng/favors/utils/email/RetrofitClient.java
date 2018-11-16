@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Tasks;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,10 +26,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
- class RetrofitClient extends RetrofitDispatcher{
+class RetrofitClient extends RetrofitDispatcher{
 
 
-    private static final String BASE_URL = "https://api.mailgun.net/v3/favors.services/";
+    private static final String BASE_URL = "https://api.mailgun.net/v3/myfavors.xyz/";
 
     private static final String API_USERNAME = "api";
 
@@ -39,11 +41,9 @@ import static java.net.HttpURLConnection.HTTP_OK;
     private Retrofit retrofit;
 
     private RetrofitClient() {
+
         OkHttpClient okClient = new OkHttpClient.Builder()
-                .addInterceptor(
-                        new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
+                .addInterceptor((chain)-> {
                                 Request original = chain.request();
 
                                 //Adding basic auth
@@ -53,8 +53,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
                                 Request request = requestBuilder.build();
                                 return chain.proceed(request);
-                            }
-                        })
+                            })
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -64,23 +63,24 @@ import static java.net.HttpURLConnection.HTTP_OK;
                 .build();
     }
 
-    public static synchronized RetrofitClient getInstance() {
+    static synchronized RetrofitClient getInstance() {
         if (mInstance == null) {
             mInstance = new RetrofitClient();
         }
         return mInstance;
     }
 
-    public Retrofit getClient() {
+    Retrofit getClient() {
         return retrofit;
     }
 
-    public Api getApi() {
-        return retrofit.create(Api.class);
+    RetrofitApi getApi() {
+
+        return retrofit.create(RetrofitApi.class);
     }
 
     @NonNull
-    public Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
+    Callback<ResponseBody> getCallback(@NonNull Context context, @NonNull String successMsg, @NonNull String failureMsg) {
         return new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
