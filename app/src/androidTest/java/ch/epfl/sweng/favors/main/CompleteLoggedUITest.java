@@ -551,8 +551,8 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
                                         0),
-                                0),
-                        isDisplayed()));
+                                0)));
+        textView14.perform(scrollTo());
         textView14.check(matches(withText("DC")));
 
         ViewInteraction textView15 = onView(
