@@ -526,14 +526,15 @@ public class CompleteLoggedUITest {
         appCompatButton4.perform(click());
 
         ViewInteraction textView13 = onView(
-                allOf(withId(R.id.deadlineFavor), withText("30-10-2018"),
+                allOf(withId(R.id.deadlineFavor),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
                                 8),
                         isDisplayed()));
-        textView13.check(matches(withText("30-10-2018")));
+
+        textView13.check(matches(isDisplayed()));
 
         ViewInteraction appCompatSpinner = onView(
                 allOf(withId(R.id.categoryFavor),
