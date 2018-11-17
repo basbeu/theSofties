@@ -2,7 +2,6 @@ package ch.epfl.sweng.favors.favors;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,15 +41,15 @@ public class MyFavorsFragment extends android.support.v4.app.Fragment {
         favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                updateList((ObservableList<Favor>) sender);
+                updateList((ObservableArrayList<Favor>) sender);
             }
         });
 
         return binding.getRoot();
     }
 
-    private void updateList(ObservableList<Favor> list){
-        listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
+    private void updateList(ObservableArrayList<Favor> list){
+        listAdapter = new FavorListAdapter(this.getActivity(), list);
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }

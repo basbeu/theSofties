@@ -3,7 +3,6 @@ package ch.epfl.sweng.favors.main;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,21 +32,21 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.location.SortLocations;
 
 public class Home extends android.support.v4.app.Fragment  {
-    private ObservableArrayList<Favor> favorList;
+    private ObservableArrayList<Favor> favorList = new ObservableArrayList<>();
     FavorListAdapter listAdapter;
     HomeBinding binding;
-    
+
     Observable.OnPropertyChangedCallback locationSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            Collections.sort((ObservableList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
-            updateList((ObservableList) sender);
+            Collections.sort((ObservableArrayList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
+            updateList((ObservableArrayList) sender);
         }
     };
     Observable.OnPropertyChangedCallback otherSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            updateList((ObservableList) sender);
+            updateList((ObservableArrayList) sender);
         }
     };
 
@@ -63,16 +62,15 @@ public class Home extends android.support.v4.app.Fragment  {
         binding.button.setOnClickListener(v ->
                 this.getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorsFragment()).addToBackStack(null).commit());
 
-        setView(currentMode);
-        binding.switchList.setOnClickListener(v -> setView(currentMode++));
-
+        setView();
+        binding.switchList.setOnClickListener(v -> {currentMode++;setView();});
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        setView(0);
+
         return binding.getRoot();
     }
 
 
-    private void updateList(ObservableList<Favor> list){
+    private void updateList(ObservableArrayList<Favor> list){
         listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
@@ -82,23 +80,20 @@ public class Home extends android.support.v4.app.Fragment  {
     int currentMode = 0;
     public ObservableField<String> lastFavorsTitle = new ObservableField<>();
 
-    void setView(int i){
-        if(i >= modes.length){i=0;};
-        switch (i){
+    void setView(){
+        if(currentMode >= modes.length){currentMode=0;};
+        switch (currentMode){
             case 0 :
                 favorList.changeOnPropertyChangedCallback(locationSortingCb);
                 FavorRequest.all(favorList, null, null);
-                lastFavorsTitle.set(modes[i]);
-
                 break;
             case 1 :
                 favorList.changeOnPropertyChangedCallback(otherSortingCb);
                 FavorRequest.all(favorList, null, null);
-                lastFavorsTitle.set(modes[0]);
-
                 break;
             default:
 
         }
+        lastFavorsTitle.set(modes[currentMode]);
     }
 }
