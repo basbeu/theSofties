@@ -107,8 +107,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
                 FavorPosterDetailView mFrag = new FavorPosterDetailView();
                 Bundle bundle = new Bundle();
-                bundle.putString(FavorPosterDetailView.OWNER_EMAIL,localFavor.get(Favor.StringFields.ownerID));
-                //bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
+            bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();});

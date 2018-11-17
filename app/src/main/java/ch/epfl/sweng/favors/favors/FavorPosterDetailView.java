@@ -65,13 +65,8 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
         public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(!ExecutionMode.getInstance().isTest()){
-            User poster = new User(getArguments().getString(OWNER_EMAIL));
-            /*ownerEmail = getArguments().getString(OWNER_EMAIL);
-            UserRequest.getList(User.StringFields.email, ownerEmail, null, null).addOnListChangedCallback(ownerContainer);*/
-            firstName.set(poster.get(User.StringFields.firstName));
-            lastName.set(poster.get(User.StringFields.lastName));
-            sex.set(poster.get(User.StringFields.sex));
-
+            ownerEmail = getArguments().getString(OWNER_EMAIL);
+            UserRequest.getList(User.StringFields.email, ownerEmail, null, null).addOnListChangedCallback(ownerContainer);
         } else {
             firstName.set("Toto");
             lastName.set("Tata");
