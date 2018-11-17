@@ -73,22 +73,25 @@ public class FavorPosterDetailViewTest {
     }
 
     @Test
-    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
+    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException, InterruptedException {
         mFragmentTestRule.launchActivity(null);
+        Thread.sleep(1000);
         mFragmentTestRule.getFragment().setFields(getNewTestFavor());
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void profilePictureDisplayed(){
+    public void profilePictureDisplayed() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
+        Thread.sleep(500);
         mFragmentTestRule.getFragment().setFields(getNewTestFavor());
         onView(withId(R.id.profilePic)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void firstNameDisplayed(){
+    public void firstNameDisplayed() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
+        Thread.sleep(500);
         mFragmentTestRule.getFragment().setFields(getNewTestFavor());
         onView(withId(R.id.posterFirstName)).perform(scrollTo()).check(matches(isDisplayed()));
     }
