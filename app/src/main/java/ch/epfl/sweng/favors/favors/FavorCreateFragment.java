@@ -68,6 +68,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         return (titleValid.get() && descriptionValid.get() && locationCityValid.get() && deadlineValid.get());
     }
     public void createFavorIfValid(Favor newFavor) {
+        Log.d("TOFIND", "YO IM HERE LOVE ME");
         if (allFavorFieldsValid()) {
             newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
             newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
@@ -83,13 +84,20 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.IntegerFields.tokens, 1);
             Log.d("Database: Favor", "Favor pushed to database");
             User u = new User(Authentication.getInstance().getUid());
+            Log.d("BIGBUG","I AM HERE");
             Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
+                        Log.d("BIGBUG","LINE 87 OK");
                         int newUserTokens = u.get(User.IntegerFields.tokens) - 1;
+                Log.d("BIGBUG","LINE 87 OK");
                         if(newUserTokens >= 0 ) {
+                            Log.d("BIGBUG","LINE 91 OK");
                             u.set(User.IntegerFields.tokens, newUserTokens);
+                            Log.d("BIGBUG","LINE 93 OK");
                             Database.getInstance().updateOnDb(u);
-                        } else{
-                            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+                            Log.d("BIGBUG","LINE 95 OK");
+                        } else {
+                            Toast.makeText(getContext(), "You do not have enough tokens to create this favor",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -277,8 +285,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-        }
-        else{
+        } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");
             validationText.set("Favor created successfully");
