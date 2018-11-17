@@ -142,7 +142,7 @@ public class FavorDetailViewTest {
         onView(withId(R.id.imageView2)).perform(scrollTo()).check(matches(isDisplayed()));*/
     }
 
-
+    @Ignore
     @Test
     public void posterViewCorrectlyLaunched() throws InterruptedException {
         //assertEquals(true, false);
