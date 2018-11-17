@@ -546,23 +546,12 @@ public class CompleteLoggedUITest {
         appCompatSpinner.perform(scrollTo(), click());
 
         ViewInteraction textView14 = onView(
-                allOf(withId(android.R.id.text1), withText("DC"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                        0),
-                                0)));
+                allOf(withText("DC")));
         textView14.perform(scrollTo());
         textView14.check(matches(withText("DC")));
 
         ViewInteraction textView15 = onView(
-                allOf(withId(android.R.id.text1), withText("MARVEL"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                        0),
-                                1),
-                        isDisplayed()));
+                allOf(withText("MARVEL")));
         textView15.check(matches(withText("MARVEL")));
 
         DataInteraction appCompatTextView2 = onData(anything())
