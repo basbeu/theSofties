@@ -1,7 +1,7 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
+import android.databinding.Observable;
 import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsListBinding;
 
 /**
@@ -59,19 +60,19 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                favorList = FavorRequest.all(null, null);
+                FavorRequest.all(favorList, null, null);
             case 1: //location
-                favorList = FavorRequest.all(null, Favor.StringFields.locationCity);
+                FavorRequest.all(favorList, null, Favor.StringFields.locationCity);
                 break;
             case 2: //recent
-                favorList = FavorRequest.all(null, null);
+                FavorRequest.all(favorList, null, null);
                 break;
             case 3: //category
-                favorList = FavorRequest.all(null, Favor.StringFields.category);
+                FavorRequest.all(favorList, null, Favor.StringFields.category);
                 break;
             default: break;
         }
-        favorList.addOnListChangedCallback(listCallBack);
+        favorList.addOnPropertyChangedCallback(listCallBack);
     }
 
     /**
@@ -87,22 +88,10 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
         listAdapter.notifyDataSetChanged();
     }
 
-    ObservableList.OnListChangedCallback listCallBack = new ObservableList.OnListChangedCallback<ObservableList<Favor>>() {
+    Observable.OnPropertyChangedCallback listCallBack = new Observable.OnPropertyChangedCallback() {
         @Override
-        public void onChanged(ObservableList<Favor> sender) {}
-
-        @Override
-        public void onItemRangeChanged(ObservableList<Favor> sender, int positionStart, int itemCount) {}
-
-        @Override
-        public void onItemRangeInserted(ObservableList<Favor> sender, int positionStart, int itemCount) {
-            updateList(sender);
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            updateList((ObservableList<Favor>) sender);
         }
-
-        @Override
-        public void onItemRangeMoved(ObservableList<Favor> sender, int fromPosition, int toPosition, int itemCount) {}
-
-        @Override
-        public void onItemRangeRemoved(ObservableList<Favor> sender, int positionStart, int itemCount) {}
     };
 }

@@ -42,7 +42,9 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
             Log.e(TAG, "Trying to intent a the fragment without the email of the favor owner");
         }
 
-        User favorCreatorUser = UserRequest.getWithEmail(ownerEmail);
+        User favorCreatorUser = new User();
+        UserRequest.getWithEmail(favorCreatorUser, ownerEmail);
+
         firstName = favorCreatorUser.getObservableObject(User.StringFields.firstName);
         lastName = favorCreatorUser.getObservableObject(User.StringFields.lastName);
         sex = favorCreatorUser.getObservableObject(User.StringFields.sex);

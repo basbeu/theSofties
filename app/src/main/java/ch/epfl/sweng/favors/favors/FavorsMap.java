@@ -1,11 +1,9 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
 
 /**

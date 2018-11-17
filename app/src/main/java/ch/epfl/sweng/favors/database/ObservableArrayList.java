@@ -82,4 +82,9 @@ public class ObservableArrayList<T> extends ArrayList<T> implements Observable {
             callback.onPropertyChanged(this, 0);
         }
     }
+    public void changeOnPropertyChangedCallback(OnPropertyChangedCallback callback){
+        callbacks.clear();
+        addOnPropertyChangedCallback(callback);
+    }
+
 }

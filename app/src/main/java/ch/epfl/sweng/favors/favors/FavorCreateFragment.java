@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.favors;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
@@ -31,6 +32,7 @@ import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -89,7 +91,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableField<String> favorDescription;
     public ObservableField<String> locationCity;
     public ObservableField<String> deadline;
-    public ObservableList<Interest> interestsList;
+    public ObservableArrayList<Interest> interestsList;
 
     public ObservableField<String> validationButtonText = new ObservableField<>("--");
     public ObservableField<String> fragmentTitle = new ObservableField<>("--");
@@ -105,16 +107,10 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private String strtext;
 
     private Spinner spinner;
-    private ObservableList.OnListChangedCallback<ObservableList<Interest>> callbackInterestList = new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
+    private Observable.OnPropertyChangedCallback callbackInterestList = new Observable.OnPropertyChangedCallback() {
         @Override
-        public void onChanged(ObservableList sender) {}
-
-        @Override
-        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {}
-
-        @Override
-        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-            if(sender != null  && !(sender.isEmpty())){
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            if(sender != null  && !(((ObservableArrayList)sender).isEmpty())){
                 ArrayList interestsTitles = new ArrayList();
                 for(Interest interest : interestsList) {
                     interestsTitles.add(interest.get(Interest.StringFields.title));
@@ -132,11 +128,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             }
         }
 
-        @Override
-        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {}
-
-        @Override
-        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {}
     };
 
     private TextWatcherCustom titleFavorTextWatcher = new TextWatcherCustom() {
@@ -216,8 +207,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         spinner =  binding.categoryFavor;
 
-        interestsList = InterestRequest.all(null, null);
-        interestsList.addOnListChangedCallback(callbackInterestList);
+        InterestRequest.all(interestsList, null, null);
+        interestsList.addOnPropertyChangedCallback(callbackInterestList);
 
         // TESTING LINE FOR BINDING
         binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();});

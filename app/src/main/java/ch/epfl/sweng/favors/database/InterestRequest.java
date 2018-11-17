@@ -1,7 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.ObservableArrayList;
-
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -10,11 +8,11 @@ public final class InterestRequest extends Request{
     private static final String COLLECTION = "interests";
 
     private InterestRequest(){}
-    public static ObservableArrayList<Interest> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
-        return db.getList(Interest.class, COLLECTION, element, value, limit, orderBy);
+    public static void getList(ObservableArrayList<Interest>list, DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
+        db.getList(list, Interest.class, COLLECTION, element, value, limit, orderBy);
     }
-    public static ObservableArrayList<Interest> all(Integer limit, DatabaseStringField orderBy){
-        return db.getAll(Interest.class, COLLECTION, limit, orderBy);
+    public static void all(ObservableArrayList<Interest> list, Integer limit, DatabaseStringField orderBy){
+        db.getAll(list, Interest.class, COLLECTION, limit, orderBy);
     }
 
 }

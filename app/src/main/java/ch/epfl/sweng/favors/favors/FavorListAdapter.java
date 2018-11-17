@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
@@ -19,8 +18,8 @@ import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
 /**
@@ -138,19 +137,17 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
      */
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
-        if(!ExecutionMode.getInstance().isTest()) {
-            this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
-        }
+
+        this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
 
         this.fragmentActivity = fragActivity;
 
-        if(!ExecutionMode.getInstance().isTest()){
-            this.listener = (Favor item) -> {
-                Log.d(TAG,"click recorded");
-                this.sharedViewFavor.select(item);
-                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
-            };
-        }
+        this.listener = (Favor item) -> {
+            Log.d(TAG,"click recorded");
+            this.sharedViewFavor.select(item);
+            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+        };
+
 
     }
 

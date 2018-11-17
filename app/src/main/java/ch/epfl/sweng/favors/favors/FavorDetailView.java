@@ -83,7 +83,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         geo = favor.getObservableObject(Favor.ObjectFields.location);
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
-        posterName = UserRequest.getWithEmail(ownerEmail.get()).getObservableObject(User.StringFields.firstName);
+
+        User favorCreationUser = new User();
+        UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
+        posterName = favorCreationUser.getObservableObject(User.StringFields.firstName);
 
     }
 

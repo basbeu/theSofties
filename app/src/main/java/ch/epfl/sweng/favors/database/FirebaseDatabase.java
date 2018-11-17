@@ -1,9 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.Observable;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +12,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -92,11 +89,11 @@ public class FirebaseDatabase extends Database{
 
     class ListRequestFb<T extends DatabaseEntity> implements OnCompleteListener{
 
-        ObservableList<T> list;
+        ObservableArrayList<T> list;
         T firstElement;
         Class<T> clazz;
 
-        public  ListRequestFb(ObservableList<T> list, Class<T> clazz){
+        public  ListRequestFb(ObservableArrayList<T> list, Class<T> clazz){
             super();
             this.list = list;
             this.clazz = clazz;
@@ -154,25 +151,25 @@ public class FirebaseDatabase extends Database{
     }
 
     @Override
-    protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz,
+    protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
                                                                        String collection,
                                                                        Integer limit,
                                                                        DatabaseStringField orderBy){
-        ObservableArrayList<T> list = new ObservableArrayList<>();
         Query query = dbFireStore.collection(collection);
         query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
-        return list;
     }
 
 
     @Override
-    protected  <T extends DatabaseEntity> void updateList(ObservableArrayList<T> list, Class<T> clazz,
+    protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                          String collection,
                                                                          DatabaseField element,
-                                                                         String value,
+                                                                         Object value,
                                                                          Integer limit,
                                                                          DatabaseStringField orderBy){
+
+
         if(element == null || value == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query = addParametersToQuery(query, limit, orderBy);
@@ -181,7 +178,7 @@ public class FirebaseDatabase extends Database{
 
 
     @Override
-    protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
                                                              String value){
         if(value == null || toUpdate == null){return;}
         DocumentReference query = dbFireStore.collection(collection).document(value);
@@ -191,8 +188,8 @@ public class FirebaseDatabase extends Database{
 
 
     @Override
-    protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField element, String value){
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             DatabaseField element, Object value){
         if(value == null || toUpdate == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query.get().addOnCompleteListener(new ListRequestFb<T>(toUpdate, clazz));

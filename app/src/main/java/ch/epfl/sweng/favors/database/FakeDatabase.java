@@ -1,9 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -17,14 +13,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
-import ch.epfl.sweng.favors.favors.FavorCreateFragment;
-import ch.epfl.sweng.favors.main.FavorsMain;
+
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
@@ -73,33 +69,34 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
-        ObservableArrayList<T> list = new ObservableArrayList<>();
+    protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
+            ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity)) {
                     try {
                         T temp = clazz.newInstance();
                         temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.add(temp);
-                            }
-                        });
+                        tempList.add(temp);
+
                     } catch (Exception e){
                         Log.e(TAG, "Illegal access exception");
                     }
                 }
 
             }
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    list.clear();
+                    list.addAll(tempList);
+                }
+            });
 
 
         },500);
-
-        return list;
     }
 
     private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
@@ -124,31 +121,33 @@ public class FakeDatabase extends Database{
      * @param <T> The object type
      */
     @Override
-    protected  <T extends DatabaseEntity> void updateList(ObservableArrayList<T> list, Class<T> clazz,
+    protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                           String collection,
                                                           DatabaseField key,
-                                                          String value,
+                                                          Object value,
                                                           Integer limit,
                                                           DatabaseStringField orderBy){
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
-            list.clear();
+            ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
-                if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
+                if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
                     try {
                         T temp = clazz.newInstance();
                         temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.add(temp);
-                            }
-                        });
+                        tempList.add(temp);
                     } catch (Exception e){
                         Log.e(TAG, "Illegal access exception");
                     }
                 }
             }
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    list.clear();
+                    list.addAll(tempList);
+                }
+            });
 
         },500);
     }
@@ -164,7 +163,7 @@ public class FakeDatabase extends Database{
      * @param <T> The object type
      */
     @Override
-    protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
                                                              String value){
 
         Handler handler = new Handler(handlerThread.getLooper());
@@ -199,15 +198,15 @@ public class FakeDatabase extends Database{
      * @param <T> The object type
      */
     @Override
-    protected  <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField key, String value){
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             DatabaseField key, Object value){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             toUpdate.reset();
 
             for(DatabaseEntity entity : database.values()) {
-                if (clazz.isInstance(entity) && entity.get((DatabaseStringField) key).equals(value)) {
+                if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {

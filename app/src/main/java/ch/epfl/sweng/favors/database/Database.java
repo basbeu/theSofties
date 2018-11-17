@@ -1,16 +1,11 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
-import android.util.Log;
-
 import com.google.android.gms.tasks.Task;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
-import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
 /**
  * Abstract class that represent a singleton for the database storage for the app
@@ -41,64 +36,24 @@ public abstract class Database {
      * @param <T> Generic type that extends DatabaseEntity
      * @return An observable Arraylist of all the DatabaseEntity of type <T> in the database
      */
-    protected abstract <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz,
+    protected abstract <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
                                                                                 String collection,
                                                                                 Integer limit,
                                                                                 DatabaseStringField orderBy);
 
 
-    protected  <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz,
-                                                                         String collection,
-                                                                         DatabaseField element,
-                                                                         String value,
-                                                                         Integer limit,
-                                                                         DatabaseStringField orderBy){
-        ObservableArrayList<T> result = new ObservableArrayList<>();
-        updateList(result, clazz, collection, element, value, limit, orderBy);
-        return result;
-    }
-
-    protected  <T extends DatabaseEntity> T getElement(Class<T> clazz, String collection,
-                                                       String value){
-        try{
-            T result = clazz.newInstance();
-            updateElement(result, clazz,  collection, value);
-            return result;
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Illegal access exception");
-            return null;
-        }
-
-    }
-
-
-    protected  <T extends DatabaseEntity> T getElement(Class<T> clazz, String collection,
-                                                       DatabaseField element, String value){
-        try{
-            T result = clazz.newInstance();
-            updateElement(result, clazz, collection, element, value);
-            return result;
-        }
-        catch (Exception e){
-            Log.e(TAG, "Illegal access exception");
-            return null;
-        }
-
-    }
-
-    protected  abstract <T extends DatabaseEntity> void updateList(ObservableArrayList<T> list, Class<T> clazz,
+    protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                           String collection,
                                                           DatabaseField element,
-                                                          String value,
+                                                          Object value,
                                                           Integer limit,
                                                           DatabaseStringField orderBy);
 
-    protected abstract <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
+    protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
                                                              String value);
 
-    protected abstract <T extends DatabaseEntity> void updateElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField element, String value);
+    protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             DatabaseField element, Object value);
 
     /**
      * @return Database that is the DB for the current session

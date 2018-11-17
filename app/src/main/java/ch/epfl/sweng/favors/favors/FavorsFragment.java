@@ -20,9 +20,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
     FavorsBinding binding;
 
     static String[] modes = {"List view", "Map view"};
-
     int currentMode = 0;
-
     public ObservableField<String> buttonDisplay = new ObservableField<>();
 
     @Nullable
