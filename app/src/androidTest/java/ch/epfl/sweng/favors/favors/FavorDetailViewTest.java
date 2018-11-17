@@ -140,11 +140,11 @@ public class FavorDetailViewTest {
         /*mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.imageView2)).perform(scrollTo()).check(matches(isDisplayed()));*/
     }
+
     @Ignore
     @Test
     public void posterViewCorrectlyLaunched() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        Thread.sleep(2000);
         onView(withId(R.id.favorPosterDetailViewAccess)).perform(scrollTo(), click());
         onView(ViewMatchers.withText(R.id.favTitle)).check(doesNotExist());
     }
@@ -192,13 +192,5 @@ public class FavorDetailViewTest {
         onView(withText("issue has been reported! Sorry for the inconvenience")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
-//    @Test
-//    public void setFieldsTest(){
-//        Bundle bundle = new Bundle();
-//        bundle.putString(FavorDetailView.FAVOR_ID,"F1");
-//        mFragmentTestRule.launchActivity(new Intent(bundle));
-//
-//        onView(withId(R.id.favTokAmmount)).check(matches(isDisplayed()));
-//    }
 
 }

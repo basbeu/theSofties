@@ -37,38 +37,37 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
 
     private String ownerEmail;
     public static final String OWNER_EMAIL = "ownerEMAIL";
-
+    private ObservableList.OnListChangedCallback<ObservableList<User>> ownerContainer =  new ObservableList.OnListChangedCallback<ObservableList<User>>() {
+        @Override
+        public void onChanged(ObservableList<User> sender) {
+        }
+        @Override
+        public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
+        }
+        @Override
+        public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
+            if(sender.isEmpty() == false){
+                User favorOwner = sender.get(0);
+                firstName.set(favorOwner.get(User.StringFields.firstName));
+                lastName.set(favorOwner.get(User.StringFields.lastName));
+                sex.set(favorOwner.get(User.StringFields.sex));
+            }
+        }
+        @Override
+        public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
+        }
+        @Override
+        public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
+        }
+    };
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(!ExecutionMode.getInstance().isTest()){
             ownerEmail = getArguments().getString(OWNER_EMAIL);
-            ObservableList<User> ownerIdList = UserRequest.getList(User.StringFields.email, ownerEmail, null, null);
-            ownerIdList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<User>>() {
-                @Override
-                public void onChanged(ObservableList<User> sender) {
-                }
-                @Override
-                public void onItemRangeChanged(ObservableList<User> sender, int positionStart, int itemCount) {
-                }
-                @Override
-                public void onItemRangeInserted(ObservableList<User> sender, int positionStart, int itemCount) {
-                    if(sender.isEmpty() == false){
-                        User favorOwner = sender.get(0);
-                        firstName.set(favorOwner.get(User.StringFields.firstName));
-                        lastName.set(favorOwner.get(User.StringFields.lastName));
-                        sex.set(favorOwner.get(User.StringFields.sex));
-                    }
-                }
-                @Override
-                public void onItemRangeMoved(ObservableList<User> sender, int fromPosition, int toPosition, int itemCount) {
-                }
-                @Override
-                public void onItemRangeRemoved(ObservableList<User> sender, int positionStart, int itemCount) {
-                }
-            });
-        }else{
+            UserRequest.getList(User.StringFields.email, ownerEmail, null, null).addOnListChangedCallback(ownerContainer);
+        } else {
             firstName.set("Toto");
             lastName.set("Tata");
             sex.set("M");

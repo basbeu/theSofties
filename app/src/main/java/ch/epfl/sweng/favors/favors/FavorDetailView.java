@@ -18,9 +18,11 @@ import com.google.firebase.firestore.GeoPoint;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 
@@ -73,6 +75,17 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 //TODO add token cost binding with new database implementation
             });
         }
+
+        if(ExecutionMode.getInstance().isTest()){
+            localFavor = new Favor("F1");
+            localFavor.set(Favor.StringFields.ownerID, "U3");
+            localFavor.set(Favor.StringFields.category, "Hand help");
+            localFavor.set(Favor.StringFields.deadline, "12.12.20");
+            localFavor.set(Favor.StringFields.description, "I need help to get rid of an old friend.");
+            localFavor.set(Favor.StringFields.title, "KILL THE BATMAN");
+            localFavor.set(Favor.StringFields.locationCity, "Gotham City");
+            localFavor.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+            }
     }
 
     public void setFields(Favor favor) {
@@ -94,14 +107,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
                 FavorPosterDetailView mFrag = new FavorPosterDetailView();
                 Bundle bundle = new Bundle();
-                bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
+            bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();});
         binding.favReportAbusiveAdd.setOnClickListener((l)->{
-            //Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
             EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
-                    "Abusive favors : "+title.get(),
+                    "Abusive favors : " + title.get(),
                     "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
                     getActivity(),
                     "issue has been reported! Sorry for the inconvenience",

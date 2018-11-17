@@ -76,10 +76,18 @@ public class FavorPosterDetailViewTest {
         mFragmentTestRule.launchActivity(null);
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
-        @Test
+
+    @Test
     public void profilePictureDisplayed(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.profilePic)).check(matches(isDisplayed()));
+    }
+
+    @Ignore
+    @Test
+    public void firstNameDisplayed(){
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.posterFirstName)).check(matches(isDisplayed()));
     }
 
 
