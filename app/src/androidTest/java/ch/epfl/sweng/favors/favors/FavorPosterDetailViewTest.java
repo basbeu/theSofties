@@ -77,22 +77,25 @@ public class FavorPosterDetailViewTest {
         mFragmentTestRule.launchActivity(null);
         Thread.sleep(1000);
         mFragmentTestRule.getFragment().setFields(getNewTestFavor());
+        Thread.sleep(1000);
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
     public void profilePictureDisplayed() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        Thread.sleep(500);
+        Thread.sleep(1000);
         mFragmentTestRule.getFragment().setFields(getNewTestFavor());
+        Thread.sleep(1000);
         onView(withId(R.id.profilePic)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
     public void firstNameDisplayed() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        Thread.sleep(500);
+        Thread.sleep(1000);
         mFragmentTestRule.getFragment().setFields(getNewTestFavor());
+        Thread.sleep(1000);
         onView(withId(R.id.posterFirstName)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
