@@ -37,7 +37,7 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
 
     private String ownerEmail;
     public static final String OWNER_EMAIL = "ownerEMAIL";
-    private ObservableList.OnListChangedCallback<ObservableList<User>> ownerContainer =  new ObservableList.OnListChangedCallback<ObservableList<User>>() {
+    ObservableList.OnListChangedCallback<ObservableList<User>> ownerContainer =  new ObservableList.OnListChangedCallback<ObservableList<User>>() {
         @Override
         public void onChanged(ObservableList<User> sender) {
         }
@@ -61,16 +61,18 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
         }
     };
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!ExecutionMode.getInstance().isTest()){
-            ownerEmail = getArguments().getString(OWNER_EMAIL);
+
+        SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
+        model.getFavor().observe(this, newFavor -> setFields(newFavor));
+    }
+
+    void setFields(Favor favor){
+        if(favor != null) {
+            String ownerEmail = favor.get(Favor.StringFields.ownerEmail);
             UserRequest.getList(User.StringFields.email, ownerEmail, null, null).addOnListChangedCallback(ownerContainer);
-        } else {
-            firstName.set("Toto");
-            lastName.set("Tata");
-            sex.set("M");
         }
     }
 

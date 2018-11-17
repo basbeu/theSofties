@@ -33,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class FavorDetailViewTest {
@@ -144,9 +145,10 @@ public class FavorDetailViewTest {
     @Ignore
     @Test
     public void posterViewCorrectlyLaunched() throws InterruptedException {
+        //assertEquals(true, false);
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.favorPosterDetailViewAccess)).perform(scrollTo(), click());
-        onView(ViewMatchers.withText(R.id.favTitle)).check(doesNotExist());
+        //onView(ViewMatchers.withText(R.id.favTitle)).check(doesNotExist());
     }
 
     @Test

@@ -14,6 +14,7 @@ import android.support.test.uiautomator.UiSelector;
 
 import com.google.android.gms.tasks.Tasks;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -52,6 +53,7 @@ import static ch.epfl.sweng.favors.favors.FavorPosterDetailView.OWNER_EMAIL;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 
@@ -72,23 +74,59 @@ public class FavorPosterDetailViewTest {
     }
 
     @Test
-    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
+    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException, InterruptedException {
         mFragmentTestRule.launchActivity(null);
+        Thread.sleep(1000);
+        mFragmentTestRule.getFragment().setFields(getNewTestFavor());
+        Thread.sleep(1000);
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void profilePictureDisplayed(){
+    public void profilePictureDisplayed() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.profilePic)).check(matches(isDisplayed()));
+        Thread.sleep(1000);
+        mFragmentTestRule.getFragment().setFields(getNewTestFavor());
+        Thread.sleep(1000);
+        onView(withId(R.id.profilePic)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
-    @Ignore
     @Test
-    public void firstNameDisplayed(){
+    public void firstNameDisplayed() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.posterFirstName)).check(matches(isDisplayed()));
+        Thread.sleep(1000);
+        mFragmentTestRule.getFragment().setFields(getNewTestFavor());
+        Thread.sleep(1000);
+        onView(withId(R.id.posterFirstName)).perform(scrollTo()).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void ownerContainerTest() throws InterruptedException {
+        mFragmentTestRule.launchActivity(null);
+        Thread.sleep(1000);
+        FavorPosterDetailView ps = mFragmentTestRule.getFragment();
+        ps.ownerContainer.onChanged(null);
+        ps.ownerContainer.onItemRangeChanged(null,0,0);
+        ps.ownerContainer.onItemRangeMoved(null, 0, 0, 0);
+        ps.ownerContainer.onItemRangeRemoved(null, 0, 0);
+    }
+
+    private Favor getNewTestFavor(){
+        Favor f2 = new Favor();
+
+        f2.set(Favor.StringFields.ownerID, "U1");
+        f2.set(Favor.StringFields.category, "Cooking");
+        f2.set(Favor.StringFields.deadline, "10.01.19");
+        f2.set(Favor.StringFields.description, "Cook me a cookie");
+        f2.set(Favor.StringFields.title, "I am hungry pls hurry");
+        f2.set(Favor.StringFields.locationCity, "Tombouctou");
+        f2.set(Favor.StringFields.ownerEmail, "toto.lolo@test.com");
+        return f2;
     }
 
 
+    @After
+    public void cleanUp(){
+        Database.getInstance().cleanUp();
+    }
 }

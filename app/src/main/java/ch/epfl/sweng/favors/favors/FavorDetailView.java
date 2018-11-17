@@ -104,13 +104,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view,container,false);
         binding.setElements(this);
-        binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
-                FavorPosterDetailView mFrag = new FavorPosterDetailView();
-                Bundle bundle = new Bundle();
-            bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
-                mFrag.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        mFrag).addToBackStack(null).commit();});
+        binding.favorPosterDetailViewAccess.setOnClickListener(v ->getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new FavorPosterDetailView()).addToBackStack(null).commit()
+        );
         binding.favReportAbusiveAdd.setOnClickListener((l)->{
             EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
                     "Abusive favors : " + title.get(),

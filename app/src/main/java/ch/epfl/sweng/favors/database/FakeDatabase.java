@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.database;
 
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.databinding.ObservableList;
 import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.util.Log;
@@ -10,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
 import java.util.HashMap;
+import java.util.Observable;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
@@ -103,7 +105,18 @@ public class FakeDatabase extends Database{
 
     @Override
     protected <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz, String collection, DatabaseField element, String value, Integer limit, DatabaseStringField orderBy) {
-        return new ObservableArrayList<>();
+        ObservableArrayList<T> list = new ObservableArrayList<>();
+
+        Handler handler = new Handler();
+        handler.postDelayed(() ->{
+            Log.d(TAG, "returning a getList call");
+            switch (clazz.toString()){
+                case "class ch.epfl.sweng.favors.database.User":
+                    Log.d(TAG, "Returning a fake user");
+                    addToList(clazz,(T)database.get("U1"),list);
+            }
+        }, 500);
+        return list;
     }
 
     /**
