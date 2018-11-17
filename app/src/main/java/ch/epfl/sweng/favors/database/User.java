@@ -17,13 +17,14 @@ public class User extends DatabaseEntity {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
+    private static final int defaultTokensNumber = 5;
 
     private static Status status = new Status(Status.Values.NotLogged);
 
     private static User user = new User();
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
-    public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
+    public enum IntegerFields implements DatabaseIntField {creationTimeStamp, tokens}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
@@ -38,6 +39,10 @@ public class User extends DatabaseEntity {
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
         db.updateFromDb(this);
+    }
+
+    static public int getDefaultTokensNumber(){
+        return User.defaultTokensNumber;
     }
 
     @Override

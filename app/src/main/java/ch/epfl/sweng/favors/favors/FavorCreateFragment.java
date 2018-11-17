@@ -7,6 +7,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -27,10 +28,14 @@ import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
+import ch.epfl.sweng.favors.authentication.FirebaseAuthentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -75,7 +80,14 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+            newFavor.set(Favor.IntegerFields.tokens, Favor.getDefaultTokensNumber());
             Log.d("Database: Favor", "Favor pushed to database");
+            User u = new User(Authentication.getInstance().getUid());
+            Database.getInstance().updateFromDb(u).addOnCompleteListener(l ->
+                    u.set(User.IntegerFields.tokens, Integer.parseInt(User.IntegerFields.tokens.toString()) - 1 );
+                    Database.getInstance().updateOnDb(u);
+                    )
+
             Database.getInstance().updateOnDb(newFavor);
             sharedViewFavor.select(newFavor);
             launchToast("Favor created successfully");
