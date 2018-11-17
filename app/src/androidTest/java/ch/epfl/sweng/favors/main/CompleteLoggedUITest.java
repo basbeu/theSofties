@@ -552,14 +552,9 @@ public class CompleteLoggedUITest {
 
         ViewInteraction textView15 = onView(
                 allOf(withText("MARVEL")));
+        textView15.perform(scrollTo());
         textView15.check(matches(withText("MARVEL")));
-
-        DataInteraction appCompatTextView2 = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(1);
-        appCompatTextView2.perform(click());
+        textView15.perform(click());
 
         ViewInteraction button4 = onView(
                 allOf(withId(R.id.addFavor),
