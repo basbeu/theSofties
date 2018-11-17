@@ -16,7 +16,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -186,6 +188,11 @@ public class AuthenticationUITest {
                                 0),
                         isDisplayed()));
         textView2.check(matches(withText("Please enter your login informations:")));
+    }
+
+    @After
+    public void end(){
+        ExecutionMode.getInstance().setInvalidAuthTest(false);
     }
 
     private static Matcher<View> childAtPosition(

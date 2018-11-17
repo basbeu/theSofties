@@ -226,6 +226,7 @@ public class FakeDatabase extends Database{
      * Fills the FakeDatabase with a few users and favors
      */
     public void createBasicDatabase(){
+        getInstance().cleanUp();
         User u1 = new User("U1");
         User u2 = new User("U2");
         User u3 = new User("U3");

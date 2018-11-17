@@ -14,8 +14,8 @@ public abstract class Authentication {
     private static Authentication auth;
 
     public static Authentication getInstance(){
-
-        FakeDatabase.getInstance().createBasicDatabase();
+        // For espresso tests
+        // FakeDatabase.getInstance().createBasicDatabase();
 
         if(auth == null){
             if(ExecutionMode.getInstance().isTest()){

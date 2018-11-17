@@ -90,7 +90,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableField<String> favorDescription;
     public ObservableField<String> locationCity;
     public ObservableField<String> deadline;
-    public ObservableArrayList<Interest> interestsList;
+    public ObservableArrayList<Interest> interestsList = new ObservableArrayList<>();
 
     public ObservableField<String> validationButtonText = new ObservableField<>("--");
     public ObservableField<String> fragmentTitle = new ObservableField<>("--");

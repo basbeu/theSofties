@@ -30,9 +30,14 @@ public class RequestTest {
     @Test
     public void userRequests(){
         // Try to get all men users
-        ObservableList<User> someUsersList = UserRequest.getList(User.StringFields.sex, "M",  null, null);
-        User user1 = UserRequest.getWithEmail("harvey.dent@gotham.com");
-        User user2 = UserRequest.getWithId("U1");
+        ObservableArrayList<User> someUsersList = new ObservableArrayList<>();
+        UserRequest.getList(someUsersList, User.StringFields.sex, "M",  null, null);
+
+        User user1 = new User();
+        UserRequest.getWithEmail(user1, "harvey.dent@gotham.com");
+        User user2 = new User();
+        UserRequest.getWithId(user2, "U1");
+
         try {
             sleep(1000);
         } catch (InterruptedException e) {
@@ -51,8 +56,10 @@ public class RequestTest {
 
     @Test
     public void favorsRequests(){
-        ObservableList<Favor> someFavorsList = FavorRequest.getList(Favor.StringFields.ownerID, "U3",  null, null);
-        ObservableList<Favor> allFavorsList = FavorRequest.all(null, null);
+        ObservableArrayList<Favor> someFavorsList =  new ObservableArrayList<>();
+        FavorRequest.getList(someFavorsList, Favor.StringFields.ownerID, "U3",  null, null);
+        ObservableArrayList<Favor> allFavorsList =  new ObservableArrayList<>();
+        FavorRequest.all(allFavorsList, null, null);
         try {
             sleep(1000);
         } catch (InterruptedException e) {
@@ -64,8 +71,10 @@ public class RequestTest {
 
     @Test
     public void interestsRequests(){
-        ObservableList<Interest> someInterestsList = InterestRequest.getList(Interest.StringFields.title, "SWISS AVIATION",  null, null);
-        ObservableList<Interest> allInterestsList = InterestRequest.all( null, null);
+        ObservableArrayList<Interest> someInterestsList =  new ObservableArrayList<>();
+        InterestRequest.getList(someInterestsList, Interest.StringFields.title, "SWISS AVIATION",  null, null);
+        ObservableArrayList<Interest> allInterestsList =  new ObservableArrayList<>();
+        InterestRequest.all(allInterestsList,  null, null);
         try {
             sleep(1000);
         } catch (InterruptedException e) {
