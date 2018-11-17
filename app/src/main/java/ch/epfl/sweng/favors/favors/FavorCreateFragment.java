@@ -80,13 +80,18 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-            newFavor.set(Favor.IntegerFields.tokens, Favor.getDefaultTokensNumber());
+            newFavor.set(Favor.IntegerFields.tokens, 1);
             Log.d("Database: Favor", "Favor pushed to database");
             User u = new User(Authentication.getInstance().getUid());
-            Database.getInstance().updateFromDb(u).addOnCompleteListener(l ->
-                    u.set(User.IntegerFields.tokens, Integer.parseInt(User.IntegerFields.tokens.toString()) - 1 );
-                    Database.getInstance().updateOnDb(u);
-                    )
+            Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
+                        int newUserTokens = u.get(User.IntegerFields.tokens) - 1;
+                        if(newUserTokens >= 0 ) {
+                            u.set(User.IntegerFields.tokens, newUserTokens);
+                            Database.getInstance().updateOnDb(u);
+                        } else{
+                            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
             Database.getInstance().updateOnDb(newFavor);
             sharedViewFavor.select(newFavor);

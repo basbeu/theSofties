@@ -14,7 +14,6 @@ public class Favor extends DatabaseEntity {
     private static final String TAG = "FAVOR";
     // identifier for firebase
     private static final String COLLECTION = "favors";
-    private static final int defaultTokensNumber = 1;
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail}
     public enum IntegerFields implements DatabaseIntField {reward, tokens}
@@ -35,9 +34,7 @@ public class Favor extends DatabaseEntity {
                 ObjectFields.values(), COLLECTION, id);
         db.updateFromDb(this);
     }
-    static public int getDefaultTokensNumber(){
-       return Favor.defaultTokensNumber;
-    }
+
 
     @Override
     public DatabaseEntity copy() {

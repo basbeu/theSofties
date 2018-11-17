@@ -17,7 +17,7 @@ public class User extends DatabaseEntity {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
-    private static final int defaultTokensNumber = 5;
+    public static final int DEFAULT_TOKENS_NUMBER = 5;
 
     private static Status status = new Status(Status.Values.NotLogged);
 
@@ -39,10 +39,6 @@ public class User extends DatabaseEntity {
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
         db.updateFromDb(this);
-    }
-
-    static public int getDefaultTokensNumber(){
-        return User.defaultTokensNumber;
     }
 
     @Override

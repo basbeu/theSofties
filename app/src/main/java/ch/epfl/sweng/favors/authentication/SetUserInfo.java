@@ -59,7 +59,7 @@ public class SetUserInfo extends AppCompatActivity {
             ExecutionMode.getInstance().setTest(true);
         }
         user.set(User.StringFields.email, Authentication.getInstance().getEmail());
-        user.set(User.IntegerFields.tokens, User.getDefaultTokensNumber());
+        user.set(User.IntegerFields.tokens, User.DEFAULT_TOKENS_NUMBER);
         baseCity.set(LocationHandler.getHandler().locationCity.get());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
