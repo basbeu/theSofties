@@ -14,6 +14,7 @@ import android.support.test.uiautomator.UiSelector;
 
 import com.google.android.gms.tasks.Tasks;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -100,8 +101,9 @@ public class FavorPosterDetailViewTest {
     }
 
     @Test
-    public void ownerContainerTest(){
+    public void ownerContainerTest() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
+        Thread.sleep(1000);
         FavorPosterDetailView ps = mFragmentTestRule.getFragment();
         ps.ownerContainer.onChanged(null);
         ps.ownerContainer.onItemRangeChanged(null,0,0);
@@ -123,4 +125,8 @@ public class FavorPosterDetailViewTest {
     }
 
 
+    @After
+    public void cleanUp(){
+        Database.getInstance().cleanUp();
+    }
 }
