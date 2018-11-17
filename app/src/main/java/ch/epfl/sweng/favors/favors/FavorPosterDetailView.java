@@ -39,8 +39,8 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     public static final String OWNER_EMAIL = "ownerEMAIL";
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(!ExecutionMode.getInstance().isTest()){
             ownerEmail = getArguments().getString(OWNER_EMAIL);

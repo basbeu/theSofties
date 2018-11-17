@@ -2,6 +2,8 @@ package ch.epfl.sweng.favors.favors;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -18,10 +20,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
@@ -44,28 +54,22 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
-//TOTEST: OK BUTTON (acts like Backbutton) AND CHECK WHAT ARE INSIDE FIELDS; SEE PROFILE AND EDIT PROFILE FOR MORE TESTS
-//TEST WHO IS THE POSTER BUTTON IN FAVOR DETAIL VIEW TEST CLASS
 
 public class FavorPosterDetailViewTest {
 
     private UiDevice device;
 
-    //@Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
     public static final String fakePosterEmail = "ownerEMAIL";
+    ObservableList<User> usersList = new ObservableArrayList<>();
 
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
        FakeDatabase.getInstance().createBasicDatabase();
        device = UiDevice.getInstance(getInstrumentation());
-      // Mockito.when(mFragmentTestRule.getArguments().getString(OWNER_EMAIL)).thenReturn(fakePosterEmail);
 
     }
-
-
-    //@Ignore("Testing interface not available")
 
     @Test
     public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
@@ -78,14 +82,5 @@ public class FavorPosterDetailViewTest {
         onView(withId(R.id.profilePic)).check(matches(isDisplayed()));
     }
 
-   /* @Test
-    public void testBackButton(){
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-        }
-        Espresso.pressBackUnconditionally();
-        intended(hasComponent(new ComponentName(getTargetContext(), FavorDetailView.class)));
-    }*/
 
 }

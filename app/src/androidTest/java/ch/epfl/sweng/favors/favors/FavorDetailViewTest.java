@@ -23,7 +23,9 @@ import ch.epfl.sweng.favors.utils.FragmentTestRule;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -137,6 +139,14 @@ public class FavorDetailViewTest {
 
         /*mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.imageView2)).perform(scrollTo()).check(matches(isDisplayed()));*/
+    }
+    @Ignore
+    @Test
+    public void posterViewCorrectlyLaunched() throws InterruptedException {
+        mFragmentTestRule.launchActivity(null);
+        Thread.sleep(2000);
+        onView(withId(R.id.favorPosterDetailViewAccess)).perform(scrollTo(), click());
+        onView(ViewMatchers.withText(R.id.favTitle)).check(doesNotExist());
     }
 
     @Test
