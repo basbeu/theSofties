@@ -61,6 +61,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
+    private User u = new User(Authentication.getInstance().getUid());
 
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
@@ -71,8 +72,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
-
-            User u = new User(Authentication.getInstance().getUid());
             Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
                         int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
                         if(newUserTokens >= 0 ) {
