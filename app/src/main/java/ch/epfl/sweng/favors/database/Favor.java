@@ -15,8 +15,8 @@ public class Favor extends DatabaseEntity {
     // identifier for firebase
     private static final String COLLECTION = "favors";
 
-    public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail}
-    public enum IntegerFields implements DatabaseIntField {reward, tokens}
+    public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail, tokens}
+    public enum IntegerFields implements DatabaseIntField {reward}
     public enum ObjectFields implements DatabaseObjectField {location, creationTimestamp, expirationTimestamp}
     public enum BooleanFields implements DatabaseBooleanField {isOpen}
 

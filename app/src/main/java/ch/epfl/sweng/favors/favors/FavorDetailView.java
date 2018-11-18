@@ -37,6 +37,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> distance = new ObservableField<>();
     public ObservableField<String> ownerEmail;
     public ObservableField<String> user;
+    public ObservableField<String> tokens;
 
     private Favor localFavor;
 
@@ -80,6 +81,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         geo = favor.getObservableObject(Favor.ObjectFields.location);
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
+        tokens = favor.getObservableObject(Favor.StringFields.tokens);
         //user.set();
     }
 

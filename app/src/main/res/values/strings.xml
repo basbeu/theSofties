@@ -34,6 +34,7 @@
     <string name="password">Password</string>
     <string name="city">City:</string>
     <string name="sex">Sex</string>
+    <string name="tokens">Tokens:</string>
     <string name="add_a_new_favor">Add a new Favor</string>
     <string name="titleFavor">Favor Title</string>
     <string name="descriptionFavor">Favor Description</string>

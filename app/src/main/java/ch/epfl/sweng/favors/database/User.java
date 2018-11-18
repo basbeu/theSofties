@@ -17,14 +17,14 @@ public class User extends DatabaseEntity {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
-    public static final int DEFAULT_TOKENS_NUMBER = 5;
+    public static final String DEFAULT_TOKENS_NUMBER = "5";
 
     private static Status status = new Status(Status.Values.NotLogged);
 
     private static User user = new User();
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
-    public enum IntegerFields implements DatabaseIntField {creationTimeStamp, tokens}
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}
+    public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 

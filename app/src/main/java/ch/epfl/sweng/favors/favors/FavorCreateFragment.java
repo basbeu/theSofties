@@ -8,6 +8,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -36,6 +37,7 @@ import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -68,7 +70,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         return (titleValid.get() && descriptionValid.get() && locationCityValid.get() && deadlineValid.get());
     }
     public void createFavorIfValid(Favor newFavor) {
-        Log.d("TOFIND", "YO IM HERE LOVE ME");
         if (allFavorFieldsValid()) {
             newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
             newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
@@ -81,20 +82,15 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
             newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
             newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-            newFavor.set(Favor.IntegerFields.tokens, 1);
-            Log.d("Database: Favor", "Favor pushed to database");
+            newFavor.set(Favor.StringFields.tokens, "1");
             User u = new User(Authentication.getInstance().getUid());
-            Log.d("BIGBUG","I AM HERE");
             Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
-                        Log.d("BIGBUG","LINE 87 OK");
-                        int newUserTokens = u.get(User.IntegerFields.tokens) - 1;
-                Log.d("BIGBUG","LINE 87 OK");
+
+
+                        int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
                         if(newUserTokens >= 0 ) {
-                            Log.d("BIGBUG","LINE 91 OK");
-                            u.set(User.IntegerFields.tokens, newUserTokens);
-                            Log.d("BIGBUG","LINE 93 OK");
+                            u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
                             Database.getInstance().updateOnDb(u);
-                            Log.d("BIGBUG","LINE 95 OK");
                         } else {
                             Toast.makeText(getContext(), "You do not have enough tokens to create this favor",
                                     Toast.LENGTH_SHORT).show();

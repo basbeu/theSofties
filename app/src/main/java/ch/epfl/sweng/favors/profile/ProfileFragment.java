@@ -29,6 +29,7 @@ public class ProfileFragment extends Fragment {
     public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city);
     public ObservableField<String> sex = user.getObservableObject(User.StringFields.sex);
     public ObservableField<String> email = user.getObservableObject(User.StringFields.email);
+    public ObservableField<String> tokens = user.getObservableObject(User.StringFields.tokens);
 
     FragmentProfileLayoutBinding binding;
 

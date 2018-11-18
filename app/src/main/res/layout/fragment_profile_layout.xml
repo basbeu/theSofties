@@ -69,21 +69,43 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+
             <TextView
                 android:id="@+id/profCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{elements.baseCity}"
                 android:textSize="22sp" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView6"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/nameFavors"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_height="55dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tokens"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/profTokens"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{elements.tokens}"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nameFavors"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
