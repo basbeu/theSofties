@@ -1,19 +1,27 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
@@ -26,8 +34,11 @@ public class FakeDatabase extends Database{
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
 
+    HandlerThread handlerThread = new HandlerThread("background-thread");
+
     private FakeDatabase(){
         database = new HashMap<>();
+        handlerThread.start();
     }
 
     /**
@@ -37,7 +48,6 @@ public class FakeDatabase extends Database{
         if(db == null){
             db = new FakeDatabase();
         }
-
         return db;
     }
 
@@ -47,8 +57,20 @@ public class FakeDatabase extends Database{
             database.put(databaseEntity.documentID, databaseEntity.copy());
         }
         else{
-            Log.e(TAG, "Trying to update data on an unknown document");
+            int leftLimit = 97; // letter 'a'
+            int rightLimit = 122; // letter 'z'
+            int targetStringLength = 5;
+            Random random = new Random();
+            StringBuilder buffer = new StringBuilder(targetStringLength);
+            for (int i = 0; i < targetStringLength; i++) {
+                int randomLimitedInt = leftLimit + (int)
+                        (random.nextFloat() * (rightLimit - leftLimit + 1));
+                buffer.append((char) randomLimitedInt);
+            }
+            String generatedString = buffer.toString();
+            database.put( generatedString, databaseEntity.copy());
         }
+
     }
 
     @Override
@@ -60,37 +82,37 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
-        ObservableArrayList<T> list = new ObservableArrayList<>();
+    protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz, String collection, Integer limit, DatabaseField orderBy) {
 
-
-        Handler handler = new Handler();
+        Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
-                Log.d(TAG, "getAll called : "+ clazz.toString());
-                switch (clazz.toString()){
-                    case "class ch.epfl.sweng.favors.database.Interest":
-                        Log.d(TAG, "Adding Intrest elements to fake DB ObservableList");
-                        addToList(clazz,(T)database.get("I1"),list);
-                        addToList(clazz,(T)database.get("I2"),list);
-                        addToList(clazz,(T)database.get("I3"),list);
-                        addToList(clazz,(T)database.get("I4"),list);
-                        addToList(clazz,(T)database.get("I5"),list);
-                        break;
-                    case "class ch.epfl.sweng.favors.database.Favor":
-                        Log.d(TAG, "Adding Favor elements to fake DB ObservableList");
-                        addToList(clazz,(T)database.get("F1"),list);
-                        addToList(clazz,(T)database.get("F2"),list);
-                        addToList(clazz,(T)database.get("F3"),list);
-                        addToList(clazz,(T)database.get("F4"),list);
-                        addToList(clazz,(T)database.get("F5"),list);
-                        addToList(clazz,(T)database.get("F6"),list);
-                        addToList(clazz,(T)database.get("F7"),list);
+            ArrayList<T> tempList = new ArrayList<>();
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity)) {
+                    try {
+                        T temp = clazz.newInstance();
+                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        tempList.add(temp);
+
+                    } catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
                 }
-            },500);
-        return list;
+
+            }
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    list.clear();
+                    list.addAll(tempList);
+                }
+            });
+
+
+        },500);
     }
 
-    private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
+    /*private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
         try{
             T documentObject = clazz.newInstance();
             documentObject.set(document.documentID, document.getEncapsulatedObjectOfMaps());
@@ -99,17 +121,125 @@ public class FakeDatabase extends Database{
         catch (Exception e){
             Log.e(TAG, "Illegal access exception");
         }
+    }*/
+
+
+    /**
+     * Updates a list with the all elements of the database having the @value for the @key
+     *
+     * @param list The list to fulfill
+     * @param clazz The object type
+     * @param collection Not used here, only for real db interactions
+     * @param value The value we want to have for the key
+     * @param <T> The object type
+     */
+    @Override
+    protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
+                                                          String collection,
+                                                          DatabaseField key,
+                                                          Object value,
+                                                          Integer limit,
+                                                          DatabaseField orderBy){
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            ArrayList<T> tempList = new ArrayList<>();
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
+                    try {
+                        T temp = clazz.newInstance();
+                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        tempList.add(temp);
+                    } catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                }
+            }
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    list.clear();
+                    list.addAll(tempList);
+                }
+            });
+
+        },500);
     }
 
+
+    /**
+     * Updates an object with the element of the database having the @value as documentID
+     *
+     * @param toUpdate The element to update
+     * @param clazz The object type
+     * @param collection Not used here, only for real db interactions
+     * @param value The value we want to have for the key
+     * @param <T> The object type
+     */
     @Override
-    protected <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz, String collection, DatabaseField element, String value, Integer limit, DatabaseStringField orderBy) {
-        return new ObservableArrayList<>();
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             String value){
+
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            toUpdate.reset();
+
+            DatabaseEntity output = database.get(value);
+            if(clazz.isInstance(output)){
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
+                    }
+                });
+
+            }
+            else{
+                Log.d(TAG, "The element with id " + value + " wasn't found on db.");
+            }
+        },500);
+    }
+
+
+    /**
+     * Updates an object with the first element of the database having the @value for the @key
+     *
+     * @param toUpdate The element to update
+     * @param clazz The object type
+     * @param collection Not used here, only for real db interactions
+     * @param key The key of the element to check
+     * @param value The value we want to have for the key
+     * @param <T> The object type
+     */
+    @Override
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             DatabaseField key, Object value){
+
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            toUpdate.reset();
+
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        }
+                    });
+
+                    return;
+                }
+            }
+            Log.d(TAG, "The element if type "+ key.toString()
+                    +" with id " + value + " wasn't found on db.");
+        },500);
     }
 
     /**
      * Fills the FakeDatabase with a few users and favors
      */
     public void createBasicDatabase(){
+        getInstance().cleanUp();
         User u1 = new User("U1");
         User u2 = new User("U2");
         User u3 = new User("U3");
@@ -137,6 +267,7 @@ public class FakeDatabase extends Database{
         u4.set(User.StringFields.lastName,FakeAuthentication.LAST_NAME);
         u4.set(User.StringFields.email, FakeAuthentication.EMAIL);
         u4.set(User.StringFields.city, FakeAuthentication.CITY);
+        u4.set(User.StringFields.tokens, FakeAuthentication.TOKENS);
         User.UserGender.setGender(u4, FakeAuthentication.GENDER);
 
         Favor f1 = new Favor("F1");

@@ -24,13 +24,13 @@ public class Interest extends DatabaseEntity {
     public Interest(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
-        db.updateFromDb(this);
+        if(db != null) db.updateFromDb(this);
     }
 
     @Override
     public DatabaseEntity copy() {
-        Interest i = new Interest(this.documentID);
-        i.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        Interest i = new Interest();
+        i.set(this.documentID, this.getEncapsulatedObjectOfMaps());
         return i;
     }
 }

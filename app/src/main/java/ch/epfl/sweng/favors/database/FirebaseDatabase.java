@@ -1,20 +1,24 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.ObservableArrayList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
@@ -83,77 +87,115 @@ public class FirebaseDatabase extends Database{
 
     }
 
-    @Override
-    protected <T extends DatabaseEntity> ObservableArrayList<T> getAll(Class<T> clazz,
-                                                                       String collection,
-                                                                       Integer limit,
-                                                                       DatabaseStringField orderBy){
-        ObservableArrayList<T> result = new ObservableArrayList<>();
-        Query query = dbFireStore.collection(collection);
-        if(orderBy != null){
-            query = query.orderBy(orderBy.toString());
-        }
-        if(limit != null){
-            query = query.limit(limit);
-        }
-        getList(query, result, clazz);
-        return result;
-    }
+    class ListRequestFb<T extends DatabaseEntity> implements OnCompleteListener{
 
-    @Override
-    protected  <T extends DatabaseEntity> ObservableArrayList<T> getList(Class<T> clazz,
-                                                                         String collection,
-                                                                         DatabaseField element,
-                                                                         String value,
-                                                                         Integer limit,
-                                                                         DatabaseStringField orderBy){
-        ObservableArrayList<T> result = new ObservableArrayList<>();
-        if(element == null || value == null){return null;}
-        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
-        if(orderBy != null){
-            query = query.orderBy(orderBy.toString());
-        }
-        if(limit != null){
-            query = query.limit(limit);
-        }
-        getList(query, result, clazz);
-        return result;
-    }
+        ObservableArrayList<T> list;
+        T firstElement;
+        Class<T> clazz;
 
-    /**
-     *
-     * @param query
-     * @param feedbackContainer
-     * @param clazz
-     * @param <T>
-     */
-    private  <T extends DatabaseEntity>  void getList(Query query,
-                                                      ObservableArrayList<T> feedbackContainer,
-                                                      Class<T> clazz ){
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Request success", task.getException());
-                    ArrayList<T> tempList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        try{
-                            T documentObject = clazz.newInstance();
-                            documentObject.set(document.getId(), document.getData());
-                            tempList.add(documentObject);
-                        }
-                        catch (Exception e){
-                            Log.e(TAG, "Illegal access exception");
-                        }
-                    }
-                    feedbackContainer.addAll(tempList);
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+        public  ListRequestFb(ObservableArrayList<T> list, Class<T> clazz){
+            super();
+            this.list = list;
+            this.clazz = clazz;
+        }
+        public  ListRequestFb(T extratctedFirstElement, Class<T> clazz){
+            super();
+            this.firstElement = extratctedFirstElement;
+            this.clazz = clazz;
+        }
+
+        @Override
+        public void onComplete(@NonNull Task task) {
+            if (!task.isSuccessful()) {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+
+            if(task.getResult() instanceof DocumentSnapshot){
+                DocumentSnapshot document = (DocumentSnapshot) task.getResult();
+                if(firstElement != null ){
+                    firstElement.reset();
+                    firstElement.set(document.getId(), document.getData());
                 }
             }
-        });
+
+            else if(task.getResult() instanceof QuerySnapshot){
+                if(list != null) list.clear();
+                for (QueryDocumentSnapshot document : (QuerySnapshot) task.getResult()) {
+                    try {
+                        if (firstElement != null) {
+                            firstElement.reset();
+                            firstElement.set(document.getId(), document.getData());
+                        }
+                        if (list != null) {
+                            T documentObject = clazz.newInstance();
+                            documentObject.set(document.getId(), document.getData());
+                            list.add(documentObject);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                }
+            }
+
+        }
+    }
+
+    Query addParametersToQuery(Query query, Integer limit, DatabaseField orderBy){
+        if(orderBy != null){
+            query = query.orderBy(orderBy.toString());
+        }
+        if(limit != null){
+            query = query.limit(limit);
+        }
+        return query;
+    }
+
+    @Override
+    protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
+                                                                       String collection,
+                                                                       Integer limit,
+                                                                       DatabaseField orderBy){
+        Query query = dbFireStore.collection(collection);
+        query = addParametersToQuery(query, limit, orderBy);
+        query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
+    }
+
+
+    @Override
+    protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
+                                                                         String collection,
+                                                                         DatabaseField element,
+                                                                         Object value,
+                                                                         Integer limit,
+                                                                         DatabaseField orderBy){
+
+
+        if(element == null || value == null){return;}
+        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
+        query = addParametersToQuery(query, limit, orderBy);
+        query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
+    }
+
+
+    @Override
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             String value){
+        if(value == null || toUpdate == null){return;}
+        DocumentReference query = dbFireStore.collection(collection).document(value);
+        query.get().addOnCompleteListener(new ListRequestFb<T>(toUpdate, clazz));
 
     }
+
+
+    @Override
+    protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
+                                                             DatabaseField element, Object value){
+        if(value == null || toUpdate == null){return;}
+        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
+        query.get().addOnCompleteListener(new ListRequestFb<T>(toUpdate, clazz));
+
+    }
+
 
     public void cleanUp(){
         db = null;

@@ -3,10 +3,12 @@ package ch.epfl.sweng.favors.favors;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -27,13 +29,20 @@ import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
+import ch.epfl.sweng.favors.authentication.FirebaseAuthentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
@@ -54,6 +63,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
+    private User u = new User(Authentication.getInstance().getUid());
 
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
@@ -64,22 +74,36 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
-            newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
-            newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
-            newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-            newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
+            Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
+                        int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
+                        if(newUserTokens >= 0 ) {
+                            newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+                            newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+                            newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
+                            newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
-            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
-            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+                            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+                            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
 
-            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
-            newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
-            newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-            Log.d("Database: Favor", "Favor pushed to database");
-            Database.getInstance().updateOnDb(newFavor);
-            sharedViewFavor.select(newFavor);
-            launchToast("Favor created successfully");
-            updateUI(true);
+                            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
+                            newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
+                            newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+                            newFavor.set(Favor.StringFields.tokens, "1");
+
+                            if(newFavor.getId() == null) {
+                               u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                               Database.getInstance().updateOnDb(u);
+                            }
+                            Database.getInstance().updateOnDb(newFavor);
+                            sharedViewFavor.select(newFavor);
+                            launchToast("Favor created successfully");
+                            updateUI(true);
+                        } else {
+                            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
         }
     }
     FavorsLayoutBinding binding;
@@ -88,7 +112,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableField<String> favorDescription;
     public ObservableField<String> locationCity;
     public ObservableField<String> deadline;
-    public ObservableList<Interest> interestsList;
+    public ObservableArrayList<Interest> interestsList = new ObservableArrayList<>();
 
     public ObservableField<String> validationButtonText = new ObservableField<>("--");
     public ObservableField<String> fragmentTitle = new ObservableField<>("--");
@@ -104,23 +128,17 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private String strtext;
 
     private Spinner spinner;
-    private ObservableList.OnListChangedCallback<ObservableList<Interest>> callbackInterestList = new ObservableList.OnListChangedCallback<ObservableList<Interest>>() {
+    private Observable.OnPropertyChangedCallback callbackInterestList = new Observable.OnPropertyChangedCallback() {
         @Override
-        public void onChanged(ObservableList sender) {}
-
-        @Override
-        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {}
-
-        @Override
-        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-            if(sender != null  && !(sender.isEmpty())){
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            if(sender != null  && !(((ObservableArrayList)sender).isEmpty())){
                 ArrayList interestsTitles = new ArrayList();
                 for(Interest interest : interestsList) {
                     interestsTitles.add(interest.get(Interest.StringFields.title));
                 }
                 if (adapter == null) {
 
-                    adapter = new ArrayAdapter<String>((FavorCreateFragment.this).getActivity(), android.R.layout.simple_spinner_item, interestsTitles);
+                    adapter = new ArrayAdapter<String>(FavorsMain.getContext(), android.R.layout.simple_spinner_item, interestsTitles);
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     spinner.setAdapter(adapter);
                 } else {
@@ -131,11 +149,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             }
         }
 
-        @Override
-        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {}
-
-        @Override
-        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {}
     };
 
     private TextWatcherCustom titleFavorTextWatcher = new TextWatcherCustom() {
@@ -215,8 +228,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         spinner =  binding.categoryFavor;
 
-        interestsList = InterestRequest.all(null, null);
-        interestsList.addOnListChangedCallback(callbackInterestList);
+        InterestRequest.all(interestsList, null, null);
+        interestsList.addOnPropertyChangedCallback(callbackInterestList);
 
         // TESTING LINE FOR BINDING
         binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();});
@@ -260,8 +273,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-        }
-        else{
+        } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");
             validationText.set("Favor created successfully");

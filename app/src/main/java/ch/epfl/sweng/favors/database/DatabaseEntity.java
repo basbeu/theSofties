@@ -1,10 +1,13 @@
 package ch.epfl.sweng.favors.database;
 
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
@@ -14,9 +17,9 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
-public abstract class DatabaseEntity {
+public abstract class DatabaseEntity implements Observable {
 
-    protected static Database db = Database.getInstance(); // = FirebaseFirestore.getInstance();
+    protected static Database db = Database.getInstance();
 
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;
@@ -26,7 +29,15 @@ public abstract class DatabaseEntity {
     protected final String collection;
     protected String documentID;
 
+    public enum UpdateType{DATA, FROM_DB, FROM_REQUEST};
+
     private final static String TAG = "Favors_DatabaseHandler";
+
+    public void setId(String documentId){
+        this.documentID = documentId;
+    }
+
+    public String getId() {return documentID;}
 
     /**
      * Init a database object with all fields that are possible for the instanced collection in the database
@@ -105,6 +116,11 @@ public abstract class DatabaseEntity {
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
         convertObjectMapToTypedMap(incommingData, intData, Integer.class);
+        for (OnPropertyChangedCallback callback : callbacks){
+            callback.onPropertyChanged(this, UpdateType.FROM_DB.ordinal());
+        }
+
+        notifyContentChange();
     }
 
     /**
@@ -157,6 +173,7 @@ public abstract class DatabaseEntity {
             resetMap(objectData, null);
         if(intData != null)
             resetMap(intData,null);
+        notifyContentChange();
     }
 
     /**
@@ -173,10 +190,28 @@ public abstract class DatabaseEntity {
         }
     }
 
+    List<OnPropertyChangedCallback> callbacks = new ArrayList<>();
+    @Override
+    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        assert(callback != null);
+        callbacks.add(callback);
+    }
+    @Override
+    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.remove(callback);
+    }
+    private void notifyContentChange(){
+        for (OnPropertyChangedCallback callback : callbacks){
+            callback.onPropertyChanged(this, UpdateType.DATA.ordinal());
+        }
+    }
 
     public void set(String id, Map<String, Object> content){
         this.documentID =id;
         this.updateLocalData(content);
+        for (OnPropertyChangedCallback callback : callbacks){
+            callback.onPropertyChanged(this, UpdateType.FROM_REQUEST.ordinal());
+        }
     }
 
     /*
@@ -191,6 +226,7 @@ public abstract class DatabaseEntity {
 
     public void set(DatabaseStringField field, String value){
         stringData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<String> getObservableObject(DatabaseStringField field){
@@ -206,6 +242,7 @@ public abstract class DatabaseEntity {
 
     public void set(DatabaseObjectField field, Object value){
         objectData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<Object> getObservableObject(DatabaseObjectField field){
@@ -221,6 +258,7 @@ public abstract class DatabaseEntity {
 
     public void set(DatabaseIntField field, Integer value){
         intData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<Integer> getObservableObject(DatabaseIntField field){
@@ -236,6 +274,7 @@ public abstract class DatabaseEntity {
 
     public void set(DatabaseBooleanField field, Boolean value){
         booleanData.get(field).set(value);
+        notifyContentChange();
     }
 
     public ObservableField<Boolean> getObservableObject(DatabaseBooleanField field){

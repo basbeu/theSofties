@@ -1,11 +1,14 @@
 package ch.epfl.sweng.favors.database;
 
+import android.databinding.Observable;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 ;
 
@@ -34,6 +37,26 @@ public class UserEntityTest {
         User.UserGender.setGender(u, User.UserGender.M);
 
         FakeDatabase.getInstance().updateOnDb(u);
+    }
+
+    public Boolean entered = false;
+    @Test
+    public void observeEntity(){
+        Observable.OnPropertyChangedCallback cb = new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                 entered = true;
+            }
+        };
+        u.addOnPropertyChangedCallback(cb);
+        FakeDatabase.getInstance().updateFromDb(u);
+        try {
+            Thread.sleep(600);
+        } catch (Exception e){
+
+        }
+        assertTrue(entered);
+        u.removeOnPropertyChangedCallback(cb);
     }
 
     @Test

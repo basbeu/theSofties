@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.google.firebase.firestore.GeoPoint;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
@@ -36,7 +39,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<Object> geo;
     public ObservableField<String> distance = new ObservableField<>();
     public ObservableField<String> ownerEmail;
+    public ObservableField<String> posterName;
     public ObservableField<String> user;
+    public ObservableField<String> tokens;
 
     private Favor localFavor;
 
@@ -66,6 +71,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
         else {
             model.getFavor().observe(this, newFavor -> {
+                localFavor = newFavor;
                 setFields(newFavor);
                 //TODO add token cost binding with new database implementation
             });
@@ -80,7 +86,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         geo = favor.getObservableObject(Favor.ObjectFields.location);
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
+        tokens = favor.getObservableObject(Favor.StringFields.tokens);
         //user.set();
+
+        User favorCreationUser = new User();
+        UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
+        posterName = favorCreationUser.getObservableObject(User.StringFields.firstName);
+
     }
 
     @Override
@@ -108,6 +120,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     getActivity(),
                     "We will inform the poster of the add that you are interested to help!",
                     "Sorry an error occured, try again later...");
+        });
+
+        binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
+            FavorPosterDetailView mFrag = new FavorPosterDetailView();
+            Bundle bundle = new Bundle();
+            bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
+            mFrag.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    mFrag).addToBackStack(null).commit();
         });
 
 

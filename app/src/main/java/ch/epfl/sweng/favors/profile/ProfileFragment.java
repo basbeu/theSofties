@@ -21,21 +21,21 @@ public class ProfileFragment extends Fragment {
 
     private static final String LOG_TAG = "PROFILE_FRAGMENT";
 
-    private User user = new User();
-
-    public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> firstName = User.getMain().getObservableObject(User.StringFields.firstName);
+    public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
+    public ObservableField<String> baseCity = User.getMain().getObservableObject(User.StringFields.city);
+    public ObservableField<String> sex = User.getMain().getObservableObject(User.StringFields.sex);
+    public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
     public ObservableField<String> profileName =  new ObservableField<>();// new ObservableField<>(user.getObservableObject(User.StringFields.firstName).get() + "'s Profile");
-    public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
-    public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city);
-    public ObservableField<String> sex = user.getObservableObject(User.StringFields.sex);
-    public ObservableField<String> email = user.getObservableObject(User.StringFields.email);
+    public ObservableField<String> tokens = User.getMain().getObservableObject(User.StringFields.tokens);
+
 
     FragmentProfileLayoutBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Database.getInstance().updateFromDb(user);
+        Database.getInstance().updateFromDb(User.getMain());
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_layout,container,false);
         binding.setElements(this);
 

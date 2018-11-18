@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.util.Log;
 
@@ -13,37 +14,42 @@ import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
-public class User extends DatabaseEntity {
+public class User extends DatabaseEntity{
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
+    public static final String DEFAULT_TOKENS_NUMBER = "5";
 
     private static Status status = new Status(Status.Values.NotLogged);
 
-    private static User user = new User();
+    private static User user = new User(Authentication.getInstance().getUid());
+    public static User getMain(){
+        return user;
+    }
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
+
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}
     public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION, Authentication.getInstance().getUid());
+                ObjectFields.values(), COLLECTION, null);
 
-        db.updateFromDb(this);
     }
 
     public User(String id){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
-        db.updateFromDb(this);
+        if(db != null) db.updateFromDb(this);
     }
+
 
     @Override
     public DatabaseEntity copy() {
-        User u = new User(this.documentID);
-        u.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        User u = new User();
+        u.set(this.documentID, this.getEncapsulatedObjectOfMaps());
         return u;
     }
 

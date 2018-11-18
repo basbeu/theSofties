@@ -1,8 +1,6 @@
 package ch.epfl.sweng.favors.location;
 
-import android.databinding.ObservableArrayList;
 
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.tasks.OnSuccessListener;
 

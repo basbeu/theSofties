@@ -12,11 +12,14 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -30,21 +33,29 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class LoggedInScreenTest {
-    ViewInteraction appCompatImageButton = onView(
-            allOf(withContentDescription("Open navigation drawer"),
-                    childAtPosition(
-                            Matchers.allOf(ViewMatchers.withId(R.id.toolbar),
-                                    childAtPosition(
-                                            withClassName(is("android.widget.LinearLayout")),
-                                            0)),
-                            0),
-                    isDisplayed()));
 
+    ViewInteraction appCompatImageButton;
     @Rule
     public ActivityTestRule<LoggedInScreen> activityActivityTestRule = new ActivityTestRule<>(LoggedInScreen.class);
+
+    @Before
+    public void setUp(){
+
+
+    }
+
     @Test
     public void menu() {
-
+        ExecutionMode.getInstance().setTest(true);
+        appCompatImageButton = onView(
+                allOf(withContentDescription("Open navigation drawer"),
+                        childAtPosition(
+                                Matchers.allOf(ViewMatchers.withId(R.id.toolbar),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
+                                                0)),
+                                0),
+                        isDisplayed()));
         appCompatImageButton.perform(click());
 
         ViewInteraction navigationMenuItemView = onView(
