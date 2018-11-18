@@ -8,7 +8,7 @@ public final class UserRequest extends Request{
     private static final String COLLECTION = "users";
 
     private UserRequest(){}
-    public static void getList(ObservableArrayList<User>  list, DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
+    public static void getList(ObservableArrayList<User>  list, DatabaseField element, Object value, Integer limit, DatabaseField orderBy){
         db.getList(list, User.class, COLLECTION, element, value, limit, orderBy);
     }
 

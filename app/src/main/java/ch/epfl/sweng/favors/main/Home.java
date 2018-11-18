@@ -89,7 +89,7 @@ public class Home extends android.support.v4.app.Fragment  {
                 break;
             case 1 :
                 favorList.changeOnPropertyChangedCallback(otherSortingCb);
-                FavorRequest.all(favorList, null, null);
+                FavorRequest.all(favorList, 5, null);
                 break;
             default:
 

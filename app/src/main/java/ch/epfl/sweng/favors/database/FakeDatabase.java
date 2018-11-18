@@ -69,7 +69,7 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz, String collection, Integer limit, DatabaseStringField orderBy) {
+    protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz, String collection, Integer limit, DatabaseField orderBy) {
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -99,7 +99,7 @@ public class FakeDatabase extends Database{
         },500);
     }
 
-    private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
+    /*private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
         try{
             T documentObject = clazz.newInstance();
             documentObject.set(document.documentID, document.getEncapsulatedObjectOfMaps());
@@ -108,7 +108,7 @@ public class FakeDatabase extends Database{
         catch (Exception e){
             Log.e(TAG, "Illegal access exception");
         }
-    }
+    }*/
 
 
     /**
@@ -126,7 +126,7 @@ public class FakeDatabase extends Database{
                                                           DatabaseField key,
                                                           Object value,
                                                           Integer limit,
-                                                          DatabaseStringField orderBy){
+                                                          DatabaseField orderBy){
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             ArrayList<T> tempList = new ArrayList<>();

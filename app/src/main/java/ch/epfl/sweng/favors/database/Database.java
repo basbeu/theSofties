@@ -39,7 +39,7 @@ public abstract class Database {
     protected abstract <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
                                                                                 String collection,
                                                                                 Integer limit,
-                                                                                DatabaseStringField orderBy);
+                                                                                DatabaseField orderBy);
 
 
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
@@ -47,7 +47,7 @@ public abstract class Database {
                                                           DatabaseField element,
                                                           Object value,
                                                           Integer limit,
-                                                          DatabaseStringField orderBy);
+                                                                DatabaseField orderBy);
 
     protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
                                                              String value);
