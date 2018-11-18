@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
@@ -56,8 +57,20 @@ public class FakeDatabase extends Database{
             database.put(databaseEntity.documentID, databaseEntity.copy());
         }
         else{
-            Log.e(TAG, "Trying to update data on an unknown document");
+            int leftLimit = 97; // letter 'a'
+            int rightLimit = 122; // letter 'z'
+            int targetStringLength = 5;
+            Random random = new Random();
+            StringBuilder buffer = new StringBuilder(targetStringLength);
+            for (int i = 0; i < targetStringLength; i++) {
+                int randomLimitedInt = leftLimit + (int)
+                        (random.nextFloat() * (rightLimit - leftLimit + 1));
+                buffer.append((char) randomLimitedInt);
+            }
+            String generatedString = buffer.toString();
+            database.put( generatedString, databaseEntity.copy());
         }
+
     }
 
     @Override

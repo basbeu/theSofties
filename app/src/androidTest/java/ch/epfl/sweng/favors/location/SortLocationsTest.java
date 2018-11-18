@@ -21,6 +21,7 @@ import static junit.framework.TestCase.assertEquals;
 public class SortLocationsTest {
     private UiDevice device;
 
+
     @Test
     public void setFavorsSorting() {
         GeoPoint point1 = new GeoPoint(46.51600,6.63282);

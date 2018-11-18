@@ -40,7 +40,7 @@
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:text="@{elements.tokens + `Tokens`}"
+                android:text="@{elements.tokens + ` Tokens`}"
                 android:textSize="18dp" />
 
         </LinearLayout>
