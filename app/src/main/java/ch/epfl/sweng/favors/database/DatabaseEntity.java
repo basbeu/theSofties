@@ -19,7 +19,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public abstract class DatabaseEntity implements Observable {
 
-    protected static Database db = Database.getInstance(); // = FirebaseFirestore.getInstance();
+    protected static Database db = Database.getInstance();
 
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
     protected Map<DatabaseIntField, ObservableField<Integer>> intData;

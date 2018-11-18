@@ -704,22 +704,8 @@ public class CompleteLoggedUITest {
                                 1)));
         appCompatEditText9.perform(pressImeActionButton());
 
-        ViewInteraction appCompatEditText10 = onView(
-                allOf(withId(R.id.profLastNameEdit), withText("Auth"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        appCompatEditText10.perform(scrollTo(), click());
-
         ViewInteraction appCompatEditText11 = onView(
-                allOf(withId(R.id.profLastNameEdit), withText("Auth"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(R.id.profLastNameEdit), withText("Auth")));
         appCompatEditText11.perform(scrollTo(), replaceText("Test"));
 
         ViewInteraction appCompatEditText12 = onView(
