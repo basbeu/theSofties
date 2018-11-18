@@ -18,6 +18,7 @@ public class User extends DatabaseEntity{
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
+    public static final String DEFAULT_TOKENS_NUMBER = "5";
 
     private static Status status = new Status(Status.Values.NotLogged);
 
@@ -27,14 +28,14 @@ public class User extends DatabaseEntity{
     }
 
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}
     public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
         super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION, "null");
+                ObjectFields.values(), COLLECTION, null);
 
     }
 

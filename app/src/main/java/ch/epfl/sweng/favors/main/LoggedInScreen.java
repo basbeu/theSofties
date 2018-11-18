@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
@@ -35,7 +36,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Database.getInstance().updateFromDb(User.getMain());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
         binding.setElements(this);
 

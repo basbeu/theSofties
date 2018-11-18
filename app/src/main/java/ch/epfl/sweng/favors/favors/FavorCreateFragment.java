@@ -7,6 +7,8 @@ import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -27,10 +29,15 @@ import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
+import ch.epfl.sweng.favors.authentication.FirebaseAuthentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
+import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.Location;
@@ -56,6 +63,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
+    private User u = new User(Authentication.getInstance().getUid());
 
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
@@ -66,22 +74,36 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
-            newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
-            newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
-            newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-            newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
+            Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
+                        int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
+                        if(newUserTokens >= 0 ) {
+                            newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+                            newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+                            newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
+                            newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
-            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
-            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+                            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+                            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
 
-            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
-            newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
-            newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-            Log.d("Database: Favor", "Favor pushed to database");
-            Database.getInstance().updateOnDb(newFavor);
-            sharedViewFavor.select(newFavor);
-            launchToast("Favor created successfully");
-            updateUI(true);
+                            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
+                            newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
+                            newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+                            newFavor.set(Favor.StringFields.tokens, "1");
+
+                            if(newFavor.getId() == null) {
+                               u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                               Database.getInstance().updateOnDb(u);
+                            }
+                            Database.getInstance().updateOnDb(newFavor);
+                            sharedViewFavor.select(newFavor);
+                            launchToast("Favor created successfully");
+                            updateUI(true);
+                        } else {
+                            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
         }
     }
     FavorsLayoutBinding binding;
@@ -251,8 +273,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-        }
-        else{
+        } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");
             validationText.set("Favor created successfully");

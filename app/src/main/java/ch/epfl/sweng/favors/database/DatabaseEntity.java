@@ -37,6 +37,8 @@ public abstract class DatabaseEntity implements Observable {
         this.documentID = documentId;
     }
 
+    public String getId() {return documentID;}
+
     /**
      * Init a database object with all fields that are possible for the instanced collection in the database
      *

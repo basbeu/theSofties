@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FavorsBinding;
 
 /**
@@ -22,12 +24,14 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
     static String[] modes = {"List view", "Map view"};
     int currentMode = 0;
     public ObservableField<String> buttonDisplay = new ObservableField<>();
+    public ObservableField<String> tokens = User.getMain().getObservableObject(User.StringFields.tokens);
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.favors,container,false);
         binding.setElements(this);
+
 
         binding.modeSwitch.setOnClickListener(new View.OnClickListener() {
               @Override

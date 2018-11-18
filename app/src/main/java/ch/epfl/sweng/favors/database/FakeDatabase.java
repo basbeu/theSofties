@@ -254,6 +254,7 @@ public class FakeDatabase extends Database{
         u4.set(User.StringFields.lastName,FakeAuthentication.LAST_NAME);
         u4.set(User.StringFields.email, FakeAuthentication.EMAIL);
         u4.set(User.StringFields.city, FakeAuthentication.CITY);
+        u4.set(User.StringFields.tokens, FakeAuthentication.TOKENS);
         User.UserGender.setGender(u4, FakeAuthentication.GENDER);
 
         Favor f1 = new Favor("F1");
