@@ -1,5 +1,7 @@
 package ch.epfl.sweng.favors.location;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Comparator;
@@ -31,7 +33,12 @@ public class SortLocations implements Comparator<Favor> {
 
     }
 
-    public double distance(double fromLat, double fromLon, double toLat, double toLon) {
+    public double distance(double fromLatDeg, double fromLonDeg, double toLatDeg, double toLonDeg) {
+        double fromLat = Math.toRadians(fromLatDeg);
+        double fromLon = Math.toRadians(fromLonDeg);
+        double toLat = Math.toRadians(toLatDeg);
+        double toLon = Math.toRadians(toLonDeg);
+
         double radius = 6378137;   // approximate Earth radius, *in meters*
         double deltaLat = toLat - fromLat;
         double deltaLon = toLon - fromLon;
