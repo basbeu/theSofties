@@ -26,6 +26,7 @@ public class User extends DatabaseEntity{
     public static User getMain(){
         return user;
     }
+    public static void updateMain(){user = new User(Authentication.getInstance().getUid());}
 
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}

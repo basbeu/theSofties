@@ -197,7 +197,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             switch (message.what) {
                 case 1:
                     Bundle bundle = message.getData();
-                    favorLocation = new GeoPoint(bundle.getDouble("lattitude"), bundle.getDouble("longitude"));
+                    favorLocation = new GeoPoint(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
                     locationCityValid.set(true);
                     break;
                 case 2:
