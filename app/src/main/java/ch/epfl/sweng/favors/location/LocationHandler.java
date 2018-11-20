@@ -1,21 +1,11 @@
 package ch.epfl.sweng.favors.location;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -142,7 +132,7 @@ public class LocationHandler {
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
         locationUser.set(lastLocation);
-        User.setLocation(locationPoint.get());
+        User.getMain().setLocation(locationPoint.get());
         // if desired the user city can automatically be updated every time location changes
         // User.setCity(locationCity.get());
         Log.d("location", "code:1000 - successfully obtained location of user");
