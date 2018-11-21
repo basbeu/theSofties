@@ -41,7 +41,7 @@
 
                 <Spinner
                     android:id="@+id/sortBySpinner"
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
@@ -52,11 +52,11 @@
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/addNewFavor"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="4dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:clickable="true"
                     android:focusable="true"
+                    app:fabSize="mini"
                     app:backgroundTint="@color/browser_actions_bg_grey"
                     app:layout_constraintStart_toStartOf="@id/sortBySpinner"
                     app:srcCompat="@android:drawable/ic_input_add" />

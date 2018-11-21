@@ -73,7 +73,9 @@ public class LocationHandler {
         } else if (distance > switchToMeters) {
             output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + " km";
         } else {
-            output = String.format(Locale.getDefault(), "%.0f", distance) + " m";
+            if(distance == 0){
+                return  "Near you";
+            }else output = String.format(Locale.getDefault(), "%.0f", distance) + " m";
         }
         return output + " away";
     }
