@@ -17,7 +17,7 @@ public class Favor extends DatabaseEntity {
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail, tokens}
     public enum IntegerFields implements DatabaseIntField {reward}
-    public enum ObjectFields implements DatabaseObjectField {location, creationTimestamp, expirationTimestamp}
+    public enum ObjectFields implements DatabaseObjectField {location, creationTimestamp, expirationTimestamp, interested}
     public enum BooleanFields implements DatabaseBooleanField {isOpen}
 
 

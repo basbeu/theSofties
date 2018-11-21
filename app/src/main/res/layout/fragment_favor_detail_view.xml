@@ -117,9 +117,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
+                    android:backgroundTint="@{elements.isInterested ? @color/interested : @color/not_interested}"
                     android:enabled="@{elements.buttonsEnabled}"
-                    android:text="@{elements.isItsOwn ? `Edit`: `I'm interested`}"
-                    android:textSize="16sp" />
+                    android:text="@{elements.isItsOwn ? `Edit`: (elements.isInterested ? `Cancel` : `Notify my interest`)}"
+                    android:textSize="16sp"
+                    />
 
                 <Button
                     android:id="@+id/deleteButton"
@@ -129,7 +131,7 @@
                     android:text="Delete"
                     android:enabled="@{elements.buttonsEnabled}"
                     android:visibility="@{elements.isItsOwn ? View.VISIBLE : View.GONE}"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/favTokAmmount"

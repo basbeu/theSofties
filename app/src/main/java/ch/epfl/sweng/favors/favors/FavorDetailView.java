@@ -7,6 +7,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
@@ -51,7 +53,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> tokens;
     public ObservableBoolean isItsOwn = new ObservableBoolean(false);
     public ObservableBoolean buttonsEnabled = new ObservableBoolean(true);
+    public ObservableBoolean isInterested = new ObservableBoolean(false);
     private Favor localFavor;
+    ArrayList<String> interestedPeople;
 
     FragmentFavorDetailViewBinding binding;
 
@@ -103,11 +107,19 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         if(favor.getId() == null){binding.deleteButton.setEnabled(false);binding.interestedButton.setEnabled(false);}
 
+        if(localFavor.get(Favor.ObjectFields.interested) != null && localFavor.get(Favor.ObjectFields.interested) instanceof ArrayList)
+            interestedPeople =  (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
+        else interestedPeople = new ArrayList<>();
+        if(interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
+
         User favorCreationUser = new User();
         UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
         posterName = favorCreationUser.getObservableObject(User.StringFields.firstName);
 
     }
+
+    Boolean buttonEnabled = true;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,6 +138,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     "Sorry an error occured, try again later...");
         });
 
+
         binding.interestedButton.setOnClickListener((l)->{
             if(isItsOwn.get()) {
                 FavorCreateFragment mFrag = new FavorCreateFragment();
@@ -135,12 +148,36 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();
             }else{
-                EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
-                        "Someone is interested in: " + title.get(),
-                        "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
-                        getActivity(),
-                        "We will inform the poster of the add that you are interested to help!",
-                        "Sorry an error occured, try again later...");
+                if(!buttonEnabled) return;
+                buttonEnabled = false;
+                if(interestedPeople.contains(User.getMain().getId())) {
+                    interestedPeople.remove(User.getMain().getId());
+                    isInterested.set(false);
+                }
+                else{
+                    interestedPeople.add(User.getMain().getId());
+                    isInterested.set(true);
+                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
+                            "Someone is interested in: " + title.get(),
+                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
+                            getActivity(),
+                            "We will inform the poster of the add that you are interested to help!",
+                            "Sorry an error occured, try again later...");
+
+                }
+
+                localFavor.set(Favor.ObjectFields.interested, interestedPeople);
+                Database.getInstance().updateOnDb(localFavor);
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // This method will be executed once the timer is over
+                        buttonEnabled = true;
+                    }
+                },5000);
+
 
             }
         });
