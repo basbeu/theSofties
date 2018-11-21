@@ -176,5 +176,8 @@ public final class Utils {
         return difference;
     }
 
+    public static String getIconPath(String iconName){
+        return "android.resource://ch.epfl.sweng.favors/drawable/"+iconName.toLowerCase().replaceAll("\\s","");
+    }
 
 }

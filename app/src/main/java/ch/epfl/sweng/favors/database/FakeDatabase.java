@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -289,6 +290,7 @@ public class FakeDatabase extends Database{
         f1.set(Favor.StringFields.title, "KILL THE BATMAN");
         f1.set(Favor.StringFields.locationCity, "Gotham City");
         f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f1.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f2.set(Favor.StringFields.ownerID, "U1");
         f2.set(Favor.StringFields.category, "Cooking");
@@ -297,6 +299,7 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.title, "I am hungry pls hurry");
         f2.set(Favor.StringFields.locationCity, "Tombouctou");
         f2.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f2.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f3.set(Favor.StringFields.ownerID, "U3");
         f3.set(Favor.StringFields.category, "Riddle");
@@ -305,6 +308,7 @@ public class FakeDatabase extends Database{
         f3.set(Favor.StringFields.title, "TICK TOK");
         f3.set(Favor.StringFields.locationCity, "Gotham City");
         f3.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f3.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f4.set(Favor.StringFields.ownerID, "U3");
         f4.set(Favor.StringFields.category, "Homework");
@@ -313,6 +317,7 @@ public class FakeDatabase extends Database{
         f4.set(Favor.StringFields.title, "Unify String Theroy");
         f4.set(Favor.StringFields.locationCity, "Caltech");
         f4.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f4.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f5.set(Favor.StringFields.ownerID, "U3");
         f5.set(Favor.StringFields.category, "Save the World");
@@ -321,6 +326,7 @@ public class FakeDatabase extends Database{
         f5.set(Favor.StringFields.title, "Help Superman");
         f5.set(Favor.StringFields.locationCity, "US");
         f5.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f5.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f6.set(Favor.StringFields.ownerID, "U3");
         f6.set(Favor.StringFields.category, "Assasin");
@@ -329,6 +335,7 @@ public class FakeDatabase extends Database{
         f6.set(Favor.StringFields.title, "League Help");
         f6.set(Favor.StringFields.locationCity, "DC world");
         f6.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f6.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f7.set(Favor.StringFields.ownerID, "U3");
         f7.set(Favor.StringFields.category, "The Flash");
@@ -337,7 +344,7 @@ public class FakeDatabase extends Database{
         f7.set(Favor.StringFields.title, "Flash needs some help");
         f7.set(Favor.StringFields.locationCity, "DC world");
         f7.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-
+        f7.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f8.set(Favor.StringFields.ownerID, "U3");
         f8.set(Favor.StringFields.category, "Supergirl");
@@ -346,6 +353,7 @@ public class FakeDatabase extends Database{
         f8.set(Favor.StringFields.title, "make use gods again");
         f8.set(Favor.StringFields.locationCity, "DC world");
         f8.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f8.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f9.set(Favor.StringFields.ownerID, "U3");
         f9.set(Favor.StringFields.category, "The Breacher");
@@ -354,6 +362,7 @@ public class FakeDatabase extends Database{
         f9.set(Favor.StringFields.title, "Flash needs some help");
         f9.set(Favor.StringFields.locationCity, "DC world");
         f9.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f9.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f10.set(Favor.StringFields.ownerID, "U3");
         f10.set(Favor.StringFields.category, "The Legends");
@@ -362,6 +371,7 @@ public class FakeDatabase extends Database{
         f10.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
         f10.set(Favor.StringFields.locationCity, "The Timeline");
         f10.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f10.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
 
         Interest i1 = new Interest("I1");
@@ -426,6 +436,7 @@ public class FakeDatabase extends Database{
         fNew.set(Favor.StringFields.title, "help with tests");
         fNew.set(Favor.StringFields.locationCity, "EPFL");
         fNew.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        fNew.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         fNew2.set(Favor.StringFields.ownerID, "U3");
         fNew2.set(Favor.StringFields.category, "Hack The Blue Smurf Institute");
@@ -434,6 +445,7 @@ public class FakeDatabase extends Database{
         fNew2.set(Favor.StringFields.title, "Smurf, Smurf, more Smurf");
         fNew2.set(Favor.StringFields.locationCity, "Smurf World");
         fNew2.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        fNew2.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         User uNew = new User("uNew");
         User uNew2 = new User("uNew2");

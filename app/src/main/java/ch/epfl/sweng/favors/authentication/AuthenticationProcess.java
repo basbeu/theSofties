@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.main.LoggedInScreen;
@@ -217,6 +218,7 @@ public class AuthenticationProcess extends Activity {
 
     private void loggedinView(Action action){
         if(mAuth.isEmailVerified()) {
+            User.updateMain();
             Intent intent = new Intent(this, LoggedInScreen.class);
             startActivity(intent);
             finish();

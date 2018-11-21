@@ -7,11 +7,14 @@ import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +43,7 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
+import ch.epfl.sweng.favors.location.GeocodingLocation;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.main.FavorsMain;
@@ -47,6 +51,7 @@ import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Favor Create Fragment
@@ -63,6 +68,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean descriptionValid = new ObservableBoolean(false);
     public ObservableBoolean locationCityValid = new ObservableBoolean(false);
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
+
+    GeoPoint favorLocation = null;
     private User u = new User(Authentication.getInstance().getUid());
 
     public static boolean isStringValid(String s) {
@@ -75,33 +82,36 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
             Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
-                        int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
-                        if(newUserTokens >= 0 ) {
-                            newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
-                            newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
-                            newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-                            newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
+                int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
+                if(newUserTokens >= 0 ) {
+                    newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+                    newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+                    newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
+                    newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
-                            newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
-                            newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+                    newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+                    newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
 
-                            newFavor.set(Favor.ObjectFields.location, LocationHandler.getHandler().locationPoint.get());
-                            newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
-                            newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-                            newFavor.set(Favor.StringFields.tokens, "1");
+                    newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
+                    newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+                    newFavor.set(Favor.StringFields.tokens, "1");
 
-                            if(newFavor.getId() == null) {
-                               u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
-                               Database.getInstance().updateOnDb(u);
-                            }
-                            Database.getInstance().updateOnDb(newFavor);
-                            sharedViewFavor.select(newFavor);
-                            launchToast("Favor created successfully");
-                            updateUI(true);
-                        } else {
-                            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    if(favorLocation != null){
+                        newFavor.set(Favor.ObjectFields.location, favorLocation);
+                    }
+
+                    if(newFavor.getId() == null) {
+                       u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                       Database.getInstance().updateOnDb(u);
+                    }
+                    Database.getInstance().updateOnDb(newFavor);
+                    sharedViewFavor.select(newFavor);
+                    launchToast("Favor created successfully");
+                    updateUI(true);
+                } else {
+                    Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
         }
@@ -163,12 +173,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             descriptionValid.set(isStringValid(editable.toString()));
         }
     };
-    private TextWatcherCustom locationFavorTextWatcher = new TextWatcherCustom() {
-        @Override
-        public void afterTextChanged(Editable editable) {
-            locationCityValid.set(isStringValid(editable.toString()));
-        }
-    };
+
     private TextWatcherCustom deadlineFavorTextWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
@@ -184,7 +189,24 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
 
     }
-    //*************************END OF TEST  *******************
+
+    class GeocoderHandler extends Handler {
+
+        @Override
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    favorLocation = new GeoPoint(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+                    locationCityValid.set(true);
+                    break;
+                case 2:
+                    locationCityValid.set(false);
+                    break;
+                default:
+            }
+        }
+    }
 
     /**
      * Load a fragment with a view to edit a favor of the database or to add a new one
@@ -221,20 +243,38 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
-        binding.locationFavor.addTextChangedListener(locationFavorTextWatcher);
-
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
         binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
 
-        spinner =  binding.categoryFavor;
+        spinner = binding.categoryFavor;
 
         InterestRequest.all(interestsList, null, null);
         interestsList.addOnPropertyChangedCallback(callbackInterestList);
+        binding.search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAddress(binding.locationFavor.getText().toString());
+            }
+        });
 
         // TESTING LINE FOR BINDING
         binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();});
 
         return binding.getRoot();
+    }
+
+    public void checkAddress(String value){
+        if(!ExecutionMode.getInstance().isTest()) {
+            locationCityValid.set(false);
+            if (value.length() < 4) {
+                return;
+            }
+            GeocodingLocation locationAddress = new GeocodingLocation();
+            locationAddress.getAddressFromLocation(value, getContext(), new GeocoderHandler());
+        }else {
+            favorLocation = new GeoPoint(1.564, 6.14543);
+            locationCityValid.set(true);
+        }
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

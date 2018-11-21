@@ -22,6 +22,8 @@ import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.Utils;
 
+import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
+
 /**
  * FavorListAdapter
  * Class that represents the graphical list view to display Favors
@@ -124,7 +126,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
          */
         private void setIconCategory(Favor favor){
             if(favor.get(Favor.StringFields.category) != null){
-                iconCategory.setImageURI(Uri.parse("android.resource://ch.epfl.sweng.favors/drawable/"+favor.get(Favor.StringFields.category).toLowerCase().replaceAll("\\s","")));
+                iconCategory.setImageURI(Uri.parse(getIconPath(favor.get(Favor.StringFields.category))));
             }
         }
 

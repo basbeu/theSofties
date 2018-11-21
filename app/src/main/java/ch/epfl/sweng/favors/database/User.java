@@ -26,6 +26,7 @@ public class User extends DatabaseEntity{
     public static User getMain(){
         return user;
     }
+    public static void updateMain(){user = new User(Authentication.getInstance().getUid());}
 
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}
@@ -59,16 +60,11 @@ public class User extends DatabaseEntity{
         user.reset();
     }
 
-    /**
-     * Sets the current location of the user
-     * @param geo the geopoint that will be stored in the database
-     */
-    static public void setLocation(@Nonnull GeoPoint geo){
-        Database.getInstance().updateFromDb(user);
+    public void setLocation(@Nonnull GeoPoint geo){
         if (user.get(StringFields.lastName) != null
                 && user.get(StringFields.email) != null
                     && user.get(StringFields.sex) != null) {
-            user.set(ObjectFields.location, geo);
+            this.set(ObjectFields.location, geo);
             Database.getInstance().updateOnDb(user);
         }
     }

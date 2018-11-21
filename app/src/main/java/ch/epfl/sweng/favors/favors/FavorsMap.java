@@ -1,22 +1,27 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.HashMap;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
 
@@ -27,7 +32,20 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     private static final String TAG = "FAVORS_MAP";
 
     FavorsMapBinding binding;
-    ObservableArrayList<Favor> favorList;
+    ObservableArrayList<Favor> favorList = new ObservableArrayList<>();
+
+    private HashMap<String,Favor> favorsMap = new HashMap<>();
+
+    private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            Favor favor = favorsMap.get(marker.getId());
+            ViewModelProviders.of(FavorsMap.this.getActivity()).get(SharedViewFavor.class).select(favor);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mapView, new FavorDetailView()).addToBackStack(null).commit();
+
+            return true;
+        }
+    };
 
     @Nullable
     @Override
@@ -68,11 +86,25 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng sydney = new LatLng(-34, 151);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setOnMarkerClickListener(markerClickListener);
+
+        FavorRequest.all(favorList,null,null);
+
+        favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                //favorsMap = new HashMap<>();
+                for(Favor favor:favorList){
+                    GeoPoint point = (GeoPoint) favor.get(Favor.ObjectFields.location);
+                    LatLng location = new LatLng(point.getLatitude(),point.getLongitude());
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)));
+                    favorsMap.put(marker.getId(), favor);
+                }
+            }
+        });
     }
-
-
 
 }
