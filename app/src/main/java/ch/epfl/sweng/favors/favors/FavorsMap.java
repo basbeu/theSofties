@@ -1,45 +1,29 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
-
 import android.databinding.Observable;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
-import java.util.logging.LogRecord;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
-
-import static android.support.v4.content.ContextCompat.getSystemService;
-import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
 
 /**
  * Fragment that displays the list of favor and allows User to sort it and to search in it
