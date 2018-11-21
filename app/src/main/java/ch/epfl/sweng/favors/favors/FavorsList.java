@@ -84,9 +84,12 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
                 FavorRequest.all(favorList, null, null);
                 break;
             case 2: //recent
-                FavorRequest.all(favorList, null, null);
+                FavorRequest.all(favorList, null, Favor.ObjectFields.creationTimestamp);
                 break;
-            case 3: //category
+            case 3: //soon expiring
+                FavorRequest.all(favorList, null, Favor.ObjectFields.expirationTimestamp);
+                break;
+            case 4: //category
                 FavorRequest.all(favorList, null, Favor.StringFields.category);
                 break;
             default: break;
