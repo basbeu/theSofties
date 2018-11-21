@@ -166,8 +166,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
                 }
 
-                localFavor.set(Favor.ObjectFields.interested, interestedPeople);
-                Database.getInstance().updateOnDb(localFavor);
+                if(localFavor != null){
+                    localFavor.set(Favor.ObjectFields.interested, interestedPeople);
+                    Database.getInstance().updateOnDb(localFavor);
+                }
+
 
                 new Handler().postDelayed(new Runnable() {
 
