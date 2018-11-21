@@ -495,13 +495,17 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         imageView2.check(matches(isDisplayed()));
 
+        ViewInteraction textView121 = onView(
+                allOf(withId(R.id.search)));
+        textView121.perform(scrollTo(), click());
+
         ViewInteraction textView12 = onView(
                 allOf(withId(R.id.deadlineFavor), withHint("Favor Deadline"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
-                                8)));
+                                9)));
         textView12.perform(scrollTo());
         textView12.check(matches(withHint("Favor Deadline")));
 
@@ -512,7 +516,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
-                                8)));
+                                9)));
         appCompatTextView.perform(scrollTo(), click());
 
         ViewInteraction appCompatButton4 = onView(
@@ -531,7 +535,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
-                                8),
+                                9),
                         isDisplayed()));
 
         textView13.check(matches(isDisplayed()));
@@ -542,7 +546,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
-                                10)));
+                                11)));
         appCompatSpinner.perform(scrollTo(), click());
 
         ViewInteraction textView14 = onView(
@@ -562,7 +566,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
-                                11),
+                                12),
                         isDisplayed()));
         button4.check(matches(isDisplayed()));
 
@@ -572,7 +576,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
-                                13)));
+                                14)));
         button5.perform(scrollTo());
         button5.check(matches(isDisplayed()));
 
@@ -582,7 +586,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
-                                11)));
+                                12)));
         appCompatButton5.perform(scrollTo(), click());
 
         ViewInteraction appCompatImageButton2 = onView(

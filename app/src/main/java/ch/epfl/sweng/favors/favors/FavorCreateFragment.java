@@ -272,6 +272,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             GeocodingLocation locationAddress = new GeocodingLocation();
             locationAddress.getAddressFromLocation(value, getContext(), new GeocoderHandler());
         }else {
+            favorLocation = new GeoPoint(1.564, 6.14543);
             locationCityValid.set(true);
         }
     }
