@@ -92,6 +92,7 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
                     LocationHandler.getHandler().locationPoint.get().getLatitude(),
                     LocationHandler.getHandler().locationPoint.get().getLongitude())));
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(12f));
         }
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(-34, 151);

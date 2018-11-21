@@ -149,7 +149,7 @@ public class LocationHandler {
             Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
             try {
                 List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
-                if (addresses.size() > 0) return addresses.get(0).getLocality();
+                if (addresses.size() > 0) return addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryCode();
             } catch (IOException e) {
                 Log.e(TAG, "Failed to get geoPoint information");
             }

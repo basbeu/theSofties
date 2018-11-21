@@ -25,12 +25,17 @@ public class GeocodingLocation {
                 String result = null;
                 Double latitude = null;
                 Double longitude = null;
+                String city = null;
+                String country = null;
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(locationAddress, 1);
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
                         latitude = address.getLatitude();
                         longitude = address.getLongitude();
+                        city = address.getLocality();
+                        country = address.getCountryCode();
+
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Unable to connect to Geocoder", e);
@@ -42,6 +47,8 @@ public class GeocodingLocation {
                         Bundle bundle = new Bundle();
                         bundle.putDouble("latitude", latitude);
                         bundle.putDouble("longitude", longitude);
+                        bundle.putString("country", country);
+                        bundle.putString("city", city);
                         message.setData(bundle);
                     } else {
                         message.what = 2;

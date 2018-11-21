@@ -195,6 +195,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
                 case 1:
                     Bundle bundle = message.getData();
                     favorLocation = new GeoPoint(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+                    locationCity.set(bundle.getString("city")+ ", " + bundle.getString("country"));
                     locationCityValid.set(true);
                     break;
                 case 2:
@@ -241,6 +242,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
+        binding.addFavor.setOnClickListener(v-> {
+            createFavorIfValid(newFavor);
+        });
         binding.addFavor.setOnClickListener(v-> {
             createFavorIfValid(newFavor);
         });
