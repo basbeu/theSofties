@@ -12,23 +12,23 @@
     </data>
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/whiteSmoke"
+    >
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/whiteSmoke"
         android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/createFavorTitle"
-
             android:text="@{elements.fragmentTitle}"
             android:textSize="24sp"
-
+            android:textAlignment="center"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30sp"
+            android:layout_marginTop="15sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -204,25 +204,16 @@
             app:layout_constraintTop_toBottomOf="@+id/categoryFavor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-        <TextView
-            android:id="@+id/testText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30sp"
-            android:text="test content"
-            app:layout_constraintTop_toBottomOf="@+id/addFavor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/testFavorDetailButton"/>
+
         <Button
             android:id="@+id/testFavorDetailButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="20sp"
-            android:text="display current favor "
+            android:text="Preview favor"
             app:layout_constraintTop_toBottomOf="@+id/addFavor"
-            app:layout_constraintStart_toEndOf="@+id/testText"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 

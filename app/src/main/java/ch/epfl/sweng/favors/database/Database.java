@@ -27,6 +27,8 @@ public abstract class Database {
      */
     public abstract Task updateFromDb(DatabaseEntity databaseEntity);
 
+    public abstract void deleteFromDatabase(DatabaseEntity databaseEntity);
+
     /**
      *
      * @param clazz The class that indicate the entity type <T>

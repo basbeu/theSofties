@@ -87,6 +87,12 @@ public class FirebaseDatabase extends Database{
 
     }
 
+    @Override
+    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
+        if(databaseEntity == null) return;
+        dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).delete();
+    }
+
     class ListRequestFb<T extends DatabaseEntity> implements OnCompleteListener{
 
         ObservableArrayList<T> list;

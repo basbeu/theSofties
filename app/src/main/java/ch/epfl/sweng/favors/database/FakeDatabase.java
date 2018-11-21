@@ -83,6 +83,12 @@ public class FakeDatabase extends Database{
     }
 
     @Override
+    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
+       if(databaseEntity == null) return;
+        database.remove(databaseEntity.documentID);
+    }
+
+    @Override
     protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz, String collection, Integer limit, DatabaseField orderBy) {
 
         Handler handler = new Handler(handlerThread.getLooper());

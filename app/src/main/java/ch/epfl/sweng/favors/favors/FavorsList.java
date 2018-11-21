@@ -67,7 +67,7 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
         });
 
         //button redirects to creating favor page
-        binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
+        binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorCreateFragment()).addToBackStack("newFavor").commit());
 
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
 

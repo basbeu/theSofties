@@ -13,6 +13,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -82,33 +83,34 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         if (allFavorFieldsValid()) {
             int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
             if(newUserTokens >= 0 ) {
-                newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
-                newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
-                newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-                newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
-
-                newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
-                newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
-
-                newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
-                newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-                newFavor.set(Favor.StringFields.tokens, "1");
-
-                if(favorLocation != null){
-                    newFavor.set(Favor.ObjectFields.location, favorLocation);
-                }
-
+                updateFavorObject(newFavor);
                 if(newFavor.getId() == null) {
-                   User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
-                   Database.getInstance().updateOnDb(User.getMain());
+                    User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                    Database.getInstance().updateOnDb(User.getMain());
                 }
                 Database.getInstance().updateOnDb(newFavor);
-                sharedViewFavor.select(newFavor);
-                launchToast("Favor created successfully");
+                launchToast(validationText.get());
                 updateUI(true);
             } else {
                 Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public void updateFavorObject(Favor newFavor){
+        newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+        newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+        newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
+        newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
+
+        newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+        newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+
+        newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
+        newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+        newFavor.set(Favor.StringFields.tokens, "1");
+        if(favorLocation != null){
+            newFavor.set(Favor.ObjectFields.location, favorLocation);
         }
     }
     FavorsLayoutBinding binding;
@@ -123,7 +125,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableField<String> fragmentTitle = new ObservableField<>("--");
     public ObservableField<String> validationText = new ObservableField<>("--");
 
-    public final String KEY_FRAGMENT_ID = "fragment_id";
+    public static final String KEY_FRAGMENT_ID = "fragment_id";
     ArrayAdapter<String> adapter = null;
 
     //TEST CODE FOR DETAIL FRAGMENT
@@ -239,7 +241,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
-        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+        binding.addFavor.setOnClickListener(v-> {
+            createFavorIfValid(newFavor);
+        });
 
         spinner = binding.categoryFavor;
 
@@ -252,8 +256,16 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        // TESTING LINE FOR BINDING
-        binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();});
+        binding.testFavorDetailButton.setOnClickListener(v->{
+            Fragment fr = new FavorDetailView();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FavorDetailView.ENABLE_BUTTONS, false);
+            fr.setArguments(bundle);
+            updateFavorObject(newFavor);
+            sharedViewFavor.select(newFavor);
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fr).addToBackStack("favorEditCreation").commit();
+
+        });
 
         return binding.getRoot();
     }

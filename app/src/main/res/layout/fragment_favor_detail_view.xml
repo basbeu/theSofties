@@ -5,6 +5,7 @@
 
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="elements"
             type="ch.epfl.sweng.favors.favors.FavorDetailView"
@@ -108,15 +109,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <Button
-                    android:id="@+id/favIntrestedButton"
+                    android:id="@+id/interestedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="35sp"
-                    android:text="I'm interested"
-                    android:textSize="20sp" />
+                    android:layout_marginStart="10sp"
+                    android:enabled="@{elements.buttonsEnabled}"
+                    android:text="@{elements.isItsOwn ? `Edit`: `I'm interested`}"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:text="Delete"
+                    android:enabled="@{elements.buttonsEnabled}"
+                    android:visibility="@{elements.isItsOwn ? View.VISIBLE : View.GONE}"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/favTokAmmount"
@@ -141,6 +154,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="10sp"
                 android:textSize="18sp"
+                android:enabled="@{elements.buttonsEnabled}"
                 android:text="@{elements.posterName}"
                 android:textStyle="bold" />
 
@@ -151,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="40sp"
+                android:enabled="@{elements.buttonsEnabled &amp;&amp; !elements.isItsOwn}"
                 android:text="Report abusive add"
                 android:textStyle="bold" />
 

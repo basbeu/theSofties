@@ -19,7 +19,7 @@ public class SortLocations implements Comparator<Favor> {
         GeoPoint place1 = (GeoPoint) f1.get(Favor.ObjectFields.location);
         GeoPoint place2 = (GeoPoint) f2.get(Favor.ObjectFields.location);
 
-        if(place1 != null && place2 != null){
+        if(place1 != null && place2 != null && currentLoc != null){
             double lat1 = place1.getLatitude();
             double lon1 = place1.getLongitude();
             double lat2 = place2.getLatitude();

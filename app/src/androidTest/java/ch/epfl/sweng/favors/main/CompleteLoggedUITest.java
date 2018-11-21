@@ -834,7 +834,7 @@ public class CompleteLoggedUITest {
         textView24.check(matches(withText("test")));
 
         ViewInteraction button8 = onView(
-                allOf(withId(R.id.favIntrestedButton),
+                allOf(withId(R.id.interestedButton),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
