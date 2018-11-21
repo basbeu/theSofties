@@ -120,6 +120,7 @@ public class FirebaseDatabase extends Database{
 
             else if(task.getResult() instanceof QuerySnapshot){
                 if(list != null) list.clear();
+                ArrayList<T> temp = new ArrayList<>();
                 for (QueryDocumentSnapshot document : (QuerySnapshot) task.getResult()) {
                     try {
                         if (firstElement != null) {
@@ -129,12 +130,13 @@ public class FirebaseDatabase extends Database{
                         if (list != null) {
                             T documentObject = clazz.newInstance();
                             documentObject.set(document.getId(), document.getData());
-                            list.add(documentObject);
+                            temp.add(documentObject);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Illegal access exception");
                     }
                 }
+                if(list != null) list.addAll(temp);
             }
 
         }
