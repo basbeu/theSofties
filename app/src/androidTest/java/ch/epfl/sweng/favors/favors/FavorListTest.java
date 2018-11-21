@@ -56,7 +56,6 @@ public class FavorListTest {
         onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click(), typeText("KILL"));
     }
 
-    @Ignore
     @Test
     public void canSortByLocation() throws InterruptedException{
         mFragmentTestRule.launchActivity(null);
@@ -66,7 +65,6 @@ public class FavorListTest {
         onView(ViewMatchers.withId(R.id.sortBySpinner)).check(matches(withSpinnerText(containsString("location"))));
     }
 
-    @Ignore
     @Test
     public void canSortByRecent() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
@@ -76,7 +74,6 @@ public class FavorListTest {
         onView(ViewMatchers.withId(R.id.sortBySpinner)).check(matches(withSpinnerText(containsString("recent"))));
     }
 
-    @Ignore
     @Test
     public void canSortByCategory() {
         mFragmentTestRule.launchActivity(null);

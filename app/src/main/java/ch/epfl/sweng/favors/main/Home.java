@@ -39,7 +39,7 @@ public class Home extends android.support.v4.app.Fragment  {
     Observable.OnPropertyChangedCallback locationSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            Collections.sort((ObservableArrayList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
+            if(LocationHandler.getHandler().locationPoint.get() != null) Collections.sort((ObservableArrayList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
             updateList((ObservableArrayList) sender);
         }
     };
@@ -89,7 +89,7 @@ public class Home extends android.support.v4.app.Fragment  {
                 break;
             case 1 :
                 favorList.changeOnPropertyChangedCallback(otherSortingCb);
-                FavorRequest.all(favorList, 5, null);
+                FavorRequest.all(favorList, 5, Favor.ObjectFields.creationTimestamp);
                 break;
             default:
 

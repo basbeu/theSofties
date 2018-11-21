@@ -144,7 +144,11 @@ public class FirebaseDatabase extends Database{
 
     Query addParametersToQuery(Query query, Integer limit, DatabaseField orderBy){
         if(orderBy != null){
-            query = query.orderBy(orderBy.toString());
+            if(orderBy == Favor.ObjectFields.creationTimestamp){
+                query = query.orderBy(orderBy.toString(), Query.Direction.DESCENDING);
+            } else {
+                query = query.orderBy(orderBy.toString());
+            }
         }
         if(limit != null){
             query = query.limit(limit);
