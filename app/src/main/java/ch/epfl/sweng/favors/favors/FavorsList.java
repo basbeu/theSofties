@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.Spinner;
 
 import java.util.Collections;
@@ -46,6 +47,24 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortBySpinner.setAdapter(adapter);
         sortBySpinner.setOnItemSelectedListener(this);
+
+        //define input behaviour for SearchView
+        SearchView searchFavor = binding.searchFavor;
+        searchFavor.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                listAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                listAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
 
         //button redirects to creating favor page
         binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
