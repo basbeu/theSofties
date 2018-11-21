@@ -18,6 +18,8 @@ import static junit.framework.TestCase.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
 
+    final static long DAY = 86400000;
+
     @Before
     public void Before() {
         ExecutionMode.getInstance().setTest(true);
@@ -172,10 +174,31 @@ public class UtilsTest {
     }
 
     @Test
+    public void favorFormatDate3(){
+        Date d = new Date(new Date().getTime()+100000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("today", f);
+    }
+
+    @Test
     public void favorFormatDate2(){
         Date d = new Date(new Long("153640875500000"));
         String f = Utils.getFavorDate(d);
         assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void favorFormatDate4(){
+        Date d = new Date(new Date().getTime()+DAY-100000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("1 day", f);
+    }
+
+    @Test
+    public void favorFormatDate5(){
+        Date d = new Date(new Date().getTime()+2*DAY-100000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("2 days", f);
     }
 
     @Test

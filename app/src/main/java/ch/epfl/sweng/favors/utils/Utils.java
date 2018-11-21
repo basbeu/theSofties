@@ -132,17 +132,20 @@ public final class Utils {
     public static String getFavorDate(Date date) {
         Date today = new Date();
         long difference = getDifference(date, today);
+        String dateString = "";
         if(date.before(today)) {
-            return "expired";
+            dateString = "expired";
         } else if (getFullDate(date).equals(getFullDate(today))) {
-            return "today";
+            dateString =  "today";
         } else if (difference < DAY) {
-            return difference/DAY+1 + " day";
+            dateString = difference/DAY+1 + " day";
         } else if (difference < DAYS) {
-            return difference/DAY+1 + " days";
+            dateString = difference/DAY+1 + " days";
+        } else {
+            SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
+            dateString = df.format(date);
         }
-        SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
-        return df.format(date);
+        return dateString;
     }
 
     /**
