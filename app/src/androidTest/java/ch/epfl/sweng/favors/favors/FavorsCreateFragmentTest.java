@@ -135,12 +135,14 @@ public class FavorsCreateFragmentTest {
         onView(withId(R.id.titleFavor)).perform(typeText("Test Expert")).perform(closeSoftKeyboard()).check(matches(withText("Test Expert")));
         onView(withId(R.id.descriptionFavor)).perform(typeText("Help me with my tests")).perform(closeSoftKeyboard()).check(matches(withText("Help me with my tests")));
         onView(withId(R.id.locationFavor)).perform(replaceText("TestCity")).perform(closeSoftKeyboard()).check(matches(withText("TestCity")));
+        onView(withId(R.id.search)).perform(scrollTo(),click());
         onView(withId(R.id.deadlineFavor)).perform(scrollTo(), click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2050,10,23));
         UiObject allowButton = device.findObject(new UiSelector().text("OK"));
         if (allowButton != null) {
             allowButton.click();
         }
+
 
         onView(withId(R.id.addFavor)).perform(scrollTo(), click());
 
