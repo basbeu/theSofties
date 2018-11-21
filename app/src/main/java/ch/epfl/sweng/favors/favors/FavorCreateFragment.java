@@ -70,7 +70,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
 
     GeoPoint favorLocation = null;
-    private User u = new User(Authentication.getInstance().getUid());
 
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
@@ -81,39 +80,35 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
-            Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
-                int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
-                if(newUserTokens >= 0 ) {
-                    newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
-                    newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
-                    newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-                    newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
+            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
+            if(newUserTokens >= 0 ) {
+                newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+                newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+                newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
+                newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
-                    newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
-                    newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+                newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+                newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
 
-                    newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
-                    newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-                    newFavor.set(Favor.StringFields.tokens, "1");
+                newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
+                newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+                newFavor.set(Favor.StringFields.tokens, "1");
 
-                    if(favorLocation != null){
-                        newFavor.set(Favor.ObjectFields.location, favorLocation);
-                    }
-
-                    if(newFavor.getId() == null) {
-                       u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
-                       Database.getInstance().updateOnDb(u);
-                    }
-                    Database.getInstance().updateOnDb(newFavor);
-                    sharedViewFavor.select(newFavor);
-                    launchToast("Favor created successfully");
-                    updateUI(true);
-                } else {
-                    Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+                if(favorLocation != null){
+                    newFavor.set(Favor.ObjectFields.location, favorLocation);
                 }
-            });
 
-
+                if(newFavor.getId() == null) {
+                   User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                   Database.getInstance().updateOnDb(User.getMain());
+                }
+                Database.getInstance().updateOnDb(newFavor);
+                sharedViewFavor.select(newFavor);
+                launchToast("Favor created successfully");
+                updateUI(true);
+            } else {
+                Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     FavorsLayoutBinding binding;
