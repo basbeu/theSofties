@@ -92,13 +92,13 @@ public class LocationHandlerTest {
     @Test
     public void getDistanceTest() {
         String test = LocationHandler.distanceBetween((GeoPoint)FAKE_LOCATION_OBJECT);
-        assertEquals("6635km away", test);
+        assertEquals("6635 km away", test);
     }
 
     @Test
     public void getDistanceTest2() {
         String test = LocationHandler.distanceBetween((GeoPoint)FAKE_LOCATION_OBJECT2);
-        assertEquals("0m away", test);
+        assertEquals("Near you", test);
     }
 
     @Test

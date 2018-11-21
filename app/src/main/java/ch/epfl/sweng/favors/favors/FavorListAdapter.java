@@ -143,7 +143,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
         this.filteredFavorList = favorList;
-        this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
+        if(fragActivity != null) this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
 
         this.fragmentActivity = fragActivity;
 

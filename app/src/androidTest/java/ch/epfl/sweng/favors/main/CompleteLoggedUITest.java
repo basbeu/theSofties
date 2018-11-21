@@ -576,7 +576,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
-                                14)));
+                                13)));
         button5.perform(scrollTo());
         button5.check(matches(isDisplayed()));
 

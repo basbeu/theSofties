@@ -145,7 +145,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
                 }
                 if (adapter == null) {
 
-                    adapter = new ArrayAdapter<String>(FavorsMain.getContext(), android.R.layout.simple_spinner_item, interestsTitles);
+                    adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, interestsTitles);
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     spinner.setAdapter(adapter);
                 } else {

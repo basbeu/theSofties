@@ -49,6 +49,7 @@ public class MyFavorsFragment extends android.support.v4.app.Fragment {
     }
 
     private void updateList(ObservableArrayList<Favor> list){
+        if(this.getActivity() == null) return; // Callback
         listAdapter = new FavorListAdapter(this.getActivity(), list);
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();

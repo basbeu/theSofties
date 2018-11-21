@@ -2,6 +2,8 @@ package ch.epfl.sweng.favors.favors;
 
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.widget.EditText;
+import android.widget.SearchView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,9 +24,12 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.instanceOf;
@@ -53,7 +58,7 @@ public class FavorListTest {
     @Test
     public void canInsertSearchText() throws InterruptedException {
         mFragmentTestRule.launchActivity(null);
-        onView(ViewMatchers.withId(R.id.searchFavor)).perform(scrollTo(), click(), typeText("KILL"));
+        onView(allOf(withClassName(endsWith("SearchView")))).perform(typeText("KILL"));
     }
 
     @Test
