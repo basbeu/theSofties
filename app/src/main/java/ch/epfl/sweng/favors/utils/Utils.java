@@ -136,8 +136,10 @@ public final class Utils {
             return "expired";
         } else if (getFullDate(date).equals(getFullDate(today))) {
             return "today";
+        } else if (difference < DAY) {
+            return difference/DAY+1 + " day";
         } else if (difference < DAYS) {
-            return difference/DAY + " days";
+            return difference/DAY+1 + " days";
         }
         SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
         return df.format(date);

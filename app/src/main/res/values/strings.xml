@@ -21,6 +21,7 @@
         <item>sort by</item>
         <item>location</item>
         <item>recent</item>
+        <item>expiring soon</item>
         <item>category</item>
     </string-array>
 
