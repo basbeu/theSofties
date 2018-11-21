@@ -107,7 +107,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         if(favor.getId() == null){binding.deleteButton.setEnabled(false);binding.interestedButton.setEnabled(false);}
 
-        if(localFavor.get(Favor.ObjectFields.interested) != null && localFavor.get(Favor.ObjectFields.interested) instanceof ArrayList)
+        if(favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList)
             interestedPeople =  (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
         else interestedPeople = new ArrayList<>();
         if(interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
