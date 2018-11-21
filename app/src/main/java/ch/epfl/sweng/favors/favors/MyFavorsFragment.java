@@ -33,7 +33,7 @@ public class MyFavorsFragment extends android.support.v4.app.Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.my_favors,container,false);
         binding.setElements(this);
 
-        binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorCreateFragment()).commit());
+        binding.addNewFavor.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorCreateFragment()).addToBackStack("newFavor").commit());
 
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
