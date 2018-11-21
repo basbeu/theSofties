@@ -145,7 +145,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             }
         });
         binding.deleteButton.setOnClickListener((l)->{
-            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
+            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) + 1;
             User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
