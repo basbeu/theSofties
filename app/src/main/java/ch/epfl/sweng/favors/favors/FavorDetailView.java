@@ -13,7 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -34,6 +37,8 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
  */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
+    private StorageReference storageReference;
+
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<String> location;
@@ -44,6 +49,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> posterName;
     public ObservableField<String> user;
     public ObservableField<String> tokens;
+    public ObservableField<String> pictureRef;
 
     private Favor localFavor;
 
@@ -89,7 +95,22 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
         tokens = favor.getObservableObject(Favor.StringFields.tokens);
+        pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
         //user.set();
+        if(pictureRef != null){
+            Log.d("PICTAG", "101");
+            storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference ref = storageReference.child("images/"+ pictureRef.get());
+            Log.d("PICTAG", pictureRef.get());
+            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Log.d("PICTAG", "success");
+                    binding.favorPicture.setImageURI(uri);
+                }
+            });
+
+        }
 
         User favorCreationUser = new User();
         UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
