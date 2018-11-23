@@ -51,6 +51,7 @@ import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
+import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.GeocodingLocation;
 import ch.epfl.sweng.favors.location.Location;
@@ -75,7 +76,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
     private static final int GET_FROM_GALLERY = 66;
-    private FirebaseStorage storage;
+    private FirebaseStorageDispatcher storage;
     private StorageReference storageReference;
     private Uri selectedImage = null;
 
@@ -127,7 +128,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.tokens, "1");
 
         if(selectedImage != null){
-            String pictureRef = Utils.uploadImage(storageReference, this.getContext(), selectedImage);
+            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
         }
         else{
@@ -209,9 +210,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-
+        storage = FirebaseStorageDispatcher.getInstance();
     }
 
     class GeocoderHandler extends Handler {
@@ -377,10 +376,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
                 binding.favorImage.setImageBitmap(bitmap);
 
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
