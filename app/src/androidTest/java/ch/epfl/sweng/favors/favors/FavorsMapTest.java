@@ -29,7 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 @RunWith(AndroidJUnit4.class)
 public class FavorsMapTest {
-
+//TODO : Better testing
     @Rule
     public FragmentTestRule<FavorsMap> mFragmentTestRule = new FragmentTestRule<>(FavorsMap.class);
 
