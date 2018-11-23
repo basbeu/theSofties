@@ -1,15 +1,21 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +33,8 @@ import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,8 +59,12 @@ import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
+import ch.epfl.sweng.favors.utils.Utils;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * Favor Create Fragment
@@ -62,6 +74,10 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
+    private static final int GET_FROM_GALLERY = 66;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private Uri selectedImage = null;
 
     private DatePickerFragment date = new DatePickerFragment();
 
@@ -109,6 +125,15 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         newFavor.set(Favor.StringFields.tokens, "1");
+
+        if(selectedImage != null){
+            String pictureRef = Utils.uploadImage(storageReference, this.getContext(), selectedImage);
+            newFavor.set(Favor.StringFields.pictureReference, pictureRef);
+        }
+        else{
+            newFavor.set(Favor.StringFields.pictureReference, null);
+        }
+
         if(favorLocation != null){
             newFavor.set(Favor.ObjectFields.location, favorLocation);
         }
@@ -184,6 +209,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewFavor = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
     }
 
@@ -270,6 +297,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fr).addToBackStack("favorEditCreation").commit();
 
         });
+        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
 
         return binding.getRoot();
     }
@@ -333,6 +361,29 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private void launchToast(String text) {
         Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        //Detects request codes
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                binding.favorImage.setImageBitmap(bitmap);
+
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
 }
