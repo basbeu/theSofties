@@ -65,7 +65,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> pictureRef;
 
     private Favor localFavor;
-    ArrayList<String> interestedPeople;
+    private ArrayList<String> interestedPeople;
 
     FragmentFavorDetailViewBinding binding;
 
@@ -219,6 +219,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.interestedUsers.setOnClickListener((l)->{
             //TODO
             InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
+            Bundle bundle = new Bundle();
+            bundle.putString(FavorCreateFragment.KEY_FRAGMENT_ID, localFavor.getId());
+            mFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     mFrag).addToBackStack(null).commit();
         });
