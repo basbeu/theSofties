@@ -173,17 +173,19 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                       String collection,
-                                                       Map<DatabaseField, Object> map,
-                                                       Integer limit,
-                                                       DatabaseField orderBy){
+    protected  <T extends DatabaseEntity>  void getList(ObservableArrayList<T> list, Class<T> clazz,
+                                                   String collection,
+                                                   Map<DatabaseField, Object> mapEquals,
+                                                   Map<DatabaseField, Object> mapLess,
+                                                   Map<DatabaseField, Object> mapMore,
+                                                   Integer limit,
+                                                   DatabaseField orderBy){
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
                 Boolean toAdd = true;
-                for(Map.Entry<DatabaseField, Object> el : map.entrySet()) {
+                for(Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
                     if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
                         toAdd = false;
                         break;

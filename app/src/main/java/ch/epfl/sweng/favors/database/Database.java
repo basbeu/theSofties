@@ -55,7 +55,9 @@ public abstract class Database {
 
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                 String collection,
-                                                                Map<DatabaseField, Object> map,
+                                                                Map<DatabaseField, Object> mapEquals,
+                                                                Map<DatabaseField, Object> mapLess,
+                                                                Map<DatabaseField, Object> mapMore,
                                                                 Integer limit,
                                                                 DatabaseField orderBy);
 

@@ -177,16 +177,25 @@ public class FirebaseDatabase extends Database{
     @Override
     protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                          String collection,
-                                                                         Map<DatabaseField, Object> map,
+                                                                         Map<DatabaseField, Object> mapEquals,
+                                                                        Map<DatabaseField, Object> mapLess,
+                                                                            Map<DatabaseField, Object> mapMore,
                                                                          Integer limit,
                                                                          DatabaseField orderBy){
 
 
-        if(map == null){return;}
         Query query = dbFireStore.collection(collection);
-        for(Map.Entry<DatabaseField, Object> el : map.entrySet()){
+
+        if(mapEquals != null) for(Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()){
             query = query.whereEqualTo(el.getKey().toString(), el.getValue());
         }
+        if(mapLess != null) for(Map.Entry<DatabaseField, Object> el : mapLess.entrySet()){
+            query = query.whereLessThan(el.getKey().toString(), el.getValue());
+        }
+        if(mapMore != null) for(Map.Entry<DatabaseField, Object> el : mapMore.entrySet()){
+            query = query.whereGreaterThan(el.getKey().toString(), el.getValue());
+        }
+
         query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
     }
