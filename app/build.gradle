@@ -19,7 +19,7 @@ android {
         dataBinding {
             enabled = true
         }
-        versionName "0.7.a1-favor"
+        versionName "0.8.a1-favors"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

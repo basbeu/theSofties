@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,7 +163,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
                             getActivity(),
                             "We will inform the poster of the add that you are interested to help!",
-                            "Sorry an error occured, try again later...");
+                            "Sorry an error occurred, try again later...");
 
                 }
 
@@ -191,6 +192,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Database.getInstance().deleteFromDatabase(localFavor);
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
+        });
+        binding.interestedUsers.setOnClickListener((l)->{
+            //TODO
+            InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    mFrag).addToBackStack(null).commit();
         });
 
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
