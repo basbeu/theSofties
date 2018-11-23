@@ -37,8 +37,8 @@
                 android:layout_gravity="center"
                 android:contentDescription="image"
                 android:padding="10sp"
-                android:src="@drawable/test_image2"
-                app:srcCompat="@drawable/test_image2" />
+                android:src="@drawable/no_image"
+                app:srcCompat="@drawable/no_image" />
 
             <TextView
                 android:id="@+id/favDescription"
