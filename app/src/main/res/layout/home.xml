@@ -29,7 +29,7 @@
                 android:textAlignment="center"
                 android:layout_weight="1"
                 android:textSize="24dp"
-                android:text="@{`Welcome back ` + elements.userName + ` !`}" />
+                android:text="@{`Welcome back ` + elements.userName + `!`}" />
         </LinearLayout>
 
         <LinearLayout
