@@ -24,6 +24,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
  * Fragment that displays the list of favor and allows User to sort it and to search in it
@@ -91,8 +92,6 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.setOnMarkerClickListener(markerClickListener);
 
-        FavorRequest.all(favorList,null,null);
-
         favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -100,8 +99,12 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
                 for(Favor favor:favorList){
                     GeoPoint point = (GeoPoint) favor.get(Favor.ObjectFields.location);
                     LatLng location = new LatLng(point.getLatitude(),point.getLongitude());
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)));
-                    favorsMap.put(marker.getId(), favor);
+
+                    //TODO : try to do it in a more clean way
+                    if(!ExecutionMode.getInstance().isTest()){
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)));
+                        favorsMap.put(marker.getId(), favor);
+                    }
                 }
             }
         });

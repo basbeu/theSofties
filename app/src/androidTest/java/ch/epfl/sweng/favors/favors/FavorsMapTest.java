@@ -46,7 +46,7 @@ public class FavorsMapTest {
     @After
     public void After() {
         Database.cleanUpAll();
-        mFragmentTestRule.finishActivity();
+        //mFragmentTestRule.finishActivity();
     }
 
     @Test
