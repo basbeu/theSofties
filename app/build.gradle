@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.4'
     implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.firebase:firebase-firestore:17.1.1'
-    // location play services
+    // location play service
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     // dexter runtime permissions
     // runtime permissions letting user to allow or deny any permission at runtime.

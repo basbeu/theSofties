@@ -3,25 +3,32 @@ package ch.epfl.sweng.favors.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
@@ -51,17 +58,21 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> posterName;
     public ObservableField<String> user;
     public ObservableField<String> tokens;
+    public ObservableBoolean isItsOwn = new ObservableBoolean(false);
+    public ObservableBoolean buttonsEnabled = new ObservableBoolean(true);
+    public ObservableBoolean isInterested = new ObservableBoolean(false);
     public ObservableField<String> pictureRef;
 
     private Favor localFavor;
+    ArrayList<String> interestedPeople;
 
     FragmentFavorDetailViewBinding binding;
 
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String FAVOR_ID = "favorID";
-    private String currentFavorID;
+    public static final String FAVOR_ID = "favor_id";
+    public static final String ENABLE_BUTTONS = "enable_buttons";
 
 
 
@@ -74,9 +85,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
-        if(savedInstanceState != null) {
-            currentFavorID = savedInstanceState.getString(FAVOR_ID);
-            localFavor = new Favor(currentFavorID);
+        Bundle arguments = getArguments();
+        if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
+            buttonsEnabled.set(arguments.getBoolean(ENABLE_BUTTONS));
+        }
+        if(arguments != null && getArguments().containsKey(FAVOR_ID)){
+            localFavor = new Favor(arguments.getString(FAVOR_ID));
             setFields(localFavor);
         }
         else {
@@ -97,6 +111,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
         tokens = favor.getObservableObject(Favor.StringFields.tokens);
+        isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
         //user.set();
         if(pictureRef != null){
@@ -113,11 +128,21 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         }
 
+        if(favor.getId() == null){binding.deleteButton.setEnabled(false);binding.interestedButton.setEnabled(false);}
+
+        if(favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList)
+            interestedPeople =  (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
+        else interestedPeople = new ArrayList<>();
+        if(interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
+
         User favorCreationUser = new User();
         UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
         posterName = favorCreationUser.getObservableObject(User.StringFields.firstName);
 
     }
+
+    Boolean buttonEnabled = true;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -136,14 +161,59 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     "Sorry an error occured, try again later...");
         });
 
-        binding.favIntrestedButton.setOnClickListener((l)->{
-            Log.d("SENDTO", "Clicked");
-            EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
-                    "Someone is interested in: "+title.get(),
-                    "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
-                    getActivity(),
-                    "We will inform the poster of the add that you are interested to help!",
-                    "Sorry an error occured, try again later...");
+
+        binding.interestedButton.setOnClickListener((l)->{
+            if(isItsOwn.get()) {
+                FavorCreateFragment mFrag = new FavorCreateFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(FavorCreateFragment.KEY_FRAGMENT_ID, localFavor.getId());
+                mFrag.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        mFrag).addToBackStack(null).commit();
+            }else{
+                if(!buttonEnabled) return;
+                buttonEnabled = false;
+                if(interestedPeople.contains(User.getMain().getId())) {
+                    interestedPeople.remove(User.getMain().getId());
+                    isInterested.set(false);
+                }
+                else{
+                    interestedPeople.add(User.getMain().getId());
+                    isInterested.set(true);
+                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
+                            "Someone is interested in: " + title.get(),
+                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
+                            getActivity(),
+                            "We will inform the poster of the add that you are interested to help!",
+                            "Sorry an error occured, try again later...");
+
+                }
+
+                if(localFavor != null){
+                    localFavor.set(Favor.ObjectFields.interested, interestedPeople);
+                    Database.getInstance().updateOnDb(localFavor);
+                }
+
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // This method will be executed once the timer is over
+                        buttonEnabled = true;
+                    }
+                },5000);
+
+
+            }
+        });
+        binding.deleteButton.setOnClickListener((l)->{
+            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) + 1;
+            User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+            Database.getInstance().updateOnDb(User.getMain());
+            Database.getInstance().deleteFromDatabase(localFavor);
+            Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
+            getActivity().onBackPressed();
         });
 
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
@@ -162,7 +232,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     @Override
     public void onDetach() {
         super.onDetach();
-        currentFavorID = null;
     }
 
     @BindingAdapter("android:src")

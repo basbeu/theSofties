@@ -83,6 +83,12 @@ public class FakeDatabase extends Database{
     }
 
     @Override
+    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
+       if(databaseEntity == null) return;
+        database.remove(databaseEntity.documentID);
+    }
+
+    @Override
     protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz, String collection, Integer limit, DatabaseField orderBy) {
 
         Handler handler = new Handler(handlerThread.getLooper());
@@ -146,6 +152,46 @@ public class FakeDatabase extends Database{
             ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
+                    try {
+                        T temp = clazz.newInstance();
+                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        tempList.add(temp);
+                    } catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                }
+            }
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    list.clear();
+                    list.addAll(tempList);
+                }
+            });
+
+        },500);
+    }
+
+    @Override
+    protected  <T extends DatabaseEntity>  void getList(ObservableArrayList<T> list, Class<T> clazz,
+                                                   String collection,
+                                                   Map<DatabaseField, Object> mapEquals,
+                                                   Map<DatabaseField, Object> mapLess,
+                                                   Map<DatabaseField, Object> mapMore,
+                                                   Integer limit,
+                                                   DatabaseField orderBy){
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            ArrayList<T> tempList = new ArrayList<>();
+            for(DatabaseEntity entity : database.values()) {
+                Boolean toAdd = true;
+                for(Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
+                    if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
+                        toAdd = false;
+                        break;
+                    }
+                }
+                if (toAdd) {
                     try {
                         T temp = clazz.newInstance();
                         temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());

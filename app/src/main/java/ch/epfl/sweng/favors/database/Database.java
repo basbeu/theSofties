@@ -2,6 +2,8 @@ package ch.epfl.sweng.favors.database;
 
 import com.google.android.gms.tasks.Task;
 
+import java.util.Map;
+
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -27,6 +29,8 @@ public abstract class Database {
      */
     public abstract Task updateFromDb(DatabaseEntity databaseEntity);
 
+    public abstract void deleteFromDatabase(DatabaseEntity databaseEntity);
+
     /**
      *
      * @param clazz The class that indicate the entity type <T>
@@ -47,6 +51,14 @@ public abstract class Database {
                                                           DatabaseField element,
                                                           Object value,
                                                           Integer limit,
+                                                                DatabaseField orderBy);
+
+    protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
+                                                                String collection,
+                                                                Map<DatabaseField, Object> mapEquals,
+                                                                Map<DatabaseField, Object> mapLess,
+                                                                Map<DatabaseField, Object> mapMore,
+                                                                Integer limit,
                                                                 DatabaseField orderBy);
 
     protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,

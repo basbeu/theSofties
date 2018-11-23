@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -87,7 +88,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableBoolean deadlineValid = new ObservableBoolean(false);
 
     GeoPoint favorLocation = null;
-    private User u = new User(Authentication.getInstance().getUid());
 
     public static boolean isStringValid(String s) {
         return ( s != null && s.length() > MIN_STRING_SIZE ) ;
@@ -98,47 +98,45 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
-            Database.getInstance().updateFromDb(u).addOnCompleteListener(t -> {
-                int newUserTokens = Integer.parseInt(u.get(User.StringFields.tokens)) - 1;
-                if(newUserTokens >= 0 ) {
-                    newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
-                    newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
-                    newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
-                    newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
-
-                    newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
-                    newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
-
-                    newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
-                    newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-                    newFavor.set(Favor.StringFields.tokens, "1");
-
-                    if(favorLocation != null){
-                        newFavor.set(Favor.ObjectFields.location, favorLocation);
-                    }
-
-                    if(newFavor.getId() == null) {
-                       u.set(User.StringFields.tokens, Integer.toString(newUserTokens));
-                       Database.getInstance().updateOnDb(u);
-                    }
-
-                    sharedViewFavor.select(newFavor);
-                    if(selectedImage != null){
-                        String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
-                        newFavor.set(Favor.StringFields.pictureReference, pictureRef);
-                    }
-                    else{
-                        newFavor.set(Favor.StringFields.pictureReference, null);
-                    }
-                    Database.getInstance().updateOnDb(newFavor);
-                    launchToast("Favor created successfully");
-                    updateUI(true);
-                } else {
-                    Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
+            if(newUserTokens >= 0 ) {
+                updateFavorObject(newFavor);
+                if(newFavor.getId() == null) {
+                    User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                    Database.getInstance().updateOnDb(User.getMain());
                 }
-            });
+                Database.getInstance().updateOnDb(newFavor);
+                launchToast(validationText.get());
+                updateUI(true);
+            } else {
+                Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
+    public void updateFavorObject(Favor newFavor){
+        newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
+        newFavor.set(Favor.StringFields.description, binding.descriptionFavor.getText().toString());
+        newFavor.set(Favor.StringFields.locationCity, binding.locationFavor.getText().toString());
+        newFavor.set(Favor.StringFields.category, binding.categoryFavor.getSelectedItem().toString());
 
+        newFavor.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date()));
+        newFavor.set(Favor.ObjectFields.expirationTimestamp, date.getDate());
+
+        newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
+        newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
+        newFavor.set(Favor.StringFields.tokens, "1");
+
+        if(selectedImage != null){
+            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
+            newFavor.set(Favor.StringFields.pictureReference, pictureRef);
+        }
+        else{
+            newFavor.set(Favor.StringFields.pictureReference, null);
+        }
+
+        if(favorLocation != null){
+            newFavor.set(Favor.ObjectFields.location, favorLocation);
         }
     }
     FavorsLayoutBinding binding;
@@ -153,7 +151,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableField<String> fragmentTitle = new ObservableField<>("--");
     public ObservableField<String> validationText = new ObservableField<>("--");
 
-    public final String KEY_FRAGMENT_ID = "fragment_id";
+    public static final String KEY_FRAGMENT_ID = "fragment_id";
     ArrayAdapter<String> adapter = null;
 
     //TEST CODE FOR DETAIL FRAGMENT
@@ -173,7 +171,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
                 }
                 if (adapter == null) {
 
-                    adapter = new ArrayAdapter<String>(FavorsMain.getContext(), android.R.layout.simple_spinner_item, interestsTitles);
+                    adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, interestsTitles);
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     spinner.setAdapter(adapter);
                 } else {
@@ -223,6 +221,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
                 case 1:
                     Bundle bundle = message.getData();
                     favorLocation = new GeoPoint(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+                    locationCity.set(bundle.getString("city")+ ", " + bundle.getString("country"));
                     locationCityValid.set(true);
                     break;
                 case 2:
@@ -269,7 +268,12 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
-        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
+        binding.addFavor.setOnClickListener(v-> {
+            createFavorIfValid(newFavor);
+        });
+        binding.addFavor.setOnClickListener(v-> {
+            createFavorIfValid(newFavor);
+        });
 
         spinner = binding.categoryFavor;
 
@@ -282,10 +286,17 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
+        binding.testFavorDetailButton.setOnClickListener(v->{
+            Fragment fr = new FavorDetailView();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FavorDetailView.ENABLE_BUTTONS, false);
+            fr.setArguments(bundle);
+            updateFavorObject(newFavor);
+            sharedViewFavor.select(newFavor);
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fr).addToBackStack("favorEditCreation").commit();
 
-        // TESTING LINE FOR BINDING
-        binding.testFavorDetailButton.setOnClickListener(v->{ getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).commit();});
+        });
+        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
 
         return binding.getRoot();
     }

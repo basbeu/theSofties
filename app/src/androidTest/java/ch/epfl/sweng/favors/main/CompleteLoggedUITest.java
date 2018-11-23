@@ -576,7 +576,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
-                                14)));
+                                13)));
         button5.perform(scrollTo());
         button5.check(matches(isDisplayed()));
 
@@ -834,7 +834,7 @@ public class CompleteLoggedUITest {
         textView24.check(matches(withText("test")));
 
         ViewInteraction button8 = onView(
-                allOf(withId(R.id.favIntrestedButton),
+                allOf(withId(R.id.interestedButton),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),

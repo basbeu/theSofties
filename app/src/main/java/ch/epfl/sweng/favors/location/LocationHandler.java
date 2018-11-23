@@ -69,11 +69,13 @@ public class LocationHandler {
         if (distance == Float.MAX_VALUE) {
             return "There is no Location";
         } else if (distance > switchToInt) {
-            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + "km";
+            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + " km";
         } else if (distance > switchToMeters) {
-            output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + "km";
+            output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + " km";
         } else {
-            output = String.format(Locale.getDefault(), "%.0f", distance) + "m";
+            if(distance == 0){
+                return  "Near you";
+            }else output = String.format(Locale.getDefault(), "%.0f", distance) + " m";
         }
         return output + " away";
     }
@@ -149,7 +151,7 @@ public class LocationHandler {
             Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
             try {
                 List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
-                if (addresses.size() > 0) return addresses.get(0).getLocality();
+                if (addresses.size() > 0) return addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryCode();
             } catch (IOException e) {
                 Log.e(TAG, "Failed to get geoPoint information");
             }

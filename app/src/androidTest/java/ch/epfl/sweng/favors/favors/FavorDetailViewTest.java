@@ -80,7 +80,7 @@ public class FavorDetailViewTest {
             e.printStackTrace();
         }
 
-        onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
+        onView(ViewMatchers.withId(R.id.interestedButton)).perform(scrollTo(), click());
         onView(withText("We will inform the poster of the add that you are interested to help!")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
@@ -118,7 +118,7 @@ public class FavorDetailViewTest {
             e.printStackTrace();
         }
 
-        onView(ViewMatchers.withId(R.id.favIntrestedButton)).perform(scrollTo(), click());
+        onView(ViewMatchers.withId(R.id.interestedButton)).perform(scrollTo(), click());
         onView(withText("Sorry an error occured, try again later...")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);

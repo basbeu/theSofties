@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FavorsBinding;
 
