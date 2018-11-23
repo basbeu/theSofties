@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -101,14 +104,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Log.d("PICTAG", "101");
             storageReference = FirebaseStorage.getInstance().getReference();
             StorageReference ref = storageReference.child("images/"+ pictureRef.get());
-            Log.d("PICTAG", pictureRef.get());
-            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            ref.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
-                public void onSuccess(Uri uri) {
-                    Log.d("PICTAG", "success");
-                    binding.imageView.setImageURI(uri);
-                }
-            });
+                public void onSuccess(byte[] bytes) {
+                    Log.d("PICTAG", Integer.toString(bytes.length));
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    binding.imageView.setImageBitmap(bmp);
+                    }});
 
         }
 
