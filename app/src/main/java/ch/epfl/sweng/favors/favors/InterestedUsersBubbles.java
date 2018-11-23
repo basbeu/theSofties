@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.igalata.bubblepicker.model.PickerItem;
 
@@ -50,6 +51,7 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 //    final TypedArray images = getResources().obtainTypedArray(R.array.images);
     private ObservableArrayList<String> userNames;
     private ObservableArrayList<String> selectedUsers;
+    private ObservableArrayList<String> interestedPeople;
     private Favor localFavor;
     private Task iplist;
 
@@ -58,6 +60,8 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
         userNames.addAll(getArguments().getStringArrayList("userNames"));
+        interestedPeople = new ObservableArrayList<>();
+        interestedPeople.addAll(getArguments().getStringArrayList("interestedPeople"));
         selectedUsers = new ObservableArrayList<>();
 
         super.onCreate(savedInstanceState);
@@ -71,40 +75,55 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         picker = binding.picker;
         picker.setCenterImmediately(true);
 
-//        iplist.addOnSuccessListener(o -> {
-//
-            picker.setAdapter(new BubblePickerAdapter() {
-                @Override
-                public int getTotalCount() {
-                    return userNames.size();
-                }
+        picker.setAdapter(new BubblePickerAdapter() {
+            @Override
+            public int getTotalCount() {
+                return userNames.size();
+            }
 
-                @NotNull
-                @Override
-                public PickerItem getItem(int position) {
-                    PickerItem item = new PickerItem();
-                    item.setTitle(userNames.get(position));
-                    item.setGradient(new BubbleGradient(colors.getColor((position * 2) % 8, 0),
-                            colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+            @NotNull
+            @Override
+            public PickerItem getItem(int position) {
+                PickerItem item = new PickerItem();
+                item.setTitle(userNames.get(position));
+                item.setGradient(new BubbleGradient(colors.getColor((position * 2) % 8, 0),
+                        colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
 //                        item.setTypeface(Typeface.BOLD);
-                    item.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+                item.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
 //                item.setBackgroundImage(ContextCompat.getDrawable(getContext(), images.getResourceId(position, 0)));
-                    return item;
-                }
-            });
+                return item;
+            }
+        });
 
-            picker.setListener(new BubblePickerListener() {
-                @Override
-                public void onBubbleSelected(@NotNull PickerItem item) {
+        picker.setListener(new BubblePickerListener() {
+            @Override
+            public void onBubbleSelected(@NotNull PickerItem item) {
+                int index = userNames.indexOf(item.getTitle());
+                // check sanity - that it does not fail to get
+                selectedUsers.add(interestedPeople.get(index));
+                //Log.d("bubbles add", selectedUsers.toString());
+                item.setGradient(new BubbleGradient(12,4));
+            }
 
-                }
+            @Override
+            public void onBubbleDeselected(@NotNull PickerItem item) {
+                int index = userNames.indexOf(item.getTitle());
+                // check sanity - that it does not fail to get
+                selectedUsers.remove(interestedPeople.get(index));
+                //Log.d("bubbles remove", selectedUsers.toString());
+                item.setGradient(new BubbleGradient(12,4));
+            }
+        });
 
-                @Override
-                public void onBubbleDeselected(@NotNull PickerItem item) {
-
-                }
-            });
-//        });
+        binding.buttonDone.setOnClickListener((l)->{
+            FavorDetailView mFrag = new FavorDetailView();
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("selectedUsers", selectedUsers);
+            Log.d("bubbles selected final", selectedUsers.toString());
+            mFrag.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    mFrag).addToBackStack(null).commit();
+        });
 
         return binding.getRoot();
     }
