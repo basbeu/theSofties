@@ -106,7 +106,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 @Override
                 public void onSuccess(Uri uri) {
                     Log.d("PICTAG", "success");
-                    binding.favorPicture.setImageURI(uri);
+                    binding.imageView.setImageURI(uri);
                 }
             });
 
