@@ -5,6 +5,8 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +19,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +47,8 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
  */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
+    private StorageReference storageReference;
+
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<String> location;
@@ -55,6 +62,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableBoolean isItsOwn = new ObservableBoolean(false);
     public ObservableBoolean buttonsEnabled = new ObservableBoolean(true);
     public ObservableBoolean isInterested = new ObservableBoolean(false);
+    public ObservableField<String> pictureRef;
+
     private Favor localFavor;
     ArrayList<String> interestedPeople;
 
@@ -104,7 +113,21 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
         tokens = favor.getObservableObject(Favor.StringFields.tokens);
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
+        pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
         //user.set();
+        if(pictureRef != null){
+            Log.d("PICTAG", "101");
+            storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference ref = storageReference.child("images/"+ pictureRef.get());
+            ref.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Log.d("PICTAG", Integer.toString(bytes.length));
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    binding.imageView.setImageBitmap(bmp);
+                    }});
+
+        }
 
         if(favor.getId() == null){binding.deleteButton.setEnabled(false);binding.interestedButton.setEnabled(false);}
 

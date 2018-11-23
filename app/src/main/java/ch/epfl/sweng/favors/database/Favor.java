@@ -15,11 +15,10 @@ public class Favor extends DatabaseEntity {
     // identifier for firebase
     private static final String COLLECTION = "favors";
 
-    public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail, tokens}
-    public enum IntegerFields implements DatabaseIntField {reward}
-    public enum ObjectFields implements DatabaseObjectField {location, creationTimestamp, expirationTimestamp, interested}
+    public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail, tokens, pictureReference}
+    public enum IntegerFields implements DatabaseIntField {tokenPerPerson, nbPerson}
+    public enum ObjectFields implements DatabaseObjectField {location, creationTimestamp, expirationTimestamp, interested, selectedPeople}
     public enum BooleanFields implements DatabaseBooleanField {isOpen}
-
 
     /**
      * empty constructor as required per firebase
@@ -34,7 +33,6 @@ public class Favor extends DatabaseEntity {
                 ObjectFields.values(), COLLECTION, id);
         if(db != null) db.updateFromDb(this);
     }
-
 
     @Override
     public DatabaseEntity copy() {

@@ -42,18 +42,18 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/favorImage"
                 android:layout_width="100dp"
                 android:layout_height="80dp"
                 android:contentDescription="@string/imageFavor"
                 app:srcCompat="@drawable/logo" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floatingActionButton"
+                android:id="@+id/uploadFavorPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="90sp"
                 android:layout_marginLeft="90sp"
+                android:layout_marginStart="90sp"
                 android:layout_marginTop="20sp"
                 android:clickable="true"
                 android:focusable="true"

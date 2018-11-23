@@ -1,5 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
+import java.util.Map;
+
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -15,6 +17,14 @@ public final class FavorRequest extends Request{
 
     public static void all(ObservableArrayList<Favor> list, Integer limit, DatabaseField orderBy){
         db.getAll(list, Favor.class, COLLECTION, limit, orderBy);
+    }
+
+    public static void  getList(ObservableArrayList<Favor> list, Map<DatabaseField, Object> mapEquals,
+                                Map<DatabaseField, Object> mapLess,
+                                Map<DatabaseField, Object> mapMore,
+                                Integer limit,
+                                DatabaseField orderBy){
+        db.getList(list, Favor.class, COLLECTION, mapEquals, mapLess, mapMore, limit, orderBy);
     }
 
     /*public static void getWithId(Favor favor, String value){
