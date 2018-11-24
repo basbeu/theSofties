@@ -97,8 +97,11 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         return (titleValid.get() && descriptionValid.get() && locationCityValid.get() && deadlineValid.get());
     }
     public void createFavorIfValid(Favor newFavor) {
+        newFavor.set(Favor.StringFields.tokens, "1");
+        newFavor.set(Favor.IntegerFields.nbPerson,1);
+        newFavor.set(Favor.IntegerFields.tokenPerPerson, 1);
         if (allFavorFieldsValid()) {
-            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
+            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - newFavor.get(Favor.IntegerFields.nbPerson)*newFavor.get(Favor.IntegerFields.tokenPerPerson);
             if(newUserTokens >= 0 ) {
                 updateFavorObject(newFavor);
                 if(newFavor.getId() == null) {
@@ -126,6 +129,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         newFavor.set(Favor.StringFields.tokens, "1");
+        newFavor.set(Favor.IntegerFields.nbPerson,1);
+        newFavor.set(Favor.IntegerFields.tokenPerPerson, 1);
 
         if(selectedImage != null){
             String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);

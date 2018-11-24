@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import ch.epfl.sweng.favors.BuildConfig;
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 public class SplashScreenActivity extends Activity {

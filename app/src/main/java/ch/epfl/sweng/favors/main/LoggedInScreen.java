@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -122,24 +123,33 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         querryLess.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
         querryGreater.put(Favor.IntegerFields.nbPerson,0);
 
-        FavorRequest.getList(listFavors,querryEqual,querryLess,querryGreater,null,null);
-        listFavors.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                int toReimburseTotal = 0;
-                Log.d(TAG, "We have received " + listFavors.size());
-                for (Favor f : listFavors) {
-                    if(f.get(Favor.ObjectFields.interested) instanceof ArrayList && ((ArrayList<String>)f.get(Favor.ObjectFields.interested)).isEmpty()){
-                        int nbPersonneRemaining = f.get(Favor.IntegerFields.nbPerson);
-                        int tokenPerPerson = Integer.parseInt(f.get(Favor.StringFields.tokens));   //TODO change this once tokens are Integers
-                        f.set(Favor.IntegerFields.nbPerson,0);
-                        toReimburseTotal += nbPersonneRemaining * tokenPerPerson;
-                    }
-                }
-                int currentUserTokense = Integer.parseInt(User.getMain().get(User.StringFields.tokens));
-                currentUserTokense += toReimburseTotal;
-                User.getMain().set(User.StringFields.tokens,currentUserTokense+"");
-            }
-        });
+        FavorRequest.getList(listFavors,querryEqual,querryLess,null,null,null);
+        Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(task ->
+                listFavors.addOnPropertyChangedCallback(
+                        new Observable.OnPropertyChangedCallback() {
+                            @Override
+                            public void onPropertyChanged(Observable sender, int propertyId) {
+                                int toReimburseTotal = 0;
+                                Log.d(TAG, "We have received " + listFavors.size());
+                                for (Favor f : listFavors) {
+                                    Log.d(TAG, "The tokensPerPerson are: " + f.get(Favor.IntegerFields.tokenPerPerson));
+                                    if(f.get(Favor.ObjectFields.interested) == null || ((ArrayList<String>)f.get(Favor.ObjectFields.interested)).isEmpty()){
+                                        Log.d(TAG, "This favor is being treated: "+f.get(Favor.StringFields.title));
+                                        int nbPersonneRemaining = f.get(Favor.IntegerFields.nbPerson)==null ? 1:f.get(Favor.IntegerFields.nbPerson);
+                                        int tokenPerPerson = f.get(Favor.IntegerFields.tokenPerPerson)==null ? Integer.parseInt(f.get(Favor.StringFields.tokens)) :  f.get(Favor.IntegerFields.tokenPerPerson);   //TODO change this once tokens are Integers
+                                        f.set(Favor.IntegerFields.nbPerson,0);
+                                        f.set(Favor.IntegerFields.tokenPerPerson,0);
+                                        toReimburseTotal += nbPersonneRemaining * tokenPerPerson;
+                                        Database.getInstance().updateOnDb(f);
+                                    }
+                                    else{Log.d(TAG, "This favor is being not being treated: "+f.get(Favor.StringFields.title));}
+                                }
+                                int currentUserTokense = Integer.parseInt(User.getMain().get(User.StringFields.tokens));
+                                currentUserTokense += toReimburseTotal;
+                                User.getMain().set(User.StringFields.tokens,currentUserTokense+"");
+                            }
+                        })
+        );
+
     }
 }
