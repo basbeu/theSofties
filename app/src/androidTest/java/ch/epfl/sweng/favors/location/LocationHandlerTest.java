@@ -1,40 +1,20 @@
 package ch.epfl.sweng.favors.location;
 
-import android.support.test.espresso.contrib.PickerActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
-import android.widget.DatePicker;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.favors.FavorCreateFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
-import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
@@ -50,7 +30,7 @@ public class LocationHandlerTest {
     private final String FAKE_FIRST_NAME = "toto";
     private final String FAKE_LAST_NAME = "foo";
     private final String FAKE_SEX = "M";
-    private final Integer FAKE_TIMESTAMP = 343354;
+    private final Long FAKE_TIMESTAMP = 343354L;
     private Favor f;
     private String FAKE_DOC_ID  = "klsafdjdlksdf";
     private String FAKE_TITLE = "Fake title";
@@ -73,7 +53,7 @@ public class LocationHandlerTest {
         u.set(User.StringFields.lastName, FAKE_LAST_NAME);
         u.set(User.StringFields.email, FAKE_EMAIL);
         u.set(User.StringFields.city, FAKE_EMAIL);
-        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+        u.set(User.LongFields.creationTimeStamp, FAKE_TIMESTAMP);
         User.UserGender.setGender(u, User.UserGender.M);
 
         FakeDatabase.getInstance().updateOnDb(u);
