@@ -70,7 +70,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     private Favor localFavor;
     private ArrayList<String> interestedPeople;
     private ObservableArrayList<String> userNames;
-//    private ArrayList<User> users;
+    private ObservableArrayList<String> selectedUsers;
+
+    //    private ArrayList<User> users;
     private Task userListTask;
 
     FragmentFavorDetailViewBinding binding;
@@ -91,6 +93,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userNames = new ObservableArrayList<>();
+        selectedUsers = new ObservableArrayList<>();
+        if(getArguments().containsKey("selectedUsers")) {
+            selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
+        }
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
         Bundle arguments = getArguments();
         if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
@@ -254,6 +260,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("userNames", userNames);
                 bundle.putStringArrayList("interestedPeople", interestedPeople);
+                bundle.putStringArrayList("selectedUsers", selectedUsers);
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();

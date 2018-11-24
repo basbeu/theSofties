@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import ch.epfl.sweng.favors.R;
 
@@ -63,6 +64,7 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         interestedPeople = new ObservableArrayList<>();
         interestedPeople.addAll(getArguments().getStringArrayList("interestedPeople"));
         selectedUsers = new ObservableArrayList<>();
+        selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
 
         super.onCreate(savedInstanceState);
     }
@@ -85,11 +87,18 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
             @Override
             public PickerItem getItem(int position) {
                 PickerItem item = new PickerItem();
-                item.setTitle(userNames.get(position));
+                String name = userNames.get(position);
+                item.setTitle(name);
                 item.setGradient(new BubbleGradient(colors.getColor((position * 2) % 8, 0),
                         colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
 //                        item.setTypeface(Typeface.BOLD);
                 item.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+
+                Optional<String> uid = getFrom(userNames, name, selectedUsers);
+                if(uid.isPresent()) {
+                    item.setSelected(true);
+                }
+
 //                item.setBackgroundImage(ContextCompat.getDrawable(getContext(), images.getResourceId(position, 0)));
                 return item;
             }
@@ -98,20 +107,18 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         picker.setListener(new BubblePickerListener() {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
-                int index = userNames.indexOf(item.getTitle());
-                // check sanity - that it does not fail to get
-                selectedUsers.add(interestedPeople.get(index));
-                //Log.d("bubbles add", selectedUsers.toString());
-                item.setGradient(new BubbleGradient(12,4));
+                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
+                if(newUser.isPresent())
+                    selectedUsers.add(newUser.get());
+                Log.d("bubbles add", selectedUsers.toString());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem item) {
-                int index = userNames.indexOf(item.getTitle());
-                // check sanity - that it does not fail to get
-                selectedUsers.remove(interestedPeople.get(index));
-                //Log.d("bubbles remove", selectedUsers.toString());
-                item.setGradient(new BubbleGradient(12,4));
+                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
+                if(newUser.isPresent())
+                    selectedUsers.remove(newUser.get());
+                Log.d("bubbles remove", selectedUsers.toString());
             }
         });
 
@@ -126,6 +133,17 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    protected static Optional<String> getFrom(List<String> givesIndex, String s, List<String> from) {
+        //Log.d("bubbles print", givesIndex.toString() + s + from.toString());
+        int index = givesIndex.indexOf(s);
+        // check sanity - get user with uid and check that names match
+        if(from.size() > index) {
+            return Optional.of(from.get(index));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
