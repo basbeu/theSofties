@@ -32,6 +32,7 @@ import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
+import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
@@ -113,20 +114,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         tokens = favor.getObservableObject(Favor.StringFields.tokens);
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
-        //user.set();
-        if(pictureRef != null){
-            Log.d("PICTAG", "101");
-            storageReference = FirebaseStorage.getInstance().getReference();
-            StorageReference ref = storageReference.child("images/"+ pictureRef.get());
-            ref.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Log.d("PICTAG", Integer.toString(bytes.length));
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    binding.imageView.setImageBitmap(bmp);
-                    }});
 
-        }
+        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
 
         if(favor.getId() == null){binding.deleteButton.setEnabled(false);binding.interestedButton.setEnabled(false);}
 

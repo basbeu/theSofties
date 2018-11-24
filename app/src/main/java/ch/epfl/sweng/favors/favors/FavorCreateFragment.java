@@ -366,7 +366,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             selectedImage = data.getData();
@@ -374,13 +373,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
                 binding.favorImage.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            } catch (FileNotFoundException e) { e.printStackTrace(); }
+            catch (IOException e) { e.printStackTrace(); }
         }
     }
 

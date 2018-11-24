@@ -1,8 +1,12 @@
 package ch.epfl.sweng.favors.database.storage;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,6 +23,7 @@ public class Storage extends FirebaseStorageDispatcher{
 
     private static FirebaseStorage firebaseStorage = null;
     private static  Storage storage = null;
+    private static final int MAX_BYTE_SIZE = 1024*1024;
 
     private Storage(){
         firebaseStorage = FirebaseStorage.getInstance();
@@ -75,4 +80,19 @@ public class Storage extends FirebaseStorageDispatcher{
 
         return null;
     }
+
+    @Override
+    public void displayImage(ObservableField<String> pictureRef, ImageView imageView) {
+        if(pictureRef != null && pictureRef.get() != null){
+            StorageReference ref = FirebaseStorage.getInstance().getReference().child("images/"+ pictureRef.get());
+            ref.getBytes(MAX_BYTE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    imageView.setImageBitmap(bmp);
+                }});
+
+        }
+    }
+
 }

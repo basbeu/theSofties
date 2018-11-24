@@ -1,7 +1,9 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.content.Context;
+import android.databinding.ObservableField;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import com.google.firebase.storage.StorageReference;
 
@@ -27,4 +29,5 @@ public abstract class FirebaseStorageDispatcher {
     }
 
     public abstract String uploadImage(StorageReference storageReference, Context context, Uri selectedImage);
+    public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView);
 }

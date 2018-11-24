@@ -1,7 +1,9 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.content.Context;
+import android.databinding.ObservableField;
 import android.net.Uri;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.storage.StorageReference;
@@ -32,5 +34,10 @@ public class FakeStorage extends FirebaseStorageDispatcher{
             Toast.makeText(context, "Uploaded", Toast.LENGTH_SHORT).show();
         }
         return "fakeRef";
+    }
+
+    @Override
+    public void displayImage(ObservableField<String> pictureRef, ImageView imageView) {
+        //TODO display fake image
     }
 }
