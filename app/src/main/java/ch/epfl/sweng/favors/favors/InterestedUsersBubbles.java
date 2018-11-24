@@ -48,7 +48,6 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 //    final TypedArray images = getResources().obtainTypedArray(R.array.images);
     private ObservableArrayList<String> userNames;
     private ObservableArrayList<String> selectedUsers;
-    private ObservableArrayList<String> interestedPeople;
     private Favor localFavor;
     private Task iplist;
 
@@ -57,8 +56,6 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
         userNames.addAll(getArguments().getStringArrayList("userNames"));
-        interestedPeople = new ObservableArrayList<>();
-        interestedPeople.addAll(getArguments().getStringArrayList("interestedPeople"));
         selectedUsers = new ObservableArrayList<>();
         selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
 
@@ -90,8 +87,8 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 //                        item.setTypeface(Typeface.BOLD);
                 item.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
 
-                Optional<String> uid = getFrom(userNames, name, selectedUsers);
-                if(uid.isPresent()) {
+//                Optional<String> uid = getFrom(userNames, name, selectedUsers);
+                if(selectedUsers.contains(name)) {
                     item.setSelected(true);
                 }
 
@@ -103,19 +100,19 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         picker.setListener(new BubblePickerListener() {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
-                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
-                Log.d("bubbles select", Boolean.toString(newUser.isPresent()));
-                if(newUser.isPresent())
-                    selectedUsers.add(newUser.get());
+//                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
+//                Log.d("bubbles select", Boolean.toString(newUser.isPresent()));
+//                if(newUser.isPresent())
+                    selectedUsers.add(item.getTitle());
                 //Log.d("bubbles add", selectedUsers.toString());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem item) {
-                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
-                Log.d("bubbles deselect", Boolean.toString(newUser.isPresent()));
-                if(newUser.isPresent())
-                    selectedUsers.remove(newUser.get());
+//                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
+//                Log.d("bubbles deselect", Boolean.toString(newUser.isPresent()));
+//                if(newUser.isPresent())
+                selectedUsers.remove(item.getTitle());
                 //Log.d("bubbles remove", selectedUsers.toString());
             }
         });
@@ -133,16 +130,16 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         return binding.getRoot();
     }
 
-    protected static Optional<String> getFrom(List<String> givesIndex, String s, List<String> from) {
-        Log.d("bubbles print", givesIndex.toString() + s + from.toString());
-        int index = givesIndex.indexOf(s);
-        // check sanity - get user with uid and check that names match
-        if(from.size() > index) {
-            return Optional.of(from.get(index));
-        } else {
-            return Optional.empty();
-        }
-    }
+//    protected static Optional<String> getFrom(List<String> givesIndex, String s, List<String> from) {
+//        Log.d("bubbles print", givesIndex.toString() + s + from.toString());
+//        int index = givesIndex.indexOf(s);
+//        // check sanity - get user with uid and check that names match
+//        if(from.size() > index) {
+//            return Optional.of(from.get(index));
+//        } else {
+//            return Optional.empty();
+//        }
+//    }
 
     @Override
     public void onResume() {

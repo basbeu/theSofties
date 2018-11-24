@@ -5,8 +5,10 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableArrayMap;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableMap;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -69,8 +71,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     private Favor localFavor;
     private ArrayList<String> interestedPeople;
-    private ObservableArrayList<String> userNames;
-    private ObservableArrayList<String> selectedUsers;
+//    private ObservableArrayList<String> userNames;
+
+    // Map K: name, V: uid
+    private ObservableMap<String, String> userNames;
+    // Map K: uid, V: name
+    private ObservableMap<String, String> selectedUsers;
 
     //    private ArrayList<User> users;
     private Task userListTask;
@@ -92,12 +98,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userNames = new ObservableArrayList<>();
-        selectedUsers = new ObservableArrayList<>();
+        userNames = new ObservableArrayMap<>();
+        selectedUsers = new ObservableArrayMap<>();
         Bundle arguments = getArguments();
-        if(arguments != null && getArguments().containsKey("selectedUsers")) {
-            selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
-        }
+
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
         if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
             buttonsEnabled.set(arguments.getBoolean(ENABLE_BUTTONS));
@@ -166,11 +170,28 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if (u != null) {
                     String fn = u.get(User.StringFields.firstName);
                     String ln = u.get(User.StringFields.lastName);
-                    userNames.add(fn + " " + ln);
+                    userNames.put(fn + " " + ln, uid);
                 }
                 Log.d("interestedPeople userna", userNames.toString());
             });
         }
+
+        // this is called when the fragment is again created after the user selection
+        userListTask.addOnSuccessListener(o -> {
+            Bundle arguments = getArguments();
+            if(arguments != null && getArguments().containsKey("selectedUsers")) {
+                ArrayList<String> names = new ArrayList<>(getArguments().getStringArrayList("selectedUsers"));
+                Log.d("bubbles DetailView nam", names.toString());
+                for(String n: names) {
+                    if(userNames.containsKey(n)) {
+                        // Map K: uid, V: name
+                        selectedUsers.put(userNames.get(n), n);
+                    }
+                }
+                Log.d("bubbles DetailView", selectedUsers.toString());
+                // put on db
+            }
+        });
 
         User favorCreationUser = new User();
         UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
@@ -258,9 +279,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             userListTask.addOnSuccessListener(o -> {
                 InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("userNames", userNames);
-                bundle.putStringArrayList("interestedPeople", interestedPeople);
-                bundle.putStringArrayList("selectedUsers", selectedUsers);
+                bundle.putStringArrayList("userNames", new ArrayList<>(userNames.keySet()));
+                // Map K: uid, V: name
+                bundle.putStringArrayList("selectedUsers", new ArrayList<>(selectedUsers.values()));
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();
