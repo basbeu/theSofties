@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,8 +22,6 @@ import java.util.Map;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.database.DatabaseEntity;
-import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
@@ -32,7 +29,6 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
-import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.favors.MyFavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
@@ -113,6 +109,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     }
 
     void reimburseExpiredFavors(){
+        Log.d(TAG, "Start of reimbusrsment");
         ObservableArrayList<Favor> listFavors = new ObservableArrayList<>();
         Map<DatabaseField, Object> querryLess = new HashMap<>();
         Map<DatabaseField, Object> querryEqual = new HashMap<>();
@@ -121,7 +118,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         querryEqual.put(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         querryLess.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
-        querryGreater.put(Favor.IntegerFields.nbPerson,0);
+        querryGreater.put(Favor.LongFields.nbPerson,0);
 
         FavorRequest.getList(listFavors,querryEqual,querryLess,null,null,null);
         Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(task ->
@@ -129,16 +126,16 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                         new Observable.OnPropertyChangedCallback() {
                             @Override
                             public void onPropertyChanged(Observable sender, int propertyId) {
-                                int toReimburseTotal = 0;
+                                long toReimburseTotal = 0;
                                 Log.d(TAG, "We have received " + listFavors.size());
                                 for (Favor f : listFavors) {
-                                    Log.d(TAG, "The tokensPerPerson are: " + f.get(Favor.IntegerFields.tokenPerPerson));
+                                    Log.d(TAG, "The tokensPerPerson are: " + f.get(Favor.LongFields.tokenPerPerson));
                                     if(f.get(Favor.ObjectFields.interested) == null || ((ArrayList<String>)f.get(Favor.ObjectFields.interested)).isEmpty()){
                                         Log.d(TAG, "This favor is being treated: "+f.get(Favor.StringFields.title));
-                                        int nbPersonneRemaining = f.get(Favor.IntegerFields.nbPerson)==null ? 1:f.get(Favor.IntegerFields.nbPerson);
-                                        int tokenPerPerson = f.get(Favor.IntegerFields.tokenPerPerson)==null ? Integer.parseInt(f.get(Favor.StringFields.tokens)) :  f.get(Favor.IntegerFields.tokenPerPerson);   //TODO change this once tokens are Integers
-                                        f.set(Favor.IntegerFields.nbPerson,0);
-                                        f.set(Favor.IntegerFields.tokenPerPerson,0);
+                                        long nbPersonneRemaining = f.get(Favor.LongFields.nbPerson)==null ? 1:f.get(Favor.LongFields.nbPerson);
+                                        long tokenPerPerson = f.get(Favor.LongFields.tokenPerPerson)==null ? Integer.parseInt(f.get(Favor.StringFields.tokens)) :  f.get(Favor.LongFields.tokenPerPerson);   //TODO change this once tokens are Integers
+                                        f.set(Favor.LongFields.nbPerson,0L);
+                                        //f.set(Favor.LongFields.tokenPerPerson,0L);
                                         toReimburseTotal += nbPersonneRemaining * tokenPerPerson;
                                         Database.getInstance().updateOnDb(f);
                                     }
@@ -147,6 +144,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                                 int currentUserTokense = Integer.parseInt(User.getMain().get(User.StringFields.tokens));
                                 currentUserTokense += toReimburseTotal;
                                 User.getMain().set(User.StringFields.tokens,currentUserTokense+"");
+                                Database.getInstance().updateOnDb(User.getMain());
                             }
                         })
         );
