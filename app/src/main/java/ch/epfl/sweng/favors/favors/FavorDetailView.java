@@ -47,8 +47,6 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
  */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
 
-    private StorageReference storageReference;
-
     public ObservableField<String> title;
     public ObservableField<String> description;
     public ObservableField<String> location;
@@ -201,6 +199,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
+            if(pictureRef != null && pictureRef.get() != null){
+                StorageReference ref = FirebaseStorageDispatcher.getInstance().getReference().child("images/"+ pictureRef.get());
+                ref.delete();
+            }
+
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
         });

@@ -77,8 +77,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private static final int MIN_STRING_SIZE = 1;
     private static final int GET_FROM_GALLERY = 66;
     private FirebaseStorageDispatcher storage;
-    private StorageReference storageReference;
-    private Uri selectedImage = null;
+    private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
 
     private DatePickerFragment date = new DatePickerFragment();
 
@@ -245,7 +244,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
@@ -268,9 +267,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
-        binding.addFavor.setOnClickListener(v-> {
-            createFavorIfValid(newFavor);
-        });
+
         binding.addFavor.setOnClickListener(v-> {
             createFavorIfValid(newFavor);
         });

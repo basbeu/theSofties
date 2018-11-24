@@ -23,7 +23,7 @@ public class Storage extends FirebaseStorageDispatcher{
 
     private static FirebaseStorage firebaseStorage = null;
     private static  Storage storage = null;
-    private static final int MAX_BYTE_SIZE = 1024*1024;
+    private static final int MAX_BYTE_SIZE = 2160*2160;
 
     private Storage(){
         firebaseStorage = FirebaseStorage.getInstance();
