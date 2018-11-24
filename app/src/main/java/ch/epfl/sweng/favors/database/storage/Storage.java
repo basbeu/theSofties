@@ -27,10 +27,12 @@ public class Storage extends FirebaseStorageDispatcher{
 
     private static FirebaseStorage firebaseStorage = null;
     private static  Storage storage = null;
-    private static final int MAX_BYTE_SIZE = 2160*2160;
+    protected static final int MAX_BYTE_SIZE = 2160*2160;
     private static Context context_ext;
     private static ProgressDialog progressDialog;
+    private static ImageView view;
 
+    //The listener are declared protected so they can be used in the tests with Mockito
 
     protected static OnSuccessListener<UploadTask.TaskSnapshot> successListener = new OnSuccessListener<UploadTask.TaskSnapshot>() {
         @Override
@@ -57,6 +59,13 @@ public class Storage extends FirebaseStorageDispatcher{
             progressDialog.setMessage("Uploaded "+(int)progress+"%");
         }
     };
+
+    protected static OnSuccessListener<byte[]> byteSuccessListener = new OnSuccessListener<byte[]>() {
+        @Override
+        public void onSuccess(byte[] bytes) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            view.setImageBitmap(bmp);
+        }};
 
     private Storage(){
         firebaseStorage = FirebaseStorage.getInstance();
@@ -101,12 +110,8 @@ public class Storage extends FirebaseStorageDispatcher{
     public void displayImage(ObservableField<String> pictureRef, ImageView imageView) {
         if(pictureRef != null && pictureRef.get() != null){
             StorageReference ref = FirebaseStorage.getInstance().getReference().child("images/"+ pictureRef.get());
-            ref.getBytes(MAX_BYTE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    imageView.setImageBitmap(bmp);
-                }});
+            view = imageView;
+            ref.getBytes(MAX_BYTE_SIZE).addOnSuccessListener(byteSuccessListener);
 
         }
     }

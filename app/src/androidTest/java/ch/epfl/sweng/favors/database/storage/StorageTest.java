@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.app.ProgressDialog;
+import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -11,10 +12,12 @@ import android.support.test.uiautomator.UiDevice;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -72,6 +75,7 @@ public class StorageTest {
     @Mock private UploadTask task;
     @Mock private StorageTask<UploadTask.TaskSnapshot> successTask;
     @Mock private StorageTask<UploadTask.TaskSnapshot> failureTask;
+    @Mock private Task<byte[]> byteTask;
 
     @Before
     public void before(){
@@ -81,6 +85,8 @@ public class StorageTest {
         when(task.addOnSuccessListener(Storage.successListener)).thenReturn(successTask);
         when(successTask.addOnFailureListener(Storage.failureListener)).thenReturn(failureTask);
         when(failureTask.addOnProgressListener(Storage.progressListener)).thenReturn(null);
+        when(ref.getBytes(Storage.MAX_BYTE_SIZE)).thenReturn(byteTask);
+        when(byteTask.addOnSuccessListener(Storage.byteSuccessListener)).thenReturn(null);
 
         Storage.getInstance();
         Storage.setStorageTest(firebaseStorage);
@@ -111,7 +117,17 @@ public class StorageTest {
         assertEquals("invalidRef", f2);
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);
+    }
 
+    @Test
+    public void nullUriReturnsNullRef(){
+        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), null);
+        assertEquals(null, refStorage);
+    }
+
+    @Test
+    public void imageCanBeDisplayed(){
+        Storage.getInstance().displayImage(new ObservableField<String>("test"), null);
     }
 
     @After
