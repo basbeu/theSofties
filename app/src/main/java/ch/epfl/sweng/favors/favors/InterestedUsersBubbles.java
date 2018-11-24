@@ -15,21 +15,17 @@ import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.BubblesBinding;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.igalata.bubblepicker.model.PickerItem;
 
@@ -108,17 +104,19 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
                 Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
+                Log.d("bubbles select", Boolean.toString(newUser.isPresent()));
                 if(newUser.isPresent())
                     selectedUsers.add(newUser.get());
-                Log.d("bubbles add", selectedUsers.toString());
+                //Log.d("bubbles add", selectedUsers.toString());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem item) {
                 Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
+                Log.d("bubbles deselect", Boolean.toString(newUser.isPresent()));
                 if(newUser.isPresent())
                     selectedUsers.remove(newUser.get());
-                Log.d("bubbles remove", selectedUsers.toString());
+                //Log.d("bubbles remove", selectedUsers.toString());
             }
         });
 
@@ -136,7 +134,7 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     }
 
     protected static Optional<String> getFrom(List<String> givesIndex, String s, List<String> from) {
-        //Log.d("bubbles print", givesIndex.toString() + s + from.toString());
+        Log.d("bubbles print", givesIndex.toString() + s + from.toString());
         int index = givesIndex.indexOf(s);
         // check sanity - get user with uid and check that names match
         if(from.size() > index) {

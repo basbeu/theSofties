@@ -94,11 +94,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         super.onCreate(savedInstanceState);
         userNames = new ObservableArrayList<>();
         selectedUsers = new ObservableArrayList<>();
-        if(getArguments().containsKey("selectedUsers")) {
+        Bundle arguments = getArguments();
+        if(arguments != null && getArguments().containsKey("selectedUsers")) {
             selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
         }
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
-        Bundle arguments = getArguments();
         if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
             buttonsEnabled.set(arguments.getBoolean(ENABLE_BUTTONS));
         }
