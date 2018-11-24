@@ -56,6 +56,7 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentFavorPosterDetailViewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_poster_detail_view, container, false);
+        binding.setPosterElements(this);
         binding.okButton.setOnClickListener((View v) -> getActivity().onBackPressed());
         return binding.getRoot();
     }
