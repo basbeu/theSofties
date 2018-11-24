@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10sp"
-                android:enabled="@{elements.buttonsEnabled}"
+                android:enabled="@{elements.buttonsEnabled &amp;&amp; !elements.isItsOwn}"
                 android:text="@{elements.posterName}"
                 android:textSize="18sp"
                 android:textStyle="bold" />
