@@ -15,11 +15,11 @@ android {
         applicationId "ch.epfl.sweng.favors"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 3
+        versionCode 4
         dataBinding {
             enabled = true
         }
-        versionName "0.8.a1-favors"
+        versionName "0.8.a8-favors"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
