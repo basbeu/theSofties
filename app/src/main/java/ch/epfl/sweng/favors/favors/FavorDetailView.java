@@ -24,7 +24,7 @@ import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
-import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
+import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
 
 
 /**
@@ -148,7 +148,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         if (imageName == null) {
             view.setImageURI(null);
         } else {
-            view.setImageURI(Uri.parse(getIconPath(imageName)));
+            view.setImageURI(Uri.parse(getIconPathFromCategory(imageName)));
         }
     }
 
