@@ -61,7 +61,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 
-@RunWith(AndroidJUnit4.class)
 public class StorageTest {
 
     @Rule public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<FavorCreateFragment>(FavorCreateFragment.class);
@@ -90,8 +89,8 @@ public class StorageTest {
             Looper.prepare();
         }
 
-    }
 
+    }
 
     @Test
     public void userCanUploadPicture(){
@@ -103,9 +102,9 @@ public class StorageTest {
 
         }
 
-        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
+       String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
         assertEquals("test", refStorage);
-        String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getFragment().getContext(), Uri.parse("fakeUri"));
+        String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
         assertEquals("validRef", f1);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         String f2 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
@@ -118,6 +117,8 @@ public class StorageTest {
     @After
     public void after(){
         ExecutionMode.getInstance().setTest(false);
+       Looper.myLooper().quitSafely();
+       Looper.getMainLooper();
     }
 
 }
