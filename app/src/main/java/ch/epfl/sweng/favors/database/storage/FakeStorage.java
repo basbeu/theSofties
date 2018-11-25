@@ -11,6 +11,9 @@ import com.google.firebase.storage.StorageReference;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
+/**
+ *
+ */
 public class FakeStorage extends FirebaseStorageDispatcher{
 
     private static FakeStorage storage = null;

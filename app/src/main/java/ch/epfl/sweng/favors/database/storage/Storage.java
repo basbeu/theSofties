@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
-
+/**
+ *
+ */
 public class Storage extends FirebaseStorageDispatcher{
 
     private static FirebaseStorage firebaseStorage = null;
@@ -31,6 +33,7 @@ public class Storage extends FirebaseStorageDispatcher{
     private static Context context_ext;
     private static ProgressDialog progressDialog;
     private static ImageView view;
+    protected static Bitmap bmp;
 
     //The listener are declared protected so they can be used in the tests with Mockito
 
@@ -63,7 +66,7 @@ public class Storage extends FirebaseStorageDispatcher{
     protected static OnSuccessListener<byte[]> byteSuccessListener = new OnSuccessListener<byte[]>() {
         @Override
         public void onSuccess(byte[] bytes) {
-            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             view.setImageBitmap(bmp);
         }};
 

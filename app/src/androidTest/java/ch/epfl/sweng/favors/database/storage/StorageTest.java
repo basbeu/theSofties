@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Looper;
@@ -76,6 +77,11 @@ public class StorageTest {
     @Mock private StorageTask<UploadTask.TaskSnapshot> successTask;
     @Mock private StorageTask<UploadTask.TaskSnapshot> failureTask;
     @Mock private Task<byte[]> byteTask;
+    @Mock private UploadTask.TaskSnapshot taskSnapshot;
+    @Mock private ImageView view;
+    @Mock private Intent data;
+
+    private byte[] b = {};
 
     @Before
     public void before(){
@@ -87,6 +93,10 @@ public class StorageTest {
         when(failureTask.addOnProgressListener(Storage.progressListener)).thenReturn(null);
         when(ref.getBytes(Storage.MAX_BYTE_SIZE)).thenReturn(byteTask);
         when(byteTask.addOnSuccessListener(Storage.byteSuccessListener)).thenReturn(null);
+        when(taskSnapshot.getBytesTransferred()).thenReturn((long)1);
+        when(taskSnapshot.getTotalByteCount()).thenReturn((long)1);
+        when(firebaseStorage.getReference()).thenReturn(ref);
+        when(data.getData()).thenReturn(Uri.parse("fakeUri"));
 
         Storage.getInstance();
         Storage.setStorageTest(firebaseStorage);
@@ -108,13 +118,18 @@ public class StorageTest {
 
         }
 
-       String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
+        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
         assertEquals("test", refStorage);
         String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
         assertEquals("validRef", f1);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         String f2 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
         assertEquals("invalidRef", f2);
+
+        Storage.successListener.onSuccess(taskSnapshot);
+        Storage.failureListener.onFailure(new Exception());
+        Storage.progressListener.onProgress(taskSnapshot);
+        Storage.byteSuccessListener.onSuccess(b);
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);
     }
@@ -127,8 +142,15 @@ public class StorageTest {
 
     @Test
     public void imageCanBeDisplayed(){
-        Storage.getInstance().displayImage(new ObservableField<String>("test"), null);
+        Storage.getInstance().displayImage(new ObservableField<String>("test"), view);
     }
+
+    @Test
+    public void getReferenceReturnsCorretly(){
+        StorageReference r = Storage.getInstance().getReference();
+        assertEquals(ref, r);
+    }
+
 
     @After
     public void after(){

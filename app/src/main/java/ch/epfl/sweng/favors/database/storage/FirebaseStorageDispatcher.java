@@ -25,6 +25,20 @@ public abstract class FirebaseStorageDispatcher {
     }
 
     public abstract StorageReference getReference();
+
+    /**
+     *
+     * @param storageReference
+     * @param context
+     * @param selectedImage
+     * @return
+     */
     public abstract String uploadImage(StorageReference storageReference, Context context, Uri selectedImage);
+
+    /**
+     *
+     * @param pictureRef
+     * @param imageView
+     */
     public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView);
 }

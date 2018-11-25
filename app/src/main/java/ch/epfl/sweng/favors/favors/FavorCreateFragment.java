@@ -359,11 +359,16 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             selectedImage = data.getData();
             Bitmap bitmap = null;
