@@ -159,6 +159,16 @@
                 android:visibility="@{elements.isItsOwn ? View.VISIBLE : View.GONE}"
                 android:textSize="16sp" />
 
+
+            <Button
+                android:id="@+id/payButton"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:enabled="@{elements.buttonsEnabled}"
+                android:text="Pay"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="@{elements.isItsOwn ? View.VISIBLE : View.GONE}" />
             <TextView
                 android:id="@+id/favorPosterDetailViewAccess"
                 android:layout_width="wrap_content"
@@ -169,6 +179,7 @@
                 android:text="@{elements.posterName}"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
 
             <TextView
                 android:id="@+id/favReportAbusiveAdd"
