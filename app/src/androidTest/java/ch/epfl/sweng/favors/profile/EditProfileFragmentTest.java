@@ -58,7 +58,7 @@ public class EditProfileFragmentTest {
         u.set(User.StringFields.lastName, FAKE_LAST_NAME);
         u.set(User.StringFields.email, FAKE_EMAIL);
         u.set(User.StringFields.city, FAKE_EMAIL);
-        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+        u.set(User.LongFields.creationTimeStamp, FAKE_TIMESTAMP);
         u.set(User.StringFields.city, FAKE_CITY);
         User.UserGender.setGender(u, User.UserGender.M);*/
 
