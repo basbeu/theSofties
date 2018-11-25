@@ -332,6 +332,11 @@ public class FakeDatabase extends Database{
         Favor f11 = new Favor("F11");
         Favor f12 = new Favor("F12");
 
+        ArrayList<String> selectedPeople1 = new ArrayList<>();
+        selectedPeople1.add(u1.getId());
+        ArrayList<String> interestedPeople1 = new ArrayList<>();
+        interestedPeople1.add(u1.getId());
+
 
         f1.set(Favor.StringFields.ownerID, "U3");
         f1.set(Favor.StringFields.category, "Hand help");
@@ -341,6 +346,11 @@ public class FakeDatabase extends Database{
         f1.set(Favor.StringFields.locationCity, "Gotham City");
         f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f1.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f1.set(Favor.ObjectFields.selectedPeople, selectedPeople1);
+        f1.set(Favor.ObjectFields.interested, interestedPeople1);
+
+        ArrayList<String> selectedPeople2 = new ArrayList<>();
+        ArrayList<String> interestedPeople2 = new ArrayList<>();
 
         f2.set(Favor.StringFields.ownerID, "U1");
         f2.set(Favor.StringFields.category, "Cooking");
@@ -350,6 +360,15 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.locationCity, "Tombouctou");
         f2.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f2.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f2.set(Favor.ObjectFields.selectedPeople, selectedPeople2);
+        f2.set(Favor.ObjectFields.interested, interestedPeople2);
+
+        ArrayList<String> selectedPeople3 = new ArrayList<>();
+        selectedPeople3.add(u1.getId());
+        selectedPeople3.add(u2.getId());
+        ArrayList<String> interestedPeople3 = new ArrayList<>();
+        interestedPeople3.add(u1.getId());
+        interestedPeople3.add(u2.getId());
 
         f3.set(Favor.StringFields.ownerID, "U3");
         f3.set(Favor.StringFields.category, "Riddle");
@@ -359,6 +378,8 @@ public class FakeDatabase extends Database{
         f3.set(Favor.StringFields.locationCity, "Gotham City");
         f3.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f3.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f3.set(Favor.ObjectFields.selectedPeople, selectedPeople3);
+        f3.set(Favor.ObjectFields.interested, interestedPeople3);
 
         f4.set(Favor.StringFields.ownerID, "U3");
         f4.set(Favor.StringFields.category, "Homework");
