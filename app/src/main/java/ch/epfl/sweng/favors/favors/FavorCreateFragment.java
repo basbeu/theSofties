@@ -360,10 +360,11 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
 
     /**
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * This method is called
+     * Inspired from this tutorial : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
+     * @param requestCode 66 if the activity is getting a picture from the gallery
+     * @param resultCode -1 if OK
+     * @param data the data corresponding to the picture
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -378,6 +379,10 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             } catch (FileNotFoundException e) { e.printStackTrace(); }
             catch (IOException e) { e.printStackTrace(); }
         }
+    }
+
+    private void setImageFromResult(int requestCode, int resultCode, Intent data){
+
     }
 
 }

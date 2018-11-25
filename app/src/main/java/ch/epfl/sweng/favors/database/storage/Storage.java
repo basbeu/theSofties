@@ -23,7 +23,7 @@ import java.util.UUID;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
- *
+ * Handle the real storage related to FirebaseStorage
  */
 public class Storage extends FirebaseStorageDispatcher{
 

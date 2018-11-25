@@ -12,7 +12,7 @@ import com.google.firebase.storage.StorageReference;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
- *
+ * This class simulates a FirebaseStorage for testing purposes
  */
 public class FakeStorage extends FirebaseStorageDispatcher{
 
