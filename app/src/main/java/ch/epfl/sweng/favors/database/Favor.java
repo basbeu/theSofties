@@ -1,7 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
-import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -16,7 +16,7 @@ public class Favor extends DatabaseEntity {
     private static final String COLLECTION = "favors";
 
     public enum StringFields implements DatabaseStringField {title, ownerID, description, locationCity, deadline, category, ownerEmail, tokens, pictureReference}
-    public enum IntegerFields implements DatabaseIntField {tokenPerPerson, nbPerson}
+    public enum LongFields implements DatabaseLongField {tokenPerPerson, nbPerson}
     public enum ObjectFields implements DatabaseObjectField {location, creationTimestamp, expirationTimestamp, interested, selectedPeople}
     public enum BooleanFields implements DatabaseBooleanField {isOpen}
 
@@ -24,12 +24,12 @@ public class Favor extends DatabaseEntity {
      * empty constructor as required per firebase
      */
     public Favor(){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,null);
         }
 
     public Favor(String id){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, id);
         if(db != null) db.updateFromDb(this);
     }

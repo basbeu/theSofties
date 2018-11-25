@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.util.Log;
 
@@ -10,7 +9,7 @@ import javax.annotation.Nonnull;
 
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
-import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -30,18 +29,18 @@ public class User extends DatabaseEntity{
 
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}
-    public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
+    public enum LongFields implements DatabaseLongField {creationTimeStamp}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, null);
 
     }
 
     public User(String id){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
         if(db != null) db.updateFromDb(this);
     }

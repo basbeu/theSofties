@@ -12,7 +12,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -22,7 +22,7 @@ public abstract class DatabaseEntity implements Observable {
     protected static Database db = Database.getInstance();
 
     protected Map<DatabaseStringField, ObservableField<String>> stringData;
-    protected Map<DatabaseIntField, ObservableField<Integer>> intData;
+    protected Map<DatabaseLongField, ObservableField<Long>> longData;
     protected Map<DatabaseBooleanField, ObservableField<Boolean>> booleanData;
     protected Map<DatabaseObjectField, ObservableField<Object>> objectData;
 
@@ -43,21 +43,21 @@ public abstract class DatabaseEntity implements Observable {
      * Init a database object with all fields that are possible for the instanced collection in the database
      *
      * @param stringFieldsValues The possibles names of string objects in the database
-     * @param intFieldsValues The possibles names of int objects in the database
+     * @param longFieldsValues The possibles names of int objects in the database
      * @param booleanFieldsValues The possibles names of boolean objects in the database
      * @param objectFieldsValues The possibles names of generic objects in the database that must be test
      *                           later, often tables
      * @param collection The collection in the database
      * @param documentID If so, the doccumentId in the database
      */
-    public DatabaseEntity(DatabaseStringField stringFieldsValues[], DatabaseIntField intFieldsValues[],
+    public DatabaseEntity(DatabaseStringField stringFieldsValues[], DatabaseLongField longFieldsValues[],
                           DatabaseBooleanField booleanFieldsValues[], DatabaseObjectField objectFieldsValues[],
                           String collection, String documentID){
 
         assert(collection != null);
 
         stringData = initMap(stringFieldsValues);
-        intData = initMap(intFieldsValues);
+        longData = initMap(longFieldsValues);
         booleanData = initMap(booleanFieldsValues);
         objectData = initMap(objectFieldsValues);
 
@@ -96,7 +96,7 @@ public abstract class DatabaseEntity implements Observable {
 
         convertTypedMapToObjectMap(stringData, toSend);
         convertTypedMapToObjectMap(booleanData, toSend);
-        convertTypedMapToObjectMap(intData, toSend);
+        convertTypedMapToObjectMap(longData, toSend);
         convertTypedMapToObjectMap(objectData, toSend);
 
         return toSend;
@@ -115,7 +115,7 @@ public abstract class DatabaseEntity implements Observable {
         convertObjectMapToTypedMap(incommingData, stringData, String.class);
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
-        convertObjectMapToTypedMap(incommingData, intData, Integer.class);
+        convertObjectMapToTypedMap(incommingData, longData, Long.class);
         for (OnPropertyChangedCallback callback : callbacks){
             callback.onPropertyChanged(this, UpdateType.FROM_DB.ordinal());
         }
@@ -171,8 +171,8 @@ public abstract class DatabaseEntity implements Observable {
             resetMap(booleanData, null);
         if(objectData != null)
             resetMap(objectData, null);
-        if(intData != null)
-            resetMap(intData,null);
+        if(longData != null)
+            resetMap(longData,null);
         notifyContentChange();
     }
 
@@ -249,20 +249,20 @@ public abstract class DatabaseEntity implements Observable {
         return objectData.get(field);
     }
 
-    public Integer get(DatabaseIntField field){
-        if(intData.get(field) != null)
-            return intData.get(field).get();
+    public Long get(DatabaseLongField field){
+        if(longData.get(field) != null)
+            return longData.get(field).get();
         else
             return null;
     }
 
-    public void set(DatabaseIntField field, Integer value){
-        intData.get(field).set(value);
+    public void set(DatabaseLongField field, Long value){
+        longData.get(field).set(value);
         notifyContentChange();
     }
 
-    public ObservableField<Integer> getObservableObject(DatabaseIntField field){
-        return intData.get(field);
+    public ObservableField<Long> getObservableObject(DatabaseLongField field){
+        return longData.get(field);
     }
 
     public Boolean get(DatabaseBooleanField field){
