@@ -99,6 +99,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         // Required empty public constructor
     }
 
+    public void payPeopleSelected(List<String> selectedPeople){
+        for(int i = 0; i < selectedPeople.size(); ++i){
+            User currentUser = new User(selectedPeople.get(i));
+
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -304,7 +311,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
         });
-        binding.interestedUsers.setOnClickListener((l)->{
+             binding.interestedUsers.setOnClickListener((l)->{
             // opens bubble
             userListTask.addOnSuccessListener(o -> {
                 InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
@@ -318,6 +325,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                         mFrag).addToBackStack(null).commit();
             });
         });
+
+        binding.payButton.setOnClickListener((l)->{
+
+        });
+
 
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
             FavorPosterDetailView mFrag = new FavorPosterDetailView();
