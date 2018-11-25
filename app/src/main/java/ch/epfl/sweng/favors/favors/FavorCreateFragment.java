@@ -120,8 +120,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         if(selectedImage != null){
             String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
-        }
-        else{
+        } else{
             newFavor.set(Favor.StringFields.pictureReference, null);
         }
 

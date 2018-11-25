@@ -133,13 +133,6 @@ public class FavorDetailViewTest {
 
 
 
-    @Test
-    public void image2Displayed(){
-
-        /*mFragmentTestRule.launchActivity(null);
-        onView(withId(R.id.imageView2)).perform(scrollTo()).check(matches(isDisplayed()));*/
-    }
-
     @Ignore
     @Test
     public void tokensAmountDisplayed(){
@@ -210,13 +203,5 @@ public class FavorDetailViewTest {
         //onView(withText("issue has been reported! Sorry for the inconvenience")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
-//    @Test
-//    public void setFieldsTest(){
-//        Bundle bundle = new Bundle();
-//        bundle.putString(FavorDetailView.FAVOR_ID,"F1");
-//        mFragmentTestRule.launchActivity(new Intent(bundle));
-//
-//        onView(withId(R.id.favTokAmmount)).check(matches(isDisplayed()));
-//    }
 
 }

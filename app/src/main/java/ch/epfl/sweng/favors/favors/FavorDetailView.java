@@ -369,9 +369,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                         EmailUtils.sendEmail(localFavor.get(Favor.StringFields.ownerEmail), u.get(User.StringFields.email),
                                 "You have been paid for the favor " + title.get()+ "!",
                                 "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it.",
-                                getActivity(),"","");
+                                getActivity(),"Users have been successfully paid.","");
                     }).addOnFailureListener(t -> {
-                        Toast.makeText(getContext(), "Could not pay all users", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Could not pay all users", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Failed to update user with uid: " + selUID + " from the DB");
                     });
                 }
@@ -380,9 +380,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                 localFavor.set(Favor.ObjectFields.selectedPeople, uidsSelected);
                 localFavor.set(Favor.LongFields.nbPerson, nbPerson.longValue());
                 Database.getInstance().updateOnDb(localFavor);
-                Toast.makeText(getContext(), "Users have been successfully paid.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Users have been successfully paid.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "Too many people are selected", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Too many people are selected", Toast.LENGTH_SHORT).show();
             }
 
         } else {
