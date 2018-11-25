@@ -2,7 +2,6 @@ package ch.epfl.sweng.favors.location;
 
 import android.content.Context;
 import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,7 +9,6 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 public class GeocodingLocation {
 
@@ -21,7 +19,8 @@ public class GeocodingLocation {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                GeocoderDispatcher geocoder = GeocoderDispatcher.getGeocoder(context);
+                //Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 String result = null;
                 Double latitude = null;
                 Double longitude = null;
