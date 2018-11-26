@@ -38,27 +38,28 @@ import ch.epfl.sweng.favors.R;
 
 public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     private static final String TAG = "BUBBLES_FRAGMENT";
+    public static final String INTERESTED_USERS = "interestedUsers";
 
     BubblesBinding binding;
     BubblePicker picker;
+    Favor localFavor;
 
-    private String[] titles;
     private TypedArray colors;
 //    final TypedArray images = getResources().obtainTypedArray(R.array.images);
     private ObservableArrayList<String> userNames;
     private ObservableArrayList<String> selectedUsers;
-    private Favor localFavor;
     private Task iplist;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
         userNames.addAll(getArguments().getStringArrayList("userNames"));
         selectedUsers = new ObservableArrayList<>();
         selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
 
-        super.onCreate(savedInstanceState);
     }
 
     @Override

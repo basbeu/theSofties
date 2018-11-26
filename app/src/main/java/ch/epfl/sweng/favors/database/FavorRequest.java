@@ -19,7 +19,7 @@ public final class FavorRequest extends Request{
         db.getAll(list, Favor.class, COLLECTION, limit, orderBy);
     }
 
-    public static void  getList(ObservableArrayList<Favor> list, Map<DatabaseField, Object> mapEquals,
+    public static void getList(ObservableArrayList<Favor> list, Map<DatabaseField, Object> mapEquals,
                                 Map<DatabaseField, Object> mapLess,
                                 Map<DatabaseField, Object> mapMore,
                                 Integer limit,

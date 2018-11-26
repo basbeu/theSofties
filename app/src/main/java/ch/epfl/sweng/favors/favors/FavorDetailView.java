@@ -107,13 +107,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         Bundle arguments = getArguments();
 
         bubblesResult = new ArrayList<>();
-        if(arguments != null && getArguments().containsKey("selectedUsers")) {
-            bubblesResult = new ArrayList<>(getArguments().getStringArrayList("selectedUsers"));
+        if(arguments != null && getArguments().containsKey(InterestedUsersBubbles.INTERESTED_USERS)) {
+            bubblesResult = new ArrayList<>(getArguments().getStringArrayList(InterestedUsersBubbles.INTERESTED_USERS));
             newSelectionOfUsers = true;
         } else {
             //FIXME get selectedUsers List from database -- done
             newSelectionOfUsers = false;
         }
+
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
         if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
             buttonsEnabled.set(arguments.getBoolean(ENABLE_BUTTONS));
@@ -304,12 +305,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
         });
+
         binding.interestedUsers.setOnClickListener((l)->{
             // opens bubble
             userListTask.addOnSuccessListener(o -> {
                 InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("userNames", new ArrayList<>(userNames.keySet()));
+                bundle.putStringArrayList(InterestedUsersBubbles.INTERESTED_USERS, new ArrayList<>(userNames.keySet()));
                 Log.d("bubbles selec", selectedUsers.toString());
                 // Map K: uid, V: name
                 bundle.putStringArrayList("selectedUsers", new ArrayList<>(selectedUsers.values()));

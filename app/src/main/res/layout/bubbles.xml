@@ -2,6 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="elements"
+            type="ch.epfl.sweng.favors.favors.InterestedUsersBubbles"
+            />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,12 +27,5 @@
             android:layout_height="match_parent"
             app:backgroundColor="@android:color/white" />
     </LinearLayout>
-
-    <data>
-        <variable
-            name="elements"
-            type="ch.epfl.sweng.favors.favors.InterestedUsersBubbles"
-            />
-    </data>
 
 </layout>
