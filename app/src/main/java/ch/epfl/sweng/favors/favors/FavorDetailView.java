@@ -68,6 +68,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> tokens;
     public ObservableBoolean isItsOwn = new ObservableBoolean(false);
     public ObservableBoolean buttonsEnabled = new ObservableBoolean(true);
+    public ObservableBoolean hasInterestedPeople = new ObservableBoolean(false);
     public ObservableBoolean isInterested = new ObservableBoolean(false);
     public ObservableField<String> pictureRef;
 
@@ -85,15 +86,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     FragmentFavorDetailViewBinding binding;
 
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String FAVOR_ID = "favor_id";
     public static final String ENABLE_BUTTONS = "enable_buttons";
     private ArrayList<String> bubblesResult;
     private boolean newSelectionOfUsers;
-
-
 
     public FavorDetailView() {
         // Required empty public constructor
@@ -160,8 +158,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         if(favor.getId() == null){binding.deleteButton.setEnabled(false);binding.interestedButton.setEnabled(false);}
 
-        if(favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList)
-            interestedPeople =  (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
+        if(favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
+            interestedPeople = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
+            hasInterestedPeople.set(true);
+        }
         else interestedPeople = new ArrayList<>();
         if(interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
 
@@ -195,15 +195,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     private void setSelectionOfPeople(String uid, ArrayList<String> dbSelectionResult) {
         User u = new User(uid);
 
-//            u.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-//                @Override
-//                public void onPropertyChanged(Observable sender, int propertyId) {
-//
-//                }
-//            });
         UserRequest.getWithId(u, uid);
-//            users.add(u);
-        userListTask = Database.getInstance().updateFromDb(u).addOnSuccessListener(o2 /*not oxygen*/ -> {
+
+        userListTask = Database.getInstance().updateFromDb(u).addOnSuccessListener(o2 -> {
             if (u != null) {
                 String fn = u.get(User.StringFields.firstName);
                 String ln = u.get(User.StringFields.lastName);
@@ -225,8 +219,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     }
                 }
 
-            }
-//                Log.d("interestedPeople userna", userNames.toString());
+            };
         });
     }
 
@@ -261,13 +254,22 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();
             }else{
+                //return if the timer is not over yet
                 if(!buttonEnabled) return;
+                //disable the button for preventing non-determinism
                 buttonEnabled = false;
+                //if user is in the list -> remove him from the list
                 if(interestedPeople.contains(User.getMain().getId())) {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
+                    if(interestedPeople.isEmpty()){
+                        hasInterestedPeople.set(false);
+                    }
                 }
                 else{
+                    if(interestedPeople.isEmpty()){
+                        hasInterestedPeople.set(true);
+                    }
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
@@ -314,7 +316,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 bundle.putStringArrayList(InterestedUsersBubbles.INTERESTED_USERS, new ArrayList<>(userNames.keySet()));
                 Log.d("bubbles selec", selectedUsers.toString());
                 // Map K: uid, V: name
-                bundle.putStringArrayList("selectedUsers", new ArrayList<>(selectedUsers.values()));
+                bundle.putStringArrayList(InterestedUsersBubbles.SELECTED_USERS, new ArrayList<>(selectedUsers.values()));
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();

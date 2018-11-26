@@ -26,6 +26,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.igalata.bubblepicker.model.PickerItem;
 
@@ -39,6 +41,7 @@ import ch.epfl.sweng.favors.R;
 public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     private static final String TAG = "BUBBLES_FRAGMENT";
     public static final String INTERESTED_USERS = "interestedUsers";
+    public static final String SELECTED_USERS = "selectedUsers";
 
     BubblesBinding binding;
     BubblePicker picker;
@@ -50,15 +53,18 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     private ObservableArrayList<String> selectedUsers;
     private Task iplist;
 
+    private final String BUTTON_STATE_D = "Done";
+    private final String BUTTON_STATE_C = "Cancel";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
-        userNames.addAll(getArguments().getStringArrayList("userNames"));
+        userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
         selectedUsers = new ObservableArrayList<>();
-        selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
+        selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
 
     }
 
@@ -66,6 +72,11 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.bubbles,container,false);
         binding.setElements(this);
+
+//        if(selectedUsers.isEmpty()) {
+//            binding.buttonDone.setEnabled(false);
+        binding.buttonDone.setText(BUTTON_STATE_C);
+//        }
 
         picker = binding.picker;
         picker.setCenterImmediately(true);
@@ -105,6 +116,9 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 //                if(newUser.isPresent())
                     selectedUsers.add(item.getTitle());
                 //Log.d("bubbles add", selectedUsers.toString());
+                // set button active (again)
+                binding.buttonDone.setText(BUTTON_STATE_D);
+                binding.buttonDone.setEnabled(true);
             }
 
             @Override
@@ -114,17 +128,37 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 //                if(newUser.isPresent())
                 selectedUsers.remove(item.getTitle());
                 //Log.d("bubbles remove", selectedUsers.toString());
+                if(selectedUsers.isEmpty()) {
+                    Toast.makeText(getContext(), "Please select at least one person in order to continue", Toast.LENGTH_LONG).show();
+                    binding.buttonDone.setEnabled(false);
+                }
             }
         });
 
         binding.buttonDone.setOnClickListener((l)->{
-            FavorDetailView mFrag = new FavorDetailView();
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("selectedUsers", selectedUsers);
-            Log.d("bubbles selected final", selectedUsers.toString());
-            mFrag.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    mFrag).addToBackStack(null).commit();
+            // Button Logic:
+            // - can cancel before selecting first time (user clicks by error)
+            // - cannot deselect all people from favor (less revenue for us -> why would you want to do that anyway)
+            // - can select, change, add more and less (as long as at least one)
+            Button b = binding.buttonDone;
+
+            if(b.isEnabled()) { // this is redundant I think
+                FavorDetailView mFrag = new FavorDetailView();
+                if(b.getText() == BUTTON_STATE_D || b.getText() == BUTTON_STATE_D.toUpperCase()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList("selectedUsers", selectedUsers);
+                    Log.d("bubbles selected final", selectedUsers.toString());
+                    mFrag.setArguments(bundle);
+                // proceed w/o sending a selection -> same as never been there
+                } else if (binding.buttonDone.getText() == BUTTON_STATE_C || b.getText() == BUTTON_STATE_C.toUpperCase()) {
+                    Toast.makeText(getContext(), "No selection made, don't forget to though!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Default case should not be triggered unless somebody renames buttons
+                    Toast.makeText(getContext(), "Error: There was an unexpected problem with the selection!", Toast.LENGTH_LONG).show();
+                }
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        mFrag).addToBackStack(null).commit();
+            }
         });
 
         return binding.getRoot();

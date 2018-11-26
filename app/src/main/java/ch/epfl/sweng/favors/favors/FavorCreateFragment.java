@@ -126,6 +126,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         newFavor.set(Favor.StringFields.tokens, "1");
+        newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
+        newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
             String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);

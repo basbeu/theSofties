@@ -77,7 +77,7 @@
 
             <LinearLayout
                 android:id="@+id/LocationBlob"
-                android:layout_width="200dp"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal"
