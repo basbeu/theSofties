@@ -11,6 +11,9 @@ public final class ExecutionMode {
 
     private boolean test;
     private boolean invalidAuthTest;
+    private GeocoderExecutionTestMode geocoderExecutionTestMode;
+
+    public enum GeocoderExecutionTestMode {SUCCESS, FAILURE, EXCEPTION};
 
     /**
      * Construct the singleton class
@@ -20,6 +23,7 @@ public final class ExecutionMode {
             throw new IllegalStateException("ExecutionMode already instantiated");
         test = false;
         invalidAuthTest = false;
+        geocoderExecutionTestMode = GeocoderExecutionTestMode.SUCCESS;
     }
 
     /**
@@ -57,5 +61,19 @@ public final class ExecutionMode {
      */
     public boolean isInvalidAuthTest() {
         return invalidAuthTest;
+    }
+
+    /**
+     * @return the current execution mode of the geocoder
+     */
+    public GeocoderExecutionTestMode getGeocoderExecutionTestMode() {
+        return geocoderExecutionTestMode;
+    }
+
+    /**
+     * @param geocoderExecutionTestMode new execution test mode for the geocoder of test
+     */
+    public void setGeocoderExecutionTestMode(GeocoderExecutionTestMode geocoderExecutionTestMode) {
+        this.geocoderExecutionTestMode = geocoderExecutionTestMode;
     }
 }

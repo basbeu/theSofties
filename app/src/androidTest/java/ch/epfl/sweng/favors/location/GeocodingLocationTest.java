@@ -22,7 +22,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 
 @RunWith(AndroidJUnit4.class)
 public class GeocodingLocationTest {
@@ -35,7 +34,7 @@ public class GeocodingLocationTest {
         ExecutionMode.getInstance().setTest(true);
     }
 
-    // test that check that getAddressFromLocation() sends the right messages on success
+    // test that check that getAddressFromLocation() sends the right messages on success of the geocoder
     @Test
     public void getAddressFromLocationSuccessMessageTest(){
         mFragmentTestRule.launchActivity(null);
@@ -60,8 +59,41 @@ public class GeocodingLocationTest {
         };
 
         Handler handler = new Handler(callback);
+        locationAddress.getAddressFromLocation(FakeGeocoder.FAKE_LOCATION_CITY, mFragmentTestRule.getFragment().getContext(), handler);
+
+        Looper.loop();
+    }
+
+    // test that check that getAddressFromLocation() sends the right messages on failure of the geocoder
+    @Test
+    public void getAddressFromLocationFailureMessageTest(){
+        ExecutionMode.getInstance().setGeocoderExecutionTestMode(ExecutionMode.GeocoderExecutionTestMode.FAILURE);
+        mFragmentTestRule.launchActivity(null);
+        onView(ViewMatchers.withId(R.id.mapView)).check(matches(isDisplayed()));
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+
+        GeocodingLocation locationAddress = new GeocodingLocation();
+
+        Handler.Callback callback = new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what == 2){
+                    Bundle bundle = msg.getData();
+                    assertEquals(GeocodingLocation.MES_FAILURE, bundle.getString(GeocodingLocation.KEY_FAILURE));
+
+                    Looper.myLooper().quitSafely();
+                }
+                return false;
+            }
+        };
+
+        Handler handler = new Handler(callback);
         locationAddress.getAddressFromLocation("Lausanne", mFragmentTestRule.getFragment().getContext(), handler);
 
         Looper.loop();
+
+        ExecutionMode.getInstance().setGeocoderExecutionTestMode(ExecutionMode.GeocoderExecutionTestMode.SUCCESS);
     }
 }

@@ -14,6 +14,8 @@ public class GeocodingLocation {
 
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
+    public static final String KEY_FAILURE = "FAILURE";
+    public static final String MES_FAILURE = "Fail to get latitude and longitude";
 
     private static final String TAG = "GeocodingLocation";
 
@@ -24,7 +26,6 @@ public class GeocodingLocation {
             @Override
             public void run() {
                 GeocoderDispatcher geocoder = GeocoderDispatcher.getGeocoder(context);
-                //Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 String result = null;
                 Double latitude = null;
                 Double longitude = null;
@@ -49,6 +50,7 @@ public class GeocodingLocation {
                     } else {
                         message.what = 2;
                         Bundle bundle = new Bundle();
+                        bundle.putString(KEY_FAILURE, MES_FAILURE);
                         message.setData(bundle);
                     }
                     message.sendToTarget();
