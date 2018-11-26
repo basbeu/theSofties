@@ -113,27 +113,27 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
                     GeoPoint point = (GeoPoint) favor.get(Favor.ObjectFields.location);
                     LatLng location = new LatLng(point.getLatitude(),point.getLongitude());
 
-                    if(getContext() != null) {
-                        Resources r = getResources();
-                        int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
-
-                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
+//                    if(getContext() != null) {
+//                        Resources r = getResources();
+//                        int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
+//
+//                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
 
                         //TODO : try to do it in a more clean way
                         if (!ExecutionMode.getInstance().isTest()) {
                             //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.carpooling);
                             //BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.carpooling));
 
-//                        Resources r = getResources();
-//                        int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
-//
-//                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
+                        Resources r = getResources();
+                        int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
+
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
 
                             Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)).icon(icon));
                             favorsMap.put(marker.getId(), favor);
                             Log.d(TAG, "new Marker : " + marker.getId());
                         }
-                    }
+//                    }
                 }
             }
         });
