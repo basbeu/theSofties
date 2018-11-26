@@ -348,6 +348,10 @@ public class FakeDatabase extends Database{
         f1.set(Favor.ObjectFields.location, new GeoPoint(0,0));
         f1.set(Favor.ObjectFields.selectedPeople, selectedPeople1);
         f1.set(Favor.ObjectFields.interested, interestedPeople1);
+        f1.set(Favor.LongFields.nbPerson, 1L);
+        f1.set(Favor.LongFields.tokenPerPerson, 1L);
+
+
 
         ArrayList<String> selectedPeople2 = new ArrayList<>();
         ArrayList<String> interestedPeople2 = new ArrayList<>();
@@ -362,6 +366,8 @@ public class FakeDatabase extends Database{
         f2.set(Favor.ObjectFields.location, new GeoPoint(0,0));
         f2.set(Favor.ObjectFields.selectedPeople, selectedPeople2);
         f2.set(Favor.ObjectFields.interested, interestedPeople2);
+        f2.set(Favor.LongFields.nbPerson, 1L);
+        f2.set(Favor.LongFields.tokenPerPerson, 1L);
 
         ArrayList<String> selectedPeople3 = new ArrayList<>();
         selectedPeople3.add(u1.getId());
@@ -380,6 +386,8 @@ public class FakeDatabase extends Database{
         f3.set(Favor.ObjectFields.location, new GeoPoint(0,0));
         f3.set(Favor.ObjectFields.selectedPeople, selectedPeople3);
         f3.set(Favor.ObjectFields.interested, interestedPeople3);
+        f3.set(Favor.LongFields.nbPerson, 1L);
+        f3.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f4.set(Favor.StringFields.ownerID, "U3");
         f4.set(Favor.StringFields.category, "Homework");
