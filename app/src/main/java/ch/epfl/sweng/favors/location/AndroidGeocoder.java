@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static ch.epfl.sweng.favors.utils.ExecutionMode.mustBeInTestMode;
+
 public class AndroidGeocoder extends GeocoderDispatcher {
-    private static AndroidGeocoder androidGeocoder;
     private Geocoder geocoder;
 
     private AndroidGeocoder(Context context){
