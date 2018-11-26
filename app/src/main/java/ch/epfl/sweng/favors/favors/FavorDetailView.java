@@ -53,6 +53,7 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
  * fragment_favor_detail_view.xml
  */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
+    private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
 
     private StorageReference storageReference;
 
@@ -74,14 +75,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     private Favor localFavor;
     private ArrayList<String> interestedPeople;
-//    private ObservableArrayList<String> userNames;
 
     // Map K: name, V: uid
     private ObservableMap<String, String> userNames;
     // Map K: uid, V: name
     private ObservableMap<String, String> selectedUsers;
 
-    //    private ArrayList<User> users;
     private Task userListTask;
 
     FragmentFavorDetailViewBinding binding;
@@ -102,14 +101,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         super.onCreate(savedInstanceState);
         userNames = new ObservableArrayMap<>();
         selectedUsers = new ObservableArrayMap<>();
-        Bundle arguments = getArguments();
-
         bubblesResult = new ArrayList<>();
-        if(arguments != null && getArguments().containsKey(InterestedUsersBubbles.INTERESTED_USERS)) {
-            bubblesResult = new ArrayList<>(getArguments().getStringArrayList(InterestedUsersBubbles.INTERESTED_USERS));
+
+        Bundle arguments = getArguments();
+        if(arguments != null && getArguments().containsKey(InterestedUsersBubbles.SELECTED_USERS)) {
+            bubblesResult = new ArrayList<>(getArguments().getStringArrayList(InterestedUsersBubbles.SELECTED_USERS));
             newSelectionOfUsers = true;
         } else {
-            //FIXME get selectedUsers List from database -- done
             newSelectionOfUsers = false;
         }
 
@@ -218,7 +216,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                         selectedUsers.put(uid, key);
                     }
                 }
-
             };
         });
     }
@@ -308,13 +305,17 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             getActivity().onBackPressed();
         });
 
+
         binding.interestedUsers.setOnClickListener((l)->{
+            if (!hasInterestedPeople.get()){
+                Toast.makeText(getContext(), "Currently no interested people available.", Toast.LENGTH_LONG).show();
+            }
             // opens bubble
             userListTask.addOnSuccessListener(o -> {
                 InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList(InterestedUsersBubbles.INTERESTED_USERS, new ArrayList<>(userNames.keySet()));
-                Log.d("bubbles selec", selectedUsers.toString());
+                Log.d(TAG, selectedUsers.toString());
                 // Map K: uid, V: name
                 bundle.putStringArrayList(InterestedUsersBubbles.SELECTED_USERS, new ArrayList<>(selectedUsers.values()));
                 mFrag.setArguments(bundle);
