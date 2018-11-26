@@ -16,6 +16,8 @@ public class GeocodingLocation {
     public static final String KEY_LONGITUDE = "longitude";
     public static final String KEY_FAILURE = "FAILURE";
     public static final String MES_FAILURE = "Fail to get latitude and longitude";
+    public static final String KEY_EXCEPTION = "EXCEPTION";
+    public static final String MES_EXCEPTION = "IOException : Unable to connect to Geocoder";
 
     private static final String TAG = "GeocodingLocation";
 
@@ -29,6 +31,7 @@ public class GeocodingLocation {
                 String result = null;
                 Double latitude = null;
                 Double longitude = null;
+                boolean ioException = false;
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(locationAddress, 1);
                     if (addressList != null && addressList.size() > 0) {
@@ -37,7 +40,8 @@ public class GeocodingLocation {
                         longitude = address.getLongitude();
                     }
                 } catch (IOException e) {
-                    Log.e(TAG, "Unable to connect to Geocoder", e);
+                    Log.e(TAG, MES_EXCEPTION, e);
+                    ioException = true;
                 } finally {
                     Message message = Message.obtain();
                     message.setTarget(handler);
@@ -47,10 +51,15 @@ public class GeocodingLocation {
                         bundle.putDouble(KEY_LATITUDE, latitude);
                         bundle.putDouble(KEY_LONGITUDE, longitude);
                         message.setData(bundle);
-                    } else {
+                    } else if(!ioException){
                         message.what = 2;
                         Bundle bundle = new Bundle();
                         bundle.putString(KEY_FAILURE, MES_FAILURE);
+                        message.setData(bundle);
+                    }else{
+                        message.what = 3;
+                        Bundle bundle = new Bundle();
+                        bundle.putString(KEY_EXCEPTION, MES_EXCEPTION);
                         message.setData(bundle);
                     }
                     message.sendToTarget();

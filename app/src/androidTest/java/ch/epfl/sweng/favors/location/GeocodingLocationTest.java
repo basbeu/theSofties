@@ -90,10 +90,43 @@ public class GeocodingLocationTest {
         };
 
         Handler handler = new Handler(callback);
-        locationAddress.getAddressFromLocation("Lausanne", mFragmentTestRule.getFragment().getContext(), handler);
+        locationAddress.getAddressFromLocation(FakeGeocoder.FAKE_LOCATION_CITY, mFragmentTestRule.getFragment().getContext(), handler);
 
         Looper.loop();
 
         ExecutionMode.getInstance().setGeocoderExecutionTestMode(ExecutionMode.GeocoderExecutionTestMode.SUCCESS);
+    }
+
+    @Test
+    public void getAddressFromLocationExceptionTest(){
+        ExecutionMode.getInstance().setGeocoderExecutionTestMode(ExecutionMode.GeocoderExecutionTestMode.EXCEPTION);
+        mFragmentTestRule.launchActivity(null);
+        onView(ViewMatchers.withId(R.id.mapView)).check(matches(isDisplayed()));
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+
+        GeocodingLocation locationAddress = new GeocodingLocation();
+
+        Handler.Callback callback = new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what == 3){
+                    Bundle bundle = msg.getData();
+                    assertEquals(GeocodingLocation.MES_EXCEPTION, bundle.getString(GeocodingLocation.KEY_EXCEPTION));
+
+                    Looper.myLooper().quitSafely();
+                }
+                return false;
+            }
+        };
+
+        Handler handler = new Handler(callback);
+        locationAddress.getAddressFromLocation(FakeGeocoder.FAKE_LOCATION_CITY, mFragmentTestRule.getFragment().getContext(), handler);
+
+        Looper.loop();
+
+        ExecutionMode.getInstance().setGeocoderExecutionTestMode(ExecutionMode.GeocoderExecutionTestMode.SUCCESS);
+
     }
 }
