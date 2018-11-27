@@ -106,6 +106,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         } else {
             newSelectionOfUsers = false;
         }
+        hasInterestedPeople.set(false);
 
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
         if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
@@ -155,11 +156,16 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             binding.interestedButton.setEnabled(false);
         }
 
-        if(favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
-            interestedPeople = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
-            hasInterestedPeople.set(true);
+        interestedPeople = new ArrayList<>();
+
+        if(favor.get(Favor.ObjectFields.interested) != null){
+            ArrayList<String> interestedPeopleL = (ArrayList<String>)favor.get(Favor.ObjectFields.interested);
+            if (!interestedPeopleL.isEmpty()) {
+                interestedPeople.addAll(interestedPeopleL);
+                hasInterestedPeople.set(true);
+            }
         }
-        else interestedPeople = new ArrayList<>();
+
         if(interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
 
         // tmp list with db result of people selected
@@ -288,21 +294,23 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         });
 
         binding.interestedUsers.setOnClickListener((l)->{
+            Log.d(TAG, Boolean.toString(hasInterestedPeople.get()));
             if (!hasInterestedPeople.get()){
                 Toast.makeText(getContext(), "Currently no interested people available.", Toast.LENGTH_LONG).show();
+            } else {
+                // opens bubble
+                userListTask.addOnSuccessListener(o -> {
+                    InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList(InterestedUsersBubbles.INTERESTED_USERS, new ArrayList<>(userNames.keySet()));
+                    Log.d(TAG, selectedUsers.toString());
+                    // Map K: uid, V: name
+                    bundle.putStringArrayList(InterestedUsersBubbles.SELECTED_USERS, new ArrayList<>(selectedUsers.values()));
+                    mFrag.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            mFrag).addToBackStack(null).commit();
+                });
             }
-            // opens bubble
-            userListTask.addOnSuccessListener(o -> {
-                InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList(InterestedUsersBubbles.INTERESTED_USERS, new ArrayList<>(userNames.keySet()));
-                Log.d(TAG, selectedUsers.toString());
-                // Map K: uid, V: name
-                bundle.putStringArrayList(InterestedUsersBubbles.SELECTED_USERS, new ArrayList<>(selectedUsers.values()));
-                mFrag.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        mFrag).addToBackStack(null).commit();
-            });
         });
 
         binding.favorPosterDetailViewAccess.setOnClickListener(v ->{

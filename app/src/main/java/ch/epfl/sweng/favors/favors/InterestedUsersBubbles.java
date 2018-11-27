@@ -53,9 +53,14 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         userNames = new ObservableArrayList<>();
         selectedUsers = new ObservableArrayList<>();
 
-        if (getArguments() != null) {
-            userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
-            selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
+        Bundle args = getArguments();
+        if (args != null) {
+            if (args.getStringArrayList(INTERESTED_USERS) != null) {
+                userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
+            }
+            if (args.getStringArrayList(SELECTED_USERS) != null) {
+                selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
+            }
         } else {
             Log.d(TAG, "no arguments received");
         }

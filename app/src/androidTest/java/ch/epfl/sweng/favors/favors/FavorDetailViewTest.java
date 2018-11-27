@@ -39,7 +39,6 @@ public class FavorDetailViewTest {
 
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
 
-
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
