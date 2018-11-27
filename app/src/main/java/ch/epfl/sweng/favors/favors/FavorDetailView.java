@@ -148,8 +148,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         // tmp list with db result of people selected
         final ArrayList<String> dbSelectionResult;
-        if (favor.get(Favor.ObjectFields.selectedPeople) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList)
-            dbSelectionResult = (ArrayList<String>) localFavor.get(Favor.ObjectFields.selectedPeople);
+        if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList)
+            dbSelectionResult = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
         else
             dbSelectionResult = new ArrayList<>();
         for (String uid : interestedPeople) {
