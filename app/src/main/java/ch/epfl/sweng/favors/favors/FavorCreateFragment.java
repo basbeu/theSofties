@@ -96,22 +96,29 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public boolean allFavorFieldsValid(){
         return (titleValid.get() && descriptionValid.get() && locationCityValid.get() && deadlineValid.get());
     }
+
     public void createFavorIfValid(Favor newFavor) {
-        if (allFavorFieldsValid()) {
-            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
-            if(newUserTokens >= 0 ) {
-                updateFavorObject(newFavor);
-                if(newFavor.getId() == null) {
-                    User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
-                    Database.getInstance().updateOnDb(User.getMain());
-                }
-                Database.getInstance().updateOnDb(newFavor);
-                launchToast(validationText.get());
-                updateUI(true);
-            } else {
-                Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
-            }
+        if (!allFavorFieldsValid()) {
+            //don't create the favor if a field is invalid
+            return;
         }
+        String availableTokens = User.getMain().get(User.StringFields.tokens);
+        int newUserTokens = Integer.parseInt(availableTokens) - 1;
+        //check if user has enough tokens to create a new favor and if he's creating a new favor or just edit an existing one
+        if(newUserTokens < 0 && newFavor.getId() == null ) {
+            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //otherwise create or update the new favor with the given fields
+        updateFavorObject(newFavor);
+        if(newFavor.getId() == null) {
+            User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+            Database.getInstance().updateOnDb(User.getMain());
+        }
+        Database.getInstance().updateOnDb(newFavor);
+        launchToast(validationText.get());
+        updateUI(true);
+        return;
     }
 
     public void updateFavorObject(Favor newFavor){
@@ -252,7 +259,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.setElements(this);
 
         if(getArguments() != null && (strtext = getArguments().getString(KEY_FRAGMENT_ID)) != null) {
-            newFavor = new Favor(strtext);
+            newFavor = new Favor(strtext); //do we really create a new favor when it already exists?
             updateUI(true);
         }
         else{
@@ -270,9 +277,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
-        binding.addFavor.setOnClickListener(v-> {
-            createFavorIfValid(newFavor);
-        });
         binding.addFavor.setOnClickListener(v-> {
             createFavorIfValid(newFavor);
         });
@@ -368,22 +372,20 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //return if no request codes
+        if(!(requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)){
+            return;
+        }
+        selectedImage = data.getData();
+        Bitmap bitmap;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+            binding.favorImage.setImageBitmap(bitmap);
 
-        //Detects request codes
-        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                binding.favorImage.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
 }

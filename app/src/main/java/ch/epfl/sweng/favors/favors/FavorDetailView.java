@@ -92,10 +92,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     private ArrayList<String> bubblesResult;
     private boolean newSelectionOfUsers;
 
-    public FavorDetailView() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,12 +165,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             dbSelectionResult = (ArrayList<String>) localFavor.get(Favor.ObjectFields.selectedPeople);
         else
             dbSelectionResult = new ArrayList<>();
-
-//        Log.d("bubbles dbs", dbSelectionResult.toString());
-
-        //
-        // populate user name list
-        //
         for (String uid : interestedPeople) {
             setSelectionOfPeople(uid, dbSelectionResult);
         }
@@ -182,7 +172,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         User favorCreationUser = new User();
         UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
         posterName = favorCreationUser.getObservableObject(User.StringFields.firstName);
-
     }
 
     /**
@@ -230,17 +219,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.setElements(this);
 
         // bindings
-        binding.favReportAbusiveAdd.setOnClickListener((l)->{
-            //Toast.makeText(this.getContext(), "issue has been reported! Sorry for the inconvenience", Toast.LENGTH_LONG).show();
-
-            EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
-                    "Abusive favors : "+title.get(),
-                    "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
-                    getActivity(),
-                    "issue has been reported! Sorry for the inconvenience",
-                    "Sorry an error occured, try again later...");
-        });
-
+        binding.favReportAbusiveAdd.setOnClickListener((l)->
+                EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
+                "Abusive favors : "+title.get(),
+                "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
+                getActivity(),
+                "issue has been reported! Sorry for the inconvenience",
+                "Sorry an error occured, try again later..."));
 
         binding.interestedButton.setOnClickListener((l)->{
             if(isItsOwn.get()) {
@@ -283,19 +268,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     Database.getInstance().updateOnDb(localFavor);
                 }
 
-
-                new Handler().postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // This method will be executed once the timer is over
-                        buttonEnabled = true;
-                    }
+                new Handler().postDelayed(() -> {
+                    // This method will be executed once the timer is over
+                    buttonEnabled = true;
                 },5000);
-
-
             }
         });
+
         binding.deleteButton.setOnClickListener((l)->{
             int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) + 1;
             User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
@@ -304,7 +283,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
         });
-
 
         binding.interestedUsers.setOnClickListener((l)->{
             if (!hasInterestedPeople.get()){
@@ -349,5 +327,4 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             view.setImageURI(Uri.parse(getIconPath(imageName)));
         }
     }
-
 }
