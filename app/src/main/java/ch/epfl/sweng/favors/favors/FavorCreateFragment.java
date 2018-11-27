@@ -3,7 +3,6 @@ package ch.epfl.sweng.favors.favors;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -14,15 +13,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,30 +36,21 @@ import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
-import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
-import ch.epfl.sweng.favors.authentication.FirebaseAuthentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.GeocodingLocation;
-import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
-import ch.epfl.sweng.favors.utils.Utils;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 /**
@@ -98,11 +84,11 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
-            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - 1;
+            updateFavorObject(newFavor);
+            long newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - newFavor.get(Favor.LongFields.nbPerson)*newFavor.get(Favor.LongFields.tokenPerPerson);
             if(newUserTokens >= 0 ) {
-                updateFavorObject(newFavor);
                 if(newFavor.getId() == null) {
-                    User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+                    User.getMain().set(User.StringFields.tokens, Long.toString(newUserTokens));
                     Database.getInstance().updateOnDb(User.getMain());
                 }
                 Database.getInstance().updateOnDb(newFavor);
@@ -126,12 +112,15 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         newFavor.set(Favor.StringFields.tokens, "1");
+        newFavor.set(Favor.LongFields.nbPerson,1L);
+        newFavor.set(Favor.LongFields.tokenPerPerson, 1L);
+        newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
+        newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
             String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
-        }
-        else{
+        } else{
             newFavor.set(Favor.StringFields.pictureReference, null);
         }
 

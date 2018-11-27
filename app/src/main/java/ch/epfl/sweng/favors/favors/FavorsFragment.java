@@ -16,7 +16,7 @@ import ch.epfl.sweng.favors.databinding.FavorsBinding;
  * Fragment that displays the list of favor and allows User to sort it and to search in it
  */
 public class FavorsFragment extends android.support.v4.app.Fragment {
-    private static final String TAG = "FAVOR_FRAGMENT";
+
 
     FavorsBinding binding;
 
