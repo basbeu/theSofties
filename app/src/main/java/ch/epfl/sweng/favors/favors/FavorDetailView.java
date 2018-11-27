@@ -66,7 +66,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> tokens;
     public ObservableBoolean isItsOwn = new ObservableBoolean(false);
     public ObservableBoolean buttonsEnabled = new ObservableBoolean(true);
-    public ObservableBoolean hasInterestedPeople = new ObservableBoolean(false);
     public ObservableBoolean isInterested = new ObservableBoolean(false);
     public ObservableField<String> pictureRef;
 
@@ -142,9 +141,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         if(favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
             interestedPeople = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
-            hasInterestedPeople.set(true);
         }
         else interestedPeople = new ArrayList<>();
+
         if (interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
 
         // tmp list with db result of people selected
@@ -232,14 +231,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if(interestedPeople.contains(User.getMain().getId())) {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
-                    if(interestedPeople.isEmpty()){
-                        hasInterestedPeople.set(false);
-                    }
                 }
                 else{
-                    if(interestedPeople.isEmpty()){
-                        hasInterestedPeople.set(true);
-                    }
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
@@ -278,8 +271,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             getActivity().onBackPressed();
         });
         binding.interestedUsers.setOnClickListener((l)->{
-            if (!hasInterestedPeople.get()){
+            if (interestedPeople.isEmpty()){
                 Toast.makeText(getContext(), "Currently no interested people available.", Toast.LENGTH_LONG).show();
+                return;
             }
             // opens bubble
             userListTask.addOnSuccessListener(o -> {

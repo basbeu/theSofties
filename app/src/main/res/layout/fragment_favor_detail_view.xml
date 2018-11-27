@@ -155,7 +155,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"
                 android:text="see interested users"
-                android:enabled="@{elements.hasInterestedPeople}"
                 android:visibility="@{elements.isItsOwn ? View.VISIBLE : View.GONE}"
                 android:textSize="16sp" />
 
