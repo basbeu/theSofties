@@ -10,7 +10,10 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
-public class GeocodingLocation {
+/**
+ * Class that provide tools for finding location
+ */
+public final class GeocodingLocation {
 
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
@@ -21,7 +24,12 @@ public class GeocodingLocation {
 
     private static final String TAG = "GeocodingLocation";
 
-
+    /**
+     * Method that search a location from a string and send an Address to a Handler
+     * @param locationAddress String corresponding to an address to search
+     * @param context Context from where the call come from
+     * @param handler Handler to which the answers will be sent
+     */
     public static void getAddressFromLocation(final String locationAddress,
                                               final Context context, final Handler handler) {
         Thread thread = new Thread() {

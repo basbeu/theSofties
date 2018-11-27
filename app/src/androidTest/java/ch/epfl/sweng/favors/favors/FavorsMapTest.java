@@ -29,7 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 @RunWith(AndroidJUnit4.class)
 public class FavorsMapTest {
-//TODO : Better testing
+//TODO : Better testin, for now just launch activity and method
     @Rule
     public FragmentTestRule<FavorsMap> mFragmentTestRule = new FragmentTestRule<>(FavorsMap.class);
 
@@ -46,7 +46,6 @@ public class FavorsMapTest {
     @After
     public void After() {
         Database.cleanUpAll();
-        //mFragmentTestRule.finishActivity();
     }
 
     @Test
@@ -57,10 +56,6 @@ public class FavorsMapTest {
 
     @Test
     public void onMapReadyTest(){
-        /*FavorsMap favorMap = new FavorsMap();
-        GoogleMap map = new GoogleMap(mapDelegate);
-        favorMap.onMapReady(map);*/
-
         mFragmentTestRule.launchActivity(null);
         onView(ViewMatchers.withId(R.id.mapView)).check(matches(isDisplayed()));
         GoogleMap map = new GoogleMap(mapDelegate);

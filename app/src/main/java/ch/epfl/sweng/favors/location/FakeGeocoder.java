@@ -9,7 +9,10 @@ import java.util.Locale;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
-public class FakeGeocoder extends GeocoderDispatcher {
+/**
+ * Provide a fake geocoder that is used during test Execution
+ */
+public final class FakeGeocoder extends GeocoderDispatcher {
     public static final String FAKE_LOCATION_CITY = "Fake Lausanne";
     public static final double FAKE_LATITUDE = 46.5196535;
     public static final double FAKE_LONGITUDE = 6.6322734;
@@ -27,6 +30,9 @@ public class FakeGeocoder extends GeocoderDispatcher {
         addressesFailure = new ArrayList<>();
     }
 
+    /**
+     * @return new FakeGeocoder ready for test
+     */
     public static FakeGeocoder getGeocoder() {
         return new FakeGeocoder();
     }
