@@ -24,7 +24,7 @@ import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.Utils;
 
-import static ch.epfl.sweng.favors.utils.Utils.getIconPath;
+import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
 
 /**
  * FavorListAdapter
@@ -130,7 +130,7 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
          */
         private void setIconCategory(Favor favor){
             if(favor.get(Favor.StringFields.category) != null){
-                iconCategory.setImageURI(Uri.parse(getIconPath(favor.get(Favor.StringFields.category))));
+                iconCategory.setImageURI(Uri.parse(getIconPathFromCategory(favor.get(Favor.StringFields.category))));
             }
         }
     }
