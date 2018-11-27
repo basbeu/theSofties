@@ -48,7 +48,6 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, savedInstanceState.toString());
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
         selectedUsers = new ObservableArrayList<>();

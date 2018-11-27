@@ -251,7 +251,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     localFavor.set(Favor.ObjectFields.interested, interestedPeople);
                     Database.getInstance().updateOnDb(localFavor);
                 }
-                
+
                 new Handler().postDelayed(() -> {
                     // This method will be executed once the timer is over
                     buttonEnabled = true;
