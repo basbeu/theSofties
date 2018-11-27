@@ -63,8 +63,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private static final int MIN_STRING_SIZE = 1;
     private static final int GET_FROM_GALLERY = 66;
     private FirebaseStorageDispatcher storage;
-    private StorageReference storageReference;
-    private Uri selectedImage = null;
+    private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
 
     private DatePickerFragment date = new DatePickerFragment();
 
@@ -234,7 +233,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         binding = DataBindingUtil.inflate(inflater, R.layout.favors_layout,container,false);
         binding.setElements(this);
 
@@ -257,9 +256,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
-        binding.addFavor.setOnClickListener(v-> {
-            createFavorIfValid(newFavor);
-        });
+
         binding.addFavor.setOnClickListener(v-> {
             createFavorIfValid(newFavor);
         });
@@ -346,26 +343,30 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         Toast.makeText(this.getContext(), text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * This method is called
+     * Inspired from this tutorial : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
+     * @param requestCode 66 if the activity is getting a picture from the gallery
+     * @param resultCode -1 if OK
+     * @param data the data corresponding to the picture
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-        //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             selectedImage = data.getData();
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
                 binding.favorImage.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            } catch (FileNotFoundException e) { e.printStackTrace(); }
+            catch (IOException e) { e.printStackTrace(); }
         }
+    }
+
+    private void setImageFromResult(int requestCode, int resultCode, Intent data){
+
     }
 
 }

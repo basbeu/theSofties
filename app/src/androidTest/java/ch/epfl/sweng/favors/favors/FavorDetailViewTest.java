@@ -1,5 +1,11 @@
 package ch.epfl.sweng.favors.favors;
 
+<<<<<<< HEAD
+=======
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Looper;
+>>>>>>> 89be7b5a2c9c303dc0dba53d0c2d4c8d859e6f51
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.uiautomator.UiDevice;
 
@@ -119,7 +125,6 @@ public class FavorDetailViewTest {
         }
 
         onView(ViewMatchers.withId(R.id.interestedButton)).perform(scrollTo(), click());
-//        onView(withText("Sorry an error occured, try again later...")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);
     }
