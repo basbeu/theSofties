@@ -22,7 +22,7 @@ public class FakeAuthentication extends Authentication {
     public static final String FIRST_NAME = "Fake";
     public static final String LAST_NAME = "Auth";
     public static final String CITY = "Fake City";
-    public static final String TOKENS = "5";
+    public static final Long TOKENS = 5L;
     public static final User.UserGender GENDER = User.UserGender.F;
 
     private FakeAuthentication(){

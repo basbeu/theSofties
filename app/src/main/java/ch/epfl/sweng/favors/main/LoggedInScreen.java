@@ -141,9 +141,9 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                                     }
                                     else{Log.d(TAG, "This favor is being not being treated: "+f.get(Favor.StringFields.title));}
                                 }
-                                int currentUserTokense = Integer.parseInt(User.getMain().get(User.StringFields.tokens));
+                                long currentUserTokense = User.getMain().get(User.LongFields.tokens);
                                 currentUserTokense += toReimburseTotal;
-                                User.getMain().set(User.StringFields.tokens,currentUserTokense+"");
+                                User.getMain().set(User.LongFields.tokens,currentUserTokense);
                                 Database.getInstance().updateOnDb(User.getMain());
                             }
                         })

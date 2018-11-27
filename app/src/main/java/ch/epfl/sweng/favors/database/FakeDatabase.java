@@ -23,6 +23,7 @@ import java.util.Random;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
@@ -278,6 +279,16 @@ public class FakeDatabase extends Database{
 
                     return;
                 }
+                else if (clazz.isInstance(entity) && value instanceof Long && entity.get((DatabaseLongField) key).equals(value)) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        }
+                    });
+
+                    return;
+                }
             }
             Log.d(TAG, "The element if type "+ key.toString()
                     +" with id " + value + " wasn't found on db.");
@@ -316,7 +327,7 @@ public class FakeDatabase extends Database{
         u4.set(User.StringFields.lastName,FakeAuthentication.LAST_NAME);
         u4.set(User.StringFields.email, FakeAuthentication.EMAIL);
         u4.set(User.StringFields.city, FakeAuthentication.CITY);
-        u4.set(User.StringFields.tokens, FakeAuthentication.TOKENS);
+        u4.set(User.LongFields.tokens, FakeAuthentication.TOKENS);
         User.UserGender.setGender(u4, FakeAuthentication.GENDER);
 
         Favor f1 = new Favor("F1");

@@ -282,8 +282,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
             }
         });
         binding.deleteButton.setOnClickListener((l) -> {
-            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) + 1;
-            User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+            long newUserTokens = User.getMain().get(User.LongFields.tokens)+ 1;
+            User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
             if(pictureRef != null && pictureRef.get() != null){
@@ -351,8 +351,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                 for (String selUID : uidsSelected) {
                     User u = new User(selUID);
                     Database.getInstance().updateFromDb(u).addOnSuccessListener(task -> {
-                        long currentTok = Integer.parseInt(u.get(User.StringFields.tokens)); //TODO fix this with longs
-                        u.set(User.StringFields.tokens, (currentTok - tokenPerPerson) + "");
+                        long currentTok = u.get(User.LongFields.tokens); //TODO fix this with longs
+                        u.set(User.LongFields.tokens, currentTok - tokenPerPerson);
                         Database.getInstance().updateOnDb(u);
                         nbPerson.getAndDecrement();
                         synchronized (uidsIntrested) {

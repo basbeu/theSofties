@@ -84,10 +84,10 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public void createFavorIfValid(Favor newFavor) {
         if (allFavorFieldsValid()) {
             updateFavorObject(newFavor);
-            long newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) - newFavor.get(Favor.LongFields.nbPerson)*newFavor.get(Favor.LongFields.tokenPerPerson);
+            long newUserTokens = User.getMain().get(User.LongFields.tokens) - newFavor.get(Favor.LongFields.nbPerson)*newFavor.get(Favor.LongFields.tokenPerPerson);
             if(newUserTokens >= 0 ) {
                 if(newFavor.getId() == null) {
-                    User.getMain().set(User.StringFields.tokens, Long.toString(newUserTokens));
+                    User.getMain().set(User.LongFields.tokens, newUserTokens);
                     Database.getInstance().updateOnDb(User.getMain());
                 }
                 Database.getInstance().updateOnDb(newFavor);
