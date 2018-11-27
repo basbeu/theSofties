@@ -119,20 +119,20 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
 //
 //                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
 
-                        //TODO : try to do it in a more clean way
-                        if (!ExecutionMode.getInstance().isTest()) {
-                            //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.carpooling);
-                            //BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.carpooling));
+                    //TODO : try to do it in a more clean way
+                    if (!ExecutionMode.getInstance().isTest()) {
+                        //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.carpooling);
+                        //BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.carpooling));
 
                         Resources r = getResources();
                         int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
 
                         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
 
-                            Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)).icon(icon));
-                            favorsMap.put(marker.getId(), favor);
-                            Log.d(TAG, "new Marker : " + marker.getId());
-                        }
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)).icon(icon));
+                        favorsMap.put(marker.getId(), favor);
+                        Log.d(TAG, "new Marker : " + marker.getId());
+                    }
 //                    }
                 }
             }
@@ -145,7 +145,7 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
      * @param resId
      * @return
      */
-    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
+    protected Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
         View customMarkerView = getLayoutInflater().inflate(R.layout.custom_marker_map, null);
 

@@ -66,4 +66,11 @@ public class FavorsMapTest {
         GoogleMap map = new GoogleMap(mapDelegate);
         mFragmentTestRule.getFragment().onMapReady(map);
     }
+
+    @Test
+    public void getMarkerBitmapFromViewTest(){
+        mFragmentTestRule.launchActivity(null);
+        onView(ViewMatchers.withId(R.id.mapView)).check(matches(isDisplayed()));
+        mFragmentTestRule.getFragment().getMarkerBitmapFromView(R.drawable.carpooling);
+    }
 }
