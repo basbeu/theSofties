@@ -50,6 +50,9 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
 
     private HashMap<String,Favor> favorsMap = new HashMap<>();
 
+    /**
+     * Action that is executed when click is perfomed on a marker
+     */
     private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -108,16 +111,12 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                //favorsMap = new HashMap<>();
                 for(Favor favor:favorList){
                     GeoPoint point = (GeoPoint) favor.get(Favor.ObjectFields.location);
                     LatLng location = new LatLng(point.getLatitude(),point.getLongitude());
 
                     //TODO : try to do it in a more clean way
-                    if(!ExecutionMode.getInstance().isTest()){
-                        //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.carpooling);
-                        //BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.carpooling));
-
+                    if (!ExecutionMode.getInstance().isTest()) {
                         Resources r = getResources();
                         int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
 
@@ -125,7 +124,7 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
 
                         Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)).icon(icon));
                         favorsMap.put(marker.getId(), favor);
-                        Log.d(TAG, "new Marker : "+marker.getId());
+                        Log.d(TAG, "new Marker : " + marker.getId());
                     }
                 }
             }
@@ -135,10 +134,10 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     /**
      * Build a custom bitmap from a ressource id, found this solution in stackoverflow
      * https://stackoverflow.com/questions/14811579/how-to-create-a-custom-shaped-bitmap-marker-with-android-map-api-v2
-     * @param resId
-     * @return
+     * @param resId  @DrawableRes int id of the ressource (image), reference to an image that is in the drawable folder
+     * @return Bitmap representing the ressource integrated in a custom layout
      */
-    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
+    protected Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
         View customMarkerView = getLayoutInflater().inflate(R.layout.custom_marker_map, null);
 

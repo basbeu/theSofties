@@ -7,32 +7,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class FakeGeocoder extends GeocoderDispatcher {
+import ch.epfl.sweng.favors.utils.ExecutionMode;
+
+/**
+ * Provide a fake geocoder that is used during test Execution
+ */
+public final class FakeGeocoder extends GeocoderDispatcher {
     public static final String FAKE_LOCATION_CITY = "Fake Lausanne";
     public static final double FAKE_LATITUDE = 46.5196535;
     public static final double FAKE_LONGITUDE = 6.6322734;
 
-    private ArrayList<Address> addresses;
+    private ArrayList<Address> addressesSuccess;
+    private ArrayList<Address> addressesFailure;
 
     private FakeGeocoder(){
-        addresses = new ArrayList<>();
-        addresses.add(new Address(Locale.getDefault()));
-        addresses.get(0).setLocality(FAKE_LOCATION_CITY);
-        addresses.get(0).setLatitude(FAKE_LATITUDE);
-        addresses.get(0).setLongitude(FAKE_LONGITUDE);
+        addressesSuccess = new ArrayList<>();
+        addressesSuccess.add(new Address(Locale.getDefault()));
+        addressesSuccess.get(0).setLocality(FAKE_LOCATION_CITY);
+        addressesSuccess.get(0).setLatitude(FAKE_LATITUDE);
+        addressesSuccess.get(0).setLongitude(FAKE_LONGITUDE);
+
+        addressesFailure = new ArrayList<>();
     }
 
+    /**
+     * @return new FakeGeocoder ready for test
+     */
     public static FakeGeocoder getGeocoder() {
         return new FakeGeocoder();
     }
 
     @Override
     public List<Address> getFromLocationName(String locationName, int maxResults) throws IOException {
-        return addresses;
+        return fakeImplementation();
     }
 
     @Override
     public List<Address> getFromLocation(double latitude, double longitude, int maxResults) throws IOException{
+        return fakeImplementation();
+    }
+
+    private List<Address> fakeImplementation() throws IOException {
+        ArrayList<Address> addresses = new ArrayList<>();
+
+        switch (ExecutionMode.getInstance().getGeocoderExecutionTestMode()){
+            case SUCCESS:
+                addresses = addressesSuccess;
+                break;
+            case FAILURE:
+                addresses =  addressesFailure;
+                break;
+            case EXCEPTION:
+                throw new IOException();
+        }
         return addresses;
     }
 }
