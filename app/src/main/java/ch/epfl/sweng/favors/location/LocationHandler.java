@@ -160,6 +160,5 @@ public class LocationHandler {
         else{
             return  "Fake Lausanne";
         }
-
     }
 }

@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.location.FakeGeocoder;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -277,7 +278,7 @@ public class CompleteLoggedUITest {
                                         0),
                                 2),
                         isDisplayed()));
-        textView9.check(matches(withText("Fake Lausanne")));
+        textView9.check(matches(withText(FakeGeocoder.FAKE_LOCATION_CITY)));
 
         ViewInteraction checkedTextView = onView(
                 allOf(withId(R.id.design_menu_item_text),

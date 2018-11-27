@@ -302,17 +302,12 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
 
     public void checkAddress(String value){
-        if(!ExecutionMode.getInstance().isTest()) {
-            locationCityValid.set(false);
-            if (value.length() < 4) {
-                return;
-            }
-            GeocodingLocation locationAddress = new GeocodingLocation();
-            locationAddress.getAddressFromLocation(value, getContext(), new GeocoderHandler());
-        }else {
-            favorLocation = new GeoPoint(1.564, 6.14543);
-            locationCityValid.set(true);
+        locationCityValid.set(false);
+        if (value.length() < 4) {
+            return;
         }
+        GeocodingLocation locationAddress = new GeocodingLocation();
+        locationAddress.getAddressFromLocation(value, getContext(), new GeocoderHandler());
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

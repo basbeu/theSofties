@@ -1,18 +1,29 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,6 +38,8 @@ import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
 import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
+import static ch.epfl.sweng.favors.utils.Utils.getIconNameFromCategory;
 
 /**
  * Fragment that displays the list of favor and allows User to sort it and to search in it
@@ -39,6 +52,9 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
 
     private HashMap<String,Favor> favorsMap = new HashMap<>();
 
+    /**
+     * Action that is executed when click is perfomed on a marker
+     */
     private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -76,6 +92,7 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
 
     }
 
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -88,6 +105,7 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         if(LocationHandler.getHandler().locationPoint.get() != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
                     LocationHandler.getHandler().locationPoint.get().getLatitude(),
@@ -98,22 +116,63 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.setOnMarkerClickListener(markerClickListener);
 
-        FavorRequest.all(favorList,null,null);
+        mMap.setOnMarkerClickListener(markerClickListener);
+        Log.d(TAG, "Map ready");
+
+        FavorRequest.all(favorList, null,null);
 
         favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                //favorsMap = new HashMap<>();
                 for(Favor favor:favorList){
                     GeoPoint point = (GeoPoint) favor.get(Favor.ObjectFields.location);
                     LatLng location = new LatLng(point.getLatitude(),point.getLongitude());
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)));
-                    favorsMap.put(marker.getId(), favor);
+
+                    //TODO : try to do it in a more clean way
+                    if (!ExecutionMode.getInstance().isTest()) {
+                        Resources r = getResources();
+                        int drawableId = r.getIdentifier(getIconNameFromCategory(favor.get(Favor.StringFields.category)), "drawable", "ch.epfl.sweng.favors");
+
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableId));
+
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(favor.get(Favor.StringFields.title)).icon(icon));
+                        favorsMap.put(marker.getId(), favor);
+                        Log.d(TAG, "new Marker : " + marker.getId());
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * Build a custom bitmap from a ressource id, found this solution in stackoverflow
+     * https://stackoverflow.com/questions/14811579/how-to-create-a-custom-shaped-bitmap-marker-with-android-map-api-v2
+     * @param resId  @DrawableRes int id of the ressource (image), reference to an image that is in the drawable folder
+     * @return Bitmap representing the ressource integrated in a custom layout
+     */
+    protected Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
+
+        View customMarkerView = getLayoutInflater().inflate(R.layout.custom_marker_map, null);
+
+        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.profile_image);
+        markerImageView.setImageResource(resId);
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+
+        customMarkerView.draw(canvas);
+
+        return returnedBitmap;
     }
 
 }
