@@ -280,8 +280,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList(InterestedUsersBubbles.INTERESTED_USERS, new ArrayList<>(userNames.keySet()));
-                Log.d(TAG, selectedUsers.toString());
-                // Map K: uid, V: name
                 bundle.putStringArrayList(InterestedUsersBubbles.SELECTED_USERS, new ArrayList<>(selectedUsers.values()));
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
