@@ -132,7 +132,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                                     Log.d(TAG, "The tokensPerPerson are: " + f.get(Favor.LongFields.tokenPerPerson));
                                     if(f.get(Favor.ObjectFields.interested) == null || ((ArrayList<String>)f.get(Favor.ObjectFields.interested)).isEmpty()){
                                         Log.d(TAG, "This favor is being treated: "+f.get(Favor.StringFields.title));
-                                        long nbPersonneRemaining = f.get(Favor.LongFields.nbPerson)==null ? 1:f.get(Favor.LongFields.nbPerson);
+                                        long nbPersonneRemaining = f.get(Favor.LongFields.nbPerson)==null ? 0:f.get(Favor.LongFields.nbPerson);
                                         long tokenPerPerson = f.get(Favor.LongFields.tokenPerPerson)==null ? Integer.parseInt(f.get(Favor.StringFields.tokens)) :  f.get(Favor.LongFields.tokenPerPerson);   //TODO change this once tokens are Integers
                                         f.set(Favor.LongFields.nbPerson,0L);
                                         //f.set(Favor.LongFields.tokenPerPerson,0L);
