@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
@@ -322,19 +324,17 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         ArrayList<String> uidsIntrested = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
         AtomicLong nbPerson = new AtomicLong(localFavor.get(Favor.LongFields.nbPerson));
         long tokenPerPerson = localFavor.get(Favor.LongFields.tokenPerPerson);
+        ArrayList<Task> tasksToWait = new ArrayList<>();
 
         if (!uidsSelected.isEmpty()) {
             if (uidsSelected.size() <= nbPerson.get()) {
                 for (String selUID : uidsSelected) {
                     User u = new User(selUID);
                     Database.getInstance().updateFromDb(u).addOnSuccessListener(task -> {
-                        long currentTok = u.get(User.LongFields.tokens); //TODO fix this with longs
-                        u.set(User.LongFields.tokens, currentTok - tokenPerPerson);
+                        long currentTok = u.get(User.LongFields.tokens);
+                        u.set(User.LongFields.tokens, currentTok + tokenPerPerson);
                         Database.getInstance().updateOnDb(u);
-                        nbPerson.getAndDecrement();
-                        synchronized (uidsIntrested) {
-                            uidsIntrested.remove(selUID);
-                        }
+                        localFavor.set(Favor.LongFields.nbPerson, nbPerson.decrementAndGet());
                         EmailUtils.sendEmail(localFavor.get(Favor.StringFields.ownerEmail), u.get(User.StringFields.email),
                                 "You have been paid for the favor " + title.get()+ "!",
                                 "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it.",
@@ -342,18 +342,19 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     }).addOnFailureListener(t -> {
                         Toast.makeText(getContext(), "Could not pay all users", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Failed to update user with uid: " + selUID + " from the DB");
-                    });
+                    }).continueWith(task->{
+                            localFavor.set(Favor.ObjectFields.interested, uidsIntrested.removeAll(uidsSelected));
+                            localFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<>());
+                            Database.getInstance().updateOnDb(localFavor);
+                            return null;
+                        });
                 }
-                uidsSelected = new ArrayList<>();
-                localFavor.set(Favor.ObjectFields.interested, uidsIntrested);
-                localFavor.set(Favor.ObjectFields.selectedPeople, uidsSelected);
-                localFavor.set(Favor.LongFields.nbPerson, nbPerson.longValue());
-                Database.getInstance().updateOnDb(localFavor);
+
+
                 Toast.makeText(getContext(), "Users have been successfully paid.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Too many people are selected", Toast.LENGTH_SHORT).show();
             }
-
         } else {
             Toast.makeText(getContext(), "Please select the people that you want to pay", Toast.LENGTH_LONG).show();
         }
