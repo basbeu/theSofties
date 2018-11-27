@@ -1,24 +1,16 @@
 package ch.epfl.sweng.favors.favors;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.igalata.bubblepicker.BubblePickerListener;
 import com.igalata.bubblepicker.adapter.BubblePickerAdapter;
 import com.igalata.bubblepicker.model.BubbleGradient;
 import com.igalata.bubblepicker.rendering.BubblePicker;
 
-import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.BubblesBinding;
 
 import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
-import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.support.v4.content.ContextCompat;
@@ -33,37 +25,40 @@ import com.igalata.bubblepicker.model.PickerItem;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.epfl.sweng.favors.R;
 
 public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     private static final String TAG = "BUBBLES_FRAGMENT";
+    public static final String INTERESTED_USERS = "interestedUsers";
+    public static final String SELECTED_USERS = "selectedUsers";
 
     BubblesBinding binding;
     BubblePicker picker;
 
-    private String[] titles;
     private TypedArray colors;
+    //for future profile pictures
 //    final TypedArray images = getResources().obtainTypedArray(R.array.images);
     private ObservableArrayList<String> userNames;
     private ObservableArrayList<String> selectedUsers;
-    private Favor localFavor;
-    private Task iplist;
 
     private final String BUTTON_STATE_D = "Done";
     private final String BUTTON_STATE_C = "Cancel";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Log.d(TAG, savedInstanceState.toString());
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
-        userNames.addAll(getArguments().getStringArrayList("userNames"));
         selectedUsers = new ObservableArrayList<>();
-        selectedUsers.addAll(getArguments().getStringArrayList("selectedUsers"));
 
-        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
+            selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
+        } else {
+            Log.d(TAG, "no arguments received");
+        }
     }
 
     @Override
@@ -71,15 +66,13 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.bubbles,container,false);
         binding.setElements(this);
 
-//        if(selectedUsers.isEmpty()) {
-//            binding.buttonDone.setEnabled(false);
         binding.buttonDone.setText(BUTTON_STATE_C);
-//        }
 
         picker = binding.picker;
         picker.setCenterImmediately(true);
 
         picker.setAdapter(new BubblePickerAdapter() {
+
             @Override
             public int getTotalCount() {
                 return userNames.size();
@@ -93,15 +86,10 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
                 item.setTitle(name);
                 item.setGradient(new BubbleGradient(colors.getColor((position * 2) % 8, 0),
                         colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
-//                        item.setTypeface(Typeface.BOLD);
                 item.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
-
-//                Optional<String> uid = getFrom(userNames, name, selectedUsers);
                 if(selectedUsers.contains(name)) {
                     item.setSelected(true);
                 }
-
-//                item.setBackgroundImage(ContextCompat.getDrawable(getContext(), images.getResourceId(position, 0)));
                 return item;
             }
         });
@@ -109,11 +97,8 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         picker.setListener(new BubblePickerListener() {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
-//                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
-//                Log.d("bubbles select", Boolean.toString(newUser.isPresent()));
-//                if(newUser.isPresent())
-                    selectedUsers.add(item.getTitle());
-                //Log.d("bubbles add", selectedUsers.toString());
+                selectedUsers.add(item.getTitle());
+                Log.d(TAG, "added " + item.getTitle() + " to selected users");
                 // set button active (again)
                 binding.buttonDone.setText(BUTTON_STATE_D);
                 binding.buttonDone.setEnabled(true);
@@ -121,11 +106,8 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem item) {
-//                Optional<String> newUser = getFrom(userNames, item.getTitle(), interestedPeople);
-//                Log.d("bubbles deselect", Boolean.toString(newUser.isPresent()));
-//                if(newUser.isPresent())
                 selectedUsers.remove(item.getTitle());
-                //Log.d("bubbles remove", selectedUsers.toString());
+                Log.d(TAG, "removed " + item.getTitle() + " from selected users");
                 if(selectedUsers.isEmpty()) {
                     Toast.makeText(getContext(), "Please select at least one person in order to continue", Toast.LENGTH_LONG).show();
                     binding.buttonDone.setEnabled(false);
@@ -144,11 +126,11 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
                 FavorDetailView mFrag = new FavorDetailView();
                 if(b.getText() == BUTTON_STATE_D || b.getText() == BUTTON_STATE_D.toUpperCase()) {
                     Bundle bundle = new Bundle();
-                    bundle.putStringArrayList("selectedUsers", selectedUsers);
+                    bundle.putStringArrayList(SELECTED_USERS, selectedUsers);
                     Log.d("bubbles selected final", selectedUsers.toString());
                     mFrag.setArguments(bundle);
                 // proceed w/o sending a selection -> same as never been there
-                } else if (binding.buttonDone.getText() == BUTTON_STATE_C || b.getText() == BUTTON_STATE_C.toUpperCase()) {
+                } else if (binding.buttonDone.getText() == BUTTON_STATE_C || b.getText() == BUTTON_STATE_C.toUpperCase() && selectedUsers.isEmpty()) {
                     Toast.makeText(getContext(), "No selection made, don't forget to though!", Toast.LENGTH_SHORT).show();
                 } else {
                     // Default case should not be triggered unless somebody renames buttons
@@ -161,29 +143,5 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 
         return binding.getRoot();
     }
-
-//    protected static Optional<String> getFrom(List<String> givesIndex, String s, List<String> from) {
-//        Log.d("bubbles print", givesIndex.toString() + s + from.toString());
-//        int index = givesIndex.indexOf(s);
-//        // check sanity - get user with uid and check that names match
-//        if(from.size() > index) {
-//            return Optional.of(from.get(index));
-//        } else {
-//            return Optional.empty();
-//        }
-//    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        picker.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        picker.onPause();
-    }
-
 
 }

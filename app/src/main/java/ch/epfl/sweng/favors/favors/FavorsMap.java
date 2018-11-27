@@ -105,7 +105,6 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         if(LocationHandler.getHandler().locationPoint.get() != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
                     LocationHandler.getHandler().locationPoint.get().getLatitude(),

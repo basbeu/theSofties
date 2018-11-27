@@ -81,23 +81,31 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public boolean allFavorFieldsValid(){
         return (titleValid.get() && descriptionValid.get() && locationCityValid.get() && deadlineValid.get());
     }
+
     public void createFavorIfValid(Favor newFavor) {
-        if (allFavorFieldsValid()) {
-            updateFavorObject(newFavor);
-            long newUserTokens = User.getMain().get(User.LongFields.tokens) - newFavor.get(Favor.LongFields.nbPerson)*newFavor.get(Favor.LongFields.tokenPerPerson);
-            if(newUserTokens >= 0 ) {
-                if(newFavor.getId() == null) {
-                    User.getMain().set(User.LongFields.tokens, newUserTokens);
-                    Database.getInstance().updateOnDb(User.getMain());
-                }
-                Database.getInstance().updateOnDb(newFavor);
-                launchToast(validationText.get());
-                updateUI(true);
-            } else {
-                Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
-            }
+        if (!allFavorFieldsValid()) {
+            //don't create the favor if a field is invalid
+            return;
         }
+        Long availableTokens = User.getMain().get(User.LongFields.tokens);
+        long newUserTokens = availableTokens - 1;
+        //check if user has enough tokens to create a new favor and if he's creating a new favor or just edit an existing one
+        if(newUserTokens < 0 && newFavor.getId() == null ) {
+            Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //otherwise create or update the new favor with the given fields
+        updateFavorObject(newFavor);
+        if(newFavor.getId() == null) {
+            User.getMain().set(User.LongFields.tokens, newUserTokens);
+            Database.getInstance().updateOnDb(User.getMain());
+        }
+        Database.getInstance().updateOnDb(newFavor);
+        launchToast(validationText.get());
+        updateUI(true);
+        return;
     }
+
 
     public void updateFavorObject(Favor newFavor){
         newFavor.set(Favor.StringFields.title, binding.titleFavor.getText().toString());
@@ -238,7 +246,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.setElements(this);
 
         if(getArguments() != null && (strtext = getArguments().getString(KEY_FRAGMENT_ID)) != null) {
-            newFavor = new Favor(strtext);
+            newFavor = new Favor(strtext); //do we really create a new favor when it already exists?
             updateUI(true);
         }
         else{
@@ -368,5 +376,4 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private void setImageFromResult(int requestCode, int resultCode, Intent data){
 
     }
-
 }
