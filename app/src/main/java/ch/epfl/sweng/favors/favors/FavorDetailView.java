@@ -3,8 +3,6 @@ package ch.epfl.sweng.favors.favors;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableArrayMap;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -14,8 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +22,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -40,6 +35,7 @@ import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
+import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
@@ -69,7 +65,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> tokens;
     public ObservableBoolean isItsOwn = new ObservableBoolean(false);
     public ObservableBoolean buttonsEnabled = new ObservableBoolean(true);
-    public ObservableBoolean hasInterestedPeople = new ObservableBoolean(false);
     public ObservableBoolean isInterested = new ObservableBoolean(false);
     public ObservableField<String> pictureRef;
 
@@ -106,17 +101,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         } else {
             newSelectionOfUsers = false;
         }
-        hasInterestedPeople.set(false);
 
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
-        if(arguments != null && getArguments().containsKey(ENABLE_BUTTONS)){
+        if (arguments != null && getArguments().containsKey(ENABLE_BUTTONS)) {
             buttonsEnabled.set(arguments.getBoolean(ENABLE_BUTTONS));
         }
-        if(arguments != null && getArguments().containsKey(FAVOR_ID)){
+        if (arguments != null && getArguments().containsKey(FAVOR_ID)) {
             localFavor = new Favor(arguments.getString(FAVOR_ID));
             setFields(localFavor);
-        }
-        else {
+        } else {
             model.getFavor().observe(this, newFavor -> {
                 localFavor = newFavor;
                 setFields(newFavor);
@@ -132,24 +125,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         location = favor.getObservableObject(Favor.StringFields.locationCity);
         geo = favor.getObservableObject(Favor.ObjectFields.location);
         ownerEmail = favor.getObservableObject(Favor.StringFields.ownerEmail);
-        distance.set(LocationHandler.distanceBetween((GeoPoint)geo.get()));
+        distance.set(LocationHandler.distanceBetween((GeoPoint) geo.get()));
         tokens = favor.getObservableObject(Favor.StringFields.tokens);
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
         //user.set();
-        if(pictureRef != null){
-            Log.d("PICTAG", "101");
-            storageReference = FirebaseStorage.getInstance().getReference();
-            StorageReference ref = storageReference.child("images/"+ pictureRef.get());
-            ref.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Log.d("PICTAG", Integer.toString(bytes.length));
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    binding.imageView.setImageBitmap(bmp);
-                    }});
 
-        }
+        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
 
         if(favor.getId() == null){
             binding.deleteButton.setEnabled(false);
@@ -162,11 +144,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             ArrayList<String> interestedPeopleL = (ArrayList<String>)favor.get(Favor.ObjectFields.interested);
             if (!interestedPeopleL.isEmpty()) {
                 interestedPeople.addAll(interestedPeopleL);
-                hasInterestedPeople.set(true);
             }
         }
 
-        if(interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
+        if (interestedPeople.contains(User.getMain().getId())) isInterested.set(true);
 
         // tmp list with db result of people selected
         final ArrayList<String> dbSelectionResult;
@@ -185,6 +166,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     /**
      * set the important List of selected people
+     *
      * @param uid
      * @param dbSelectionResult
      */
@@ -202,7 +184,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
                 // logic for determining which selection to use
                 // if in bubbles selected and the order was bubbleView -> FavorDetailView
-                if(newSelectionOfUsers) {
+                if (newSelectionOfUsers) {
                     if (bubblesResult.contains(key)) {
                         selectedUsers.put(uid, key);
                         localFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<>(selectedUsers.keySet()));
@@ -224,10 +206,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view, container, false);
         binding.setElements(this);
 
-        // bindings
         binding.favReportAbusiveAdd.setOnClickListener((l)->
                 EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
                 "Abusive favors : "+title.get(),
@@ -236,8 +217,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 "issue has been reported! Sorry for the inconvenience",
                 "Sorry an error occured, try again later..."));
 
-        binding.interestedButton.setOnClickListener((l)->{
-            if(isItsOwn.get()) {
+        binding.interestedButton.setOnClickListener((l) -> {
+            if (isItsOwn.get()) {
                 FavorCreateFragment mFrag = new FavorCreateFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(FavorCreateFragment.KEY_FRAGMENT_ID, localFavor.getId());
@@ -253,14 +234,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if(interestedPeople.contains(User.getMain().getId())) {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
-                    if(interestedPeople.isEmpty()){
-                        hasInterestedPeople.set(false);
-                    }
                 }
                 else{
-                    if(interestedPeople.isEmpty()){
-                        hasInterestedPeople.set(true);
-                    }
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
@@ -272,11 +247,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
                 }
 
-                if(localFavor != null){
+                if (localFavor != null) {
                     localFavor.set(Favor.ObjectFields.interested, interestedPeople);
                     Database.getInstance().updateOnDb(localFavor);
                 }
-
+                
                 new Handler().postDelayed(() -> {
                     // This method will be executed once the timer is over
                     buttonEnabled = true;
@@ -285,17 +260,20 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         });
 
         binding.deleteButton.setOnClickListener((l)->{
-            int newUserTokens = Integer.parseInt(User.getMain().get(User.StringFields.tokens)) + 1;
-            User.getMain().set(User.StringFields.tokens, Integer.toString(newUserTokens));
+            long newUserTokens = User.getMain().get(User.LongFields.tokens) + 1;
+            User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
+            if(pictureRef != null && pictureRef.get() != null){
+                StorageReference ref = FirebaseStorageDispatcher.getInstance().getReference().child("images/"+ pictureRef.get());
+                ref.delete();
+            }
+
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
         });
-
         binding.interestedUsers.setOnClickListener((l)->{
-            Log.d(TAG, Boolean.toString(hasInterestedPeople.get()));
-            if (!hasInterestedPeople.get()){
+            if (interestedPeople.isEmpty()){
                 Toast.makeText(getContext(), "Currently no interested people available.", Toast.LENGTH_LONG).show();
             } else {
                 // opens bubble
@@ -313,13 +291,17 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             }
         });
 
-        binding.favorPosterDetailViewAccess.setOnClickListener(v ->{
+        binding.favorPosterDetailViewAccess.setOnClickListener(v -> {
             FavorPosterDetailView mFrag = new FavorPosterDetailView();
             Bundle bundle = new Bundle();
             bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
             mFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     mFrag).addToBackStack(null).commit();
+        });
+
+        binding.payButton.setOnClickListener(v -> {
+           paySelectedPeople();
         });
 
         return binding.getRoot();
@@ -336,6 +318,48 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             view.setImageURI(null);
         } else {
             view.setImageURI(Uri.parse(getIconPathFromCategory(imageName)));
+        }
+    }
+
+    public void paySelectedPeople() {
+        ArrayList<String> uidsSelected = (ArrayList<String>) localFavor.get(Favor.ObjectFields.selectedPeople);
+        ArrayList<String> uidsIntrested = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
+        AtomicLong nbPerson = new AtomicLong(localFavor.get(Favor.LongFields.nbPerson));
+        long tokenPerPerson = localFavor.get(Favor.LongFields.tokenPerPerson);
+
+        if (!uidsSelected.isEmpty()) {
+            if (uidsSelected.size() <= nbPerson.get()) {
+                for (String selUID : uidsSelected) {
+                    User u = new User(selUID);
+                    Database.getInstance().updateFromDb(u).addOnSuccessListener(task -> {
+                        long currentTok = u.get(User.LongFields.tokens); //TODO fix this with longs
+                        u.set(User.LongFields.tokens, currentTok - tokenPerPerson);
+                        Database.getInstance().updateOnDb(u);
+                        nbPerson.getAndDecrement();
+                        synchronized (uidsIntrested) {
+                            uidsIntrested.remove(selUID);
+                        }
+                        EmailUtils.sendEmail(localFavor.get(Favor.StringFields.ownerEmail), u.get(User.StringFields.email),
+                                "You have been paid for the favor " + title.get()+ "!",
+                                "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it.",
+                                getActivity(),"Users have been successfully paid.","");
+                    }).addOnFailureListener(t -> {
+                        Toast.makeText(getContext(), "Could not pay all users", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Failed to update user with uid: " + selUID + " from the DB");
+                    });
+                }
+                uidsSelected = new ArrayList<>();
+                localFavor.set(Favor.ObjectFields.interested, uidsIntrested);
+                localFavor.set(Favor.ObjectFields.selectedPeople, uidsSelected);
+                localFavor.set(Favor.LongFields.nbPerson, nbPerson.longValue());
+                Database.getInstance().updateOnDb(localFavor);
+                Toast.makeText(getContext(), "Users have been successfully paid.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Too many people are selected", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            Toast.makeText(getContext(), "Please select the people that you want to pay", Toast.LENGTH_LONG).show();
         }
     }
 }

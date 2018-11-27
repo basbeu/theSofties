@@ -23,7 +23,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
     static String[] modes = {"List view", "Map view"};
     int currentMode = 0;
     public ObservableField<String> buttonDisplay = new ObservableField<>();
-    public ObservableField<String> tokens = User.getMain().getObservableObject(User.StringFields.tokens);
+    public ObservableField<Long> tokens = User.getMain().getObservableObject(User.LongFields.tokens);
 
     @Nullable
     @Override
