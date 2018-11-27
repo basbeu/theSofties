@@ -189,8 +189,12 @@ public final class Utils {
         return difference;
     }
 
-    public static String getIconPath(String iconName){
-        return "android.resource://ch.epfl.sweng.favors/drawable/"+iconName.toLowerCase().replaceAll("\\s","");
+    public static String getIconPathFromCategory(String category){
+        return "android.resource://ch.epfl.sweng.favors/drawable/"+getIconNameFromCategory(category);
+    }
+
+    public static String getIconNameFromCategory(String category){
+        return category.toLowerCase().replaceAll("\\s","");
     }
 
 
