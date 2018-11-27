@@ -147,8 +147,9 @@ public class LocationHandler {
             Log.e(TAG, "Location geopoint does not have any content");
             return "Not available";
         }
-        if(!ExecutionMode.getInstance().isTest()) {
-            Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
+        //if(!ExecutionMode.getInstance().isTest()) {
+            //Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
+            GeocoderDispatcher gcd = GeocoderDispatcher.getGeocoder(FavorsMain.getContext());
             try {
                 List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
                 if (addresses.size() > 0) return addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryCode();
@@ -156,10 +157,10 @@ public class LocationHandler {
                 Log.e(TAG, "Failed to get geoPoint information");
             }
             return "Not available";
-        }
+        /*}
         else{
             return  "Fake Lausanne";
-        }
+        }*/
 
     }
 }
