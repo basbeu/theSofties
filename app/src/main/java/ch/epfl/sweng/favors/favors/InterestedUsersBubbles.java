@@ -40,7 +40,6 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
 //    final TypedArray images = getResources().obtainTypedArray(R.array.images);
     private ObservableArrayList<String> userNames;
     private ObservableArrayList<String> selectedUsers;
-    private Task iplist;
 
     private final String BUTTON_STATE_D = "Done";
     private final String BUTTON_STATE_C = "Cancel";
@@ -49,11 +48,17 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, savedInstanceState.toString());
         colors = getResources().obtainTypedArray(R.array.colors);
         userNames = new ObservableArrayList<>();
-        userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
         selectedUsers = new ObservableArrayList<>();
-        selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
+
+        if (getArguments() != null) {
+            userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
+            selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
+        } else {
+            Log.d(TAG, "no arguments received");
+        }
     }
 
     @Override
