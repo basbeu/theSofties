@@ -109,16 +109,13 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(LocationHandler.getHandler().locationPoint.get() != null){
+
+        if(!ExecutionMode.getInstance().isTest() && LocationHandler.getHandler().locationPoint.get() != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
                     LocationHandler.getHandler().locationPoint.get().getLatitude(),
                     LocationHandler.getHandler().locationPoint.get().getLongitude())));
             mMap.moveCamera(CameraUpdateFactory.zoomTo(12f));
         }
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setOnMarkerClickListener(markerClickListener);
         Log.d(TAG, "Map ready");
