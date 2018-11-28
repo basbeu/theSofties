@@ -66,7 +66,7 @@ public class RequestTest {
 
         }
         assertEquals(someFavorsList.size(), 9);
-        assertEquals(allFavorsList.size(), 10);
+        assertEquals(allFavorsList.size(), 12);
     }
 
     @Test

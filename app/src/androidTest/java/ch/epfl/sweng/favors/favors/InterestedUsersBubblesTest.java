@@ -56,7 +56,7 @@ public class InterestedUsersBubblesTest {
         }
     }
 
-    @Test
+    @Ignore
     public void warnsAboutEmptySelection(){
 //        Intent intent = new Intent();
 //        Bundle bundle = new Bundle();

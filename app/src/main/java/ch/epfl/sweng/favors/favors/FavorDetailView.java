@@ -135,7 +135,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
 
         if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
-            interestedPeople = (ArrayList<String>) localFavor.get(Favor.ObjectFields.interested);
+            interestedPeople = (ArrayList<String>) favor.get(Favor.ObjectFields.interested);
             if(isItsOwn.get()) {
                 for (String uid : interestedPeople) {
                     User u = new User();

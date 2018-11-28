@@ -309,18 +309,22 @@ public class FakeDatabase extends Database{
         u1.set(User.StringFields.lastName, "Lolo");
         u1.set(User.StringFields.email, "toto.lolo@test.com");
         u1.set(User.StringFields.city, "Tombouctou");
+        u1.set(User.LongFields.tokens, 5L);
         User.UserGender.setGender(u1, User.UserGender.M);
 
         u2.set(User.StringFields.firstName, "Bruce");
         u2.set(User.StringFields.lastName, "Wayne");
         u2.set(User.StringFields.email, "bruce.wayne@waynecorp.com");
         u2.set(User.StringFields.city, "Gotham City");
+        u2.set(User.LongFields.tokens, 5L);
+
         User.UserGender.setGender(u2, User.UserGender.M);
 
         u3.set(User.StringFields.firstName, "Harvey");
         u3.set(User.StringFields.lastName, "Dent");
         u3.set(User.StringFields.email, "harvey.dent@gotham.com");
         u3.set(User.StringFields.city, "Arkham Asylum");
+        u3.set(User.LongFields.tokens, 5L);
         User.UserGender.setGender(u3, User.UserGender.M);
 
         u4.set(User.StringFields.firstName, FakeAuthentication.FIRST_NAME);
@@ -408,6 +412,8 @@ public class FakeDatabase extends Database{
         f4.set(Favor.StringFields.locationCity, "Caltech");
         f4.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f4.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f4.set(Favor.LongFields.nbPerson, 1L);
+        f4.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f5.set(Favor.StringFields.ownerID, "U3");
         f5.set(Favor.StringFields.category, "Save the World");
@@ -417,6 +423,8 @@ public class FakeDatabase extends Database{
         f5.set(Favor.StringFields.locationCity, "US");
         f5.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f5.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f5.set(Favor.LongFields.nbPerson, 1L);
+        f5.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f6.set(Favor.StringFields.ownerID, "U3");
         f6.set(Favor.StringFields.category, "Assasin");
@@ -426,6 +434,8 @@ public class FakeDatabase extends Database{
         f6.set(Favor.StringFields.locationCity, "DC world");
         f6.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f6.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f6.set(Favor.LongFields.nbPerson, 1L);
+        f6.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f7.set(Favor.StringFields.ownerID, "U3");
         f7.set(Favor.StringFields.category, "The Flash");
@@ -435,6 +445,8 @@ public class FakeDatabase extends Database{
         f7.set(Favor.StringFields.locationCity, "DC world");
         f7.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f7.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f7.set(Favor.LongFields.nbPerson, 1L);
+        f7.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f8.set(Favor.StringFields.ownerID, "U3");
         f8.set(Favor.StringFields.category, "Supergirl");
@@ -444,6 +456,8 @@ public class FakeDatabase extends Database{
         f8.set(Favor.StringFields.locationCity, "DC world");
         f8.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f8.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f8.set(Favor.LongFields.nbPerson, 1L);
+        f8.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f9.set(Favor.StringFields.ownerID, "U3");
         f9.set(Favor.StringFields.category, "The Breacher");
@@ -453,6 +467,8 @@ public class FakeDatabase extends Database{
         f9.set(Favor.StringFields.locationCity, "DC world");
         f9.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f9.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f9.set(Favor.LongFields.nbPerson, 1L);
+        f9.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f10.set(Favor.StringFields.ownerID, "U3");
         f10.set(Favor.StringFields.category, "The Legends");
@@ -462,12 +478,14 @@ public class FakeDatabase extends Database{
         f10.set(Favor.StringFields.locationCity, "The Timeline");
         f10.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f10.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f10.set(Favor.LongFields.nbPerson, 1L);
+        f10.set(Favor.LongFields.tokenPerPerson, 1L);
 
         f11.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
         f11.set(Favor.StringFields.category, "The Legends");
         f11.set(Favor.StringFields.deadline, "12.12.2020");
-        f11.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date(5)));
-        f11.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date(10)));
+        f11.set(Favor.ObjectFields.creationTimestamp, new Date(5));
+        f11.set(Favor.ObjectFields.expirationTimestamp, new Date(10));
         f11.set(Favor.LongFields.nbPerson, 10L);
         f11.set(Favor.LongFields.tokenPerPerson, 2L);
         f11.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
@@ -477,17 +495,17 @@ public class FakeDatabase extends Database{
         f11.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
         f12.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
-        f11.set(Favor.StringFields.category, "The Legends");
-        f11.set(Favor.StringFields.deadline, "12.12.2020");
-        f11.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date(10000)));
-        f11.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date(new Date().getTime()+1000000L)));
-        f11.set(Favor.LongFields.nbPerson, 30L);
-        f11.set(Favor.LongFields.tokenPerPerson, 2L);
-        f11.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
-        f11.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
-        f11.set(Favor.StringFields.locationCity, "The Timeline");
-        f11.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-        f11.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f12.set(Favor.StringFields.category, "The Legends");
+        f12.set(Favor.StringFields.deadline, "12.12.2020");
+        f12.set(Favor.ObjectFields.creationTimestamp, new Date(10000));
+        f12.set(Favor.ObjectFields.expirationTimestamp, new Date(new Date().getTime()+1000000L));
+        f12.set(Favor.LongFields.nbPerson, 30L);
+        f12.set(Favor.LongFields.tokenPerPerson, 2L);
+        f12.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
+        f12.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
+        f12.set(Favor.StringFields.locationCity, "The Timeline");
+        f12.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
+        f12.set(Favor.ObjectFields.location, new GeoPoint(0,0));
 
 
         Interest i1 = new Interest("I1");
