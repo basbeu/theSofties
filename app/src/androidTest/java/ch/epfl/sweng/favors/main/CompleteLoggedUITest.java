@@ -135,11 +135,6 @@ public class CompleteLoggedUITest {
         }
 
 
-        // Check first favor title
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.title), withText("Favor12.")));
-        textView3.check(matches(withText("Favor12.")));
-
         // Check second favor title
         ViewInteraction textView5 = onView(
                 allOf(withId(R.id.title), withText("KILL THE BATMAN"),
