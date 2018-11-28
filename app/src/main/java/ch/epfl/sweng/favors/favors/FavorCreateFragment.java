@@ -118,7 +118,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-        newFavor.set(Favor.StringFields.tokens, "1");
         newFavor.set(Favor.LongFields.nbPerson,1L);
         newFavor.set(Favor.LongFields.tokenPerPerson, 1L);
         newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
@@ -137,6 +136,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     }
     FavorsLayoutBinding binding;
 
+    public ObservableField<Long> nbPerson;
+    public ObservableField<Long> tokenPerPers;
     public ObservableField<String> favorTitle;
     public ObservableField<String> favorDescription;
     public ObservableField<String> locationCity;

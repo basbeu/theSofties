@@ -5,6 +5,7 @@
 
     <data>
         <import type="android.view.View" />
+        <import type="java.lang.Long"/>
         <variable
             name="elements"
             type="ch.epfl.sweng.favors.favors.FavorDetailView"
@@ -137,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="70sp"
-                    android:text="@{elements.tokens}"
+                    android:text="@{Long.toString(elements.nbPers.get()) + ` * ` + Long.toString(elements.tokenPerPers.get())}"
                     android:textSize="20sp" />
 
                 <ImageView

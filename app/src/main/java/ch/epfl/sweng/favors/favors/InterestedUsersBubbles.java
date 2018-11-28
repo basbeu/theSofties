@@ -13,6 +13,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,21 +26,40 @@ import com.igalata.bubblepicker.model.PickerItem;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.favors.R;
 
 public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     private static final String TAG = "BUBBLES_FRAGMENT";
-    public static final String INTERESTED_USERS = "interestedUsers";
-    public static final String SELECTED_USERS = "selectedUsers";
 
     BubblesBinding binding;
     BubblePicker picker;
 
     private TypedArray colors;
+
     //for future profile pictures
 //    final TypedArray images = getResources().obtainTypedArray(R.array.images);
-    private ObservableArrayList<String> userNames;
-    private ObservableArrayList<String> selectedUsers;
+
+    private ArrayList<String> userNames;
+    public void setUserNames(ArrayList<String> userNames) {
+        this.userNames = userNames;
+    }
+
+    private ArrayList<String> selectedUsers;
+    public void setSelectedUsers(ArrayList<String> selectedUsers) {
+        this.selectedUsers = selectedUsers;
+    }
+
+    private Long maxToSelect;
+    public void setMaxToSelect(Long maxToSelect) {
+        this.maxToSelect = maxToSelect;
+    }
+
+
+    @Override
+    public void setRetainInstance(boolean retain) {
+    }
 
     private final String BUTTON_STATE_D = "Done";
     private final String BUTTON_STATE_C = "Cancel";
@@ -47,17 +67,16 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         colors = getResources().obtainTypedArray(R.array.colors);
-        userNames = new ObservableArrayList<>();
-        selectedUsers = new ObservableArrayList<>();
 
-        if (getArguments() != null) {
-            userNames.addAll(getArguments().getStringArrayList(INTERESTED_USERS));
-            selectedUsers.addAll(getArguments().getStringArrayList(SELECTED_USERS));
-        } else {
-            Log.d(TAG, "no arguments received");
+        if(userNames == null || selectedUsers == null || maxToSelect == null) {
+            Log.e(TAG, "The fragment can't be intent, data are missing");
+            (InterestedUsersBubbles.this).getFragmentManager().beginTransaction().remove(this).commit();
         }
+        for(String name : userNames){
+            Log.d(TAG, name);
+        }
+        selectedUsers.clear();
     }
 
     @Override
@@ -96,9 +115,11 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         picker.setListener(new BubblePickerListener() {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
+                if(selectedUsers.size() >= maxToSelect){
+                    Toast.makeText(getContext(), "You can't select more user than what you plan at the favor creation", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 selectedUsers.add(item.getTitle());
-                Log.d(TAG, "added " + item.getTitle() + " to selected users");
-                // set button active (again)
                 binding.buttonDone.setText(BUTTON_STATE_D);
                 binding.buttonDone.setEnabled(true);
             }
@@ -124,19 +145,13 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
             if(b.isEnabled()) { // this is redundant I think
                 FavorDetailView mFrag = new FavorDetailView();
                 if(b.getText() == BUTTON_STATE_D || b.getText() == BUTTON_STATE_D.toUpperCase()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArrayList(SELECTED_USERS, selectedUsers);
-                    Log.d("bubbles selected final", selectedUsers.toString());
-                    mFrag.setArguments(bundle);
-                // proceed w/o sending a selection -> same as never been there
                 } else if (binding.buttonDone.getText() == BUTTON_STATE_C || b.getText() == BUTTON_STATE_C.toUpperCase() && selectedUsers.isEmpty()) {
                     Toast.makeText(getContext(), "No selection made, don't forget to though!", Toast.LENGTH_SHORT).show();
                 } else {
                     // Default case should not be triggered unless somebody renames buttons
                     Toast.makeText(getContext(), "Error: There was an unexpected problem with the selection!", Toast.LENGTH_LONG).show();
                 }
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        mFrag).addToBackStack(null).commit();
+                (InterestedUsersBubbles.this).getFragmentManager().beginTransaction().remove(this).commit();
             }
         });
 
