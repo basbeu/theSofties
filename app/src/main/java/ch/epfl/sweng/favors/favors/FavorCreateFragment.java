@@ -84,12 +84,24 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     public void createFavorIfValid(Favor newFavor) {
         if (!allFavorFieldsValid()) {
-            //don't create the favor if a field is invalid
             return;
         }
-        Long availableTokens = User.getMain().get(User.LongFields.tokens);
-        long newUserTokens = availableTokens - 1;
-        //check if user has enough tokens to create a new favor and if he's creating a new favor or just edit an existing one
+
+        try {
+            Long.parseLong(binding.nbTokens.getText().toString());
+            Long.parseLong(binding.nbPersons.getText().toString());
+        }catch(Exception e){
+            Toast.makeText(getContext(), "Please insert valid number of tokens and person", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Long newUserTokens = User.getMain().get(User.LongFields.tokens) -
+                Long.parseLong(binding.nbTokens.getText().toString()) *
+                Long.parseLong(binding.nbPersons.getText().toString());
+
+        if(Long.parseLong(binding.nbTokens.getText().toString()) < 1 || Long.parseLong(binding.nbPersons.getText().toString()) < 1){
+            Toast.makeText(getContext(), "Please non zero values for token and persons number", Toast.LENGTH_SHORT).show();
+        }
+
         if(newUserTokens < 0 && newFavor.getId() == null ) {
             Toast.makeText(getContext(), "You do not have enough tokens to create this favor", Toast.LENGTH_SHORT).show();
             return;
@@ -118,8 +130,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         newFavor.set(Favor.StringFields.ownerEmail, Authentication.getInstance().getEmail());
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
-        newFavor.set(Favor.LongFields.nbPerson,1L);
-        newFavor.set(Favor.LongFields.tokenPerPerson, 1L);
+        newFavor.set(Favor.LongFields.nbPerson,Long.parseLong(binding.nbPersons.getText().toString()));
+        newFavor.set(Favor.LongFields.tokenPerPerson, Long.parseLong(binding.nbTokens.getText().toString()));
         newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
@@ -259,6 +271,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         favorDescription = newFavor.getObservableObject(Favor.StringFields.description);
         locationCity = newFavor.getObservableObject(Favor.StringFields.locationCity);
         deadline = newFavor.getObservableObject(Favor.StringFields.deadline);
+        nbPerson = newFavor.getObservableObject(Favor.LongFields.nbPerson);
+        tokenPerPers = newFavor.getObservableObject(Favor.LongFields.tokenPerPerson);
+
 
         locationCity.set(LocationHandler.getHandler().locationCity.get());
 
