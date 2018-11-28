@@ -76,7 +76,6 @@ public class InterestedUsersBubbles extends android.support.v4.app.Fragment {
         for(String name : userNames){
             Log.d(TAG, name);
         }
-        selectedUsers.clear();
     }
 
     @Override

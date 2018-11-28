@@ -342,9 +342,7 @@ public class FakeDatabase extends Database{
         Favor f6 = new Favor("F6");
         Favor f7 = new Favor("F7");
         Favor f8 = new Favor("F8");
-        Favor f9 = new Favor("F9");
-        Favor f10 = new Favor("F10");
-        Favor f11 = new Favor("F11");
+        Favor f9 = new Favor("F9");;
         Favor f12 = new Favor("F12");
 
         ArrayList<String> selectedPeople1 = new ArrayList<>();
@@ -470,30 +468,6 @@ public class FakeDatabase extends Database{
         f9.set(Favor.LongFields.nbPerson, 1L);
         f9.set(Favor.LongFields.tokenPerPerson, 1L);
 
-        f10.set(Favor.StringFields.ownerID, "U3");
-        f10.set(Favor.StringFields.category, "The Legends");
-        f10.set(Favor.StringFields.deadline, "12.12.20");
-        f10.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
-        f10.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
-        f10.set(Favor.StringFields.locationCity, "The Timeline");
-        f10.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-        f10.set(Favor.ObjectFields.location, new GeoPoint(0,0));
-        f10.set(Favor.LongFields.nbPerson, 1L);
-        f10.set(Favor.LongFields.tokenPerPerson, 1L);
-
-        f11.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
-        f11.set(Favor.StringFields.category, "The Legends");
-        f11.set(Favor.StringFields.deadline, "12.12.2020");
-        f11.set(Favor.ObjectFields.creationTimestamp, new Date(5));
-        f11.set(Favor.ObjectFields.expirationTimestamp, new Date(10));
-        f11.set(Favor.LongFields.nbPerson, 10L);
-        f11.set(Favor.LongFields.tokenPerPerson, 2L);
-        f11.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
-        f11.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
-        f11.set(Favor.StringFields.locationCity, "The Timeline");
-        f11.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-        f11.set(Favor.ObjectFields.location, new GeoPoint(0,0));
-
         f12.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
         f12.set(Favor.StringFields.category, "The Legends");
         f12.set(Favor.StringFields.deadline, "12.12.2020");
@@ -502,7 +476,7 @@ public class FakeDatabase extends Database{
         f12.set(Favor.LongFields.nbPerson, 30L);
         f12.set(Favor.LongFields.tokenPerPerson, 2L);
         f12.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
-        f12.set(Favor.StringFields.title, "Stop cesar surviving the assasinaton.");
+        f12.set(Favor.StringFields.title, "Favor12.");
         f12.set(Favor.StringFields.locationCity, "The Timeline");
         f12.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f12.set(Favor.ObjectFields.location, new GeoPoint(0,0));
@@ -552,8 +526,6 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(f7);
         getInstance().updateOnDb(f8);
         getInstance().updateOnDb(f9);
-        getInstance().updateOnDb(f10);
-        getInstance().updateOnDb(f11);
         getInstance().updateOnDb(f12);
     }
 

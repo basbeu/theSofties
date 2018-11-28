@@ -44,6 +44,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
@@ -51,7 +52,7 @@ import static org.hamcrest.Matchers.is;
 public class CompleteLoggedUITest {
 
     @Rule
-    public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class);
+    public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class, false, false);
 
     @Rule
     public GrantPermissionRule mGrantPermissionRule =
@@ -61,15 +62,13 @@ public class CompleteLoggedUITest {
 
     @Before
     public void setUp() {
-        ExecutionMode.getInstance().setTest(false);
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
     }
 
-    @Ignore("Need to be fixed to this sprints UI")
     @Test
     public void completeLoggedUITest() {
-
+        mActivityTestRule.launchActivity(null);
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -80,15 +79,15 @@ public class CompleteLoggedUITest {
             e.printStackTrace();
         }
 
-//        ViewInteraction textView = onView(
-//                allOf(withId(R.id.welcomeTitle), withText("Welcome back Fake !"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-//                                        0),
-//                                0),
-//                        isDisplayed()));
-//        textView.check(matches(withText("Welcome back Fake !")));
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.welcomeTitle), withText("Welcome back Fake!"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textView.check(matches(withText("Welcome back Fake!")));
 
         ViewInteraction textView2 = onView(
                 allOf(withId(R.id.lastFavorsTitle), withText("Discover favors in your area..."),
@@ -111,14 +110,14 @@ public class CompleteLoggedUITest {
         button.check(matches(isDisplayed()));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.title), withText("KILL THE BATMAN"),
+                allOf(withId(R.id.title), withText(containsString("Favor10.")),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1),
                         isDisplayed()));
-        textView3.check(matches(withText("KILL THE BATMAN")));
+        textView3.check(matches(withText(containsString("Favor10."))));
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.switchList), withText(">"),
@@ -180,34 +179,34 @@ public class CompleteLoggedUITest {
         button2.check(matches(isDisplayed()));
 
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.title), withText("KILL THE BATMAN"),
+                allOf(withId(R.id.title), withText("Favor10."),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1),
                         isDisplayed()));
-        textView5.check(matches(withText("KILL THE BATMAN")));
+        textView5.check(matches(withText("Favor10.")));
 
         ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("I am hungry pls hurry"),
+                allOf(withId(R.id.title), withText("Favor12."),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1),
                         isDisplayed()));
-        textView6.check(matches(withText("I am hungry pls hurry")));
+        textView6.check(matches(withText("Favor12.")));
 
         ViewInteraction textView7 = onView(
-                allOf(withId(R.id.category), withText("Hand help"),
+                allOf(withId(R.id.category), withText("The Legends"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
                                         0),
                                 0),
                         isDisplayed()));
-        textView7.check(matches(withText("Hand help")));
+        textView7.check(matches(withText("The Legends")));
 
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.modeSwitch), withText("Map view"),
@@ -846,30 +845,30 @@ public class CompleteLoggedUITest {
         button8.perform(scrollTo());
         button8.check(matches(isDisplayed()));
 
-//        try {
-//            Thread.sleep(600);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-//        ViewInteraction textView25 = onView(
-//                allOf(withId(R.id.favorPosterDetailViewAccess),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-//                                        0),
-//                                6)
-//                        ));
-//        textView25.perform(scrollTo());
+        ViewInteraction textView25 = onView(
+                allOf(withId(R.id.favorPosterDetailViewAccess),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
+                                        0),
+                                6)
+                        ));
+        textView25.perform(scrollTo());
 
-//        ViewInteraction appCompatTextView3 = onView(
-//                allOf(withId(R.id.favorPosterDetailViewAccess), withText("Nom"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withClassName(is("android.widget.ScrollView")),
-//                                        0),
-//                                6)));
-//        appCompatTextView3.perform(scrollTo(), click());
+        ViewInteraction appCompatTextView3 = onView(
+                allOf(withId(R.id.favorPosterDetailViewAccess), withText("Nom"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                6)));
+        appCompatTextView3.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -880,66 +879,66 @@ public class CompleteLoggedUITest {
             e.printStackTrace();
         }
 
-//        ViewInteraction textView26 = onView(
-//                allOf(withId(R.id.posterTitle), withText("Who is the poster?"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-//                                        0),
-//                                0),
-//                        isDisplayed()));
-//        textView26.check(matches(withText("Who is the poster?")));
-//
-//        ViewInteraction imageView4 = onView(
-//                allOf(withId(R.id.profilePic),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-//                                        0),
-//                                1),
-//                        isDisplayed()));
-//        imageView4.check(matches(isDisplayed()));
-//
-//        ViewInteraction textView27 = onView(
-//                allOf(withText("First name"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-//                                        0),
-//                                2),
-//                        isDisplayed()));
-//        textView27.check(matches(withText("First name")));
-//
-//        ViewInteraction appCompatImageButton4 = onView(
-//                allOf(withContentDescription("Open navigation drawer"),
-//                        childAtPosition(
-//                                allOf(withId(R.id.toolbar),
-//                                        childAtPosition(
-//                                                withClassName(is("android.widget.LinearLayout")),
-//                                                0)),
-//                                0),
-//                        isDisplayed()));
-//        appCompatImageButton4.perform(click());
-//
-//        ViewInteraction navigationMenuItemView4 = onView(
-//                allOf(childAtPosition(
-//                        allOf(withId(R.id.design_navigation_view),
-//                                childAtPosition(
-//                                        withId(R.id.nav_view),
-//                                        0)),
-//                        4),
-//                        isDisplayed()));
-//        navigationMenuItemView4.perform(click());
-//
-//        ViewInteraction textView28 = onView(
-//                allOf(withId(R.id.settingsTitle), withText("Settings"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(R.id.fragment_container),
-//                                        0),
-//                                0),
-//                        isDisplayed()));
-//        textView28.check(matches(withText("Settings")));
+        ViewInteraction textView26 = onView(
+                allOf(withId(R.id.posterTitle), withText("Who is the poster?"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textView26.check(matches(withText("Who is the poster?")));
+
+        ViewInteraction imageView4 = onView(
+                allOf(withId(R.id.profilePic),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
+                                        0),
+                                1),
+                        isDisplayed()));
+        imageView4.check(matches(isDisplayed()));
+
+        ViewInteraction textView27 = onView(
+                allOf(withText("First name"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
+                                        0),
+                                2),
+                        isDisplayed()));
+        textView27.check(matches(withText("First name")));
+
+        ViewInteraction appCompatImageButton4 = onView(
+                allOf(withContentDescription("Open navigation drawer"),
+                        childAtPosition(
+                                allOf(withId(R.id.toolbar),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        appCompatImageButton4.perform(click());
+
+        ViewInteraction navigationMenuItemView4 = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.design_navigation_view),
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0)),
+                        4),
+                        isDisplayed()));
+        navigationMenuItemView4.perform(click());
+
+        ViewInteraction textView28 = onView(
+                allOf(withId(R.id.settingsTitle), withText("Settings"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.fragment_container),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textView28.check(matches(withText("Settings")));
     }
 
     private static Matcher<View> childAtPosition(
