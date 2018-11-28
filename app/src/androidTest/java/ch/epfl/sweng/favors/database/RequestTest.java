@@ -65,8 +65,8 @@ public class RequestTest {
         } catch (InterruptedException e) {
 
         }
-        assertEquals(someFavorsList.size(), 9);
-        assertEquals(allFavorsList.size(), 12);
+        assertEquals(someFavorsList.size(), 8);
+        assertEquals(allFavorsList.size(), 10);
     }
 
     @Test

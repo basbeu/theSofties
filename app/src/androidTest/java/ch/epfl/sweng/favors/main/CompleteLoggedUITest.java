@@ -110,14 +110,14 @@ public class CompleteLoggedUITest {
         button.check(matches(isDisplayed()));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.title), withText(containsString("Favor10.")),
+                allOf(withId(R.id.title), withText(containsString("Favor12.")),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1),
                         isDisplayed()));
-        textView3.check(matches(withText(containsString("Favor10."))));
+        textView3.check(matches(withText(containsString("Favor12."))));
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.switchList), withText(">"),
