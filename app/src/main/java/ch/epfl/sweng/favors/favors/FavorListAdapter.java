@@ -19,6 +19,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -150,7 +151,11 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         this.listener = (Favor item) -> {
             Log.d(TAG,"click recorded");
             this.sharedViewFavor.select(item);
-            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            if(item.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
+                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            else
+                fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+
         };
     }
 

@@ -32,6 +32,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.HashMap;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
@@ -60,7 +61,10 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         public boolean onMarkerClick(Marker marker) {
             Favor favor = favorsMap.get(marker.getId());
             ViewModelProviders.of(FavorsMap.this.getActivity()).get(SharedViewFavor.class).select(favor);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mapView, new FavorDetailView()).addToBackStack(null).commit();
+            if(favor.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
 
             return true;
         }
