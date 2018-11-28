@@ -194,13 +194,7 @@ public class CompleteLoggedUITest {
                                                 0)),
                                 1),
                         isDisplayed()));
-        textView7.check(matches(withText("5 Tokens")));
-
-        // Test list content
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("Favor12.")))
-                ;
-        textView6.check(matches(withText("Favor12.")));
+        textView7.check(matches(withText("5 Tokens")))
 
 
         ViewInteraction textView8 = onView(
