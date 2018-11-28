@@ -117,14 +117,27 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         button2.check(matches(isDisplayed()));
 
-        // Check first favor title
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.title), withText("Favor12."),
+        // Switch home screen list
+        ViewInteraction appCompatButton = onView(
+                allOf(withId(R.id.switchList), withText(">"),
                         childAtPosition(
                                 childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        1),
+                                1),
+                        isDisplayed()));
+        appCompatButton.perform(click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        // Check first favor title
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.title), withText("Favor12.")));
         textView3.check(matches(withText("Favor12.")));
 
         // Check second favor title
@@ -138,22 +151,6 @@ public class CompleteLoggedUITest {
 
         textView5.check(matches(withText("KILL THE BATMAN")));
 
-        // Switch home screen list
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.switchList), withText(">"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.LinearLayout")),
-                                        1),
-                                1),
-                        isDisplayed()));
-        appCompatButton.perform(click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         // Click the "More favors button to get the lists"
         ViewInteraction appCompatButton2 = onView(
@@ -206,12 +203,8 @@ public class CompleteLoggedUITest {
 
         // Test list content
         ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("Favor12."),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
+                allOf(withId(R.id.title), withText("Favor12.")))
+                ;
         textView6.check(matches(withText("Favor12.")));
 
 

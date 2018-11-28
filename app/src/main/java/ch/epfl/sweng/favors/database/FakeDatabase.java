@@ -475,7 +475,7 @@ public class FakeDatabase extends Database{
         f12.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
         f12.set(Favor.StringFields.category, "The Legends");
         f12.set(Favor.StringFields.deadline, "12.12.2020");
-        f12.set(Favor.ObjectFields.creationTimestamp, new Date(10000));
+        f12.set(Favor.ObjectFields.creationTimestamp, new Date().getTime());
         f12.set(Favor.ObjectFields.expirationTimestamp, new Date(new Date().getTime()+1000000L));
         f12.set(Favor.LongFields.nbPerson, 3L);
         f12.set(Favor.LongFields.tokenPerPerson, 2L);
