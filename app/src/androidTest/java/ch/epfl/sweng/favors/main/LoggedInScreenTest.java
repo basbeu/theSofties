@@ -127,7 +127,7 @@ public class LoggedInScreenTest {
     public void testReimbursment(){
         activityActivityTestRule.getActivity().reimburseExpiredFavors();
         long tok = User.getMain().get(User.LongFields.tokens);
-        assertThat(tok,is(85));
+        assertThat(tok,is(85L));
     }
 
     @After
