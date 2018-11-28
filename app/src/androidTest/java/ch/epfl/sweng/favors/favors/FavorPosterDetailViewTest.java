@@ -30,7 +30,7 @@ public class FavorPosterDetailViewTest {
 
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
 
-    public static final String fakePosterEmail = "bruce.wayne@waynecorp.com"; // Email of the profile we want to show
+    public static final String fakePosterId = "U2"; // Email of the profile we want to show
 
     @Before
     public void Before(){
@@ -52,7 +52,7 @@ public class FavorPosterDetailViewTest {
 
     @Test
     public void posterDetailsAreOk(){
-        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterEmail));
+        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterId));
         try {
             sleep(1000);
         } catch (InterruptedException e) {
