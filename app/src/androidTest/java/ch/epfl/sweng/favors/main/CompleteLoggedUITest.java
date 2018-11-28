@@ -124,8 +124,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
-                                1),
-                        isDisplayed()));
+                                1)));
         textView3.check(matches(withText("Favor12.")));
 
         // Check second favor title
@@ -135,8 +134,8 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
-                                1),
-                        isDisplayed()));
+                                1)));
+
         textView5.check(matches(withText("KILL THE BATMAN")));
 
         // Switch home screen list
