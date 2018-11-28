@@ -22,7 +22,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.favors.favors.FavorPosterDetailView.OWNER_EMAIL;
+import static ch.epfl.sweng.favors.favors.FavorPosterDetailView.OWNER_ID;
 import static java.lang.Thread.sleep;
 
 
@@ -52,7 +52,7 @@ public class FavorPosterDetailViewTest {
 
     @Test
     public void posterDetailsAreOk(){
-        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_EMAIL, fakePosterEmail));
+        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterEmail));
         try {
             sleep(1000);
         } catch (InterruptedException e) {

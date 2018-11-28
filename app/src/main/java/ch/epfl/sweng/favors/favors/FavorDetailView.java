@@ -45,6 +45,7 @@ import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
@@ -148,7 +149,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
 
         User favorCreationUser = new User();
-        UserRequest.getWithEmail(favorCreationUser, ownerEmail.get());
+        UserRequest.getWithId(favorCreationUser, favor.get(Favor.StringFields.ownerID));
         posterName = favorCreationUser.getObservableObject(User.StringFields.firstName);
     }
 
@@ -229,7 +230,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
-            if(pictureRef != null && pictureRef.get() != null){
+            if(pictureRef != null && pictureRef.get() != null && !ExecutionMode.getInstance().isTest()){
                 StorageReference ref = FirebaseStorageDispatcher.getInstance().getReference().child("images/"+ pictureRef.get());
                 ref.delete();
             }
@@ -261,7 +262,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.favorPosterDetailViewAccess.setOnClickListener(v -> {
             FavorPosterDetailView mFrag = new FavorPosterDetailView();
             Bundle bundle = new Bundle();
-            bundle.putString(FavorPosterDetailView.OWNER_EMAIL, localFavor.get(Favor.StringFields.ownerEmail));
+            bundle.putString(FavorPosterDetailView.OWNER_ID, localFavor.get(Favor.StringFields.ownerID));
             mFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                     mFrag).addToBackStack("interested").commit();

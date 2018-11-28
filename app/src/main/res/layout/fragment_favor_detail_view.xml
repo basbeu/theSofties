@@ -116,7 +116,6 @@
                     android:id="@+id/interestedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
                     android:backgroundTint="@{elements.isInterested ? @color/interested : @color/not_interested}"
                     android:enabled="@{elements.buttonsEnabled}"
                     android:text="@{elements.isItsOwn ? `Edit`: (elements.isInterested ? `No longer interested` : `Notify my interest`)}"
@@ -127,7 +126,7 @@
                     android:id="@+id/deleteButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
+                    android:layout_marginStart="10dp"
                     android:text="Delete"
                     android:enabled="@{elements.buttonsEnabled}"
                     android:visibility="@{elements.isItsOwn ? View.VISIBLE : View.GONE}"
@@ -137,7 +136,7 @@
                     android:id="@+id/favTokAmmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="70sp"
+                    android:layout_marginStart="15dp"
                     android:text="@{Long.toString(elements.nbPers) + ` * ` + Long.toString(elements.tokenPerPers)}"
                     android:textSize="20sp" />
 
@@ -145,7 +144,7 @@
                     android:id="@+id/imageView2"
                     android:layout_width="38sp"
                     android:layout_height="38sp"
-                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"
                     android:src="@drawable/favor_token_img" />
             </LinearLayout>
 

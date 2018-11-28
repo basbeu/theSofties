@@ -468,18 +468,23 @@ public class FakeDatabase extends Database{
         f9.set(Favor.LongFields.nbPerson, 1L);
         f9.set(Favor.LongFields.tokenPerPerson, 1L);
 
+
+        ArrayList<String> interested = new ArrayList<>();
+        interested.add("U3");
+        interested.add("U2");
         f12.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
         f12.set(Favor.StringFields.category, "The Legends");
         f12.set(Favor.StringFields.deadline, "12.12.2020");
         f12.set(Favor.ObjectFields.creationTimestamp, new Date(10000));
         f12.set(Favor.ObjectFields.expirationTimestamp, new Date(new Date().getTime()+1000000L));
-        f12.set(Favor.LongFields.nbPerson, 30L);
+        f12.set(Favor.LongFields.nbPerson, 3L);
         f12.set(Favor.LongFields.tokenPerPerson, 2L);
         f12.set(Favor.StringFields.description, "Fix a time anomaly in 300BC");
         f12.set(Favor.StringFields.title, "Favor12.");
         f12.set(Favor.StringFields.locationCity, "The Timeline");
         f12.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
         f12.set(Favor.ObjectFields.location, new GeoPoint(0,0));
+        f12.set(Favor.ObjectFields.interested, interested);
 
 
         Interest i1 = new Interest("I1");
