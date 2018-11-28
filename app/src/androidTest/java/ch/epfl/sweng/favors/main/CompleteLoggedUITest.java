@@ -211,8 +211,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
-                                1),
-                        isDisplayed()));
+                                1)));
         textView6.check(matches(withText("Favor12.")));
 
 
@@ -222,8 +221,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
-                                1),
-                        isDisplayed()));
+                                1)));
         textView8.check(matches(withText("KILL THE BATMAN")));
 
         // Test sort
