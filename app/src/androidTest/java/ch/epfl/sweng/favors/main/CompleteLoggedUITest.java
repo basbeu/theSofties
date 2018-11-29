@@ -389,12 +389,7 @@ public class CompleteLoggedUITest {
         appCompatButton2.perform(click());
 
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.payButton), withText("Pay"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                7)));
+                allOf(withId(R.id.payButton), withText("Pay")));
         appCompatButton3.perform(scrollTo(), click());
 
     }
@@ -463,23 +458,13 @@ public class CompleteLoggedUITest {
         button5.check(matches(isDisplayed()));
 
         ViewInteraction button6 = onView(
-                allOf(withId(R.id.interestedUsers),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                6)));
+                allOf(withId(R.id.interestedUsers)));
 
         button6.perform(scrollTo());
         button6.check(matches(isDisplayed()));
 
         ViewInteraction button7 = onView(
-                allOf(withId(R.id.payButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                7)));
+                allOf(withId(R.id.payButton)));
 
         button7.perform(scrollTo());
         button7.check(matches(isDisplayed()));
