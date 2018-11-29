@@ -222,47 +222,80 @@ public class CompleteLoggedUITest {
                                 1)));
         appCompatSpinner3.perform(scrollTo(), click());
 
-        DataInteraction appCompatCheckedTextView2 = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(2);
-        appCompatCheckedTextView2.perform(click());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        ViewInteraction appCompatSpinner4 = onView(
-                allOf(withId(R.id.sortBySpinner),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                1)));
-        appCompatSpinner4.perform(scrollTo(), click());
+        ViewInteraction textView15 = onView(
+                allOf(withText("location")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("location")));
+        textView15.perform(click());
 
-        DataInteraction appCompatCheckedTextView3 = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(3);
-        appCompatCheckedTextView3.perform(click());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        appCompatSpinner3.perform(scrollTo(), click());
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        textView15 = onView(
+                allOf(withText("expiring soon")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("expiring soon")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        textView15 = onView(
+                allOf(withText("recent")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("recent")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        textView15 = onView(
+                allOf(withText("category")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("category")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.favorsList),
