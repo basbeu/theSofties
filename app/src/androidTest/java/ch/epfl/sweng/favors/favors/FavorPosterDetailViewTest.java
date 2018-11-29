@@ -58,9 +58,9 @@ public class FavorPosterDetailViewTest {
         } catch (InterruptedException e) {
 
         }
-        onView(withId(R.id.posterFirstName)).check(matches(withText("Bruce")));
-        onView(withId(R.id.posterLastName)).check(matches(withText("Wayne")));
-        onView(withId(R.id.gender)).check(matches(withText("M")));
+        onView(withId(R.id.posterFirstName)).check(matches(withText("Jeanne")));
+        onView(withId(R.id.posterLastName)).check(matches(withText("Trousse")));
+        onView(withId(R.id.gender)).check(matches(withText("F")));
         onView(withId(R.id.okButton)).perform(scrollTo());
         onView(withId(R.id.okButton)).check(matches(isDisplayed()));
     }

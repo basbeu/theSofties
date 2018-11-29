@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
@@ -120,7 +121,10 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
          */
         private void setTimestamp(Favor favor) {
             if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
-                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
+                Date d;
+                if(favor.get(Favor.ObjectFields.expirationTimestamp) instanceof Timestamp)
+                    d = ((Timestamp)favor.get(Favor.ObjectFields.expirationTimestamp)).toDate();
+                else d = (Date) favor.get(Favor.ObjectFields.expirationTimestamp);
                 timestamp.setText(Utils.getFavorDate(d));
             } else { timestamp.setText("--"); }
         }

@@ -22,6 +22,7 @@ import java.util.Map;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
@@ -33,6 +34,7 @@ import ch.epfl.sweng.favors.favors.MyFavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.settings.SettingsFragment;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
 public class LoggedInScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +50,18 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Database.getInstance().updateFromDb(User.getMain());
+        User.updateMain();
+        User.getMain().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                    // Must be remove when fake requests with multiple queries will be implemented
+                    if(!ExecutionMode.getInstance().isTest()) reimburseExpiredFavors();
+                    sender.removeOnPropertyChangedCallback(this);
+                }
+            }
+        });
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
         binding.setElements(this);
 
@@ -68,7 +81,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home()).commit();
             binding.navView.setCheckedItem(R.id.favors);
         }
-        reimburseExpiredFavors();
 
     }
 

@@ -34,30 +34,30 @@ public class RequestTest {
         UserRequest.getList(someUsersList, User.StringFields.sex, "M",  null, null);
 
         User user1 = new User();
-        UserRequest.getWithEmail(user1, "harvey.dent@gotham.com");
+        UserRequest.getWithEmail(user1, "jean.marchand@thesoftie.com");
         User user2 = new User();
-        UserRequest.getWithId(user2, "U1");
+        UserRequest.getWithId(user2, "U2");
 
         try {
             sleep(1000);
         } catch (InterruptedException e) {
 
         }
-        assertEquals(user1.get(User.StringFields.firstName), "Harvey");
-        assertEquals(user1.get(User.StringFields.lastName), "Dent");
-        assertEquals(user1.get(User.StringFields.city), "Arkham Asylum");
+        assertEquals(user1.get(User.StringFields.firstName), "Jean");
+        assertEquals(user1.get(User.StringFields.lastName), "Marchand");
+        assertEquals(user1.get(User.StringFields.city), "Sydney, AU");
 
-        assertEquals(user2.get(User.StringFields.firstName), "Toto");
-        assertEquals(user2.get(User.StringFields.lastName),"Lolo");
-        assertEquals(user2.get(User.StringFields.city), "Tombouctou");
+        assertEquals(user2.get(User.StringFields.firstName), "Jeanne");
+        assertEquals(user2.get(User.StringFields.lastName),"Trousse");
+        assertEquals(user2.get(User.StringFields.city), "New York, US");
 
-        assertEquals(someUsersList.size(), 3);
+        assertEquals(2, someUsersList.size());
     }
 
     @Test
     public void favorsRequests(){
         ObservableArrayList<Favor> someFavorsList =  new ObservableArrayList<>();
-        FavorRequest.getList(someFavorsList, Favor.StringFields.ownerID, "U3",  null, null);
+        FavorRequest.getList(someFavorsList, Favor.StringFields.ownerID, "U1",  null, null);
         ObservableArrayList<Favor> allFavorsList =  new ObservableArrayList<>();
         FavorRequest.all(allFavorsList, null, null);
         try {
@@ -65,8 +65,8 @@ public class RequestTest {
         } catch (InterruptedException e) {
 
         }
-        assertEquals(someFavorsList.size(), 8);
-        assertEquals(allFavorsList.size(), 10);
+        assertEquals(4, someFavorsList.size());
+        assertEquals(10, allFavorsList.size());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class RequestTest {
         } catch (InterruptedException e) {
 
         }
-        assertEquals(someInterestsList.size(), 1);
-        assertEquals(allInterestsList.size(), 5);
+        assertEquals(0, someInterestsList.size());
+        assertEquals(5, allInterestsList.size());
     }
 }

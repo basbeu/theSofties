@@ -117,6 +117,15 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         button2.check(matches(isDisplayed()));
 
+        ViewInteraction textView8 = onView(
+                allOf(withId(R.id.title), withText("Closest favor"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                1)));
+        textView8.check(matches(withText("Closest favor")));
+
         // Switch home screen list
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.switchList), withText(">"),
@@ -135,16 +144,25 @@ public class CompleteLoggedUITest {
         }
 
 
-        // Check second favor title
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.title), withText("KILL THE BATMAN"),
+                allOf(withId(R.id.title), withText("Most recent favor"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1)));
 
-        textView5.check(matches(withText("KILL THE BATMAN")));
+        textView5.check(matches(withText("Most recent favor")));
+
+        ViewInteraction textView6 = onView(
+                allOf(withId(R.id.title), withText("Expiring soon favor"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                1)));
+
+        textView6.check(matches(withText("Expiring soon favor")));
 
 
         // Click the "More favors button to get the lists"
@@ -161,6 +179,125 @@ public class CompleteLoggedUITest {
 
         try {
             Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void listSortingTests(){
+        // Test sort
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction appCompatSpinner3 = onView(
+                allOf(withId(R.id.sortBySpinner),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                1)));
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction textView15 = onView(
+                allOf(withText("location")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("location")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ViewInteraction textView8 = onView(
+                allOf(withId(R.id.title), withText("Closest favor"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                1)));
+        textView8.check(matches(withText("Closest favor")));
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        textView15 = onView(
+                allOf(withText("expiring soon")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("expiring soon")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ViewInteraction textView6 = onView(
+                allOf(withId(R.id.title), withText("Expiring soon favor"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                1)));
+
+        textView6.check(matches(withText("Expiring soon favor")));
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        textView15 = onView(
+                allOf(withText("recent")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("recent")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ViewInteraction textView5 = onView(
+                allOf(withId(R.id.title), withText("Most recent favor"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        0),
+                                1)));
+
+        textView5.check(matches(withText("Most recent favor")));
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        textView15 = onView(
+                allOf(withText("category")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("category")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -196,106 +333,22 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         textView7.check(matches(withText("5 Tokens")));
 
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction textView8 = onView(
-                allOf(withId(R.id.title), withText("KILL THE BATMAN"),
+                allOf(withId(R.id.title), withText("Closest favor"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1)));
-        textView8.check(matches(withText("KILL THE BATMAN")));
+        textView8.check(matches(withText("Closest favor")));
 
-        // Test sort
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction appCompatSpinner3 = onView(
-                allOf(withId(R.id.sortBySpinner),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                1)));
-        appCompatSpinner3.perform(scrollTo(), click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction textView15 = onView(
-                allOf(withText("location")));
-        textView15.perform(scrollTo());
-        textView15.check(matches(withText("location")));
-        textView15.perform(click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        appCompatSpinner3.perform(scrollTo(), click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        textView15 = onView(
-                allOf(withText("expiring soon")));
-        textView15.perform(scrollTo());
-        textView15.check(matches(withText("expiring soon")));
-        textView15.perform(click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        appCompatSpinner3.perform(scrollTo(), click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        textView15 = onView(
-                allOf(withText("recent")));
-        textView15.perform(scrollTo());
-        textView15.check(matches(withText("recent")));
-        textView15.perform(click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        appCompatSpinner3.perform(scrollTo(), click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        textView15 = onView(
-                allOf(withText("category")));
-        textView15.perform(scrollTo());
-        textView15.check(matches(withText("category")));
-        textView15.perform(click());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        listSortingTests();
 
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.favorsList),
@@ -353,14 +406,14 @@ public class CompleteLoggedUITest {
          */
 
         ViewInteraction textView10 = onView(
-                allOf(withId(R.id.favTitle), withText("Favor12."),
+                allOf(withId(R.id.favTitle), withText("Most recent favor"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
                                 0)));
         textView10.perform(scrollTo());
-        textView10.check(matches(withText("Favor12.")));
+        textView10.check(matches(withText("Most recent favor")));
 
         ViewInteraction imageView = onView(
                 allOf(withId(R.id.imageView), withContentDescription("image"),
@@ -373,7 +426,7 @@ public class CompleteLoggedUITest {
         imageView.check(matches(isDisplayed()));
 
         ViewInteraction textView11 = onView(
-                allOf(withId(R.id.favDescription), withText("Fix a time anomaly in 300BC"),
+                allOf(withId(R.id.favDescription), withText("It does messy things"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
@@ -381,7 +434,7 @@ public class CompleteLoggedUITest {
                                 2),
                         isDisplayed()));
         textView11.perform(scrollTo());
-        textView11.check(matches(withText("Fix a time anomaly in 300BC")));
+        textView11.check(matches(withText("It does messy things")));
 
 
         try {
@@ -458,16 +511,16 @@ public class CompleteLoggedUITest {
         }
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.titleFavor), withText("Favor12."),
+                allOf(withId(R.id.titleFavor), withText("Most recent favor"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 2)));
-        appCompatEditText.perform(scrollTo(), replaceText("Favor24"));
+        appCompatEditText.perform(scrollTo(), replaceText("Renamed favor"));
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.titleFavor), withText("Favor24"),
+                allOf(withId(R.id.titleFavor), withText("Renamed favor"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
@@ -539,14 +592,14 @@ public class CompleteLoggedUITest {
          * Preview a favor while editing
          */
         ViewInteraction textView14 = onView(
-                allOf(withId(R.id.favTitle), withText("Favor24"),
+                allOf(withId(R.id.favTitle), withText("Renamed favor"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
                                 0),
                         isDisplayed()));
-        textView14.check(matches(withText("Favor24")));
+        textView14.check(matches(withText("Renamed favor")));
 
         pressBack();
 
@@ -637,7 +690,7 @@ public class CompleteLoggedUITest {
 
    private void favorDetailViewTests(){
        try {
-           Thread.sleep(5000);
+           Thread.sleep(600);
        } catch (InterruptedException e) {
            e.printStackTrace();
        }
@@ -649,20 +702,20 @@ public class CompleteLoggedUITest {
        recyclerView3.perform( actionOnItemAtPosition(1, click()));
 
        try {
-           Thread.sleep(500);
+           Thread.sleep(600);
        } catch (InterruptedException e) {
            e.printStackTrace();
        }
 
        ViewInteraction textView14 = onView(
-               allOf(withId(R.id.favTitle), withText("KILL THE BATMAN"),
+               allOf(withId(R.id.favTitle), withText("Closest favor"),
                        childAtPosition(
                                childAtPosition(
                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                        0),
                                0),
                        isDisplayed()));
-       textView14.check(matches(withText("KILL THE BATMAN")));
+       textView14.check(matches(withText("Closest favor")));
 
 
        ViewInteraction appCompatButton9 = onView(
@@ -675,7 +728,7 @@ public class CompleteLoggedUITest {
        appCompatButton9.perform(scrollTo(), click());
 
        try {
-           Thread.sleep(6000);
+           Thread.sleep(600);
        } catch (InterruptedException e) {
            e.printStackTrace();
        }
@@ -690,7 +743,7 @@ public class CompleteLoggedUITest {
        appCompatButton9.perform(scrollTo(), click());
 
        try {
-           Thread.sleep(6000);
+           Thread.sleep(600);
        } catch (InterruptedException e) {
            e.printStackTrace();
        }
@@ -706,7 +759,7 @@ public class CompleteLoggedUITest {
 
 
        ViewInteraction appCompatButton10 = onView(
-               allOf(withText("Harvey")));
+               allOf(withText("Jean")));
        appCompatButton10.perform(scrollTo(), click());
 
        try {
@@ -781,7 +834,7 @@ public class CompleteLoggedUITest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(5000);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -893,7 +946,11 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
-
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void profilTests(){
@@ -1228,14 +1285,14 @@ public class CompleteLoggedUITest {
         appCompatSpinner.perform(scrollTo(), click());
 
         ViewInteraction textView14 = onView(
-                allOf(withText("DC")));
+                allOf(withText("Cooking")));
         textView14.perform(scrollTo());
-        textView14.check(matches(withText("DC")));
+        textView14.check(matches(withText("Cooking")));
 
         ViewInteraction textView15 = onView(
-                allOf(withText("MARVEL")));
+                allOf(withText("Tutoring")));
         textView15.perform(scrollTo());
-        textView15.check(matches(withText("MARVEL")));
+        textView15.check(matches(withText("Tutoring")));
         textView15.perform(click());
 
         ViewInteraction appCompatEditText19 = onView(
@@ -1300,7 +1357,7 @@ public class CompleteLoggedUITest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -1362,7 +1419,7 @@ public class CompleteLoggedUITest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(7000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -1374,6 +1431,19 @@ public class CompleteLoggedUITest {
         favorSubmitEditionTests();
         favorDetailViewTests();
         myFavorsAndCreateFavorTest();
+
+    }
+
+    @Test
+    public void secondCompleteLoggedUITest() {
+        mActivityTestRule.launchActivity(null);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         navigationDrawerTests();
         profilTests();
 
