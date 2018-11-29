@@ -38,6 +38,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
@@ -350,12 +351,8 @@ public class CompleteLoggedUITest {
 
         listSortingTests();
 
-        ViewInteraction recyclerView2 = onView(
-                allOf(withId(R.id.favorsList),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
-        recyclerView2.perform(actionOnItemAtPosition(0, click()));
+        ViewInteraction recyclerView2 = onView(allOf(withChild(allOf(withId(R.id.title), withText("Most recent favor")))));
+        recyclerView2.perform(click());
 
         try {
             Thread.sleep(800);
