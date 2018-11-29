@@ -194,7 +194,7 @@ public class CompleteLoggedUITest {
                                                 0)),
                                 1),
                         isDisplayed()));
-        textView7.check(matches(withText("5 Tokens")))
+        textView7.check(matches(withText("5 Tokens")));
 
 
         ViewInteraction textView8 = onView(
