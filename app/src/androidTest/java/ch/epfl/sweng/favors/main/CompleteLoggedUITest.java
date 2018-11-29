@@ -358,19 +358,18 @@ public class CompleteLoggedUITest {
         recyclerView2.perform(actionOnItemAtPosition(0, click()));
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(800);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        ViewInteraction textView9 = onView(
+                allOf(withId(R.id.favReportAbusiveAdd)));
+        textView9.perform(scrollTo());
+
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.interestedUsers), withText("see interested users"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                6)));
-        appCompatButton.perform(scrollTo(), click());
+                allOf(withId(R.id.interestedUsers), withText("see interested users")));
+        appCompatButton.perform(click());
 
 
         try {
