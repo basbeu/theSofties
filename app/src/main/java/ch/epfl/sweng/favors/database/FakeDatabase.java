@@ -188,19 +188,55 @@ public class FakeDatabase extends Database{
             ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
                 Boolean toAdd = true;
-                for(Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
-                    if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
-                        toAdd = false;
-                        break;
+                if(mapEquals!=null) {
+                    for (Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
+                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
+                            toAdd = false;
+                            break;
+                        }
+                    }
+                    if (toAdd) {
+                        try {
+                            T temp = clazz.newInstance();
+                            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                            tempList.add(temp);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Illegal access exception");
+                        }
                     }
                 }
-                if (toAdd) {
-                    try {
-                        T temp = clazz.newInstance();
-                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        tempList.add(temp);
-                    } catch (Exception e){
-                        Log.e(TAG, "Illegal access exception");
+                if (mapLess != null) {
+                    for (Map.Entry<DatabaseField, Object> el : mapLess.entrySet()) {
+                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).compareTo((String)el.getValue())>0)) {
+                            toAdd = false;
+                            break;
+                        }
+                    }
+                    if (toAdd) {
+                        try {
+                            T temp = clazz.newInstance();
+                            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                            tempList.add(temp);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Illegal access exception");
+                        }
+                    }
+                }
+                if (mapMore != null) {
+                    for (Map.Entry<DatabaseField, Object> el : mapMore.entrySet()) {
+                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).compareTo((String)el.getValue())<0)) {
+                            toAdd = false;
+                            break;
+                        }
+                    }
+                    if (toAdd) {
+                        try {
+                            T temp = clazz.newInstance();
+                            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                            tempList.add(temp);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Illegal access exception");
+                        }
                     }
                 }
             }
