@@ -46,4 +46,6 @@ public abstract class FirebaseStorageDispatcher {
      * @param imageView the Imageview where the picture should be displayed
      */
     public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView);
+
+    public abstract void deleteImageFromStorage(ObservableField<String> pictureRef);
 }

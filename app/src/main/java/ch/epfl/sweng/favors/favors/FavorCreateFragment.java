@@ -137,10 +137,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
-            if(pictureReference != null && pictureReference.get() != null && !ExecutionMode.getInstance().isTest()){
-                StorageReference ref = FirebaseStorageDispatcher.getInstance().getReference().child("images/"+ pictureReference.get());
-                ref.delete();
-            }
+            storage.deleteImageFromStorage(pictureReference);
             String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
 

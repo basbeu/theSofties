@@ -45,4 +45,9 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     public void displayImage(ObservableField<String> pictureRef, ImageView imageView) {
         //TODO display fake image
     }
+
+    @Override
+    public void deleteImageFromStorage(ObservableField<String> pictureRef) {
+
+    }
 }

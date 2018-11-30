@@ -119,4 +119,12 @@ public class Storage extends FirebaseStorageDispatcher{
         }
     }
 
+    @Override
+    public void deleteImageFromStorage(ObservableField<String> pictureRef) {
+        if(pictureRef != null && pictureRef.get() != null && !ExecutionMode.getInstance().isTest()){
+            StorageReference ref = getReference().child("images/"+ pictureRef.get());
+            ref.delete();
+        }
+    }
+
 }
