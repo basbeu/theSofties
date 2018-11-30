@@ -19,7 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -225,6 +227,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             }
         });
 
+
         binding.deleteButton.setOnClickListener((l)->{
             long newUserTokens = User.getMain().get(User.LongFields.tokens) + 1;
             User.getMain().set(User.LongFields.tokens, newUserTokens);
@@ -237,26 +240,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
-        });
-        binding.interestedUsers.setOnClickListener((l)->{
-            if (interestedPeople.isEmpty()){
-                Toast.makeText(getContext(), "Currently no interested people available.", Toast.LENGTH_LONG).show();
-                return;
-            }
-            else if (interestedPeople.size() != userNames.size()){
-                Toast.makeText(getContext(), "Impossible to reach the server.", Toast.LENGTH_LONG).show();
-                return;
-            }
-            // opens bubble
-            InterestedUsersBubbles mFrag = new InterestedUsersBubbles();
-
-            mFrag.setSelectedUsers(selectedUsers);
-            ArrayList<String> names = new ArrayList<>();
-            names.addAll(userNames.keySet());
-            mFrag.setUserNames(names);
-            mFrag.setMaxToSelect(localFavor.get(Favor.LongFields.nbPerson));
-
-            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mFrag).addToBackStack(null).commit();
         });
 
         binding.favorPosterDetailViewAccess.setOnClickListener(v -> {
@@ -331,3 +314,5 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     }
 }
+
+

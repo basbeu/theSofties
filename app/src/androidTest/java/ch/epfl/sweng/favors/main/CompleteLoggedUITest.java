@@ -454,12 +454,6 @@ public class CompleteLoggedUITest {
         button5.perform(scrollTo());
         button5.check(matches(isDisplayed()));
 
-        ViewInteraction button6 = onView(
-                allOf(withId(R.id.interestedUsers)));
-
-        button6.perform(scrollTo());
-        button6.check(matches(isDisplayed()));
-
         ViewInteraction button7 = onView(
                 allOf(withId(R.id.payButton)));
 
