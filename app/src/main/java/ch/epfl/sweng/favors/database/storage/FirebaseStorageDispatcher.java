@@ -47,5 +47,9 @@ public abstract class FirebaseStorageDispatcher {
      */
     public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView);
 
+    /**
+     * Delete an image on firestore
+     * @param pictureRef the reference of the image to be deleted
+     */
     public abstract void deleteImageFromStorage(ObservableField<String> pictureRef);
 }
