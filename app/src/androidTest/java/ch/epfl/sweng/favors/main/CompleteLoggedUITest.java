@@ -661,12 +661,7 @@ public class CompleteLoggedUITest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        pressBack();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
    private void favorDetailViewTests(){
