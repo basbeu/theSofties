@@ -15,7 +15,6 @@ public abstract class Authentication {
 
     public static Authentication getInstance(){
         // For espresso tests
-        // FakeDatabase.getInstance().createBasicDatabase();
 
         if(auth == null){
             if(ExecutionMode.getInstance().isTest()){
@@ -23,6 +22,7 @@ public abstract class Authentication {
             }else{
                 auth = FirebaseAuthentication.getInstance();
             }
+            // FakeDatabase.getInstance().createBasicDatabase();
         }
 
         return auth;

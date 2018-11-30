@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,12 +32,14 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.HashMap;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
+import ch.epfl.sweng.favors.location.Location;
+import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
-
 import static ch.epfl.sweng.favors.utils.Utils.getIconNameFromCategory;
 
 /**
@@ -58,7 +61,10 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         public boolean onMarkerClick(Marker marker) {
             Favor favor = favorsMap.get(marker.getId());
             ViewModelProviders.of(FavorsMap.this.getActivity()).get(SharedViewFavor.class).select(favor);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mapView, new FavorDetailView()).addToBackStack(null).commit();
+            if(favor.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            else
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
 
             return true;
         }
@@ -103,6 +109,14 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        if(!ExecutionMode.getInstance().isTest() && LocationHandler.getHandler().locationPoint.get() != null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                    LocationHandler.getHandler().locationPoint.get().getLatitude(),
+                    LocationHandler.getHandler().locationPoint.get().getLongitude())));
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(12f));
+        }
+
         mMap.setOnMarkerClickListener(markerClickListener);
         Log.d(TAG, "Map ready");
 

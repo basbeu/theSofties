@@ -16,7 +16,7 @@ import ch.epfl.sweng.favors.databinding.FragmentFavorPosterDetailViewBinding;
 public class FavorPosterDetailView extends android.support.v4.app.Fragment {
 
     private static String TAG = "FAVORS_POSTER_DETAIL_VIEW";
-    public static final String OWNER_EMAIL = "ownerEMAIL";
+    public static final String OWNER_ID = "ownerID";
 
 
     public ObservableField<String> firstName = new ObservableField<>();
@@ -31,19 +31,19 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
 
         super.onCreate(savedInstanceState);
 
-        if(getArguments() != null && getArguments().getString(OWNER_EMAIL) != null){
-            ownerEmail = getArguments().getString(OWNER_EMAIL);
+        if(getArguments() != null && getArguments().getString(OWNER_ID) != null){
+            ownerEmail = getArguments().getString(OWNER_ID);
         }
         else if(getActivity() != null && getActivity().getIntent() != null &&
-                getActivity().getIntent().getStringExtra(OWNER_EMAIL) != null){
-            ownerEmail = getActivity().getIntent().getStringExtra(OWNER_EMAIL);
+                getActivity().getIntent().getStringExtra(OWNER_ID) != null){
+            ownerEmail = getActivity().getIntent().getStringExtra(OWNER_ID);
         }
         else{
             Log.e(TAG, "Trying to intent a the fragment without the email of the favor owner");
         }
 
         User favorCreatorUser = new User();
-        UserRequest.getWithEmail(favorCreatorUser, ownerEmail);
+        UserRequest.getWithId(favorCreatorUser, ownerEmail);
 
         firstName = favorCreatorUser.getObservableObject(User.StringFields.firstName);
         lastName = favorCreatorUser.getObservableObject(User.StringFields.lastName);

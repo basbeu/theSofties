@@ -4,6 +4,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -12,6 +13,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -19,11 +21,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -40,8 +45,8 @@ public class LoggedInScreenTest {
 
     @Before
     public void setUp(){
-
-
+        ExecutionMode.getInstance().setTest(true);
+        ExecutionMode.getInstance().setInvalidAuthTest(false);
     }
 
     @Test
@@ -116,6 +121,19 @@ public class LoggedInScreenTest {
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
+    }
+
+    @Ignore
+    public void testReimbursment(){
+        activityActivityTestRule.getActivity().reimburseExpiredFavors();
+        // We need to set up request to fake db to get truly expired favors
+        long tok = User.getMain().get(User.LongFields.tokens);
+        assertThat(tok,is(19L));
+    }
+
+    @After
+    public void cleanUp(){
+        FakeDatabase.cleanUpAll();
     }
 }
 

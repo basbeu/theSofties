@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.util.Log;
 
@@ -10,7 +9,7 @@ import javax.annotation.Nonnull;
 
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
-import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
@@ -18,7 +17,7 @@ public class User extends DatabaseEntity{
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
-    public static final String DEFAULT_TOKENS_NUMBER = "5";
+    public static final Long DEFAULT_TOKENS_NUMBER = 5L;
 
     private static Status status = new Status(Status.Values.NotLogged);
 
@@ -29,19 +28,19 @@ public class User extends DatabaseEntity{
     public static void updateMain(){user = new User(Authentication.getInstance().getUid());}
 
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, tokens}
-    public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
+    public enum LongFields implements DatabaseLongField {creationTimeStamp, tokens}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, null);
 
     }
 
     public User(String id){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
         if(db != null) db.updateFromDb(this);
     }

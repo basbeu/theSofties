@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="java.lang.Long"/>
         <variable
             name="elements"
             type="ch.epfl.sweng.favors.profile.ProfileFragment"
@@ -95,7 +96,7 @@
                 android:id="@+id/profTokens"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{elements.tokens}"
+                android:text="@{Long.toString(elements.tokens)}"
                 android:textSize="22sp" />
 
             <TextView

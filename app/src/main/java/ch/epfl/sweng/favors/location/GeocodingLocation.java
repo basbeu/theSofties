@@ -39,13 +39,19 @@ public final class GeocodingLocation {
                 String result = null;
                 Double latitude = null;
                 Double longitude = null;
+                String city = null;
+                String country = null;
                 boolean ioException = false;
+
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(locationAddress, 1);
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
                         latitude = address.getLatitude();
                         longitude = address.getLongitude();
+                        city = address.getLocality();
+                        country = address.getCountryCode();
+
                     }
                 } catch (IOException e) {
                     Log.e(TAG, MES_EXCEPTION, e);
@@ -56,8 +62,10 @@ public final class GeocodingLocation {
                     if (latitude != null && longitude != null) {
                         message.what = 1;
                         Bundle bundle = new Bundle();
-                        bundle.putDouble(KEY_LATITUDE, latitude);
-                        bundle.putDouble(KEY_LONGITUDE, longitude);
+                        bundle.putDouble("latitude", latitude);
+                        bundle.putDouble("longitude", longitude);
+                        bundle.putString("country", country);
+                        bundle.putString("city", city);
                         message.setData(bundle);
                     } else if(!ioException){
                         message.what = 2;

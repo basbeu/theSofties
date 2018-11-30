@@ -11,12 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Filter;
+import android.widget.Filterable;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -30,8 +34,9 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
  * sets the fields that shpould be visible in the ListView
  * favor_item.xml (item of list) and fragment_favors.xml (list)
  */
-public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
+public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder> implements Filterable {
     private ObservableArrayList<Favor> favorList;
+    private ObservableArrayList<Favor> filteredFavorList;
     private SharedViewFavor sharedViewFavor;
     private FragmentActivity fragmentActivity;
     private OnItemClickListener listener;
@@ -48,7 +53,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         public TextView title, timestamp, location, distance, category;
         public ImageView iconCategory;
         public FavorListAdapter adapter;
-        public Favor selectedFavor = null;
 
         // FIXME ObservableFields
         public FavorViewHolder(View itemView, FavorListAdapter adapter) {
@@ -61,10 +65,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
             category = itemView.findViewById(R.id.category);
             iconCategory = itemView.findViewById(R.id.iconCategory);
             this.adapter = adapter;
-        }
-
-        public void setFavor(Favor f) {
-            this.selectedFavor = f;
         }
 
         @Override
@@ -103,8 +103,14 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
          * @param favor the relevant favor
          */
         private void setStringFields(Favor favor) {
-            if(favor.get(Favor.StringFields.title) != null)
-                title.setText(favor.get(Favor.StringFields.title));
+            String titleStr = favor.get(Favor.StringFields.title);
+            if(titleStr != null){
+               if(titleStr.length() > 23){
+                   titleStr = titleStr.subSequence(0, 22).toString();
+                   titleStr = titleStr.concat("...");
+               }
+                title.setText(titleStr);
+            }
             if(favor.get(Favor.StringFields.category) != null)
                 category.setText(favor.get(Favor.StringFields.category));
         }
@@ -115,7 +121,10 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
          */
         private void setTimestamp(Favor favor) {
             if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
-                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
+                Date d;
+                if(favor.get(Favor.ObjectFields.expirationTimestamp) instanceof Timestamp)
+                    d = ((Timestamp)favor.get(Favor.ObjectFields.expirationTimestamp)).toDate();
+                else d = (Date) favor.get(Favor.ObjectFields.expirationTimestamp);
                 timestamp.setText(Utils.getFavorDate(d));
             } else { timestamp.setText("--"); }
         }
@@ -129,7 +138,6 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
                 iconCategory.setImageURI(Uri.parse(getIconPathFromCategory(favor.get(Favor.StringFields.category))));
             }
         }
-
     }
 
     /**
@@ -139,18 +147,20 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
      */
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
-
-        this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
+        this.filteredFavorList = favorList;
+        if(fragActivity != null) this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
 
         this.fragmentActivity = fragActivity;
 
         this.listener = (Favor item) -> {
             Log.d(TAG,"click recorded");
             this.sharedViewFavor.select(item);
-            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            if(item.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
+                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+            else
+                fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+
         };
-
-
     }
 
     @Override
@@ -162,12 +172,60 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     @Override
     public void onBindViewHolder(FavorViewHolder holder, int position) {
-        holder.bind(favorList.get(position), listener);
+        holder.bind(filteredFavorList.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        return favorList.size();
+        return filteredFavorList.size();
+    }
+
+    /**
+     * @param f favor
+     * @param s string input
+     * @return whether s matches favor's title, description, category or location city
+     */
+    private Boolean checkSearch(Favor f, String s){
+        String slc = s.toLowerCase();
+        return f.get(Favor.StringFields.title).toLowerCase().contains(slc) ||
+                f.get(Favor.StringFields.description).toLowerCase().contains(slc) ||
+                f.get(Favor.StringFields.category).toLowerCase().contains(slc) ||
+                f.get(Favor.StringFields.locationCity).toLowerCase().contains(slc);
+    }
+
+    protected Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            String searchInput = constraint.toString();
+            if (searchInput.isEmpty()) {
+                filteredFavorList = favorList;
+            } else {
+                ObservableArrayList<Favor> filteredList = new ObservableArrayList<>();
+                for (Favor f : favorList) {
+
+                    if (checkSearch(f, searchInput)) {
+                        filteredList.add(f);
+                    }
+                }
+
+                filteredFavorList = filteredList;
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredFavorList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredFavorList = (ObservableArrayList<Favor>) results.values;
+            notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public Filter getFilter() {
+        return searchFilter;
     }
 
 }

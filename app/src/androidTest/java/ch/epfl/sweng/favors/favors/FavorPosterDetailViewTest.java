@@ -22,7 +22,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.favors.favors.FavorPosterDetailView.OWNER_EMAIL;
+import static ch.epfl.sweng.favors.favors.FavorPosterDetailView.OWNER_ID;
 import static java.lang.Thread.sleep;
 
 
@@ -30,7 +30,7 @@ public class FavorPosterDetailViewTest {
 
     @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
 
-    public static final String fakePosterEmail = "bruce.wayne@waynecorp.com"; // Email of the profile we want to show
+    public static final String fakePosterId = "U2"; // Email of the profile we want to show
 
     @Before
     public void Before(){
@@ -52,15 +52,15 @@ public class FavorPosterDetailViewTest {
 
     @Test
     public void posterDetailsAreOk(){
-        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_EMAIL, fakePosterEmail));
+        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterId));
         try {
             sleep(1000);
         } catch (InterruptedException e) {
 
         }
-        onView(withId(R.id.posterFirstName)).check(matches(withText("Bruce")));
-        onView(withId(R.id.posterLastName)).check(matches(withText("Wayne")));
-        onView(withId(R.id.gender)).check(matches(withText("M")));
+        onView(withId(R.id.posterFirstName)).check(matches(withText("Jeanne")));
+        onView(withId(R.id.posterLastName)).check(matches(withText("Trousse")));
+        onView(withId(R.id.gender)).check(matches(withText("F")));
         onView(withId(R.id.okButton)).perform(scrollTo());
         onView(withId(R.id.okButton)).check(matches(isDisplayed()));
     }

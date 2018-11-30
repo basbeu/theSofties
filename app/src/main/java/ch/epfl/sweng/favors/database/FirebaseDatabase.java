@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
@@ -87,6 +88,12 @@ public class FirebaseDatabase extends Database{
 
     }
 
+    @Override
+    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
+        if(databaseEntity == null) return;
+        dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).delete();
+    }
+
     class ListRequestFb<T extends DatabaseEntity> implements OnCompleteListener{
 
         ObservableArrayList<T> list;
@@ -144,7 +151,11 @@ public class FirebaseDatabase extends Database{
 
     Query addParametersToQuery(Query query, Integer limit, DatabaseField orderBy){
         if(orderBy != null){
-            query = query.orderBy(orderBy.toString());
+            if(orderBy == Favor.ObjectFields.creationTimestamp){
+                query = query.orderBy(orderBy.toString(), Query.Direction.DESCENDING);
+            } else {
+                query = query.orderBy(orderBy.toString());
+            }
         }
         if(limit != null){
             query = query.limit(limit);
@@ -166,18 +177,41 @@ public class FirebaseDatabase extends Database{
     @Override
     protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                          String collection,
-                                                                         DatabaseField element,
-                                                                         Object value,
+                                                                         Map<DatabaseField, Object> mapEquals,
+                                                                        Map<DatabaseField, Object> mapLess,
+                                                                            Map<DatabaseField, Object> mapMore,
                                                                          Integer limit,
                                                                          DatabaseField orderBy){
 
 
-        if(element == null || value == null){return;}
-        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
+        Query query = dbFireStore.collection(collection);
+
+        if(mapEquals != null) for(Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()){
+            query = query.whereEqualTo(el.getKey().toString(), el.getValue());
+        }
+        if(mapLess != null) for(Map.Entry<DatabaseField, Object> el : mapLess.entrySet()){
+            query = query.whereLessThan(el.getKey().toString(), el.getValue());
+        }
+        if(mapMore != null) for(Map.Entry<DatabaseField, Object> el : mapMore.entrySet()){
+            query = query.whereGreaterThan(el.getKey().toString(), el.getValue());
+        }
+
         query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
     }
 
+    protected <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
+                                                                String collection,
+                                                                DatabaseField element,
+                                                                Object value,
+                                                                Integer limit,
+                                                                DatabaseField orderBy){
+        if(element == null || value == null){return;}
+        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
+        query = addParametersToQuery(query, limit, orderBy);
+        query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
+
+    }
 
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,

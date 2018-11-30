@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FavorsBinding;
 
@@ -17,14 +16,14 @@ import ch.epfl.sweng.favors.databinding.FavorsBinding;
  * Fragment that displays the list of favor and allows User to sort it and to search in it
  */
 public class FavorsFragment extends android.support.v4.app.Fragment {
-    private static final String TAG = "FAVOR_FRAGMENT";
+
 
     FavorsBinding binding;
 
     static String[] modes = {"List view", "Map view"};
     int currentMode = 0;
     public ObservableField<String> buttonDisplay = new ObservableField<>();
-    public ObservableField<String> tokens = User.getMain().getObservableObject(User.StringFields.tokens);
+    public ObservableField<Long> tokens = User.getMain().getObservableObject(User.LongFields.tokens);
 
     @Nullable
     @Override
