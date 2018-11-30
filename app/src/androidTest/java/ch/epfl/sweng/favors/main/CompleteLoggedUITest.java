@@ -363,7 +363,7 @@ public class CompleteLoggedUITest {
         ViewInteraction textView9 = onView(
                 allOf(withId(R.id.favReportAbusiveAdd)));
         textView9.perform(scrollTo());
-
+/*
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.interestedUsers), withText("see interested users")));
         appCompatButton.perform(click());
@@ -384,7 +384,7 @@ public class CompleteLoggedUITest {
                                 0),
                         isDisplayed()));
         appCompatButton2.perform(click());
-
+*/
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.payButton), withText("Pay")));
         appCompatButton3.perform(scrollTo(), click());
