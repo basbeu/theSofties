@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,9 +137,17 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
+            if(pictureReference != null && pictureReference.get() != null && !ExecutionMode.getInstance().isTest()){
+                StorageReference ref = FirebaseStorageDispatcher.getInstance().getReference().child("images/"+ pictureReference.get());
+                ref.delete();
+            }
             String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
-        } else{
+
+        } else if(pictureReference != null){
+            newFavor.set(Favor.StringFields.pictureReference, pictureReference.get());
+        }
+        else{
             newFavor.set(Favor.StringFields.pictureReference, null);
         }
 
@@ -154,6 +163,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public ObservableField<String> favorDescription;
     public ObservableField<String> locationCity;
     public ObservableField<String> deadline;
+    public ObservableField<String> pictureReference = null;
     public ObservableArrayList<Interest> interestsList = new ObservableArrayList<>();
 
     public ObservableField<String> validationButtonText = new ObservableField<>("--");
@@ -274,7 +284,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         nbPerson = newFavor.getObservableObject(Favor.LongFields.nbPerson);
         tokenPerPers = newFavor.getObservableObject(Favor.LongFields.tokenPerPerson);
 
-
         locationCity.set(LocationHandler.getHandler().locationCity.get());
 
         binding.titleFavor.addTextChangedListener(titleFavorTextWatcher);
@@ -353,9 +362,16 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     };
     private void updateUI(boolean isEditing){
         if(isEditing){
+            pictureReference = newFavor.getObservableObject(Favor.StringFields.pictureReference);
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
+            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> {
+                if(pictureReference != null && pictureReference.get() != null){
+                    storage.displayImage(pictureReference, binding.favorImage);
+                }
+             }
+            );
         } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");
@@ -379,6 +395,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+
             selectedImage = data.getData();
             Bitmap bitmap = null;
             try {
