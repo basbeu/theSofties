@@ -25,7 +25,15 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     public ObservableField<String> firstName = new ObservableField<>();
     public ObservableField<String> lastName = new ObservableField<>();
     public ObservableField<String> sex = new ObservableField<>();
-    public ObservableField<String> profilePicRef = new ObservableField<>();
+    public static ObservableField<String> profilePicRef = new ObservableField<>();
+    public static FragmentFavorPosterDetailViewBinding binding;
+
+    protected static Observable.OnPropertyChangedCallback pictureCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            Storage.getInstance().displayImage(profilePicRef, binding.profilePic, "profile");
+        }
+    };
 
     private String ownerEmail;
     private User favorCreatorUser;
@@ -61,15 +69,10 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentFavorPosterDetailViewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_poster_detail_view, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_poster_detail_view, container, false);
         binding.setPosterElements(this);
         binding.okButton.setOnClickListener((View v) -> getActivity().onBackPressed());
-        profilePicRef.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                Storage.getInstance().displayImage(profilePicRef, binding.profilePic, "profile");
-            }
-        });
+        profilePicRef.addOnPropertyChangedCallback(pictureCallback);
 
         return binding.getRoot();
     }
