@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.storage.StorageReference;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -52,6 +53,6 @@ public class FakeStorage extends FirebaseStorageDispatcher{
 
     @Override
     public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category) {
-        return null;
+        return Tasks.forResult(null);
     }
 }

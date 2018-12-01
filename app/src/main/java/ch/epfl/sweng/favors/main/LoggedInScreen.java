@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
 import java.io.FileNotFoundException;
@@ -57,6 +58,13 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     private String storageRef;
     private ObservableField<String> profilePictureRef;
     private FirebaseStorageDispatcher storage = FirebaseStorageDispatcher.getInstance();
+    private OnSuccessListener deleteSuccess = new OnSuccessListener() {
+        @Override
+        public void onSuccess(Object o) {
+            User.getMain().set(User.StringFields.profilePicRef, null);
+            headerBinding.profilePicture.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        }
+    };
 
     ActivityLoggedInScreenBinding binding;
     NavHeaderBinding headerBinding;
@@ -108,11 +116,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                    storage.deleteImageFromStorage(profilePictureRef, "profile").addOnSuccessListener(s -> {
-                        User.getMain().set(User.StringFields.profilePicRef, null);
-                        headerBinding.profilePicture.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
-                        Toast.makeText(this, "Profile picture successfully deleted", Toast.LENGTH_LONG).show();
-                    });
+                    storage.deleteImageFromStorage(profilePictureRef, "profile").addOnSuccessListener(deleteSuccess);
             });
 
         });

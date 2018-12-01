@@ -940,6 +940,21 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         navigationMenuItemView3.perform(click());
 
+        appCompatImageButton.perform(click());
+
+
+        ViewInteraction floatingActionButton = onView(
+                allOf(withId(R.id.deleteProfilePicture),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.navigation_header_container),
+                                        0),
+                                0),
+                        isDisplayed()));
+        floatingActionButton.perform(click());
+
+        navigationMenuItemView3.perform(click());
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
