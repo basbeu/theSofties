@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.storage.Storage;
 import ch.epfl.sweng.favors.databinding.FragmentFavorPosterDetailViewBinding;
 
 public class FavorPosterDetailView extends android.support.v4.app.Fragment {
@@ -22,8 +25,10 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     public ObservableField<String> firstName = new ObservableField<>();
     public ObservableField<String> lastName = new ObservableField<>();
     public ObservableField<String> sex = new ObservableField<>();
+    public ObservableField<String> profilePicRef = new ObservableField<>();
 
     private String ownerEmail;
+    private User favorCreatorUser;
 
 
     @Override
@@ -42,12 +47,13 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
             Log.e(TAG, "Trying to intent a the fragment without the email of the favor owner");
         }
 
-        User favorCreatorUser = new User();
+        favorCreatorUser = new User();
         UserRequest.getWithId(favorCreatorUser, ownerEmail);
 
         firstName = favorCreatorUser.getObservableObject(User.StringFields.firstName);
         lastName = favorCreatorUser.getObservableObject(User.StringFields.lastName);
         sex = favorCreatorUser.getObservableObject(User.StringFields.sex);
+        profilePicRef = favorCreatorUser.getObservableObject(User.StringFields.profilePicRef);
 
 
     }
@@ -58,6 +64,13 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
         FragmentFavorPosterDetailViewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_poster_detail_view, container, false);
         binding.setPosterElements(this);
         binding.okButton.setOnClickListener((View v) -> getActivity().onBackPressed());
+        profilePicRef.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                Storage.getInstance().displayImage(profilePicRef, binding.profilePic, "profile");
+            }
+        });
+
         return binding.getRoot();
     }
 
