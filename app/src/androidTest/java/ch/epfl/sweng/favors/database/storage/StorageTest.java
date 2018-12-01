@@ -118,12 +118,12 @@ public class StorageTest {
 
         }
 
-        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
+        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), "test");
         assertEquals("test", refStorage);
-        String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
+        String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), "test");
         assertEquals("validRef", f1);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
-        String f2 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"));
+        String f2 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), "test");
         assertEquals("invalidRef", f2);
 
         Storage.successListener.onSuccess(taskSnapshot);
@@ -136,13 +136,13 @@ public class StorageTest {
 
     @Test
     public void nullUriReturnsNullRef(){
-        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), null);
+        String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), null, "test");
         assertEquals(null, refStorage);
     }
 
     @Test
     public void imageCanBeDisplayed(){
-        Storage.getInstance().displayImage(new ObservableField<String>("test"), view);
+        Storage.getInstance().displayImage(new ObservableField<String>("test"), view, "test");
     }
 
     @Test

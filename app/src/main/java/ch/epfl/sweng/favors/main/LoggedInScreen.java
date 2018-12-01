@@ -136,6 +136,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                 headerBinding.profilePicture.setImageBitmap(bitmap);
                 storageRef = FirebaseStorageDispatcher.getInstance().uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
+                ObservableField<String> oldRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
+                if(oldRef != null && oldRef.get() != null){
+                    FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(oldRef, "profile");
+                }
                 User.getMain().set(User.StringFields.profilePicRef, storageRef);
                 Database.getInstance().updateOnDb(User.getMain());
 
