@@ -147,9 +147,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 headerBinding.profilePicture.setImageBitmap(bitmap);
                 storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
                 ObservableField<String> oldRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
-                if(oldRef != null && oldRef.get() != null){
-                    storage.deleteImageFromStorage(oldRef, "profile");
-                }
+                storage.deleteImageFromStorage(oldRef, "profile");
                 User.getMain().set(User.StringFields.profilePicRef, storageRef);
                 Database.getInstance().updateOnDb(User.getMain());
 
