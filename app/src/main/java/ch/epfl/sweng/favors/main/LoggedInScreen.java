@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 
@@ -55,6 +56,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
     private String storageRef;
     private ObservableField<String> profilePictureRef;
+    private FirebaseStorageDispatcher storage = FirebaseStorageDispatcher.getInstance();
 
     ActivityLoggedInScreenBinding binding;
     NavHeaderBinding headerBinding;
@@ -86,7 +88,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
         Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
             if(profilePictureRef != null && profilePictureRef.get() != null){
-                FirebaseStorageDispatcher.getInstance().displayImage(profilePictureRef, headerBinding.profilePicture, "profile");
+                storage.displayImage(profilePictureRef, headerBinding.profilePicture, "profile");
             }
         });
 
@@ -106,6 +108,16 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
 
        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
+        headerBinding.deleteProfilePicture.setOnClickListener(v -> {
+            Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
+                if(profilePictureRef != null && profilePictureRef.get() != null){
+                    storage.deleteImageFromStorage(profilePictureRef, "profile");
+                    User.getMain().set(User.StringFields.profilePicRef, null);
+                    headerBinding.profilePicture.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+                }
+            });
+
+        });
     }
 
     @Override
@@ -135,10 +147,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                 headerBinding.profilePicture.setImageBitmap(bitmap);
-                storageRef = FirebaseStorageDispatcher.getInstance().uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
+                storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
                 ObservableField<String> oldRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
                 if(oldRef != null && oldRef.get() != null){
-                    FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(oldRef, "profile");
+                    storage.deleteImageFromStorage(oldRef, "profile");
                 }
                 User.getMain().set(User.StringFields.profilePicRef, storageRef);
                 Database.getInstance().updateOnDb(User.getMain());

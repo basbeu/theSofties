@@ -1414,7 +1414,7 @@ public class CompleteLoggedUITest {
             e.printStackTrace();
         }
 
-        navigationDrawerTests();
+        //navigationDrawerTests();
         profilTests();
 
     }
