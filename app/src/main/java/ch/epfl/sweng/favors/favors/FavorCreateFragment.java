@@ -115,7 +115,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         }
         Database.getInstance().updateOnDb(newFavor);
         launchToast(validationText.get());
-        updateUI(true);
+        //updateUI(true);
         return;
     }
 
@@ -363,12 +363,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> {
-                if(pictureReference != null && pictureReference.get() != null){
-                    storage.displayImage(pictureReference, binding.favorImage, "favor");
-                }
-             }
-            );
+            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> storage.displayImage(pictureReference, binding.favorImage, "favor"));
         } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");

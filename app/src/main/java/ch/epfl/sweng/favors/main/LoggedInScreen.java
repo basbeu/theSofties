@@ -87,9 +87,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
         Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
-            if(profilePictureRef != null && profilePictureRef.get() != null){
-                storage.displayImage(profilePictureRef, headerBinding.profilePicture, "profile");
-            }
+            storage.displayImage(profilePictureRef, headerBinding.profilePicture, "profile");
         });
 
 
@@ -110,14 +108,11 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                if(profilePictureRef != null && profilePictureRef.get() != null){
                     storage.deleteImageFromStorage(profilePictureRef, "profile").addOnSuccessListener(s -> {
                         User.getMain().set(User.StringFields.profilePicRef, null);
                         headerBinding.profilePicture.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
                         Toast.makeText(this, "Profile picture successfully deleted", Toast.LENGTH_LONG).show();
                     });
-
-                }
             });
 
         });
