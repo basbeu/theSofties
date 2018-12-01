@@ -1,11 +1,15 @@
 package ch.epfl.sweng.favors.database.storage;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,6 +23,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -132,6 +138,26 @@ public class Storage extends FirebaseStorageDispatcher{
             String path = category.toLowerCase()+"/";
             StorageReference ref = getReference().child(path+pictureRef.get());
             return ref.delete();
+        }
+        return null;
+    }
+
+    @Override
+    public Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view) {
+        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
+                view.setImageBitmap(bitmap);
+                return bitmap;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
         return null;
     }

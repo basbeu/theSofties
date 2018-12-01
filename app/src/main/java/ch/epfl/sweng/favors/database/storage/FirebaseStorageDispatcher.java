@@ -1,7 +1,9 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.widget.ImageView;
 
@@ -16,6 +18,7 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 public abstract class FirebaseStorageDispatcher {
 
     private static FirebaseStorageDispatcher storage = null;
+    public final static int GET_FROM_GALLERY = 66;
 
     public static FirebaseStorageDispatcher getInstance() {
         if(storage != null){
@@ -68,4 +71,6 @@ public abstract class FirebaseStorageDispatcher {
 
         return true;
     }
+
+    public abstract Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view);
 }

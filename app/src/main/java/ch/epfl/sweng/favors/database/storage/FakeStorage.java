@@ -1,7 +1,10 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
@@ -54,5 +57,12 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     @Override
     public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category) {
         return Tasks.forResult(null);
+    }
+
+    @Override
+    public Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view) {
+
+        if(requestCode != 66 || resultCode !=-1) return Bitmap.createBitmap(400, 400, Bitmap.Config.ALPHA_8);
+        return null;
     }
 }

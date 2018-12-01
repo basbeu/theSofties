@@ -53,7 +53,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
     public ObservableField<String> location = LocationHandler.getHandler().locationCity;
     public final String TAG = "LOGGED_IN_SCREEN";
-    private final static int GET_FROM_GALLERY = 66;
     private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
     private String storageRef;
     private ObservableField<String> profilePictureRef;
@@ -113,7 +112,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         }
 
 
-       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
+       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
                     storage.deleteImageFromStorage(profilePictureRef, "profile").addOnSuccessListener(deleteSuccess);
@@ -143,20 +142,14 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+        Bitmap bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, resultCode, data, this, headerBinding.profilePicture);
+        if(bitmap != null) {
             selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                headerBinding.profilePicture.setImageBitmap(bitmap);
-                storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
-                ObservableField<String> oldRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
-                storage.deleteImageFromStorage(oldRef, "profile");
-                User.getMain().set(User.StringFields.profilePicRef, storageRef);
-                Database.getInstance().updateOnDb(User.getMain());
-
-            } catch (FileNotFoundException e) { e.printStackTrace(); }
-            catch (IOException e) { e.printStackTrace(); }
+            storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
+            ObservableField<String> oldRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
+            storage.deleteImageFromStorage(oldRef, "profile");
+            User.getMain().set(User.StringFields.profilePicRef, storageRef);
+            Database.getInstance().updateOnDb(User.getMain());
         }
     }
 

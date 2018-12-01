@@ -62,7 +62,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
-    private static final int GET_FROM_GALLERY = 66;
     private FirebaseStorageDispatcher storage;
     private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
 
@@ -312,7 +311,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fr).addToBackStack("favorEditCreation").commit();
 
         });
-        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
+        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
 
         return binding.getRoot();
     }
@@ -385,15 +384,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+        Bitmap bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, resultCode, data, this.getActivity(), binding.favorImage);
+        if(bitmap != null) {
             selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                binding.favorImage.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) { e.printStackTrace(); }
-            catch (IOException e) { e.printStackTrace(); }
         }
     }
-
 }
