@@ -1,8 +1,11 @@
 package ch.epfl.sweng.favors.database.storage;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -38,6 +41,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import ch.epfl.sweng.favors.R;
 
@@ -81,6 +87,8 @@ public class StorageTest {
     @Mock private UploadTask.TaskSnapshot taskSnapshot;
     @Mock private ImageView view;
     @Mock private Intent data;
+    @Mock private Context context;
+    @Mock private ContentResolver contentResolver;
 
     private byte[] b = {};
 
@@ -99,19 +107,19 @@ public class StorageTest {
         when(firebaseStorage.getReference()).thenReturn(storageReference);
         when(data.getData()).thenReturn(Uri.parse("fakeUri"));
         when(ref.delete()).thenReturn(deletTask);
+        when(context.getContentResolver()).thenReturn(contentResolver);
 
         Storage.getInstance();
         Storage.setStorageTest(firebaseStorage);
-
-        if(Looper.myLooper() == null){
-            Looper.prepare();
-        }
-
 
     }
 
     @Test
     public void userCanUploadPicture(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
         mFragmentTestRule.launchActivity(null);
         try {
             Thread.sleep(500);
@@ -132,10 +140,15 @@ public class StorageTest {
 
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);
+        Looper.myLooper().quitSafely();
     }
 
     @Test
     public void listenersBehaveAsExpected(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
         mFragmentTestRule.launchActivity(null);
         try {
             Thread.sleep(500);
@@ -149,6 +162,7 @@ public class StorageTest {
         Storage.failureListener.onFailure(new Exception());
         Storage.progressListener.onProgress(taskSnapshot);
         Storage.byteSuccessListener.onSuccess(b);
+        Looper.myLooper().quitSafely();
     }
 
     @Test
@@ -176,6 +190,9 @@ public class StorageTest {
 
     @Test
     public void deleteReturnsCorrectTask(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
         mFragmentTestRule.launchActivity(null);
         try {
             Thread.sleep(500);
@@ -185,6 +202,8 @@ public class StorageTest {
         }
         Task<Void> result = Storage.getInstance().deleteImageFromStorage(new ObservableField<String>("test"), "favor");
         assertEquals(deletTask, result);
+
+        Looper.myLooper().quitSafely();
     }
 
     @Test
@@ -198,12 +217,48 @@ public class StorageTest {
         assertEquals(false, FirebaseStorageDispatcher.checkStoragePath(null));
     }
 
+    @Test
+    public void getPictureFromDeviceFake(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
+        mFragmentTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+
+        }catch (Exception e){
+
+        }
+        Bitmap b1 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY, -1, null, mFragmentTestRule.getActivity(), null);
+        Bitmap b2 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(67, -1, null, mFragmentTestRule.getActivity(), null);
+        assertEquals(FakeStorage.bitmap, b1);
+        assertEquals(null, b2);
+        Looper.myLooper().quitSafely();
+    }
+
+    @Test
+    public void getPictureFromDeviceReal(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
+        mFragmentTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+
+        }catch (Exception e){
+
+        }
+        Bitmap b1 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY, -1, data, context, view);
+        assertEquals(null, b1);
+        Looper.myLooper().quitSafely();
+    }
+
 
     @After
     public void after(){
         ExecutionMode.getInstance().setTest(false);
-       Looper.myLooper().quitSafely();
-       Looper.getMainLooper();
     }
 
 }

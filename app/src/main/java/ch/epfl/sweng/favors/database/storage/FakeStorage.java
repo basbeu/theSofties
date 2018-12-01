@@ -22,6 +22,7 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 public class FakeStorage extends FirebaseStorageDispatcher{
 
     private static FakeStorage storage = null;
+    protected static Bitmap bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ALPHA_8);
 
     public static FirebaseStorageDispatcher getInstance(){
         if(storage == null){
@@ -62,7 +63,9 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     @Override
     public Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view) {
 
-        if(requestCode != 66 || resultCode !=-1) return Bitmap.createBitmap(400, 400, Bitmap.Config.ALPHA_8);
+        if(requestCode == 66 && resultCode ==-1){
+            return bitmap;
+        }
         return null;
     }
 }
