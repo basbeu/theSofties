@@ -916,6 +916,30 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
+        appCompatImageButton.perform(click());
+
+        ViewInteraction navigationMenuItemView2 = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.design_navigation_view),
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0)),
+                        3),
+                        isDisplayed()));
+        navigationMenuItemView2.perform(click());
+
+        appCompatImageButton.perform(click());
+
+        ViewInteraction navigationMenuItemView3 = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.design_navigation_view),
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0)),
+                        4),
+                        isDisplayed()));
+        navigationMenuItemView3.perform(click());
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
