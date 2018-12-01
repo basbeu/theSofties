@@ -76,6 +76,7 @@ public class StorageTest {
     @Mock private UploadTask task;
     @Mock private StorageTask<UploadTask.TaskSnapshot> successTask;
     @Mock private StorageTask<UploadTask.TaskSnapshot> failureTask;
+    @Mock private Task<Void> deletTask;
     @Mock private Task<byte[]> byteTask;
     @Mock private UploadTask.TaskSnapshot taskSnapshot;
     @Mock private ImageView view;
@@ -95,8 +96,9 @@ public class StorageTest {
         when(byteTask.addOnSuccessListener(Storage.byteSuccessListener)).thenReturn(null);
         when(taskSnapshot.getBytesTransferred()).thenReturn((long)1);
         when(taskSnapshot.getTotalByteCount()).thenReturn((long)1);
-        when(firebaseStorage.getReference()).thenReturn(ref);
+        when(firebaseStorage.getReference()).thenReturn(storageReference);
         when(data.getData()).thenReturn(Uri.parse("fakeUri"));
+        when(ref.delete()).thenReturn(deletTask);
 
         Storage.getInstance();
         Storage.setStorageTest(firebaseStorage);
@@ -163,7 +165,37 @@ public class StorageTest {
     @Test
     public void getReferenceReturnsCorretly(){
         StorageReference r = Storage.getInstance().getReference();
-        assertEquals(ref, r);
+        assertEquals(storageReference, r);
+    }
+
+    @Test
+    public void deleteReturnsNullWithWrongCategory(){
+        Task<Void> result = Storage.getInstance().deleteImageFromStorage(new ObservableField<String>("test"), null);
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void deleteReturnsCorrectTask(){
+        mFragmentTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+
+        }catch (Exception e){
+
+        }
+        Task<Void> result = Storage.getInstance().deleteImageFromStorage(new ObservableField<String>("test"), "favor");
+        assertEquals(deletTask, result);
+    }
+
+    @Test
+    public void checkCategoryTest(){
+        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("profile"));
+        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("pRofIle"));
+        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("favor"));
+        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("FAVOR"));
+        assertEquals(false, FirebaseStorageDispatcher.checkStoragePath("favors"));
+        assertEquals(false, FirebaseStorageDispatcher.checkStoragePath("profiles"));
+        assertEquals(false, FirebaseStorageDispatcher.checkStoragePath(null));
     }
 
 

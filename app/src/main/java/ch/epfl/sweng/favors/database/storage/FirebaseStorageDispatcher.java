@@ -57,8 +57,12 @@ public abstract class FirebaseStorageDispatcher {
      */
     public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category);
 
-    public static boolean checkStoragePath(String path){
-        if(!path.equals("favor/") && !path.equals("profile/")){
+    public static boolean checkStoragePath(String category){
+        if(category == null){
+            return false;
+        }
+        String cat = category.toLowerCase();
+        if(!cat.equals("favor") && !cat.equals("profile")){
             return false;
         }
 
