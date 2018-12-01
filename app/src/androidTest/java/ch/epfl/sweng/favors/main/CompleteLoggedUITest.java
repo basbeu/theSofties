@@ -846,13 +846,13 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         appCompatImageButton.perform(click());
 
-        ViewInteraction textView8 = onView(
-                allOf(withText("Fake Auth"),
+        /*ViewInteraction textView8 = onView(
+                allOf(withId(R.id.textView2), withText("Fake Auth"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.navigation_header_container),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         textView8.check(matches(withText("Fake Auth")));
 
@@ -862,9 +862,9 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         withId(R.id.navigation_header_container),
                                         0),
-                                2),
+                                3),
                         isDisplayed()));
-        textView9.check(matches(withText(FakeGeocoder.FAKE_LOCATION_CITY)));
+        textView9.check(matches(withText(FakeGeocoder.FAKE_LOCATION_CITY)));*/
 
         ViewInteraction checkedTextView = onView(
                 allOf(withId(R.id.design_menu_item_text),
@@ -1414,7 +1414,7 @@ public class CompleteLoggedUITest {
             e.printStackTrace();
         }
 
-        //navigationDrawerTests();
+        navigationDrawerTests();
         profilTests();
 
     }
