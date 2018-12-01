@@ -111,9 +111,12 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
                 if(profilePictureRef != null && profilePictureRef.get() != null){
-                    storage.deleteImageFromStorage(profilePictureRef, "profile");
-                    User.getMain().set(User.StringFields.profilePicRef, null);
-                    headerBinding.profilePicture.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+                    storage.deleteImageFromStorage(profilePictureRef, "profile").addOnSuccessListener(s -> {
+                        User.getMain().set(User.StringFields.profilePicRef, null);
+                        headerBinding.profilePicture.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+                        Toast.makeText(this, "Profile picture successfully deleted", Toast.LENGTH_LONG).show();
+                    });
+
                 }
             });
 

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -123,12 +124,13 @@ public class Storage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public void deleteImageFromStorage(ObservableField<String> pictureRef, String category) {
+    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category) {
         String path = category.toLowerCase()+"/";
         if(Storage.checkStoragePath(path) && pictureRef != null && pictureRef.get() != null){
             StorageReference ref = getReference().child(path+pictureRef.get());
-            ref.delete();
+            return ref.delete();
         }
+        return null;
     }
 
 }

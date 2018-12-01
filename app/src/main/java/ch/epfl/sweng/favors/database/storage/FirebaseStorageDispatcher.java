@@ -5,6 +5,7 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -54,7 +55,7 @@ public abstract class FirebaseStorageDispatcher {
      * @param pictureRef the reference of the image to be deleted
      * @param category the category of the picture to be deleted (favor or profile)
      */
-    public abstract void deleteImageFromStorage(ObservableField<String> pictureRef, String category);
+    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category);
 
     public static boolean checkStoragePath(String path){
         if(!path.equals("favor/") && !path.equals("profile/")){
