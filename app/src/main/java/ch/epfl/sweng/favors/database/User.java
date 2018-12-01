@@ -28,7 +28,7 @@ public class User extends DatabaseEntity{
     public static void updateMain(){user = new User(Authentication.getInstance().getUid());}
 
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, profilePicRef}
     public enum LongFields implements DatabaseLongField {creationTimeStamp, tokens}
     public enum ObjectFields implements DatabaseObjectField {rights, location}
     public enum BooleanFields implements DatabaseBooleanField {}

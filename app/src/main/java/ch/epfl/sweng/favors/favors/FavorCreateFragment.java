@@ -137,8 +137,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
-            storage.deleteImageFromStorage(pictureReference);
-            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
+            storage.deleteImageFromStorage(pictureReference, "favor");
+            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage, "favor");
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
 
         } else if(pictureReference != null){
@@ -365,7 +365,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationText.set("Favor edited successfully");
             Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> {
                 if(pictureReference != null && pictureReference.get() != null){
-                    storage.displayImage(pictureReference, binding.favorImage);
+                    storage.displayImage(pictureReference, binding.favorImage, "favor");
                 }
              }
             );

@@ -1,9 +1,14 @@
 package ch.epfl.sweng.favors.main;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +19,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.Timestamp;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +35,7 @@ import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.MyFavorsFragment;
@@ -43,6 +51,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     public ObservableField<String> lastName = User.getMain().getObservableObject(User.StringFields.lastName);
     public ObservableField<String> location = LocationHandler.getHandler().locationCity;
     public final String TAG = "LOGGED_IN_SCREEN";
+    private final static int GET_FROM_GALLERY = 66;
+    private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
+    private String storageRef;
+    private ObservableField<String> profilePictureRef;
 
     ActivityLoggedInScreenBinding binding;
     NavHeaderBinding headerBinding;
@@ -71,6 +83,16 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         headerBinding.setElements(this);
         binding.navView.addHeaderView(headerBinding.getRoot());
 
+        profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
+        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
+            if(profilePictureRef != null && profilePictureRef.get() != null){
+                FirebaseStorageDispatcher.getInstance().displayImage(profilePictureRef, headerBinding.profilePicture, "profile");
+            }
+        });
+
+
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout,
                 binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -82,6 +104,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             binding.navView.setCheckedItem(R.id.favors);
         }
 
+
+       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
     }
 
     @Override
@@ -93,6 +117,31 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             super.onBackPressed();
         }
 
+    }
+
+    /**
+     * This method is called on the result of method startActivityOnResult
+     * Inspired from this tutorial : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
+     * @param requestCode 66 if the activity is getting a picture from the gallery
+     * @param resultCode -1 if OK
+     * @param data the data corresponding to the picture
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                headerBinding.profilePicture.setImageBitmap(bitmap);
+                storageRef = FirebaseStorageDispatcher.getInstance().uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
+                User.getMain().set(User.StringFields.profilePicRef, storageRef);
+                Database.getInstance().updateOnDb(User.getMain());
+
+            } catch (FileNotFoundException e) { e.printStackTrace(); }
+            catch (IOException e) { e.printStackTrace(); }
+        }
     }
 
     @Override

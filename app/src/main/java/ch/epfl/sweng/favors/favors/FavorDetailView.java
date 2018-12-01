@@ -133,7 +133,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
         //user.set();
 
-        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
+        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, "favor");
 
 
 
@@ -233,7 +233,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
-            FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(pictureRef);
+            FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(pictureRef, "favor");
 
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
