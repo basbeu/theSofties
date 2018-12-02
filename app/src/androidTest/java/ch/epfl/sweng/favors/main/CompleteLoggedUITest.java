@@ -1198,8 +1198,7 @@ public class CompleteLoggedUITest {
                                                 1)),
                                 2)));
         floatingActionButton2.perform(scrollTo(), click());
-
-        //TODO **************************
+        
         ViewInteraction floatingActionButton3 = onView(
                 allOf(withId(R.id.uploadFavorPicture),
                         childAtPosition(
@@ -1209,7 +1208,6 @@ public class CompleteLoggedUITest {
                                                 1)),
                                 1)));
         floatingActionButton3.perform(scrollTo(), click());
-        //TODO ******************************
 
 
         ViewInteraction appCompatEditText12 = onView(
