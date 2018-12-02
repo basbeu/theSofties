@@ -63,6 +63,11 @@ public abstract class FirebaseStorageDispatcher {
      */
     public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category);
 
+    /**
+     * Checks if the category exists
+     * @param category favor or profile
+     * @return true if category is favor or profile, false otherwise
+     */
     public static boolean checkStoragePath(String category){
         if(category == null){
             return false;
@@ -75,8 +80,37 @@ public abstract class FirebaseStorageDispatcher {
         return true;
     }
 
+    /**
+     * Extracts an image from data and displays it
+     * Inspired from : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
+     * and : https://androidkennel.org/android-camera-access-tutorial/
+     * @param requestCode 66 if it's an image from the gallery, 99 if from the camera
+     * @param resultCode -1 if the operation was successfull
+     * @param data the intent containing the image
+     * @param context the context from which the method has been called
+     * @param view the view on which the image should be displayed
+     * @return the image Bitmap or null if the requestCode were not valid
+     */
     public abstract Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view);
+
+    /**
+     * Check if the device has already granted permission for camera and storage
+     * Ask for permission if not already granted, open the camera by calling takePictureFromCamera otherwise
+     * @param fragment the fragment that should ask for the permission
+     */
     public abstract void checkCameraPermission(Fragment fragment);
+
+    /**
+     * Open the camera of the device to take a picture
+     * Once it's done, onActivityResult from fragment will be called
+     * @param fragment the fragment that should call startActivityForResult
+     */
     public abstract void takePictureFromCamera(Fragment fragment);
+
+    /**
+     * Open the gallery of the device to select a picture
+     * Once it's done, onActivityResult from fragment will be called
+     * @param fragment the fragment that should call startActivityForResult
+     */
     public abstract void takePictureFromGallery(Fragment fragment);
 }

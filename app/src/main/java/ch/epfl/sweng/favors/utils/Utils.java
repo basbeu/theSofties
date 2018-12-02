@@ -201,10 +201,11 @@ public final class Utils {
     }
 
     /**
-     * https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri
-     * @param context
-     * @param bitmap
-     * @return
+     * Create an Uri from an image bitmap
+     * found on https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri
+     * @param context the context of the fragment that call this method
+     * @param bitmap the bitmap to be converted in Uri
+     * @return Uri to the image bitmap, or null if the path cannot be resolved
      */
 
     public static Uri getImageUri(Context context, Bitmap bitmap){

@@ -385,10 +385,11 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     /**
      * This method is called on the result of method startActivityOnResult
+     * Obtain an image bitmap and affect the path of this image to selectedImage
      * Inspired from this tutorial : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
-     * @param requestCode 66 if the activity is getting a picture from the gallery
+     * @param requestCode 66 if the activity is getting a picture from the gallery, 99 if from the camera
      * @param resultCode -1 if OK
-     * @param data the data corresponding to the picture
+     * @param data the Intent containing the picture
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -405,6 +406,14 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     }
 
+    /**
+     * This method is called on the result of method requestPermission
+     * Calls takeImageFromCamera if the permission have been granted
+     * Inspired from https://androidkennel.org/android-camera-access-tutorial/
+     * @param requestCode 0 if access to the storage and camera of the device
+     * @param permissions array of String from permissions requested
+     * @param grantResults array of int containing the results of the permissions (0 if permission granted)
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == FirebaseStorageDispatcher.STORAGE_PERMISSION) {

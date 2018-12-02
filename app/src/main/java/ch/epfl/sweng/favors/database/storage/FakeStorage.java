@@ -53,7 +53,6 @@ public class FakeStorage extends FirebaseStorageDispatcher{
 
     @Override
     public void displayImage(ObservableField<String> pictureRef, ImageView imageView, String category) {
-        //TODO display fake image
     }
 
     @Override
@@ -77,12 +76,10 @@ public class FakeStorage extends FirebaseStorageDispatcher{
 
     @Override
     public void takePictureFromCamera(Fragment fragment) {
-
     }
 
     @Override
     public void takePictureFromGallery(Fragment fragment) {
-
     }
 
 }

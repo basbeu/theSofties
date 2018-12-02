@@ -174,9 +174,6 @@ public class Storage extends FirebaseStorageDispatcher{
         return null;
     }
 
-    /**
-     * https://androidkennel.org/android-camera-access-tutorial/
-     */
     @Override
     public void checkCameraPermission(Fragment fragment) {
         if (ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
