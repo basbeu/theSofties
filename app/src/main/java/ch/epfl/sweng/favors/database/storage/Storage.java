@@ -1,14 +1,19 @@
 package ch.epfl.sweng.favors.database.storage;
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -159,7 +164,36 @@ public class Storage extends FirebaseStorageDispatcher{
                 return null;
             }
         }
+        else if (requestCode == GET_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            view.setImageBitmap(bitmap);
+            return bitmap;
+        }
+
         return null;
+    }
+
+    /**
+     * https://androidkennel.org/android-camera-access-tutorial/
+     */
+    @Override
+    public void checkCameraPermission(Fragment fragment) {
+        if (ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            fragment.requestPermissions(new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, STORAGE_PERMISSION);
+        }
+
+        else takePictureFromCamera(fragment);
+    }
+
+    @Override
+    public void takePictureFromCamera(Fragment fragment) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
+            fragment.startActivityForResult(intent, FirebaseStorageDispatcher.GET_FROM_CAMERA);
+        }
     }
 
 }

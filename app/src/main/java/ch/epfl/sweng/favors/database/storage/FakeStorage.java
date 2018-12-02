@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -68,4 +69,15 @@ public class FakeStorage extends FirebaseStorageDispatcher{
         }
         return null;
     }
+
+    @Override
+    public void checkCameraPermission(Fragment fragment) {
+
+    }
+
+    @Override
+    public void takePictureFromCamera(Fragment fragment) {
+
+    }
+
 }

@@ -43,7 +43,7 @@
 
             <ImageView
                 android:id="@+id/favorImage"
-                android:layout_width="100dp"
+                android:layout_width="132dp"
                 android:layout_height="80dp"
                 android:contentDescription="@string/imageFavor"
                 app:srcCompat="@drawable/logo" />
@@ -58,7 +58,17 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="@color/browser_actions_divider_color"
-                app:srcCompat="@android:drawable/ic_menu_add" />
+                app:srcCompat="@drawable/upload_picture_gallery"/>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/uploadFavorPictureCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20sp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/browser_actions_divider_color"
+                app:srcCompat="@drawable/upload_picture_camera"/>
         </RelativeLayout>
 
         <EditText

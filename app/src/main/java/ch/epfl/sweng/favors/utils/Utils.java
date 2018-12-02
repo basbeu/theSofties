@@ -3,7 +3,9 @@ package ch.epfl.sweng.favors.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -195,6 +198,19 @@ public final class Utils {
 
     public static String getIconNameFromCategory(String category){
         return category.toLowerCase().replaceAll("\\s","");
+    }
+
+    /**
+     * https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri
+     * @param context
+     * @param bitmap
+     * @return
+     */
+
+    public static Uri getImageUri(Context context, Bitmap bitmap){
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "favorpic", null);
+        return Uri.parse(path);
     }
 
 

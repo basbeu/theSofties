@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.Task;
@@ -19,6 +20,8 @@ public abstract class FirebaseStorageDispatcher {
 
     private static FirebaseStorageDispatcher storage = null;
     public final static int GET_FROM_GALLERY = 66;
+    public final static int GET_FROM_CAMERA = 99;
+    public final static int STORAGE_PERMISSION = 0;
 
     public static FirebaseStorageDispatcher getInstance() {
         if(storage != null){
@@ -73,4 +76,6 @@ public abstract class FirebaseStorageDispatcher {
     }
 
     public abstract Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view);
+    public abstract void checkCameraPermission(Fragment fragment);
+    public abstract void takePictureFromCamera(Fragment fragment);
 }

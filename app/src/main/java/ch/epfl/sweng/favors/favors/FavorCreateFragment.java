@@ -1,9 +1,11 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
@@ -11,12 +13,15 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,8 +34,10 @@ import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,6 +57,8 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
+import ch.epfl.sweng.favors.utils.Utils;
+import io.grpc.PickFirstBalancerFactory;
 
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.StorageReference;
@@ -312,7 +321,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         });
         binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
-
+        binding.uploadFavorPictureCamera.setOnClickListener(v->storage.checkCameraPermission(this));
         return binding.getRoot();
     }
 
@@ -386,7 +395,26 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, resultCode, data, this.getActivity(), binding.favorImage);
         if(bitmap != null) {
-            selectedImage = data.getData();
+            if(requestCode == FirebaseStorageDispatcher.GET_FROM_GALLERY){
+                selectedImage = data.getData();
+            }
+            else{
+                selectedImage = Utils.getImageUri(getActivity(), bitmap);
+            }
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == FirebaseStorageDispatcher.STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                storage.takePictureFromCamera(this);
+            }
+            else{
+                Toast.makeText(getContext(), "Alright, keep your secrets then", Toast.LENGTH_LONG).show();
+            }
         }
     }
+
 }

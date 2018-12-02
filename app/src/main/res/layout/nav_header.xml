@@ -39,7 +39,7 @@
             app:backgroundTint="@color/white"
             app:layout_constraintStart_toEndOf="@+id/view2"
             app:layout_constraintTop_toBottomOf="@+id/deleteProfilePicture"
-            app:srcCompat="@drawable/upload_picture" />
+            app:srcCompat="@drawable/upload_picture_gallery" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/view2"
