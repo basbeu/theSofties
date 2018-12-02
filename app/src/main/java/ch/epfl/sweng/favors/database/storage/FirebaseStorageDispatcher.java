@@ -63,22 +63,22 @@ public abstract class FirebaseStorageDispatcher {
      */
     public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category);
 
-    /**
-     * Checks if the category exists
-     * @param category favor or profile
-     * @return true if category is favor or profile, false otherwise
-     */
-    public static boolean checkStoragePath(String category){
-        if(category == null){
-            return false;
-        }
-        String cat = category.toLowerCase();
-        if(!cat.equals("favor") && !cat.equals("profile")){
-            return false;
-        }
-
-        return true;
-    }
+//    /**
+//     * Checks if the category exists
+//     * @param category favor or profile
+//     * @return true if category is favor or profile, false otherwise
+//     */
+//    public static boolean checkStoragePath(String category){
+//        if(category == null){
+//            return false;
+//        }
+//        String cat = category.toLowerCase();
+//        if(!cat.equals("favor") && !cat.equals("profile")){
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     /**
      * Extracts an image from data and displays it

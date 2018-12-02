@@ -107,7 +107,7 @@ public class Storage extends FirebaseStorageDispatcher{
     public String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, StorageCategories category) {
 
 
-        if(Storage.checkStoragePath(category.toString()) && selectedImage != null)
+        if(selectedImage != null)
         {
             String path = category.toString()+"/";
             context_ext = context;
@@ -127,7 +127,7 @@ public class Storage extends FirebaseStorageDispatcher{
     @Override
     public void displayImage(ObservableField<String> pictureRef, ImageView imageView, StorageCategories category) {
 
-        if(Storage.checkStoragePath(category.toString()) && pictureRef != null && pictureRef.get() != null){
+        if(pictureRef != null && pictureRef.get() != null){
             String path = category.toString()+"/";
             StorageReference ref = FirebaseStorage.getInstance().getReference().child(path+ pictureRef.get());
             view = imageView;
@@ -139,7 +139,7 @@ public class Storage extends FirebaseStorageDispatcher{
     @Override
     public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category) {
 
-        if(Storage.checkStoragePath(category.toString()) && pictureRef != null && pictureRef.get() != null){
+        if(pictureRef != null && pictureRef.get() != null){
             String path = category.toString()+"/";
             StorageReference ref = getReference().child(path+pictureRef.get());
             return ref.delete();
