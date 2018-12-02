@@ -24,6 +24,7 @@ import java.util.Random;
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
@@ -205,26 +206,9 @@ public class FakeDatabase extends Database{
                         }
                     }
                 }
-                if (mapLess != null) {
+                if(mapLess!=null) {
                     for (Map.Entry<DatabaseField, Object> el : mapLess.entrySet()) {
-                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).compareTo((String)el.getValue())>0)) {
-                            toAdd = false;
-                            break;
-                        }
-                    }
-                    if (toAdd) {
-                        try {
-                            T temp = clazz.newInstance();
-                            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                            tempList.add(temp);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Illegal access exception");
-                        }
-                    }
-                }
-                if (mapMore != null) {
-                    for (Map.Entry<DatabaseField, Object> el : mapMore.entrySet()) {
-                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).compareTo((String)el.getValue())<0)) {
+                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && ((Timestamp)entity.get((DatabaseObjectField) el.getKey())).compareTo((Timestamp) el.getValue())>0)) {
                             toAdd = false;
                             break;
                         }
