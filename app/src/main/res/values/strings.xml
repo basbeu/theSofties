@@ -53,5 +53,7 @@
 
     <string name="emailNotif">Email notifications</string>
     <string name="appNotif"> App notifications </string>
+    <string name="colorSetting">The main color of the app :  </string>
+    colorSetting
 
 </resources>

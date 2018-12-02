@@ -28,6 +28,7 @@ import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.MyFavorsFragment;
@@ -69,6 +70,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         headerBinding = DataBindingUtil.inflate(getLayoutInflater(),
                 R.layout.nav_header, binding.navView, false);
         headerBinding.setElements(this);
+
+        headerBinding.topView.setBackgroundResource(LocalPreferences.getInstance().getColor());
         binding.navView.addHeaderView(headerBinding.getRoot());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout,
@@ -82,7 +85,11 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             binding.navView.setCheckedItem(R.id.favors);
         }
 
+        //binding.toolbar.setBackgroundColor(LocalPreferences.getInstance().getColor());
+        binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
     }
+
+    
 
     @Override
     public void onBackPressed() {
