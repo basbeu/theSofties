@@ -1,18 +1,24 @@
 package ch.epfl.sweng.favors.database.storage;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -89,12 +95,16 @@ public class StorageTest {
     @Mock private Intent data;
     @Mock private Context context;
     @Mock private ContentResolver contentResolver;
+    @Mock private Fragment fakeFragment;
 
     private byte[] b = {};
+    private Bundle bundle = new Bundle();
+
 
     @Before
     public void before(){
         ExecutionMode.getInstance().setTest(true);
+        bundle.putParcelable("data", FakeStorage.bitmap);
         when(storageReference.child("favor/"+ "test")).thenReturn(ref);
         when(ref.putFile(Uri.parse("fakeUri"))).thenReturn(task);
         when(task.addOnSuccessListener(Storage.successListener)).thenReturn(successTask);
@@ -108,6 +118,8 @@ public class StorageTest {
         when(data.getData()).thenReturn(Uri.parse("fakeUri"));
         when(ref.delete()).thenReturn(deletTask);
         when(context.getContentResolver()).thenReturn(contentResolver);
+        when(data.getExtras()).thenReturn(bundle);
+
 
         Storage.getInstance();
         Storage.setStorageTest(firebaseStorage);
@@ -234,7 +246,9 @@ public class StorageTest {
         Bitmap b2 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(67, -1, null, mFragmentTestRule.getActivity(), null);
         assertEquals(FakeStorage.bitmap, b1);
         assertEquals(null, b2);
+
         Looper.myLooper().quitSafely();
+
     }
 
     @Test
@@ -252,7 +266,33 @@ public class StorageTest {
         }
         Bitmap b1 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY, -1, data, context, view);
         assertEquals(null, b1);
+        Bitmap b2 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_CAMERA, -1, data, mFragmentTestRule.getActivity(), view);
+        assertEquals(FakeStorage.bitmap, b2);
+
+        Bitmap b3 = Storage.getInstance().getPictureFromDevice(3, -1, data, mFragmentTestRule.getActivity(), view);
+        assertEquals(null, b3);
+
         Looper.myLooper().quitSafely();
+    }
+
+    @Ignore
+    @Test
+    public void takePictureFromCameraCanBeCalled(){
+        mFragmentTestRule.launchActivity(new Intent());
+        try {
+            Thread.sleep(500);
+
+        }catch (Exception e){
+
+        }
+        Storage.getInstance().checkCameraPermission(fakeFragment);
+        //Storage.getInstance().takePictureFromCamera(fakeFragment);
+
+    }
+
+    @Test
+    public void takePictureFromGalleryCanBeCalled(){
+        Storage.getInstance().takePictureFromGallery(fakeFragment);
     }
 
 

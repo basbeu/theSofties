@@ -1198,7 +1198,7 @@ public class CompleteLoggedUITest {
                                                 1)),
                                 2)));
         floatingActionButton2.perform(scrollTo(), click());
-        
+
         ViewInteraction floatingActionButton3 = onView(
                 allOf(withId(R.id.uploadFavorPicture),
                         childAtPosition(

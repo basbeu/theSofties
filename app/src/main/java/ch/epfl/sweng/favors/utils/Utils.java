@@ -210,6 +210,9 @@ public final class Utils {
     public static Uri getImageUri(Context context, Bitmap bitmap){
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "favorpic", null);
+        if(path == null){
+            return null;
+        }
         return Uri.parse(path);
     }
 

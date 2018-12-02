@@ -1,14 +1,21 @@
 package ch.epfl.sweng.favors.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Looper;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.util.Date;
 
@@ -19,6 +26,9 @@ import static junit.framework.TestCase.assertTrue;
 public class UtilsTest {
 
     final static long DAY = 86400000;
+
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock private Context context;
 
     @Before
     public void Before() {
@@ -240,6 +250,11 @@ public class UtilsTest {
     @Test
     public void CreateUtils(){
         new Utils();
+    }
+
+    @Test
+    public void getImageUriTest(){
+        Utils.getImageUri(context, Bitmap.createBitmap(100, 100, Bitmap.Config.ALPHA_8));
     }
 
 
