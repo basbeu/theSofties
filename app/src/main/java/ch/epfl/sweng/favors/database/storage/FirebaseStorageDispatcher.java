@@ -46,7 +46,7 @@ public abstract class FirebaseStorageDispatcher {
      * @param category the category of the picture (favor or profile)
      * @return null if selectedImage == null, the storage reference of the picture otherwise
      */
-    public abstract String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, String category);
+    public abstract String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, StorageCategories category);
 
     /**
      * Download the picture corresponding to pictureRef from firestore and displays it on imageView
@@ -54,14 +54,14 @@ public abstract class FirebaseStorageDispatcher {
      * @param imageView the Imageview where the picture should be displayed
      * @param category the category of the picture to be displayed (favor or profile)
      */
-    public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView, String category);
+    public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView, StorageCategories category);
 
     /**
      * Delete an image on firestore
      * @param pictureRef the reference of the image to be deleted
      * @param category the category of the picture to be deleted (favor or profile)
      */
-    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category);
+    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category);
 
     /**
      * Checks if the category exists

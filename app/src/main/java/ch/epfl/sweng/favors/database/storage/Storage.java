@@ -47,6 +47,7 @@ public class Storage extends FirebaseStorageDispatcher{
     private static ImageView view;
     protected static Bitmap bmp;
 
+
     //The listener are declared protected so they can be used in the tests with Mockito
 
     protected static OnSuccessListener<UploadTask.TaskSnapshot> successListener = new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -103,13 +104,12 @@ public class Storage extends FirebaseStorageDispatcher{
         firebaseStorage = storage;
     }
 
-    public String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, String category) {
+    public String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, StorageCategories category) {
 
 
-
-        if(Storage.checkStoragePath(category) && selectedImage != null)
+        if(Storage.checkStoragePath(category.toString()) && selectedImage != null)
         {
-            String path = category.toLowerCase()+"/";
+            String path = category.toString()+"/";
             context_ext = context;
             progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Uploading...");
@@ -125,10 +125,10 @@ public class Storage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public void displayImage(ObservableField<String> pictureRef, ImageView imageView, String category) {
+    public void displayImage(ObservableField<String> pictureRef, ImageView imageView, StorageCategories category) {
 
-        if(Storage.checkStoragePath(category) && pictureRef != null && pictureRef.get() != null){
-            String path = category.toLowerCase()+"/";
+        if(Storage.checkStoragePath(category.toString()) && pictureRef != null && pictureRef.get() != null){
+            String path = category.toString()+"/";
             StorageReference ref = FirebaseStorage.getInstance().getReference().child(path+ pictureRef.get());
             view = imageView;
             ref.getBytes(MAX_BYTE_SIZE).addOnSuccessListener(byteSuccessListener);
@@ -137,10 +137,10 @@ public class Storage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category) {
+    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category) {
 
-        if(Storage.checkStoragePath(category) && pictureRef != null && pictureRef.get() != null){
-            String path = category.toLowerCase()+"/";
+        if(Storage.checkStoragePath(category.toString()) && pictureRef != null && pictureRef.get() != null){
+            String path = category.toString()+"/";
             StorageReference ref = getReference().child(path+pictureRef.get());
             return ref.delete();
         }

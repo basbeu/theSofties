@@ -38,6 +38,7 @@ import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
+import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.MyFavorsFragment;
@@ -94,7 +95,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
         Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
-            storage.displayImage(profilePictureRef, headerBinding.profilePicture, "profile");
+            storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE);
         });
 
 
@@ -115,7 +116,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                    storage.deleteImageFromStorage(profilePictureRef, "profile").addOnSuccessListener(deleteSuccess);
+                    storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
             });
 
         });
@@ -148,9 +149,9 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         }
         if(bitmap != null) {
             selectedImage = data.getData();
-            storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");
+            storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, StorageCategories.PROFILE);
             ObservableField<String> oldRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
-            storage.deleteImageFromStorage(oldRef, "profile");
+            storage.deleteImageFromStorage(oldRef, StorageCategories.PROFILE);
             User.getMain().set(User.StringFields.profilePicRef, storageRef);
             Database.getInstance().updateOnDb(User.getMain());
         }

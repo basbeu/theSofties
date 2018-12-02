@@ -38,9 +38,9 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, String category) {
+    public String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, StorageCategories category) {
 
-        if(!Storage.checkStoragePath(category) || selectedImage == null) return null;
+        if(!Storage.checkStoragePath(category.toString()) || selectedImage == null) return null;
 
         if(ExecutionMode.getInstance().isInvalidAuthTest()){
             Toast.makeText(context, "Failed to upload image, try again later", Toast.LENGTH_SHORT).show();
@@ -52,11 +52,11 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public void displayImage(ObservableField<String> pictureRef, ImageView imageView, String category) {
+    public void displayImage(ObservableField<String> pictureRef, ImageView imageView, StorageCategories category) {
     }
 
     @Override
-    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category) {
+    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category) {
         return Tasks.forResult(null);
     }
 
