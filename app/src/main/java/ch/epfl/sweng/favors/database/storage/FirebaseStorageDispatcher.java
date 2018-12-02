@@ -78,4 +78,5 @@ public abstract class FirebaseStorageDispatcher {
     public abstract Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view);
     public abstract void checkCameraPermission(Fragment fragment);
     public abstract void takePictureFromCamera(Fragment fragment);
+    public abstract void takePictureFromGallery(Fragment fragment);
 }

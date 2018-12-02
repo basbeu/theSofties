@@ -196,4 +196,9 @@ public class Storage extends FirebaseStorageDispatcher{
         }
     }
 
+    @Override
+    public void takePictureFromGallery(Fragment fragment) {
+        fragment.startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+    }
+
 }

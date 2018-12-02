@@ -1189,6 +1189,29 @@ public class CompleteLoggedUITest {
                                 2)));
         appCompatEditText11.perform(scrollTo(), replaceText("New favor"), closeSoftKeyboard());
 
+        ViewInteraction floatingActionButton2 = onView(
+                allOf(withId(R.id.uploadFavorPictureCamera),
+                        childAtPosition(
+                                allOf(withId(R.id.imageOfFavor),
+                                        childAtPosition(
+                                                withClassName(is("android.support.constraint.ConstraintLayout")),
+                                                1)),
+                                2)));
+        floatingActionButton2.perform(scrollTo(), click());
+
+        //TODO **************************
+        ViewInteraction floatingActionButton3 = onView(
+                allOf(withId(R.id.uploadFavorPicture),
+                        childAtPosition(
+                                allOf(withId(R.id.imageOfFavor),
+                                        childAtPosition(
+                                                withClassName(is("android.support.constraint.ConstraintLayout")),
+                                                1)),
+                                1)));
+        floatingActionButton3.perform(scrollTo(), click());
+        //TODO ******************************
+
+
         ViewInteraction appCompatEditText12 = onView(
                 allOf(withId(R.id.descriptionFavor),
                         childAtPosition(

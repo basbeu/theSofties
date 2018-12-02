@@ -72,11 +72,16 @@ public class FakeStorage extends FirebaseStorageDispatcher{
 
     @Override
     public void checkCameraPermission(Fragment fragment) {
-
+        takePictureFromCamera(fragment);
     }
 
     @Override
     public void takePictureFromCamera(Fragment fragment) {
+
+    }
+
+    @Override
+    public void takePictureFromGallery(Fragment fragment) {
 
     }
 

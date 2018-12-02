@@ -123,7 +123,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         }
         Database.getInstance().updateOnDb(newFavor);
         launchToast(validationText.get());
-        //updateUI(true);
+        updateUI(true);
         return;
     }
 
@@ -320,7 +320,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fr).addToBackStack("favorEditCreation").commit();
 
         });
-        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
+        binding.uploadFavorPicture.setOnClickListener(v-> storage.takePictureFromGallery(this));
         binding.uploadFavorPictureCamera.setOnClickListener(v->storage.checkCameraPermission(this));
         return binding.getRoot();
     }
