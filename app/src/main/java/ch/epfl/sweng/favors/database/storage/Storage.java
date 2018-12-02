@@ -174,12 +174,21 @@ public class Storage extends FirebaseStorageDispatcher{
 
     @Override
     public void checkCameraPermission(Fragment fragment) {
-        if (ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (permissionGranted(fragment, Manifest.permission.CAMERA)
+                || permissionGranted(fragment, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             fragment.requestPermissions(new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, STORAGE_PERMISSION);
         }
-
         else takePictureFromCamera(fragment);
+    }
+
+    /**
+     * Will check if a specific permission is gratend to the fragment
+     * @param fragment current fragmetn to request permission in
+     * @param permission Manifest constant that you wich to check permissions for.
+     * @return true if permission is granted.
+     */
+    private boolean permissionGranted(Fragment fragment, String permission) {
+        return ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
