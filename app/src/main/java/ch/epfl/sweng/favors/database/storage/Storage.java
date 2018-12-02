@@ -156,8 +156,6 @@ public class Storage extends FirebaseStorageDispatcher{
                 bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
                 view.setImageBitmap(bitmap);
                 return bitmap;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
