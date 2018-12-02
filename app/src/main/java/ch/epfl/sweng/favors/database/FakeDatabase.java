@@ -184,6 +184,7 @@ public class FakeDatabase extends Database{
                                                    Map<DatabaseField, Object> mapMore,
                                                    Integer limit,
                                                    DatabaseField orderBy){
+        Log.d(TAG, clazz.getName());
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             ArrayList<T> tempList = new ArrayList<>();
@@ -212,11 +213,17 @@ public class FakeDatabase extends Database{
                 if(mapMore!=null) {
                     Log.d(TAG, "mapMore being treated");
                     for (Map.Entry<DatabaseField, Object> e2 : mapMore.entrySet()) {
-                        Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ (Timestamp)entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue());
-                        if (!(clazz.isInstance(entity) && e2.getValue() instanceof String && ((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()) > 0)) {
-                            Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ (Timestamp)entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue() + "\t compareTo yields: "+ ((Timestamp)entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()));
-                            toAdd = false;
-                            break;
+                        Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue()+" \t entity class is :"+entity.getClass());
+                        if(clazz.isInstance(entity) && e2.getValue() instanceof String)
+                        Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ (Timestamp)entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue() + "\t compareTo yields: "+((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()));
+                        if (!(clazz.isInstance(entity) && e2.getValue() instanceof Timestamp )) {
+                            try {
+                                boolean b = ((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()) > 0;
+                            }catch (NullPointerException np){
+                                Log.i(TAG, "entity does not have a timnestamp");
+                                toAdd = false;
+                                break;
+                            }
                         }
                     }
                     addToList(clazz, tempList, entity, toAdd);
