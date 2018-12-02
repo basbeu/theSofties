@@ -23,18 +23,17 @@ public class LocalPreferences {
 
         SQLiteDatabase db = InternalSqliteDb.getInstance();
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + PK_PREFERENCES + " INTEGER PRIMARY KEY," + FIELD_UID + " VARCHAR," + FIELD_EMAIL_NOTIF + " BOOLEAN DEFAULT 1, "+ FIELD_APP_NOTIF + " BOOLEAN DEFAULT 1);");
-      
+
         Cursor res;
         do{
             res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE "+ FIELD_UID + " = '" + Uid+"';",null);
-
             if(res.getCount() == 0){
                 db.execSQL("INSERT OR IGNORE INTO " + TABLE_NAME + "(" + FIELD_UID +") VALUES ('" + Uid + "');");
             }
         }while(res.getCount() == 0);
 
-        res.moveToFirst();
         Log.d("LOCAL_PREFERENCES", Integer.toString(res.getCount()));
+        res.moveToFirst();
         emailNofifEnabled = getBoolean(res,res.getColumnIndex(FIELD_EMAIL_NOTIF));
         appNotifEnabled = getBoolean(res,res.getColumnIndex(FIELD_APP_NOTIF));
     }
