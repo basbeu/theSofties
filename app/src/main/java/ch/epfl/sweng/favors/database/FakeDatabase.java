@@ -15,6 +15,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,8 +29,6 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
-import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
-
 /**
  * Singleton class that represent a fake DB for testing purpose
  */
@@ -38,6 +37,7 @@ public class FakeDatabase extends Database{
     public static final String LAST_FAVOR_TITLE = "Flash needs some help";
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
+    private static final String TAG = "FAKE_DB";
 
     HandlerThread handlerThread = new HandlerThread("background-thread");
 
@@ -190,24 +190,36 @@ public class FakeDatabase extends Database{
             for(DatabaseEntity entity : database.values()) {
                 Boolean toAdd = true;
                 if(mapEquals!=null) {
+                    Log.d(TAG, "mapEquals being treated");
                     for (Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
                         if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
                             toAdd = false;
                             break;
                         }
                     }
-                    if (toAdd) {
-                        try {
-                            T temp = clazz.newInstance();
-                            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                            tempList.add(temp);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Illegal access exception");
+                    addToList(clazz, tempList, entity, toAdd);
+                }
+                if (mapLess != null) {
+                    Log.d(TAG, "mapLess being treated");
+                    for (Map.Entry<DatabaseField, Object> e2 : mapLess.entrySet()) {
+                        if (!(clazz.isInstance(entity) && e2.getValue() instanceof String && ((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()) < 0)) {
+                            toAdd = false;
+                            break;
                         }
                     }
+                    addToList(clazz, tempList, entity, toAdd);
                 }
-                if(mapLess!=null) {
-                    getAll(list,clazz,collection,limit,orderBy);
+                if(mapMore!=null) {
+                    Log.d(TAG, "mapMore being treated");
+                    for (Map.Entry<DatabaseField, Object> e2 : mapMore.entrySet()) {
+                        Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ (Timestamp)entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue());
+                        if (!(clazz.isInstance(entity) && e2.getValue() instanceof String && ((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()) > 0)) {
+                            Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ (Timestamp)entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue() + "\t compareTo yields: "+ ((Timestamp)entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()));
+                            toAdd = false;
+                            break;
+                        }
+                    }
+                    addToList(clazz, tempList, entity, toAdd);
                 }
             }
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -219,6 +231,28 @@ public class FakeDatabase extends Database{
             });
 
         },500);
+    }
+
+    /**
+     *
+     * @param clazz Class
+     * @param tempList the list that will receive the elements
+     * @param entity entity to add to list
+     * @param toAdd will only add if toAdd is True
+     * @param <T> Tape of entityType
+     */
+    private <T extends DatabaseEntity> void addToList(Class<T> clazz, ArrayList<T> tempList, DatabaseEntity entity, Boolean toAdd) {
+        Log.d(TAG + "_ADD_TO_LIST", "toAdd: " + toAdd);
+        if (toAdd) {
+            try {
+                T temp = clazz.newInstance();
+                temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                tempList.add(temp);
+                Log.d(TAG, "Added element to return");
+            } catch (Exception e) {
+                Log.e(TAG, "Illegal access exception");
+            }
+        }
     }
 
 

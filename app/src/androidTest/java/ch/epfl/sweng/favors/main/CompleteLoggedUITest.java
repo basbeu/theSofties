@@ -122,6 +122,11 @@ public class CompleteLoggedUITest {
         button2.check(matches(isDisplayed()));
 
         Log.i(TAG, "First closesetFAvor");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ViewInteraction textView8 = onView(
                 allOf(withId(R.id.title), withText("Closest favor"),
                         childAtPosition(
