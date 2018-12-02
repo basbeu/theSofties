@@ -64,7 +64,7 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     @Override
     public Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view) {
 
-        if(requestCode == 66 && resultCode ==-1){
+        if((requestCode == GET_FROM_GALLERY || requestCode == GET_FROM_CAMERA) && resultCode ==-1){
             return bitmap;
         }
         return null;

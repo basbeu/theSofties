@@ -278,6 +278,9 @@ public class StorageTest {
     @Ignore
     @Test
     public void takePictureFromCameraCanBeCalled(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
         mFragmentTestRule.launchActivity(new Intent());
         try {
             Thread.sleep(500);
@@ -286,6 +289,7 @@ public class StorageTest {
 
         }
         Storage.getInstance().checkCameraPermission(fakeFragment);
+        Looper.myLooper().quitSafely();
         //Storage.getInstance().takePictureFromCamera(fakeFragment);
 
     }
