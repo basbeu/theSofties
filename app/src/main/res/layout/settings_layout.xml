@@ -37,7 +37,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            
+
             <ToggleButton
                 android:id="@+id/email_notif_toggle"
                 android:layout_width="wrap_content"
@@ -47,6 +47,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/emailNotif"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ToggleButton
+                android:id="@+id/app_notif_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/appNotif"/>
 
         </LinearLayout>
 

@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
 
@@ -100,6 +101,7 @@ public final class Utils {
         auth.signOut();
         context.startActivity(intent);
         User.resetMain();
+        LocalPreferences.closeInstance();
     }
 
     public static String getYear(Date date) {

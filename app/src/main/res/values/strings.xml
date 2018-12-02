@@ -51,5 +51,7 @@
     <string name="nameFavors">Favors</string>
     <string name="buttonBubble">Done</string>
 
-    <string name="emailNotif"> Notification by email</string>
+    <string name="emailNotif">Email notifications</string>
+    <string name="appNotif"> App notifications </string>
+
 </resources>

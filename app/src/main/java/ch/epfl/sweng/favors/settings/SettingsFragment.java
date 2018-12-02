@@ -25,12 +25,17 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.settings_layout,container,false);
 
+        binding.emailNotifToggle.setChecked(LocalPreferences.getInstance().isEmailNofifEnabled());
+        binding.appNotifToggle.setChecked(LocalPreferences.getInstance().isAppNotifEnabled());
+
+
         binding.emailNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             LocalPreferences.getInstance().setEmailNofifEnabled(isChecked);
-            Log.d(TAG, "toggle changed : " +isChecked);
         });
 
-        binding.emailNotifToggle.setChecked(LocalPreferences.getInstance().isEmailNofifEnabled());
+        binding.appNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) ->{
+            LocalPreferences.getInstance().setAppNotifEnabled(isChecked);
+        } );
 
         return binding.getRoot();
     }
