@@ -50,4 +50,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="nameFavors">Favors</string>
     <string name="buttonBubble">Done</string>
+
+    <string name="emailNotif"> Notification by email</string>
 </resources>
