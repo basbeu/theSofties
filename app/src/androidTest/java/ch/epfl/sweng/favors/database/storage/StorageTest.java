@@ -1,80 +1,39 @@
 package ch.epfl.sweng.favors.database.storage;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import android.widget.ImageView;
+
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import ch.epfl.sweng.favors.R;
 
 import ch.epfl.sweng.favors.favors.FavorCreateFragment;
-import ch.epfl.sweng.favors.favors.FavorDetailView;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withHint;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 
 public class StorageTest {
@@ -242,8 +201,8 @@ public class StorageTest {
         }catch (Exception e){
 
         }
-        Bitmap b1 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY, -1, null, mFragmentTestRule.getActivity(), null);
-        Bitmap b2 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(67, -1, null, mFragmentTestRule.getActivity(), null);
+        Bitmap b1 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY, null, mFragmentTestRule.getActivity(), null);
+        Bitmap b2 = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(67, null, mFragmentTestRule.getActivity(), null);
         assertEquals(FakeStorage.bitmap, b1);
         assertEquals(null, b2);
 
@@ -264,34 +223,15 @@ public class StorageTest {
         }catch (Exception e){
 
         }
-        Bitmap b1 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY, -1, data, context, view);
+        Bitmap b1 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_GALLERY,  data, context, view);
         assertEquals(null, b1);
-        Bitmap b2 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_CAMERA, -1, data, mFragmentTestRule.getActivity(), view);
+        Bitmap b2 = Storage.getInstance().getPictureFromDevice(Storage.GET_FROM_CAMERA, data, mFragmentTestRule.getActivity(), view);
         assertEquals(FakeStorage.bitmap, b2);
 
-        Bitmap b3 = Storage.getInstance().getPictureFromDevice(3, -1, data, mFragmentTestRule.getActivity(), view);
+        Bitmap b3 = Storage.getInstance().getPictureFromDevice(3, data, mFragmentTestRule.getActivity(), view);
         assertEquals(null, b3);
 
         Looper.myLooper().quitSafely();
-    }
-
-    @Ignore
-    @Test
-    public void takePictureFromCameraCanBeCalled(){
-        if(Looper.myLooper() == null){
-            Looper.prepare();
-        }
-        mFragmentTestRule.launchActivity(new Intent());
-        try {
-            Thread.sleep(500);
-
-        }catch (Exception e){
-
-        }
-        Storage.getInstance().checkCameraPermission(fakeFragment);
-        Looper.myLooper().quitSafely();
-        //Storage.getInstance().takePictureFromCamera(fakeFragment);
-
     }
 
     @Test

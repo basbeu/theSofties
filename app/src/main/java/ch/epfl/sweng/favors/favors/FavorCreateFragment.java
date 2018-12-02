@@ -394,7 +394,10 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, resultCode, data, this.getActivity(), binding.favorImage);
+        Bitmap bitmap = null;
+        if(resultCode == -1){
+            bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, data, this.getActivity(), binding.favorImage);
+        }
         if(bitmap != null) {
             if(requestCode == FirebaseStorageDispatcher.GET_FROM_GALLERY){
                 selectedImage = data.getData();

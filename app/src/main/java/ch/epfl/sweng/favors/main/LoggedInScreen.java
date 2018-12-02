@@ -142,7 +142,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, resultCode, data, this, headerBinding.profilePicture);
+        Bitmap bitmap = null;
+        if(resultCode == -1) {
+            bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, data, this, headerBinding.profilePicture);
+        }
         if(bitmap != null) {
             selectedImage = data.getData();
             storageRef = storage.uploadImage(FirebaseStorageDispatcher.getInstance().getReference(), this, selectedImage, "profile");

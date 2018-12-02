@@ -148,8 +148,8 @@ public class Storage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view) {
-        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+    public Bitmap getPictureFromDevice(int requestCode, Intent data, Context context, ImageView view) {
+        if (requestCode == GET_FROM_GALLERY) {
             Uri selectedImage = data.getData();
             Bitmap bitmap = null;
             try {
@@ -158,13 +158,11 @@ public class Storage extends FirebaseStorageDispatcher{
                 return bitmap;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                return null;
             } catch (IOException e) {
                 e.printStackTrace();
-                return null;
             }
         }
-        else if (requestCode == GET_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
+        else if (requestCode == GET_FROM_CAMERA) {
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             view.setImageBitmap(bitmap);

@@ -85,13 +85,12 @@ public abstract class FirebaseStorageDispatcher {
      * Inspired from : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
      * and : https://androidkennel.org/android-camera-access-tutorial/
      * @param requestCode 66 if it's an image from the gallery, 99 if from the camera
-     * @param resultCode -1 if the operation was successfull
      * @param data the intent containing the image
      * @param context the context from which the method has been called
      * @param view the view on which the image should be displayed
-     * @return the image Bitmap or null if the requestCode were not valid
+     * @return the image Bitmap or null if the requestCode was not valid
      */
-    public abstract Bitmap getPictureFromDevice(int requestCode, int resultCode, Intent data, Context context, ImageView view);
+    public abstract Bitmap getPictureFromDevice(int requestCode, Intent data, Context context, ImageView view);
 
     /**
      * Check if the device has already granted permission for camera and storage
