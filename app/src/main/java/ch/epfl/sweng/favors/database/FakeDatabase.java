@@ -207,21 +207,7 @@ public class FakeDatabase extends Database{
                     }
                 }
                 if(mapLess!=null) {
-                    for (Map.Entry<DatabaseField, Object> el : mapLess.entrySet()) {
-                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && ((Timestamp)entity.get((DatabaseObjectField) el.getKey())).compareTo((Timestamp) el.getValue())>0)) {
-                            toAdd = false;
-                            break;
-                        }
-                    }
-                    if (toAdd) {
-                        try {
-                            T temp = clazz.newInstance();
-                            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                            tempList.add(temp);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Illegal access exception");
-                        }
-                    }
+                    getAll(list,clazz,collection,limit,orderBy);
                 }
             }
             new Handler(Looper.getMainLooper()).post(new Runnable() {

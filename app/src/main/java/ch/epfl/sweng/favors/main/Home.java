@@ -12,9 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -22,6 +26,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.databinding.HomeBinding;
 import ch.epfl.sweng.favors.favors.FavorListAdapter;
 import ch.epfl.sweng.favors.favors.FavorsFragment;
@@ -80,16 +85,22 @@ public class Home extends android.support.v4.app.Fragment  {
     int currentMode = 0;
     public ObservableField<String> lastFavorsTitle = new ObservableField<>();
 
+
+
+
+
     void setView(){
+        Map<DatabaseField, Object> querryGreater = new HashMap<>();
+        querryGreater.put(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date()));
         if(currentMode >= modes.length){currentMode=0;};
         switch (currentMode){
             case 0 :
                 favorList.changeOnPropertyChangedCallback(locationSortingCb);
-                FavorRequest.all(favorList, null, null);
+                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
                 break;
             case 1 :
                 favorList.changeOnPropertyChangedCallback(otherSortingCb);
-                FavorRequest.all(favorList, 5, Favor.ObjectFields.creationTimestamp);
+                FavorRequest.getList(favorList,null,null,querryGreater, 5, Favor.ObjectFields.creationTimestamp);
                 break;
             default:
 
