@@ -22,7 +22,6 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static java.lang.Thread.sleep;
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -46,43 +45,43 @@ public class SetUserInfoTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        activityActivityTestRule.launchActivity(null);
-        try {
-            sleep(300);
-        } catch (InterruptedException e) {
+        Intent intent = new Intent();
+        intent.putExtra(FavorsMain.TEST_MODE, "true");
+        activityActivityTestRule.launchActivity(intent);
 
-        }
-        onView(withId(R.id.userFirstNameEdit)).perform(scrollTo(),replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.userFirstNameEdit)).perform(scrollTo(),replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
         onView(withId(R.id.userLastNameEdit)).perform(scrollTo(),replaceText(FAKELASTNAME)).perform(closeSoftKeyboard());
         onView(withId(R.id.userCityEdit)).perform(scrollTo(),replaceText(FAKECITY)).perform(closeSoftKeyboard());
         onView(withId(R.id.profGenderFEdit)).perform(scrollTo(),click());
         onView(withId(R.id.submit)).perform(scrollTo(),click());
         u = new User(Authentication.getInstance().getUid());
-        try {
-            sleep(300);
-        } catch (InterruptedException e) {
-
-        }
     }
 
     @Test
     public void userHasCorrectFirstName() {
 
-        assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
+        });
 
     }
     @Test
     public void userHasCorrectLastName() {
-        assertEquals(FAKELASTNAME, u.get(User.StringFields.lastName));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals(FAKELASTNAME, u.get(User.StringFields.lastName));
+        });
     }
     @Test
     public void userHasCorrectCity() {
-        assertEquals(FAKECITY, u.get(User.StringFields.city));
-
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals(FAKECITY, u.get(User.StringFields.city));
+        });
     }
     @Test
     public void userHasCorrectGender() {
-        assertEquals("F", u.get(User.StringFields.sex));
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
+            assertEquals("F", u.get(User.StringFields.sex));
+        });
     }
 
 }

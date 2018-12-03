@@ -1,10 +1,16 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
@@ -14,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executor;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
@@ -21,6 +28,8 @@ import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
+
+import static java.lang.Thread.sleep;
 
 
 /**
@@ -71,15 +80,11 @@ public class FakeDatabase extends Database{
         }
 
     }
-
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID == null || !database.containsKey(databaseEntity.documentID)){return Tasks.forCanceled();}
-        Handler handler = new Handler(handlerThread.getLooper());
-        handler.postDelayed(()->{
-            if(database.get(databaseEntity.documentID) == null) return;
-            databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
-        },200);
+        databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
+
         return Tasks.forResult(true);
     }
 

@@ -48,7 +48,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        User.updateMain();
+        User.getMain().reset();
         User.getMain().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -59,6 +59,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 }
             }
         });
+        Database.getInstance().updateFromDb(User.getMain());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
         binding.setElements(this);
