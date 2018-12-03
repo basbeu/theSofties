@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -47,6 +48,7 @@ public class LoggedInScreenTest {
     public void setUp(){
         ExecutionMode.getInstance().setTest(true);
         ExecutionMode.getInstance().setInvalidAuthTest(false);
+        InternalSqliteDb.openDb(activityActivityTestRule.getActivity().getApplicationContext());
     }
 
     @Test

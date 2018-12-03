@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -55,6 +56,8 @@ public class AuthenticationUITest {
         device = UiDevice.getInstance(getInstrumentation());
         ExecutionMode.getInstance().setTest(true);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
+
+        InternalSqliteDb.openDb(mActivityTestRule.getActivity().getApplicationContext());
     }
     @Test
     public void bigTestAuth() throws Exception{

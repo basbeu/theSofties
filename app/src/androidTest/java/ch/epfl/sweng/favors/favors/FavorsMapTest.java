@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoRule;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
@@ -52,6 +53,8 @@ public class FavorsMapTest {
     public void fragment_can_be_instantiated() {
         mFragmentTestRule.launchActivity(null);
         onView(ViewMatchers.withId(R.id.mapView)).check(matches(isDisplayed()));
+
+        InternalSqliteDb.openDb(mFragmentTestRule.getActivity().getApplicationContext());
     }
 
     @Test
