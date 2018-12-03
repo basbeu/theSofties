@@ -45,6 +45,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
+import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -133,7 +134,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
         //user.set();
 
-        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
+        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, StorageCategories.FAVOR);
 
 
 
@@ -233,10 +234,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
-            if(pictureRef != null && pictureRef.get() != null && !ExecutionMode.getInstance().isTest()){
-                StorageReference ref = FirebaseStorageDispatcher.getInstance().getReference().child("images/"+ pictureRef.get());
-                ref.delete();
-            }
+            FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(pictureRef, StorageCategories.FAVOR);
 
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();

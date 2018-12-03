@@ -64,6 +64,7 @@ public class SetUserInfo extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
+        user.set(User.StringFields.profilePicRef, null);
 
         bindUi();
     }

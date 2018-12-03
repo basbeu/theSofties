@@ -10,8 +10,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Observable;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
@@ -63,6 +66,11 @@ public class FavorPosterDetailViewTest {
         onView(withId(R.id.gender)).check(matches(withText("F")));
         onView(withId(R.id.okButton)).perform(scrollTo());
         onView(withId(R.id.okButton)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void pictureCallback(){
+        FavorPosterDetailView.pictureCallback.onPropertyChanged(null, 0);
     }
 
 }
