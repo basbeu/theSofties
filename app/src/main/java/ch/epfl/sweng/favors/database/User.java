@@ -68,18 +68,6 @@ public class User extends DatabaseEntity{
         }
     }
 
-//    /**
-//     * Sets the current city
-//     * @param city the city that will be stored in the database
-//     */
-//    static public void setCity(@Nonnull String city){
-//        Database.getInstance().updateFromDb(user);
-//        if (user != null) {
-//            user.set(StringFields.city, city);
-//            Database.getInstance().updateOnDb(user);
-//        }
-//    }
-
     public enum UserGender {
         M ,F, DEFAULT;
 
