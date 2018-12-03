@@ -9,9 +9,12 @@ public class Notification {
 
     public Notification(NotificationType notificationType, Favor favor){
         this.notificationType = notificationType;
+        if(favor != null){
+            this.favor = favor;
+        }
 
     }
-    
+
     public NotificationType getNotificationType(){
         return notificationType;
     }
