@@ -90,7 +90,7 @@ public class FakeDatabase extends Database{
 
     @Override
     public void deleteFromDatabase(DatabaseEntity databaseEntity) {
-       if(databaseEntity == null) return;
+        if(databaseEntity == null) return;
         database.remove(databaseEntity.documentID);
     }
 
@@ -147,11 +147,11 @@ public class FakeDatabase extends Database{
      */
     @Override
     protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                          String collection,
-                                                          DatabaseField key,
-                                                          Object value,
-                                                          Integer limit,
-                                                          DatabaseField orderBy){
+                                                       String collection,
+                                                       DatabaseField key,
+                                                       Object value,
+                                                       Integer limit,
+                                                       DatabaseField orderBy){
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             ArrayList<T> tempList = new ArrayList<>();
@@ -218,12 +218,12 @@ public class FakeDatabase extends Database{
 
     @Override
     protected  <T extends DatabaseEntity>  void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                   String collection,
-                                                   Map<DatabaseField, Object> mapEquals,
-                                                   Map<DatabaseField, Object> mapLess,
-                                                   Map<DatabaseField, Object> mapMore,
-                                                   Integer limit,
-                                                   DatabaseField orderBy){
+                                                        String collection,
+                                                        Map<DatabaseField, Object> mapEquals,
+                                                        Map<DatabaseField, Object> mapLess,
+                                                        Map<DatabaseField, Object> mapMore,
+                                                        Integer limit,
+                                                        DatabaseField orderBy){
         Log.d(TAG, clazz.getName());
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -234,34 +234,12 @@ public class FakeDatabase extends Database{
                     continue;
                 }
                 Boolean toAdd = true;
-                if(mapEquals!=null) {
-                    for (Map.Entry<DatabaseField, Object> e : mapEquals.entrySet()) {
-                        if (!check(CheckType.Equal, e, entity)) {
-                            toAdd = false;
-                            break;
-                        }
-                    }
+                toAdd = processMap(mapEquals, entity, toAdd, mapEquals!=null, CheckType.Equal);
+                toAdd = processMap(mapLess, entity, toAdd, toAdd && mapLess != null, CheckType.Less);
+                toAdd = processMap(mapMore, entity, toAdd, toAdd && mapMore != null, CheckType.Greater);
+                if(toAdd) {
+                    addToList(clazz, tempList, entity, toAdd);
                 }
-                if(!toAdd) continue;
-                if (mapLess != null) {
-                    for (Map.Entry<DatabaseField, Object> e : mapLess.entrySet()) {
-                        if(!check(CheckType.Less, e, entity)) {
-                            toAdd = false;
-                            break;
-                        }
-                    }
-                }
-                if(!toAdd) continue;
-                if(mapMore!=null) {
-                    for (Map.Entry<DatabaseField, Object> e : mapMore.entrySet()) {
-                        if(!check(CheckType.Greater, e, entity)) {
-                            toAdd = false;
-                            break;
-                        }
-                    }
-                }
-                if(!toAdd) continue;
-                addToList(clazz, tempList, entity, toAdd);
             }
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
@@ -271,6 +249,18 @@ public class FakeDatabase extends Database{
             });
 
         },500);
+    }
+
+    private boolean processMap(Map<DatabaseField, Object> mapLess, DatabaseEntity entity, Boolean toAdd, boolean b, CheckType less) {
+        if (b) {
+            for (Map.Entry<DatabaseField, Object> e : mapLess.entrySet()) {
+                if (!check(less, e, entity)) {
+                    toAdd = false;
+                    break;
+                }
+            }
+        }
+        return toAdd;
     }
 
     /**
@@ -307,7 +297,7 @@ public class FakeDatabase extends Database{
      */
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             String value){
+                                                          String value){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -342,7 +332,7 @@ public class FakeDatabase extends Database{
      */
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField key, Object value){
+                                                          DatabaseField key, Object value){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
