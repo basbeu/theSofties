@@ -4,38 +4,22 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
-import android.databinding.ObservableArrayMap;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.databinding.ObservableMap;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -47,7 +31,7 @@ import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
+import ch.epfl.sweng.favors.utils.email.Email;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
@@ -177,10 +161,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.setElements(this);
 
         binding.favReportAbusiveAdd.setOnClickListener((l)->
-                EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
-                "Abusive favors : "+title.get(),
-                "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
-                getActivity(),
+                EmailUtils.sendEmail(
+                        new Email(Authentication.getInstance().getEmail(), "report@myfavors.xyz", "Abusive favors : " + title.get(), "The abusive favor is : title" + title.get() + "\ndescription : " + description.get()), getActivity(),
                 "issue has been reported! Sorry for the inconvenience",
                 "Sorry an error occured, try again later..."));
 
@@ -205,10 +187,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 else{
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
-                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
-                            "Someone is interested in: " + title.get(),
-                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
-                            getActivity(),
+                    EmailUtils.sendEmail(
+                            new Email(Authentication.getInstance().getEmail(), ownerEmail.get(), "Someone is interested in: " + title.get(), "Hi ! I am interested to help you with your favor. Please answer directly to this email."), getActivity(),
                             "We will inform the poster of the add that you are interested to help!",
                             "Sorry an error occurred, try again later...");
 
@@ -286,11 +266,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
                     if(propertyId == User.UpdateType.FROM_DB.ordinal()){
-                        EmailUtils.sendEmail(   localFavor.get(Favor.StringFields.ownerEmail),
-                                                ((User)sender).get(User.StringFields.email),
-                                "You have been paid for the favor " + title.get()+ "!",
-                                "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it.",
-                                getActivity(),"Users have been successfully paid.","");
+                        EmailUtils.sendEmail(
+                                new Email(localFavor.get(Favor.StringFields.ownerEmail), ((User) sender).get(User.StringFields.email), "You have been paid for the favor " + title.get() + "!", "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it."), getActivity(),"Users have been successfully paid.","");
                         sender.removeOnPropertyChangedCallback(this);
                     }
                 }
