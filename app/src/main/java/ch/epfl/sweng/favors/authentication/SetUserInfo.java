@@ -9,10 +9,13 @@ import android.text.Editable;
 import android.util.Log;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
+import ch.epfl.sweng.favors.favors.Notification;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -60,6 +63,7 @@ public class SetUserInfo extends AppCompatActivity {
         }
         user.set(User.StringFields.email, Authentication.getInstance().getEmail());
         user.set(User.LongFields.tokens, User.DEFAULT_TOKENS_NUMBER);
+        user.set(User.ObjectFields.notifications, new ArrayList<Notification>());
         baseCity.set(LocationHandler.getHandler().locationCity.get());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
@@ -78,7 +82,7 @@ public class SetUserInfo extends AppCompatActivity {
         binding.profGenderEdit.setOnCheckedChangeListener((RadioGroup group, int checkedId) ->{
             switch (checkedId){
                 case R.id.profGenderMEdit:
-                    User.UserGender.setGender(user,User.UserGender.M);
+                    User.UserGender.setGender(user, User.UserGender.M);
                     break;
                 case  R.id.profGenderFEdit:
                     User.UserGender.setGender(user, User.UserGender.F);
