@@ -58,7 +58,7 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, @NonNull StorageCategories category) {
+    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category) {
         return Tasks.forResult(null);
     }
 

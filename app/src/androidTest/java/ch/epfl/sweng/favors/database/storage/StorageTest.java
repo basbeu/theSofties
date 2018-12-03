@@ -116,18 +116,14 @@ public class StorageTest {
     }
 
     @Test
-    public void listenersBehaveAsExpected(){
+    public void listenersBehaveAsExpected() throws InterruptedException {
         if(Looper.myLooper() == null){
             Looper.prepare();
         }
 
         mFragmentTestRule.launchActivity(null);
-        try {
-            Thread.sleep(500);
+        Thread.sleep(500);
 
-        }catch (Exception e){
-
-        }
         Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.FAVOR);
         Storage.getInstance().displayImage(new ObservableField<String>("test"), view, StorageCategories.FAVOR);
         Storage.successListener.onSuccess(taskSnapshot);
@@ -137,17 +133,16 @@ public class StorageTest {
         Looper.myLooper().quitSafely();
     }
 
-    @Ignore("test coverage test")
     @Test
-    public void nullUriReturnsNullRef(){
+    public void nullUriReturnsNullRef() {
         String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), null, StorageCategories.PROFILE);
         assertNull(refStorage);
     }
 
-    @Ignore
+
     @Test
     public void imageCanBeDisplayed(){
-//        Storage.getInstance().displayImage(new ObservableField<String>("test"), view, "test");
+        Storage.getInstance().displayImage(new ObservableField<String>("test"), view, StorageCategories.FAVOR);
     }
 
     @Test
@@ -156,41 +151,25 @@ public class StorageTest {
         assertEquals(storageReference, r);
     }
 
-    @Ignore("Test is irelevant with new StorageCategories.")
     @Test
     public void deleteReturnsNullWithWrongCategory(){
-        Task<Void> result = Storage.getInstance().deleteImageFromStorage(new ObservableField<String>("test"), null); //cannot have this null here. Will cause a null pointer exception
+        Task<Void> result = Storage.getInstance().deleteImageFromStorage(new ObservableField<String>("test"), null);
         assertNull( result);
     }
 
     @Test
-    public void deleteReturnsCorrectTask(){
+    public void deleteReturnsCorrectTask() throws InterruptedException {
         if(Looper.myLooper() == null){
             Looper.prepare();
         }
         mFragmentTestRule.launchActivity(null);
-        try {
-            Thread.sleep(500);
+        Thread.sleep(500);
 
-        }catch (Exception e){
-
-        }
         Task<Void> result = Storage.getInstance().deleteImageFromStorage(new ObservableField<String>("test"), StorageCategories.FAVOR);
         assertEquals(deletTask, result);
 
         Looper.myLooper().quitSafely();
     }
-//TODO remove me
-//    @Test
-//    public void checkCategoryTest(){
-//        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("profile"));
-//        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("pRofIle"));
-//        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("favor"));
-//        assertEquals(true, FirebaseStorageDispatcher.checkStoragePath("FAVOR"));
-//        assertEquals(false, FirebaseStorageDispatcher.checkStoragePath("favors"));
-//        assertEquals(false, FirebaseStorageDispatcher.checkStoragePath("profiles"));
-//        assertEquals(false, FirebaseStorageDispatcher.checkStoragePath(null));
-//    }
 
     @Test
     public void getPictureFromDeviceFake(){
