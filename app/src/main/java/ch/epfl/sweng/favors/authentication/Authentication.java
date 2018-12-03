@@ -22,7 +22,7 @@ public abstract class Authentication {
             }else{
                 auth = FirebaseAuthentication.getInstance();
             }
-            // FakeDatabase.getInstance().createBasicDatabase();
+            FakeDatabase.getInstance().createBasicDatabase();
         }
 
         return auth;

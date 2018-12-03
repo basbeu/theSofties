@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
@@ -176,6 +177,46 @@ public class FakeDatabase extends Database{
         },500);
     }
 
+    enum CheckType{Greater, Equal, Less};
+
+    boolean check(CheckType type, Map.Entry<DatabaseField, Object>  entry, DatabaseEntity entity){
+        if(entry == null || entity == null) return false;
+
+        if(entry.getKey() instanceof DatabaseStringField) {
+            String temp = entity.get((DatabaseStringField) entry.getKey());
+            if(temp == null || !(entry.getValue() instanceof String)) return false;
+            if(type == CheckType.Equal) return temp.equals(entry.getValue());
+            else return false; // Comparison of String have no meaning
+        }
+        else if(entry.getKey() instanceof DatabaseLongField) {
+            Long temp = entity.get((DatabaseLongField) entry.getKey());
+            if(temp == null || !(entry.getValue() instanceof Long)) return false;
+            if(type == CheckType.Equal) return temp == (long) entry.getValue();
+            if(type == CheckType.Greater) return temp < (long) entry.getValue();
+            if(type == CheckType.Less) return temp > (long) entry.getValue();
+        }
+
+        else if(entry.getKey() instanceof DatabaseBooleanField) {
+            Boolean temp = entity.get((DatabaseBooleanField) entry.getKey());
+            if(temp == null || !(entry.getValue() instanceof Boolean)) return false;
+            if(type == CheckType.Equal) return temp == (boolean) entry.getValue();
+            else return false; // Comparison on boolean has no meaning
+        }
+        else {
+            Object temp = entity.get((DatabaseObjectField) entry.getKey());
+            if(temp == null) return false;
+            if(temp instanceof Timestamp) {
+                if(!(entry.getValue() instanceof Timestamp)) return false;
+                int out = ((Timestamp) temp).compareTo((Timestamp) entry.getValue());
+                if(type == CheckType.Equal) return out == 0;
+                if(type == CheckType.Greater) return out < 0;
+                if(type == CheckType.Less) return out > 0;
+            }
+        }
+        Log.d(TAG, "Performing a not implemented comparison in fake database");
+        return false;
+    }
+
     @Override
     protected  <T extends DatabaseEntity>  void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                    String collection,
@@ -187,47 +228,41 @@ public class FakeDatabase extends Database{
         Log.d(TAG, clazz.getName());
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
+
             ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
+                if(!clazz.isInstance(entity)){
+                    continue;
+                }
                 Boolean toAdd = true;
                 if(mapEquals!=null) {
-                    Log.d(TAG, "mapEquals being treated");
-                    for (Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
-                        if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
+                    for (Map.Entry<DatabaseField, Object> e : mapEquals.entrySet()) {
+                        if (!check(CheckType.Equal, e, entity)) {
                             toAdd = false;
                             break;
                         }
                     }
-                    addToList(clazz, tempList, entity, toAdd);
                 }
+                if(!toAdd) continue;
                 if (mapLess != null) {
-                    Log.d(TAG, "mapLess being treated");
-                    for (Map.Entry<DatabaseField, Object> e2 : mapLess.entrySet()) {
-                        if (!(clazz.isInstance(entity) && e2.getValue() instanceof String && ((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()) < 0)) {
+                    for (Map.Entry<DatabaseField, Object> e : mapLess.entrySet()) {
+                        if(!check(CheckType.Less, e, entity)) {
                             toAdd = false;
                             break;
                         }
                     }
-                    addToList(clazz, tempList, entity, toAdd);
                 }
+                if(!toAdd) continue;
                 if(mapMore!=null) {
-                    Log.d(TAG, "mapMore being treated");
-                    for (Map.Entry<DatabaseField, Object> e2 : mapMore.entrySet()) {
-                        Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue()+" \t entity class is :"+entity.getClass());
-                        if(clazz.isInstance(entity) && e2.getValue() instanceof String)
-                        Log.d(TAG, "In mapMore if condition. \tThe timestamp entity is: "+ (Timestamp)entity.get((DatabaseObjectField)e2.getKey()) + "\t and element: " +e2.getValue() + "\t compareTo yields: "+((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()));
-                        if (!(clazz.isInstance(entity) && e2.getValue() instanceof Timestamp )) {
-                            try {
-                                boolean b = ((Timestamp) entity.get((DatabaseObjectField) e2.getKey())).compareTo((Timestamp) e2.getValue()) > 0;
-                            }catch (NullPointerException np){
-                                Log.i(TAG, "entity does not have a timnestamp");
-                                toAdd = false;
-                                break;
-                            }
+                    for (Map.Entry<DatabaseField, Object> e : mapMore.entrySet()) {
+                        if(!check(CheckType.Less, e, entity)) {
+                            toAdd = false;
+                            break;
                         }
                     }
-                    addToList(clazz, tempList, entity, toAdd);
                 }
+                if(!toAdd) continue;
+                addToList(clazz, tempList, entity, toAdd);
             }
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override

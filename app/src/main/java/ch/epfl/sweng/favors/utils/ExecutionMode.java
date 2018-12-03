@@ -18,7 +18,7 @@ public final class ExecutionMode {
     private ExecutionMode(){
         if(instance != null)
             throw new IllegalStateException("ExecutionMode already instantiated");
-        test = false;
+        test = true;
         invalidAuthTest = false;
         geocoderExecutionTestMode = GeocoderExecutionTestMode.SUCCESS;
     }
