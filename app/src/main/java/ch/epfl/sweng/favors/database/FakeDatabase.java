@@ -583,7 +583,7 @@ public class FakeDatabase extends Database{
         f8.set(Favor.StringFields.locationCity, "Los Angeles, US");
         f8.set(Favor.ObjectFields.location, new GeoPoint(34.05223, -118.24368));
         f8.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(4), 0));
-        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(4), 0));
+        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
 
 
         f8.set(Favor.ObjectFields.interested, interestedPeople5);
