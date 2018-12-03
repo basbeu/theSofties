@@ -133,7 +133,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
 
+        //Notification notification = new Notification(NotificationType.INTEREST, localFavor);
+        User owner = new User();
+        owner.addOnPropertyChangedCallback(notificationCB);
+        String ownerId = localFavor.get(Favor.StringFields.ownerID);
+        UserRequest.getWithId(owner, ownerId);
 
+        Log.d(TAG, "user's first name: " + owner.getObservableObject(User.StringFields.firstName).get());
+
+        ArrayList<Notification> notificationsList = (ArrayList<Notification>)owner.get(User.ObjectFields.notifications);
 
         if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
             interestedPeople = (ArrayList<String>) favor.get(Favor.ObjectFields.interested);
@@ -154,6 +162,19 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     }
 
     Boolean buttonEnabled = true;
+
+    Observable.OnPropertyChangedCallback notificationCB = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId == DatabaseEntity.UpdateType.FROM_REQUEST.ordinal()) {
+                String fn = ((User) sender).get(User.StringFields.firstName);
+                String ln = ((User) sender).get(User.StringFields.lastName);
+                String key = fn + " " + ln;
+                userNames.put(key,((User) sender));
+                sender.removeOnPropertyChangedCallback(this);
+            }
+        }
+    };
 
     Observable.OnPropertyChangedCallback userInfosCb = new Observable.OnPropertyChangedCallback() {
         @Override
@@ -202,20 +223,33 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 } else {
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
+
+                    Notification notification = new Notification(NotificationType.INTEREST, localFavor);
+                    User owner = new User();
+                    Database.getInstance().updateFromDb(User.)
+                    String ownerId = localFavor.get(Favor.StringFields.ownerID);
+
+                    owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                        @Override
+                        public void onPropertyChanged(Observable sender, int propertyId) {
+                            if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                                EmailUtils.sendEmail(   localFavor.get(Favor.StringFields.ownerEmail),
+                                        ((User)sender).get(User.StringFields.email),
+                                        "You have been paid for the favor " + title.get()+ "!",
+                                        "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it.",
+                                        getActivity(),"Users have been successfully paid.","");
+                                sender.removeOnPropertyChangedCallback(this);
+                            }
+                        }
+                    });
+
+
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
                             "Someone is interested in: " + title.get(),
                             "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
                             getActivity(),
                             "We will inform the poster of the add that you are interested to help!",
                             "Sorry an error occurred, try again later...");
-                    Notification notification = new Notification(NotificationType.INTEREST, localFavor);
-                    User owner = new User();
-                    String ownerId = localFavor.get(Favor.StringFields.ownerID);
-                    UserRequest.getWithId(owner, ownerId);
-
-                    ArrayList<Notification> notificationsList = (ArrayList<Notification>)owner.get(User.ObjectFields.notifications);
-                    notificationsList.add(notification);
-                    Database.getInstance().updateOnDb(owner);
 
                 }
 
