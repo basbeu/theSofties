@@ -37,7 +37,6 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.FavorsMapBinding;
-import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import static ch.epfl.sweng.favors.utils.Utils.getIconNameFromCategory;
@@ -125,6 +124,9 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
         favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                    return;
+                }
                 for(Favor favor:favorList){
                     GeoPoint point = (GeoPoint) favor.get(Favor.ObjectFields.location);
                     LatLng location = new LatLng(point.getLatitude(),point.getLongitude());

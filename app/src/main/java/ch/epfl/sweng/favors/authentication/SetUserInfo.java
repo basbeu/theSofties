@@ -55,9 +55,6 @@ public class SetUserInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().hasExtra(FavorsMain.TEST_MODE)){
-            ExecutionMode.getInstance().setTest(true);
-        }
         user.set(User.StringFields.email, Authentication.getInstance().getEmail());
         user.set(User.LongFields.tokens, User.DEFAULT_TOKENS_NUMBER);
         baseCity.set(LocationHandler.getHandler().locationCity.get());

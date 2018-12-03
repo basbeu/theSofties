@@ -3,31 +3,25 @@ package ch.epfl.sweng.favors.database;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
+import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
-
-import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
 /**
  * Singleton class that represent a fake DB for testing purpose
@@ -37,8 +31,9 @@ public class FakeDatabase extends Database{
     public static final String LAST_FAVOR_TITLE = "Flash needs some help";
     public static FakeDatabase db = null;
     private HashMap<String, DatabaseEntity> database;
+    private static final String TAG = "FAKE_DB";
 
-    HandlerThread handlerThread = new HandlerThread("background-thread");
+    final HandlerThread handlerThread = new HandlerThread("background-thread");
 
     private FakeDatabase(){
         database = new HashMap<>();
@@ -76,7 +71,6 @@ public class FakeDatabase extends Database{
         }
 
     }
-
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID == null || !database.containsKey(databaseEntity.documentID)){return Tasks.forCanceled();}
@@ -87,7 +81,7 @@ public class FakeDatabase extends Database{
 
     @Override
     public void deleteFromDatabase(DatabaseEntity databaseEntity) {
-       if(databaseEntity == null) return;
+        if(databaseEntity == null) return;
         database.remove(databaseEntity.documentID);
     }
 
@@ -110,13 +104,7 @@ public class FakeDatabase extends Database{
                 }
 
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    list.clear();
-                    list.addAll(tempList);
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
 
 
         },500);
@@ -145,11 +133,11 @@ public class FakeDatabase extends Database{
      */
     @Override
     protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                          String collection,
-                                                          DatabaseField key,
-                                                          Object value,
-                                                          Integer limit,
-                                                          DatabaseField orderBy){
+                                                       String collection,
+                                                       DatabaseField key,
+                                                       Object value,
+                                                       Integer limit,
+                                                       DatabaseField orderBy){
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             ArrayList<T> tempList = new ArrayList<>();
@@ -164,55 +152,119 @@ public class FakeDatabase extends Database{
                     }
                 }
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    list.clear();
-                    list.addAll(tempList);
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
 
         },500);
     }
 
+    enum CheckType{Greater, Equal, Less}
+
+    private boolean check(CheckType type, Map.Entry<DatabaseField, Object>  entry, DatabaseEntity entity){
+        if(entry == null || entity == null) return false;
+
+        if(entry.getKey() instanceof DatabaseStringField) {
+            String temp = entity.get((DatabaseStringField) entry.getKey());
+            if(temp == null || !(entry.getValue() instanceof String)) return false;
+            if(type == CheckType.Equal) return temp.equals(entry.getValue());
+            else return false; // Comparison of String have no meaning
+        }
+        else if(entry.getKey() instanceof DatabaseLongField) {
+            Long temp = entity.get((DatabaseLongField) entry.getKey());
+            if(temp == null || !(entry.getValue() instanceof Long)) return false;
+            if(type == CheckType.Equal) return temp == (long) entry.getValue();
+            if(type == CheckType.Greater) return temp < (long) entry.getValue();
+            if(type == CheckType.Less) return temp > (long) entry.getValue();
+        }
+
+        else if(entry.getKey() instanceof DatabaseBooleanField) {
+            Boolean temp = entity.get((DatabaseBooleanField) entry.getKey());
+            if(temp == null || !(entry.getValue() instanceof Boolean)) return false;
+            if(type == CheckType.Equal) return temp == (boolean) entry.getValue();
+            else return false; // Comparison on boolean has no meaning
+        }
+        else {
+            Object temp = entity.get((DatabaseObjectField) entry.getKey());
+            if(temp == null) return false;
+            if(temp instanceof Timestamp) {
+                if(!(entry.getValue() instanceof Timestamp)) return false;
+                int out = ((Timestamp) temp).compareTo((Timestamp) entry.getValue());
+                if(type == CheckType.Equal) return out == 0;
+                if(type == CheckType.Greater) return out > 0;
+                if(type == CheckType.Less) return out < 0;
+            }
+        }
+        Log.d(TAG, "Performing a not implemented comparison in fake database");
+        return false;
+    }
+
     @Override
     protected  <T extends DatabaseEntity>  void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                   String collection,
-                                                   Map<DatabaseField, Object> mapEquals,
-                                                   Map<DatabaseField, Object> mapLess,
-                                                   Map<DatabaseField, Object> mapMore,
-                                                   Integer limit,
-                                                   DatabaseField orderBy){
+                                                        String collection,
+                                                        Map<DatabaseField, Object> mapEquals,
+                                                        Map<DatabaseField, Object> mapLess,
+                                                        Map<DatabaseField, Object> mapMore,
+                                                        Integer limit,
+                                                        DatabaseField orderBy){
+        Log.d(TAG, clazz.getName());
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
+
             ArrayList<T> tempList = new ArrayList<>();
             for(DatabaseEntity entity : database.values()) {
-                Boolean toAdd = true;
-                for(Map.Entry<DatabaseField, Object> el : mapEquals.entrySet()) {
-                    if (!(clazz.isInstance(entity) && el.getValue() instanceof String && entity.get((DatabaseStringField) el.getKey()).equals(el.getValue()))) {
-                        toAdd = false;
-                        break;
-                    }
+                if(!clazz.isInstance(entity)){
+                    continue;
                 }
-                if (toAdd) {
-                    try {
-                        T temp = clazz.newInstance();
-                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        tempList.add(temp);
-                    } catch (Exception e){
-                        Log.e(TAG, "Illegal access exception");
-                    }
+                Boolean toAdd = true;
+                //noinspection ConstantConditions
+                toAdd = processMap(mapEquals, entity, toAdd, CheckType.Equal);
+                toAdd = processMap(mapLess, entity, toAdd, CheckType.Less);
+                toAdd = processMap(mapMore, entity, toAdd,  CheckType.Greater);
+                if(toAdd) {
+                    addToList(clazz, tempList, entity);
                 }
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    list.clear();
-                    list.addAll(tempList);
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
 
         },500);
+    }
+
+    /**
+     * Checks if the parameters specified in map are valide, if they are not the *toAdd* parameter will be returned as false. The checkType is required to allow for the proper types of checks to be opperated.
+     * Only pass the check type corresponding to the information that is contained in the map.
+     * @param map map of parameters to check
+     * @param entity element of the database that is being checkes with the different querry parameters to determine if it shoul dbe added to the DB
+     * @param toAdd boolean value that determins if entity will be added to the list
+     * @param checkType Type of check to opperate on the map
+     * @return updated version of toAdd this is required to check if the element still needs to be added.
+     */
+    private boolean processMap(Map<DatabaseField, Object> map, DatabaseEntity entity, Boolean toAdd, CheckType checkType) {
+        if (toAdd && map != null) {
+            for (Map.Entry<DatabaseField, Object> e : map.entrySet()) {
+                if (!check(checkType, e, entity)) {
+                    toAdd = false;
+                    break;
+                }
+            }
+        }
+        return toAdd;
+    }
+
+    /**
+     *
+     * @param clazz Class
+     * @param tempList the list that will receive the elements
+     * @param entity entity to add to list
+     * @param <T> Tape of entityType
+     */
+    private <T extends DatabaseEntity> void addToList(Class<T> clazz, ArrayList<T> tempList, DatabaseEntity entity) {
+            try {
+                T temp = clazz.newInstance();
+                temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                tempList.add(temp);
+                Log.d(TAG, "Added element to return");
+            } catch (Exception e) {
+                Log.e(TAG, "Illegal access exception");
+            }
     }
 
 
@@ -227,7 +279,7 @@ public class FakeDatabase extends Database{
      */
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             String value){
+                                                          String value){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -235,12 +287,7 @@ public class FakeDatabase extends Database{
 
             DatabaseEntity output = database.get(value);
             if(clazz.isInstance(output)){
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
-                    }
-                });
+                new Handler(Looper.getMainLooper()).post(() -> toUpdate.set(value, output.getEncapsulatedObjectOfMaps()));
 
             }
             else{
@@ -262,7 +309,7 @@ public class FakeDatabase extends Database{
      */
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField key, Object value){
+                                                          DatabaseField key, Object value){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -270,22 +317,12 @@ public class FakeDatabase extends Database{
 
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        }
-                    });
+                    new Handler(Looper.getMainLooper()).post(() -> toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps()));
 
                     return;
                 }
                 else if (clazz.isInstance(entity) && value instanceof Long && entity.get((DatabaseLongField) key).equals(value)) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        }
-                    });
+                    new Handler(Looper.getMainLooper()).post(() -> toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps()));
 
                     return;
                 }
@@ -355,7 +392,7 @@ public class FakeDatabase extends Database{
         Favor f6 = new Favor("F6");
         Favor f7 = new Favor("F7");
         Favor f8 = new Favor("F8");
-        Favor f9 = new Favor("F9");;
+        Favor f9 = new Favor("F9");
         Favor f10 = new Favor("F10");
 
 
@@ -489,10 +526,6 @@ public class FakeDatabase extends Database{
 
 
 
-        ArrayList<String> interestedPeople5 = new ArrayList<>();
-        interestedPeople5.add(u4.getId());
-        interestedPeople5.add(u2.getId());
-
         f8.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
         f8.set(Favor.StringFields.title, "Make use gods again");
         f8.set(Favor.StringFields.description, "Destroy kryptoninite on earth");
@@ -501,10 +534,9 @@ public class FakeDatabase extends Database{
         f8.set(Favor.StringFields.locationCity, "Los Angeles, US");
         f8.set(Favor.ObjectFields.location, new GeoPoint(34.05223, -118.24368));
         f8.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(4), 0));
-        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(4), 0));
+        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
 
 
-        f8.set(Favor.ObjectFields.interested, interestedPeople5);
         f8.set(Favor.LongFields.nbPerson, 1L);
         f8.set(Favor.LongFields.tokenPerPerson, 2L);
 

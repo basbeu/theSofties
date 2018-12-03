@@ -62,7 +62,6 @@ import ch.epfl.sweng.favors.utils.Utils;
 import io.grpc.PickFirstBalancerFactory;
 
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.StorageReference;
 
 /**
  * Favor Create Fragment
@@ -189,6 +188,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     private Observable.OnPropertyChangedCallback callbackInterestList = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
             if(sender != null  && !(((ObservableArrayList)sender).isEmpty())){
                 ArrayList interestsTitles = new ArrayList();
                 for(Interest interest : interestsList) {

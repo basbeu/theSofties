@@ -31,7 +31,6 @@ import java.util.Map;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
@@ -73,17 +72,18 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        User.updateMain();
+        User.getMain().reset();
         User.getMain().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 if(propertyId == User.UpdateType.FROM_DB.ordinal()){
                     // Must be remove when fake requests with multiple queries will be implemented
-                    if(!ExecutionMode.getInstance().isTest()) reimburseExpiredFavors();
+                    reimburseExpiredFavors();
                     sender.removeOnPropertyChangedCallback(this);
                 }
             }
         });
+        Database.getInstance().updateFromDb(User.getMain());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
         binding.setElements(this);
@@ -190,7 +190,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     }
 
     void reimburseExpiredFavors(){
-        Log.d(TAG, "Start of reimbusrsment");
         ObservableArrayList<Favor> listFavors = new ObservableArrayList<>();
         Map<DatabaseField, Object> querryLess = new HashMap<>();
         Map<DatabaseField, Object> querryEqual = new HashMap<>();
@@ -202,33 +201,33 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         querryGreater.put(Favor.LongFields.nbPerson,0);
 
         FavorRequest.getList(listFavors,querryEqual,querryLess,null,null,null);
-        Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(task ->
-                listFavors.addOnPropertyChangedCallback(
-                        new Observable.OnPropertyChangedCallback() {
-                            @Override
-                            public void onPropertyChanged(Observable sender, int propertyId) {
-                                long toReimburseTotal = 0;
-                                Log.d(TAG, "We have received " + listFavors.size());
-                                for (Favor f : listFavors) {
-                                    Log.d(TAG, "The tokensPerPerson are: " + f.get(Favor.LongFields.tokenPerPerson));
-                                    if(f.get(Favor.ObjectFields.interested) == null || ((ArrayList<String>)f.get(Favor.ObjectFields.interested)).isEmpty()){
-                                        Log.d(TAG, "This favor is being treated: "+f.get(Favor.StringFields.title));
-                                        long nbPersonneRemaining = f.get(Favor.LongFields.nbPerson);
-                                        long tokenPerPerson = f.get(Favor.LongFields.tokenPerPerson);   //TODO change this once tokens are Integers
-                                        f.set(Favor.LongFields.nbPerson,0L);
-                                        //f.set(Favor.LongFields.tokenPerPerson,0L);
-                                        toReimburseTotal += nbPersonneRemaining * tokenPerPerson;
-                                        Database.getInstance().updateOnDb(f);
-                                    }
-                                    else{Log.d(TAG, "This favor is being not being treated: "+f.get(Favor.StringFields.title));}
-                                }
-                                long currentUserTokense = User.getMain().get(User.LongFields.tokens);
-                                currentUserTokense += toReimburseTotal;
-                                User.getMain().set(User.LongFields.tokens,currentUserTokense);
-                                Database.getInstance().updateOnDb(User.getMain());
-                            }
-                        })
-        );
 
+        listFavors.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                    return;
+                }
+                long toReimburseTotal = 0;
+                Log.d(TAG, "We have received " + listFavors.size());
+                for (Favor f : listFavors) {
+                    Log.d(TAG, "The value are: " + f.get(Favor.StringFields.title));
+                    if(f.get(Favor.ObjectFields.interested) == null || ((ArrayList<String>)f.get(Favor.ObjectFields.interested)).isEmpty()){
+                        Log.d(TAG, "This favor is being treated: "+f.get(Favor.StringFields.title));
+                        long nbPersonneRemaining = f.get(Favor.LongFields.nbPerson);
+                        long tokenPerPerson = f.get(Favor.LongFields.tokenPerPerson);
+                        f.set(Favor.LongFields.nbPerson,0L);
+                        //f.set(Favor.LongFields.tokenPerPerson,0L);
+                        toReimburseTotal += nbPersonneRemaining * tokenPerPerson;
+                        Database.getInstance().updateOnDb(f);
+                    }
+                    else{Log.d(TAG, "This favor is being not being treated: "+f.get(Favor.StringFields.title));}
+                }
+                long currentUserTokense = User.getMain().get(User.LongFields.tokens);
+                currentUserTokense += toReimburseTotal;
+                User.getMain().set(User.LongFields.tokens,currentUserTokense);
+                Database.getInstance().updateOnDb(User.getMain());
+            }
+        });
     }
 }

@@ -46,9 +46,7 @@ public class SetUserInfoTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        Intent intent = new Intent();
-        intent.putExtra(FavorsMain.TEST_MODE, "true");
-        activityActivityTestRule.launchActivity(intent);
+        activityActivityTestRule.launchActivity(null);
 
         onView(ViewMatchers.withId(R.id.userFirstNameEdit)).perform(scrollTo(),replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
         onView(withId(R.id.userLastNameEdit)).perform(scrollTo(),replaceText(FAKELASTNAME)).perform(closeSoftKeyboard());
