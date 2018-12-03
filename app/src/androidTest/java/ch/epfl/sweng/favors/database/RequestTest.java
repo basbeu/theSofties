@@ -23,7 +23,6 @@ public class RequestTest {
     @Before
     public void setup(){
         ExecutionMode.getInstance().setTest(true);
-        FakeDatabase.getInstance().cleanUp();
         FakeDatabase.getInstance().createBasicDatabase();
     }
 
