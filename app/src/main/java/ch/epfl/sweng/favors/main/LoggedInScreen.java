@@ -31,6 +31,7 @@ import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.MyFavorsFragment;
+import ch.epfl.sweng.favors.favors.Notifications;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.settings.SettingsFragment;
@@ -100,7 +101,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         switch (menuItem.getItemId())
         {
             case R.id.notifications:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
