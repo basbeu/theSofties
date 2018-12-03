@@ -208,13 +208,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             getActivity(),
                             "We will inform the poster of the add that you are interested to help!",
                             "Sorry an error occurred, try again later...");
-
-                }
-
-                if (localFavor != null) {
-                    localFavor.set(Favor.ObjectFields.interested, interestedPeople);
-                    Database.getInstance().updateOnDb(localFavor);
-
                     Notification notification = new Notification(NotificationType.INTEREST, localFavor);
                     User owner = new User();
                     String ownerId = localFavor.get(Favor.StringFields.ownerID);
@@ -223,6 +216,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     ArrayList<Notification> notificationsList = (ArrayList<Notification>)owner.get(User.ObjectFields.notifications);
                     notificationsList.add(notification);
                     Database.getInstance().updateOnDb(owner);
+
+                }
+
+                if (localFavor != null) {
+                    localFavor.set(Favor.ObjectFields.interested, interestedPeople);
+                    Database.getInstance().updateOnDb(localFavor);
                 }
 
 
