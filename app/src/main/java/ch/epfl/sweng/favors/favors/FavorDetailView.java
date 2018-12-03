@@ -339,7 +339,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         }
 
-
     }
 }
 
