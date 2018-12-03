@@ -1,16 +1,10 @@
 package ch.epfl.sweng.favors.database;
 
-import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
@@ -20,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Executor;
 
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
@@ -28,8 +21,6 @@ import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
-
-import static java.lang.Thread.sleep;
 
 
 /**
@@ -42,7 +33,7 @@ public class FakeDatabase extends Database{
     private HashMap<String, DatabaseEntity> database;
     private static final String TAG = "FAKE_DB";
 
-    HandlerThread handlerThread = new HandlerThread("background-thread");
+    final HandlerThread handlerThread = new HandlerThread("background-thread");
 
     private FakeDatabase(){
         database = new HashMap<>();
@@ -113,12 +104,7 @@ public class FakeDatabase extends Database{
                 }
 
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    list.update(tempList);
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
 
 
         },500);
@@ -166,19 +152,14 @@ public class FakeDatabase extends Database{
                     }
                 }
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    list.update(tempList);
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
 
         },500);
     }
 
-    enum CheckType{Greater, Equal, Less};
+    enum CheckType{Greater, Equal, Less}
 
-    boolean check(CheckType type, Map.Entry<DatabaseField, Object>  entry, DatabaseEntity entity){
+    private boolean check(CheckType type, Map.Entry<DatabaseField, Object>  entry, DatabaseEntity entity){
         if(entry == null || entity == null) return false;
 
         if(entry.getKey() instanceof DatabaseStringField) {
@@ -234,19 +215,15 @@ public class FakeDatabase extends Database{
                     continue;
                 }
                 Boolean toAdd = true;
+                //noinspection ConstantConditions
                 toAdd = processMap(mapEquals, entity, toAdd, CheckType.Equal);
                 toAdd = processMap(mapLess, entity, toAdd, CheckType.Less);
                 toAdd = processMap(mapMore, entity, toAdd,  CheckType.Greater);
                 if(toAdd) {
-                    addToList(clazz, tempList, entity, toAdd);
+                    addToList(clazz, tempList, entity);
                 }
             }
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    list.update(tempList);
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
 
         },500);
     }
@@ -277,12 +254,9 @@ public class FakeDatabase extends Database{
      * @param clazz Class
      * @param tempList the list that will receive the elements
      * @param entity entity to add to list
-     * @param toAdd will only add if toAdd is True
      * @param <T> Tape of entityType
      */
-    private <T extends DatabaseEntity> void addToList(Class<T> clazz, ArrayList<T> tempList, DatabaseEntity entity, Boolean toAdd) {
-        Log.d(TAG + "_ADD_TO_LIST", "toAdd: " + toAdd);
-        if (toAdd) {
+    private <T extends DatabaseEntity> void addToList(Class<T> clazz, ArrayList<T> tempList, DatabaseEntity entity) {
             try {
                 T temp = clazz.newInstance();
                 temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
@@ -291,7 +265,6 @@ public class FakeDatabase extends Database{
             } catch (Exception e) {
                 Log.e(TAG, "Illegal access exception");
             }
-        }
     }
 
 
@@ -314,12 +287,7 @@ public class FakeDatabase extends Database{
 
             DatabaseEntity output = database.get(value);
             if(clazz.isInstance(output)){
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        toUpdate.set(value, output.getEncapsulatedObjectOfMaps());
-                    }
-                });
+                new Handler(Looper.getMainLooper()).post(() -> toUpdate.set(value, output.getEncapsulatedObjectOfMaps()));
 
             }
             else{
@@ -349,22 +317,12 @@ public class FakeDatabase extends Database{
 
             for(DatabaseEntity entity : database.values()) {
                 if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        }
-                    });
+                    new Handler(Looper.getMainLooper()).post(() -> toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps()));
 
                     return;
                 }
                 else if (clazz.isInstance(entity) && value instanceof Long && entity.get((DatabaseLongField) key).equals(value)) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        }
-                    });
+                    new Handler(Looper.getMainLooper()).post(() -> toUpdate.set(entity.documentID, entity.getEncapsulatedObjectOfMaps()));
 
                     return;
                 }
@@ -434,7 +392,7 @@ public class FakeDatabase extends Database{
         Favor f6 = new Favor("F6");
         Favor f7 = new Favor("F7");
         Favor f8 = new Favor("F8");
-        Favor f9 = new Favor("F9");;
+        Favor f9 = new Favor("F9");
         Favor f10 = new Favor("F10");
 
 
