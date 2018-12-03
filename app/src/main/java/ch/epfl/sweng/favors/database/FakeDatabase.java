@@ -234,9 +234,9 @@ public class FakeDatabase extends Database{
                     continue;
                 }
                 Boolean toAdd = true;
-                toAdd = processMap(mapEquals, entity, toAdd, mapEquals!=null, CheckType.Equal);
-                toAdd = processMap(mapLess, entity, toAdd, toAdd && mapLess != null, CheckType.Less);
-                toAdd = processMap(mapMore, entity, toAdd, toAdd && mapMore != null, CheckType.Greater);
+                toAdd = processMap(mapEquals, entity, toAdd, CheckType.Equal);
+                toAdd = processMap(mapLess, entity, toAdd, CheckType.Less);
+                toAdd = processMap(mapMore, entity, toAdd,  CheckType.Greater);
                 if(toAdd) {
                     addToList(clazz, tempList, entity, toAdd);
                 }
@@ -251,10 +251,19 @@ public class FakeDatabase extends Database{
         },500);
     }
 
-    private boolean processMap(Map<DatabaseField, Object> mapLess, DatabaseEntity entity, Boolean toAdd, boolean b, CheckType less) {
-        if (b) {
-            for (Map.Entry<DatabaseField, Object> e : mapLess.entrySet()) {
-                if (!check(less, e, entity)) {
+    /**
+     * Checks if the parameters specified in map are valide, if they are not the *toAdd* parameter will be returned as false. The checkType is required to allow for the proper types of checks to be opperated.
+     * Only pass the check type corresponding to the information that is contained in the map.
+     * @param map map of parameters to check
+     * @param entity element of the database that is being checkes with the different querry parameters to determine if it shoul dbe added to the DB
+     * @param toAdd boolean value that determins if entity will be added to the list
+     * @param checkType Type of check to opperate on the map
+     * @return updated version of toAdd this is required to check if the element still needs to be added.
+     */
+    private boolean processMap(Map<DatabaseField, Object> map, DatabaseEntity entity, Boolean toAdd, CheckType checkType) {
+        if (toAdd && map != null) {
+            for (Map.Entry<DatabaseField, Object> e : map.entrySet()) {
+                if (!check(checkType, e, entity)) {
                     toAdd = false;
                     break;
                 }
