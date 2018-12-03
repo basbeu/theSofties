@@ -1,5 +1,8 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Looper;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -10,12 +13,17 @@ import android.support.test.uiautomator.UiSelector;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
+import com.google.firebase.storage.FirebaseStorage;
+
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -24,6 +32,7 @@ import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.Interest;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
@@ -45,19 +54,23 @@ import static junit.framework.TestCase.assertEquals;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class FavorsCreateFragmentTest {
     private UiDevice device;
 
-    @Rule
-    public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
+    @Rule public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    @Mock private Intent data;
 
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
         FakeDatabase.getInstance().createBasicDatabase();
         device = UiDevice.getInstance(getInstrumentation());
+        when(data.getData()).thenReturn(Uri.parse("fakeUri"));
     }
 
     @Test
@@ -200,6 +213,50 @@ public class FavorsCreateFragmentTest {
 
         u.set(User.LongFields.tokens, 5L);
         Database.getInstance().updateOnDb(u);
+
+    }
+
+    @Test
+    public void onRequestPermissionResultTest(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+        mFragmentTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+
+        }catch (Exception e){
+
+        }
+
+        int[] grantResults = {0, 0};
+        int[] grantResultsDenied = {0, -1};
+        String[] permissions = {};
+
+        mFragmentTestRule.getFragment().onRequestPermissionsResult(FirebaseStorageDispatcher.STORAGE_PERMISSION, permissions, grantResults);
+        mFragmentTestRule.getFragment().onRequestPermissionsResult(FirebaseStorageDispatcher.STORAGE_PERMISSION, permissions, grantResultsDenied);
+
+        Looper.myLooper().quitSafely();
+    }
+
+    @Test
+    public void onActivityResultTest(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+        mFragmentTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+
+        }catch (Exception e){
+
+        }
+
+
+        mFragmentTestRule.getFragment().onActivityResult(FirebaseStorageDispatcher.GET_FROM_GALLERY, -1, data);
+        mFragmentTestRule.getFragment().onActivityResult(FirebaseStorageDispatcher.GET_FROM_CAMERA, -1, data);
+
+        Looper.myLooper().quitSafely();
 
     }
 
