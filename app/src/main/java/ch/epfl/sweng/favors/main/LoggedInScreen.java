@@ -44,6 +44,7 @@ import ch.epfl.sweng.favors.favors.MyFavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.settings.SettingsFragment;
+import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
 public class LoggedInScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
