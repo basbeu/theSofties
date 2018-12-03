@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -57,7 +58,6 @@ public class AuthentificationProcessTest {
 
     @Test
     public void loginSucceed() throws Exception{
-
         ExecutionMode.getInstance().setInvalidAuthTest(false);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
@@ -66,9 +66,9 @@ public class AuthentificationProcessTest {
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a login title
         onView(ViewMatchers.withId(R.id.loginMessageText)).check(matches(isDisplayed()));
+        InternalSqliteDb.openDb(activityActivityTestRule.getActivity().getApplicationContext());
+
         //login process
-
-
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("bruce.wayne@waynecorp.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("tatata666")).perform(closeSoftKeyboard());
         onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
