@@ -30,7 +30,7 @@ public class User extends DatabaseEntity{
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
     public enum LongFields implements DatabaseLongField {creationTimeStamp, tokens}
-    public enum ObjectFields implements DatabaseObjectField {rights, location}
+    public enum ObjectFields implements DatabaseObjectField {rights, location, notifications}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){

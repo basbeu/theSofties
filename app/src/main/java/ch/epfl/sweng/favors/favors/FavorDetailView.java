@@ -88,7 +88,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     private Map<String, User> userNames;
 
     FragmentFavorDetailViewBinding binding;
-    
+
     public static final String FAVOR_ID = "favor_id";
     public static final String ENABLE_BUTTONS = "enable_buttons";
     private ArrayList<String> bubblesResult;
