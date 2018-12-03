@@ -7,7 +7,6 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -23,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.location.FakeGeocoder;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
@@ -55,7 +53,6 @@ import static org.hamcrest.Matchers.is;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class CompleteLoggedUITest {
-    private static final String TAG = "COMPLETE_UI_TEST";
 
     @Rule
     public ActivityTestRule<SplashScreenActivity> mActivityTestRule = new ActivityTestRule<>(SplashScreenActivity.class, false, false);
@@ -121,12 +118,6 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         button2.check(matches(isDisplayed()));
 
-        Log.i(TAG, "First closesetFAvor");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         ViewInteraction textView8 = onView(
                 allOf(withId(R.id.title), withText("Closest favor"),
                         childAtPosition(
@@ -134,7 +125,7 @@ public class CompleteLoggedUITest {
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1)));
-        //textView8.check(matches(withText("Closest favor")));
+        textView8.check(matches(withText("Closest favor")));
 
         // Switch home screen list
         ViewInteraction appCompatButton = onView(
@@ -225,12 +216,10 @@ public class CompleteLoggedUITest {
         textView15.perform(click());
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "2 closesetFAvor");
-
         ViewInteraction textView8 = onView(
                 allOf(withId(R.id.title), withText("Closest favor"),
                         childAtPosition(
@@ -238,7 +227,7 @@ public class CompleteLoggedUITest {
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1)));
-        //textView8.check(matches(withText("Closest favor")));
+        textView8.check(matches(withText("Closest favor")));
         appCompatSpinner3.perform(scrollTo(), click());
 
         try {
@@ -346,11 +335,10 @@ public class CompleteLoggedUITest {
         textView7.check(matches(withText("5 Tokens")));
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "3 closesetFAvor");
 
         ViewInteraction textView8 = onView(
                 allOf(withId(R.id.title), withText("Closest favor"),
@@ -359,7 +347,7 @@ public class CompleteLoggedUITest {
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0),
                                 1)));
-        //textView8.check(matches(withText("Closest favor")));
+        textView8.check(matches(withText("Closest favor")));
 
         listSortingTests();
 
@@ -670,91 +658,87 @@ public class CompleteLoggedUITest {
 
     }
 
-   private void favorDetailViewTests(){
-       try {
-           Thread.sleep(600);
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
-       ViewInteraction recyclerView3 = onView(
-               allOf(withId(R.id.favorsList),
-                       childAtPosition(
-                               withClassName(is("android.widget.LinearLayout")),
-                               1)));
-       recyclerView3.perform( actionOnItemAtPosition(1, click()));
+    private void favorDetailViewTests(){
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-       try {
-           Thread.sleep(2000);
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
+        ViewInteraction recyclerView2 = onView(allOf(withChild(allOf(withId(R.id.title), withText("Closest favor")))));
+        recyclerView2.perform(click());
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-       ViewInteraction textView14 = onView(
-               allOf(withId(R.id.favTitle), withText("Closest favor"),
-                       childAtPosition(
-                               childAtPosition(
-                                       IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                       0),
-                               0),
-                       isDisplayed()));
-       //textView14.check(matches(withText("Closest favor")));
+        ViewInteraction textView14 = onView(
+                allOf(withId(R.id.favTitle), withText("Closest favor"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textView14.check(matches(withText("Closest favor")));
 
 
-       ViewInteraction appCompatButton9 = onView(
-               allOf(withId(R.id.interestedButton), withText("Notify my interest"),
-                       childAtPosition(
-                               childAtPosition(
-                                       withClassName(is("android.widget.LinearLayout")),
-                                       5),
-                               0)));
-       appCompatButton9.perform(scrollTo(), click());
+        ViewInteraction appCompatButton9 = onView(
+                allOf(withId(R.id.interestedButton), withText("Notify my interest"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        5),
+                                0)));
+        appCompatButton9.perform(scrollTo(), click());
 
-       try {
-           Thread.sleep(600);
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-       appCompatButton9 = onView(
-               allOf(withId(R.id.interestedButton),
-                       childAtPosition(
-                               childAtPosition(
-                                       withClassName(is("android.widget.LinearLayout")),
-                                       5),
-                               0)));
-       appCompatButton9.perform(scrollTo(), click());
+        appCompatButton9 = onView(
+                allOf(withId(R.id.interestedButton),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        5),
+                                0)));
+        appCompatButton9.perform(scrollTo(), click());
 
-       try {
-           Thread.sleep(600);
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
-       appCompatButton9 = onView(
-               allOf(withId(R.id.interestedButton),
-                       childAtPosition(
-                               childAtPosition(
-                                       withClassName(is("android.widget.LinearLayout")),
-                                       5),
-                               0)));
-       appCompatButton9.perform(scrollTo(), click());
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        appCompatButton9 = onView(
+                allOf(withId(R.id.interestedButton),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.LinearLayout")),
+                                        5),
+                                0)));
+        appCompatButton9.perform(scrollTo(), click());
 
 
 
-       ViewInteraction appCompatButton10 = onView(
-               allOf(withText("Jean")));
-       appCompatButton10.perform(scrollTo(), click());
+        ViewInteraction appCompatButton10 = onView(
+                allOf(withText("Jean")));
+        appCompatButton10.perform(scrollTo(), click());
 
-       try {
-           Thread.sleep(2000);
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-       posterDetailsTests();
+        posterDetailsTests();
 
-       pressBack();
+        pressBack();
 
-   }
+    }
 
     private void posterDetailsTests() {
         ViewInteraction textView26 = onView(
@@ -1402,9 +1386,6 @@ public class CompleteLoggedUITest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(5000);
-            FakeDatabase.getInstance().cleanUp();
-            FakeDatabase.getInstance().createBasicDatabase();
-            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
