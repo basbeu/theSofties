@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.settings;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -62,6 +64,11 @@ public class SetingsFragmentTest {
         String selectionText = "Blue";
         onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
         onView(ViewMatchers.withId(R.id.colors)).check(matches(withSpinnerText(containsString(selectionText))));
+    }
+
+    @After
+    public void after(){
+        LocalPreferences.closeInstance();
     }
 }
 
