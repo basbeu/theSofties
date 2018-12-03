@@ -58,7 +58,6 @@ public class LoggedInScreenTest {
     public void setUp(){
         ExecutionMode.getInstance().setTest(true);
         ExecutionMode.getInstance().setInvalidAuthTest(false);
-        InternalSqliteDb.openDb(activityActivityTestRule.getActivity().getApplicationContext());
         when(data.getData()).thenReturn(Uri.parse("fakeUri"));
     }
 
