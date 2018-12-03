@@ -223,7 +223,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     ArrayList<Notification> notificationsList = (ArrayList<Notification>)owner.get(User.ObjectFields.notifications);
                     notificationsList.add(notification);
                     Database.getInstance().updateOnDb(owner);
-                    
                 }
 
 
