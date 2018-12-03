@@ -215,7 +215,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if (localFavor != null) {
                     localFavor.set(Favor.ObjectFields.interested, interestedPeople);
                     Database.getInstance().updateOnDb(localFavor);
-                    
+
                 }
 
 
