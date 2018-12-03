@@ -1,9 +1,11 @@
 package ch.epfl.sweng.favors.favors;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
@@ -11,12 +13,15 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,8 +34,10 @@ import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,12 +51,15 @@ import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
+import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.GeocodingLocation;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
+import ch.epfl.sweng.favors.utils.Utils;
+import io.grpc.PickFirstBalancerFactory;
 
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.StorageReference;
@@ -62,7 +72,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
-    private static final int GET_FROM_GALLERY = 66;
     private FirebaseStorageDispatcher storage;
     private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
 
@@ -137,8 +146,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
-            storage.deleteImageFromStorage(pictureReference);
-            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage);
+            storage.deleteImageFromStorage(pictureReference, StorageCategories.FAVOR);
+            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage, StorageCategories.FAVOR);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
 
         } else if(pictureReference != null){
@@ -312,8 +321,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fr).addToBackStack("favorEditCreation").commit();
 
         });
-        binding.uploadFavorPicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY));
-
+        binding.uploadFavorPicture.setOnClickListener(v-> storage.takePictureFromGallery(this));
+        binding.uploadFavorPictureCamera.setOnClickListener(v->storage.checkCameraPermission(this));
         return binding.getRoot();
     }
 
@@ -363,12 +372,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> {
-                if(pictureReference != null && pictureReference.get() != null){
-                    storage.displayImage(pictureReference, binding.favorImage);
-                }
-             }
-            );
+            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> storage.displayImage(pictureReference, binding.favorImage, StorageCategories.FAVOR));
         } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");
@@ -382,22 +386,47 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
     /**
      * This method is called on the result of method startActivityOnResult
+     * Obtain an image bitmap and affect the path of this image to selectedImage
      * Inspired from this tutorial : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
-     * @param requestCode 66 if the activity is getting a picture from the gallery
+     * @param requestCode 66 if the activity is getting a picture from the gallery, 99 if from the camera
      * @param resultCode -1 if OK
-     * @param data the data corresponding to the picture
+     * @param data the Intent containing the picture
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                binding.favorImage.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) { e.printStackTrace(); }
-            catch (IOException e) { e.printStackTrace(); }
+        Bitmap bitmap = null;
+        if(resultCode == -1){
+            bitmap = FirebaseStorageDispatcher.getInstance().getPictureFromDevice(requestCode, data, this.getActivity(), binding.favorImage);
+        }
+        if(bitmap != null) {
+            if(requestCode == FirebaseStorageDispatcher.GET_FROM_GALLERY){
+                selectedImage = data.getData();
+            }
+            else{
+                selectedImage = Utils.getImageUri(getActivity(), bitmap);
+            }
+        }
+
+    }
+
+    /**
+     * This method is called on the result of method requestPermission
+     * Calls takeImageFromCamera if the permission have been granted
+     * Inspired from https://androidkennel.org/android-camera-access-tutorial/
+     * @param requestCode 0 if access to the storage and camera of the device
+     * @param permissions array of String from permissions requested
+     * @param grantResults array of int containing the results of the permissions (0 if permission granted)
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == FirebaseStorageDispatcher.STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                storage.takePictureFromCamera(this);
+            }
+            else{
+                Toast.makeText(getContext(), "Alright, keep your secrets then", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
