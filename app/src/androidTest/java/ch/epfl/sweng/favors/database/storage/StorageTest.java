@@ -137,6 +137,7 @@ public class StorageTest {
         Looper.myLooper().quitSafely();
     }
 
+    @Ignore("test coverage test")
     @Test
     public void nullUriReturnsNullRef(){
         String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), null, StorageCategories.PROFILE);
