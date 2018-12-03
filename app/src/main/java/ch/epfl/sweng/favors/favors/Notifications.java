@@ -22,8 +22,6 @@ public class Notifications extends Fragment {
     ObservableArrayList<Notification> notificationsList = new ObservableArrayList<>();
     NotificationListAdapter listAdapter;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
