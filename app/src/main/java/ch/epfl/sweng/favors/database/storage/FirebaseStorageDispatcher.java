@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
@@ -61,7 +62,7 @@ public abstract class FirebaseStorageDispatcher {
      * @param pictureRef the reference of the image to be deleted
      * @param category the category of the picture to be deleted (favor or profile)
      */
-    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category);
+    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, @NonNull StorageCategories category);
 
 //    /**
 //     * Checks if the category exists

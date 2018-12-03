@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
@@ -40,7 +41,8 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     @Override
     public String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, StorageCategories category) {
 
-        if(category == null ||selectedImage == null) return null;
+        if (category == null || selectedImage == null) { return null;}
+
 
         if(ExecutionMode.getInstance().isInvalidAuthTest()){
             Toast.makeText(context, "Failed to upload image, try again later", Toast.LENGTH_SHORT).show();
@@ -56,7 +58,7 @@ public class FakeStorage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category) {
+    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, @NonNull StorageCategories category) {
         return Tasks.forResult(null);
     }
 

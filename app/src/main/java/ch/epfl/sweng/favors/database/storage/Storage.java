@@ -137,7 +137,7 @@ public class Storage extends FirebaseStorageDispatcher{
     }
 
     @Override
-    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef,  StorageCategories category) {
+    public Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef,  @NonNull StorageCategories category) {
 
         if(category == null || pictureRef != null && pictureRef.get() != null){
             String path = category.toString()+"/";
