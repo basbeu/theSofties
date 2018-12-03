@@ -27,7 +27,7 @@ import ch.epfl.sweng.favors.location.SortLocations;
  * Fragment that displays the list of favor and allows User to sort it and to search in it
  */
 public class FavorsList extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener {
-    private static final String TAG = "FAVORS_FRAGMENT";
+    private static final String TAG = "FAVORS_LIST";
 
     FavorsListBinding binding;
     ObservableArrayList<Favor> favorList = new ObservableArrayList<>();
@@ -74,7 +74,6 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
         return binding.getRoot();
     }
 
-
     Observable.OnPropertyChangedCallback locationSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
@@ -82,12 +81,14 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             updateList((ObservableArrayList) sender);
         }
     };
+
     Observable.OnPropertyChangedCallback otherSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
             updateList((ObservableArrayList) sender);
         }
     };
+
     /**
      *
      * Sorts the favors list according to sort criteria
@@ -123,7 +124,7 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     public void onNothingSelected(AdapterView<?> parent) {}
 
     private void updateList(ObservableArrayList<Favor> list){
-        listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
+        listAdapter = new FavorListAdapter(this.getActivity(), list);
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }
