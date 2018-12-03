@@ -190,7 +190,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 mFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         mFrag).addToBackStack(null).commit();
-            }else{
+            } else {
                 //return if the timer is not over yet
                 if(!buttonEnabled) return;
                 //disable the button for preventing non-determinism
@@ -199,8 +199,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if(interestedPeople.contains(User.getMain().getId())) {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
-                }
-                else{
+                } else {
+                    Notification notification = new Notification(NotificationType.INTEREST, localFavor);
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
@@ -215,6 +215,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if (localFavor != null) {
                     localFavor.set(Favor.ObjectFields.interested, interestedPeople);
                     Database.getInstance().updateOnDb(localFavor);
+                    
                 }
 
 
