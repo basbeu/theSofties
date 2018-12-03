@@ -21,4 +21,8 @@ public class Notification {
     public Favor getFavor(){
         return favor;
     }
+
+    public String getFavorTitle(){
+        return favor.get(Favor.StringFields.title);
+    }
 }
