@@ -36,7 +36,6 @@ public class User extends DatabaseEntity{
     public User(){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, null);
-
     }
 
     public User(String id){
@@ -44,7 +43,6 @@ public class User extends DatabaseEntity{
                 ObjectFields.values(), COLLECTION,id);
         if(db != null) db.updateFromDb(this);
     }
-
 
     @Override
     public DatabaseEntity copy() {

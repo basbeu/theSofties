@@ -40,12 +40,7 @@ public class Notifications extends Fragment {
         binding.setElements(this);
 
         //notificationsList.changeOnPropertyChangedCallback(listCB);
-
         notificationsList = (ArrayList<Notification>)User.getMain().get(User.ObjectFields.notifications);
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
-        }
 
         listAdapter = new NotificationListAdapter(notificationsList);
         binding.notificationsList.setLayoutManager(new LinearLayoutManager(getContext()));
