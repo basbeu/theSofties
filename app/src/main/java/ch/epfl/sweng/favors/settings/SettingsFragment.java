@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.settings;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class SettingsFragment extends Fragment {
     private static final String TAG = "SETTINGS_FRAGMENT";
 
     private Map<String, Integer> colorsMap;
+    private Boolean restart = false;
 
     SettingsLayoutBinding binding;
 
@@ -36,6 +38,11 @@ public class SettingsFragment extends Fragment {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String color = binding.colors.getItemAtPosition(position).toString();
             LocalPreferences.getInstance().setColor(colorsMap.get(color));
+
+            if(restart)
+                restart();
+            else
+                restart = true;
         }
 
         @Override
@@ -76,4 +83,12 @@ public class SettingsFragment extends Fragment {
 
         return binding.getRoot();
     }
+
+    private void restart() {
+        Intent i = getActivity().getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName() );
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
+
 }
