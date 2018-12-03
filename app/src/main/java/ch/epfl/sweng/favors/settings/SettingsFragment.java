@@ -31,6 +31,19 @@ public class SettingsFragment extends Fragment {
 
     SettingsLayoutBinding binding;
 
+    private AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String color = binding.colors.getItemAtPosition(position).toString();
+            LocalPreferences.getInstance().setColor(colorsMap.get(color));
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,18 +72,7 @@ public class SettingsFragment extends Fragment {
         binding.colors.setAdapter(adapter);
         binding.colors.setSelection(new ArrayList<>(colorsMap.values()).indexOf(LocalPreferences.getInstance().getColor()));
 
-        binding.colors.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String color = binding.colors.getItemAtPosition(position).toString();
-                LocalPreferences.getInstance().setColor(colorsMap.get(color));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        binding.colors.setOnItemSelectedListener(spinnerListener);
 
         return binding.getRoot();
     }
