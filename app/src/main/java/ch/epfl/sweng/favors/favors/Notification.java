@@ -12,7 +12,6 @@ public class Notification {
         if(favor != null){
             this.favor = favor;
         }
-
     }
 
     public NotificationType getNotificationType(){
@@ -22,6 +21,4 @@ public class Notification {
     public Favor getFavor(){
         return favor;
     }
-
-
 }
