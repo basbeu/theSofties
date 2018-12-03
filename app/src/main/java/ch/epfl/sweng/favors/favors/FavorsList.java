@@ -84,6 +84,9 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     Observable.OnPropertyChangedCallback locationSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
             Collections.sort((ObservableArrayList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
             updateList((ObservableArrayList) sender);
         }
@@ -91,7 +94,11 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     Observable.OnPropertyChangedCallback otherSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            updateList((ObservableArrayList) sender);
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
+             updateList((ObservableArrayList) sender);
+
         }
     };
     /**
@@ -135,11 +142,4 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }
-
-    Observable.OnPropertyChangedCallback listCallBack = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            updateList((ObservableArrayList<Favor>) sender);
-        }
-    };
 }

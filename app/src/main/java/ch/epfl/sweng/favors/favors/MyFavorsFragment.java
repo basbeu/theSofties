@@ -41,6 +41,9 @@ public class MyFavorsFragment extends android.support.v4.app.Fragment {
         favorList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                    return;
+                }
                 updateList((ObservableArrayList<Favor>) sender);
             }
         });

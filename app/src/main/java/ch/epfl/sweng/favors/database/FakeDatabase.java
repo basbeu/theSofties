@@ -3,21 +3,14 @@ package ch.epfl.sweng.favors.database;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -82,8 +75,11 @@ public class FakeDatabase extends Database{
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID == null || !database.containsKey(databaseEntity.documentID)){return Tasks.forCanceled();}
-        databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
-
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            if(database.get(databaseEntity.documentID) == null) return;
+            databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
+        },200);
         return Tasks.forResult(true);
     }
 
@@ -115,8 +111,7 @@ public class FakeDatabase extends Database{
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    list.clear();
-                    list.addAll(tempList);
+                    list.update(tempList);
                 }
             });
 
@@ -169,8 +164,7 @@ public class FakeDatabase extends Database{
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    list.clear();
-                    list.addAll(tempList);
+                    list.update(tempList);
                 }
             });
 
@@ -209,8 +203,8 @@ public class FakeDatabase extends Database{
                 if(!(entry.getValue() instanceof Timestamp)) return false;
                 int out = ((Timestamp) temp).compareTo((Timestamp) entry.getValue());
                 if(type == CheckType.Equal) return out == 0;
-                if(type == CheckType.Greater) return out < 0;
-                if(type == CheckType.Less) return out > 0;
+                if(type == CheckType.Greater) return out > 0;
+                if(type == CheckType.Less) return out < 0;
             }
         }
         Log.d(TAG, "Performing a not implemented comparison in fake database");
@@ -255,7 +249,7 @@ public class FakeDatabase extends Database{
                 if(!toAdd) continue;
                 if(mapMore!=null) {
                     for (Map.Entry<DatabaseField, Object> e : mapMore.entrySet()) {
-                        if(!check(CheckType.Less, e, entity)) {
+                        if(!check(CheckType.Greater, e, entity)) {
                             toAdd = false;
                             break;
                         }
@@ -267,8 +261,7 @@ public class FakeDatabase extends Database{
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    list.clear();
-                    list.addAll(tempList);
+                    list.update(tempList);
                 }
             });
 
@@ -571,10 +564,6 @@ public class FakeDatabase extends Database{
 
 
 
-        ArrayList<String> interestedPeople5 = new ArrayList<>();
-        interestedPeople5.add(u4.getId());
-        interestedPeople5.add(u2.getId());
-
         f8.set(Favor.StringFields.ownerID, FakeAuthentication.UID);
         f8.set(Favor.StringFields.title, "Make use gods again");
         f8.set(Favor.StringFields.description, "Destroy kryptoninite on earth");
@@ -586,7 +575,6 @@ public class FakeDatabase extends Database{
         f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
 
 
-        f8.set(Favor.ObjectFields.interested, interestedPeople5);
         f8.set(Favor.LongFields.nbPerson, 1L);
         f8.set(Favor.LongFields.tokenPerPerson, 2L);
 

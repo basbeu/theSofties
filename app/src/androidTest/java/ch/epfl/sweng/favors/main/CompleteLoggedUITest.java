@@ -324,7 +324,7 @@ public class CompleteLoggedUITest {
         button3.check(matches(isDisplayed()));
 
         ViewInteraction textView7 = onView(
-                allOf(withId(R.id.tokens), withText("5 Tokens"),
+                allOf(withId(R.id.tokens), withText("7 Tokens"),
                         childAtPosition(
                                 allOf(withId(R.id.linLayout1),
                                         childAtPosition(
@@ -332,7 +332,7 @@ public class CompleteLoggedUITest {
                                                 0)),
                                 1),
                         isDisplayed()));
-        textView7.check(matches(withText("5 Tokens")));
+        textView7.check(matches(withText("7 Tokens")));
 
         try {
             Thread.sleep(600);

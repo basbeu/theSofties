@@ -9,11 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Collections;
 import java.util.Date;
@@ -21,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
@@ -30,9 +26,6 @@ import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.databinding.HomeBinding;
 import ch.epfl.sweng.favors.favors.FavorListAdapter;
 import ch.epfl.sweng.favors.favors.FavorsFragment;
-import ch.epfl.sweng.favors.favors.FavorsList;
-import ch.epfl.sweng.favors.favors.FavorsMap;
-import ch.epfl.sweng.favors.location.Location;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.location.SortLocations;
 
@@ -44,6 +37,9 @@ public class Home extends android.support.v4.app.Fragment  {
     Observable.OnPropertyChangedCallback locationSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
             if(LocationHandler.getHandler().locationPoint.get() != null) Collections.sort((ObservableArrayList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
             updateList((ObservableArrayList) sender);
         }
@@ -51,6 +47,9 @@ public class Home extends android.support.v4.app.Fragment  {
     Observable.OnPropertyChangedCallback otherSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
             updateList((ObservableArrayList) sender);
         }
     };
