@@ -42,6 +42,7 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
@@ -60,7 +61,6 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
  */
 public class FavorDetailView extends android.support.v4.app.Fragment  {
     private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
-
 
     public ObservableField<String> title;
     public ObservableField<String> description;
@@ -200,7 +200,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
                 } else {
-                    Notification notification = new Notification(NotificationType.INTEREST, localFavor);
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
@@ -215,6 +214,15 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 if (localFavor != null) {
                     localFavor.set(Favor.ObjectFields.interested, interestedPeople);
                     Database.getInstance().updateOnDb(localFavor);
+
+                    Notification notification = new Notification(NotificationType.INTEREST, localFavor);
+                    User owner = new User();
+                    String ownerId = localFavor.get(Favor.StringFields.ownerID);
+                    UserRequest.getWithId(owner, ownerId);
+
+                    ArrayList<Notification> notificationsList = (ArrayList<Notification>)owner.get(User.ObjectFields.notifications);
+                    notificationsList.add(notification);
+                    Database.getInstance().updateOnDb(owner);
                     
                 }
 

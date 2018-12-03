@@ -102,6 +102,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         {
             case R.id.notifications:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
+                break;
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
