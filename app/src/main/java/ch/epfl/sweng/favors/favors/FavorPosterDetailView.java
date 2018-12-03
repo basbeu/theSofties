@@ -14,6 +14,7 @@ import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.storage.Storage;
+import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FragmentFavorPosterDetailViewBinding;
 
 public class FavorPosterDetailView extends android.support.v4.app.Fragment {
@@ -31,7 +32,7 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     protected static Observable.OnPropertyChangedCallback pictureCallback = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            Storage.getInstance().displayImage(profilePicRef, binding.profilePic, "profile");
+            Storage.getInstance().displayImage(profilePicRef, binding.profilePic, StorageCategories.PROFILE);
         }
     };
 

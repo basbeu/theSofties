@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
@@ -46,7 +47,7 @@ public abstract class FirebaseStorageDispatcher {
      * @param category the category of the picture (favor or profile)
      * @return null if selectedImage == null, the storage reference of the picture otherwise
      */
-    public abstract String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, String category);
+    public abstract String uploadImage(StorageReference storageReference, Context context, Uri selectedImage, StorageCategories category);
 
     /**
      * Download the picture corresponding to pictureRef from firestore and displays it on imageView
@@ -54,31 +55,31 @@ public abstract class FirebaseStorageDispatcher {
      * @param imageView the Imageview where the picture should be displayed
      * @param category the category of the picture to be displayed (favor or profile)
      */
-    public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView, String category);
+    public abstract void displayImage(ObservableField<String> pictureRef, ImageView imageView, StorageCategories category);
 
     /**
      * Delete an image on firestore
      * @param pictureRef the reference of the image to be deleted
      * @param category the category of the picture to be deleted (favor or profile)
      */
-    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, String category);
+    public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, @NonNull StorageCategories category);
 
-    /**
-     * Checks if the category exists
-     * @param category favor or profile
-     * @return true if category is favor or profile, false otherwise
-     */
-    public static boolean checkStoragePath(String category){
-        if(category == null){
-            return false;
-        }
-        String cat = category.toLowerCase();
-        if(!cat.equals("favor") && !cat.equals("profile")){
-            return false;
-        }
-
-        return true;
-    }
+//    /**
+//     * Checks if the category exists
+//     * @param category favor or profile
+//     * @return true if category is favor or profile, false otherwise
+//     */
+//    public static boolean checkStoragePath(String category){
+//        if(category == null){
+//            return false;
+//        }
+//        String cat = category.toLowerCase();
+//        if(!cat.equals("favor") && !cat.equals("profile")){
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     /**
      * Extracts an image from data and displays it

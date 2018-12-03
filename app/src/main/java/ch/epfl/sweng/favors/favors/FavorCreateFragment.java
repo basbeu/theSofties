@@ -51,6 +51,7 @@ import ch.epfl.sweng.favors.database.InterestRequest;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
+import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FavorsLayoutBinding;
 import ch.epfl.sweng.favors.location.GeocodingLocation;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -145,8 +146,8 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(selectedImage != null){
-            storage.deleteImageFromStorage(pictureReference, "favor");
-            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage, "favor");
+            storage.deleteImageFromStorage(pictureReference, StorageCategories.FAVOR);
+            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage, StorageCategories.FAVOR);
             newFavor.set(Favor.StringFields.pictureReference, pictureRef);
 
         } else if(pictureReference != null){
@@ -371,7 +372,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> storage.displayImage(pictureReference, binding.favorImage, "favor"));
+            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> storage.displayImage(pictureReference, binding.favorImage, StorageCategories.FAVOR));
         } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");
