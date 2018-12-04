@@ -324,7 +324,7 @@ public class FakeDatabase extends Database{
         u1.set(User.StringFields.city, "Sydney, AU");
         u1.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u1, User.UserGender.M);
-        u1.set(User.ObjectFields.notifications, new ObservableArrayList<String>());
+        u1.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         u2.set(User.StringFields.firstName, "Jeanne");
         u2.set(User.StringFields.lastName, "Trousse");
@@ -332,7 +332,7 @@ public class FakeDatabase extends Database{
         u2.set(User.StringFields.city, "New York, US");
         u2.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u2, User.UserGender.F);
-        u2.set(User.ObjectFields.notifications, new ObservableArrayList<String>());
+        u2.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         u3.set(User.StringFields.firstName, "Harvey");
         u3.set(User.StringFields.lastName, "Dent");
@@ -340,7 +340,7 @@ public class FakeDatabase extends Database{
         u3.set(User.StringFields.city, "London, UK");
         u3.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u3, User.UserGender.M);
-        u3.set(User.ObjectFields.notifications, new ObservableArrayList<String>());
+        u3.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         u4.set(User.StringFields.firstName, "Marie");
         u4.set(User.StringFields.lastName, "Vaud");
@@ -348,7 +348,7 @@ public class FakeDatabase extends Database{
         u4.set(User.StringFields.city, "Madrid, ES");
         u4.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u4, User.UserGender.F);
-        u4.set(User.ObjectFields.notifications, new ObservableArrayList<String>());
+        u4.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
