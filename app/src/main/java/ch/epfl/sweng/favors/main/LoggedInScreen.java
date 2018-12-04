@@ -100,9 +100,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId())
         {
-            case R.id.notifications:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
-                break;
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
@@ -114,6 +111,9 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.notifications:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
                 Utils.logout(this, Authentication.getInstance());
