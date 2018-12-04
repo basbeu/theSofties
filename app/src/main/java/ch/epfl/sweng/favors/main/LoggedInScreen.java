@@ -36,6 +36,7 @@ import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
@@ -91,6 +92,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         headerBinding = DataBindingUtil.inflate(getLayoutInflater(),
                 R.layout.nav_header, binding.navView, false);
         headerBinding.setElements(this);
+
+        headerBinding.topView.setBackgroundResource(LocalPreferences.getInstance().getColor());
         binding.navView.addHeaderView(headerBinding.getRoot());
 
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
@@ -112,6 +115,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             binding.navView.setCheckedItem(R.id.favors);
         }
 
+        binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
@@ -121,6 +125,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         });
     }
+
+    
 
     @Override
     public void onBackPressed() {
