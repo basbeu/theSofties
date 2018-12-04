@@ -115,7 +115,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             binding.navView.setCheckedItem(R.id.favors);
         }
 
-        //binding.toolbar.setBackgroundColor(LocalPreferences.getInstance().getColor());
         binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));

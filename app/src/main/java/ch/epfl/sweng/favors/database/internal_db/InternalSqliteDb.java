@@ -10,7 +10,7 @@ import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 public final class InternalSqliteDb {
     private static SQLiteDatabase db;
 
-    public static String INTERNAL_DATABASE = "local_db";
+    public static final String INTERNAL_DATABASE = "local_db";
 
     private InternalSqliteDb(){}
 

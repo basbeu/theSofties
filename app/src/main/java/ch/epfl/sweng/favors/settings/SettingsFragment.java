@@ -1,19 +1,16 @@
 package ch.epfl.sweng.favors.settings;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +19,6 @@ import java.util.Map;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.databinding.SettingsLayoutBinding;
-import ch.epfl.sweng.favors.main.LoggedInScreen;
 
 public class SettingsFragment extends Fragment {
 
@@ -56,12 +52,12 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.settings_layout,container,false);
 
-        binding.emailNotifToggle.setChecked(LocalPreferences.getInstance().isEmailNofifEnabled());
+        binding.emailNotifToggle.setChecked(LocalPreferences.getInstance().isEmailNotifEnabled());
         binding.appNotifToggle.setChecked(LocalPreferences.getInstance().isAppNotifEnabled());
 
 
         binding.emailNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            LocalPreferences.getInstance().setEmailNofifEnabled(isChecked);
+            LocalPreferences.getInstance().setEmailNotifEnabled(isChecked);
         });
 
         binding.appNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) ->{

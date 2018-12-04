@@ -2,7 +2,6 @@ package ch.epfl.sweng.favors.database.internal_db;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -17,7 +16,7 @@ public class LocalPreferences {
     private static final String FIELD_APP_NOTIF = "AppNotif";
     private static final String FIELD_COLOR = "Color";
 
-    private boolean emailNofifEnabled;
+    private boolean emailNotifEnabled;
     private boolean appNotifEnabled;
     private int color;
 
@@ -36,7 +35,7 @@ public class LocalPreferences {
         }while(res.getCount() == 0);
 
         res.moveToFirst();
-        emailNofifEnabled = getBoolean(res,res.getColumnIndex(FIELD_EMAIL_NOTIF));
+        emailNotifEnabled = getBoolean(res,res.getColumnIndex(FIELD_EMAIL_NOTIF));
         appNotifEnabled = getBoolean(res,res.getColumnIndex(FIELD_APP_NOTIF));
         color = res.getInt(res.getColumnIndex(FIELD_COLOR));
     }
@@ -53,13 +52,13 @@ public class LocalPreferences {
         instance = null;
     }
 
-    public boolean isEmailNofifEnabled() {
-        return emailNofifEnabled;
+    public boolean isEmailNotifEnabled() {
+        return emailNotifEnabled;
     }
 
-    public void setEmailNofifEnabled(boolean emailNofifEnabled) {
-        this.emailNofifEnabled = emailNofifEnabled;
-        updateBooleanField(FIELD_EMAIL_NOTIF,emailNofifEnabled);
+    public void setEmailNotifEnabled(boolean emailNotifEnabled) {
+        this.emailNotifEnabled = emailNotifEnabled;
+        updateBooleanField(FIELD_EMAIL_NOTIF, emailNotifEnabled);
     }
 
     public boolean isAppNotifEnabled() {
