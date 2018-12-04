@@ -36,6 +36,9 @@ public class Notifications extends Fragment {
         binding.notificationsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         notificationsList = (ArrayList<String>)(User.getMain().get(User.ObjectFields.notifications));
+        try {
+            Thread.sleep(5000);
+        }catch (Exception e){}
         listAdapter = new NotificationListAdapter(notificationsList);
         binding.notificationsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
