@@ -26,6 +26,7 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
