@@ -305,6 +305,11 @@ public class FakeDatabase extends Database{
         u0.set(User.StringFields.city, FakeAuthentication.CITY);
         u0.set(User.LongFields.tokens, FakeAuthentication.TOKENS);
         User.UserGender.setGender(u0, FakeAuthentication.GENDER);
+        ArrayList<String> notifications = new ArrayList<String>();
+        notifications.add("Someone is interested in your favor !");
+        u1.set(User.ObjectFields.notifications, notifications);
+
+
 
         u1.set(User.StringFields.firstName, "Jean");
         u1.set(User.StringFields.lastName, "Marchand");
