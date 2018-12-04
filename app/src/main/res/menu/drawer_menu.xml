@@ -5,10 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/notifications"
-            android:icon="@drawable/exclamation_mark"
-            android:title="@string/notifications"/>
-        <item
             android:id="@+id/favors"
             android:checked="true"
             android:icon="@drawable/databaselogo"
@@ -26,6 +22,10 @@
             android:id="@+id/settings"
             android:icon="@drawable/settingslogo"
             android:title="@string/settings"/>
+        <item
+            android:id="@+id/notifications"
+            android:icon="@drawable/exclamation_mark"
+            android:title="@string/notifications"/>
     </group>
 
     <item

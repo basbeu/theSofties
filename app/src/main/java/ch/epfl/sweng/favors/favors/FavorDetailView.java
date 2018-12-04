@@ -54,6 +54,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> ownerEmail;
     public ObservableField<String> posterName;
     public ObservableField<String> user;
+    ObservableField<String> ownerId;
 
     public ObservableField<Long> tokenPerPers;
     public ObservableField<Long> nbPers;
@@ -112,6 +113,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         nbPers = favor.getObservableObject(Favor.LongFields.nbPerson);
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
+        ownerId = favor.getObservableObject(Favor.StringFields.ownerID);
         //user.set();
 
         FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
@@ -205,8 +207,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             "Sorry an error occurred, try again later...");
 
                     User owner = new User();
-                    String ownerId = localFavor.get(Favor.StringFields.ownerID);
-                    UserRequest.getWithId(owner, ownerId);
+                    UserRequest.getWithId(owner, ownerId.get());
 
                     owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                         @Override
