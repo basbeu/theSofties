@@ -9,10 +9,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 
 public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.NotificationViewHolder>{
-    private ArrayList<Notification> notificationList;
+    private ArrayList<String> notificationList;
     private static final String TAG = "NOTIFICATION_ADAPTER_LIST";
 
     public class NotificationViewHolder extends RecyclerView.ViewHolder{
@@ -25,17 +25,12 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
             this.adapter = adapter;
         }
 
-        public void bind(final Notification item){
-            Notification notification = item;
-            setText(notification);
+        public void bind(final String item){
+            setText(item);
         }
 
-        private void setText(Notification n) {
-            Favor favor = n.getFavor();
-            NotificationType nt = n.getNotificationType();
-            if(nt != null && favor != null) {
-                notificationText.setText(nt.getNotificationMessage() + " " + favor.get(Favor.StringFields.title));
-            }
+        private void setText(String notificationString) {
+            notificationText.setText(notificationString);
         }
     }
 
@@ -43,7 +38,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
      * Constructor for a FavorListAdapter
      * @param notificationList
      */
-    public NotificationListAdapter(ArrayList<Notification> notificationList) {
+    public NotificationListAdapter(ArrayList<String> notificationList) {
         this.notificationList = notificationList;
     }
 

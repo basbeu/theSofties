@@ -4,52 +4,33 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
-import android.databinding.ObservableArrayMap;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.databinding.ObservableMap;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
@@ -224,8 +205,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                         public void onPropertyChanged(Observable sender, int propertyId) {
                             if(propertyId == User.UpdateType.FROM_DB.ordinal()){
 
-                                Notification notification = new Notification(NotificationType.INTEREST, localFavor);
-                                ArrayList<Notification> notificationList = (ArrayList<Notification>)((User)sender).get(User.ObjectFields.notifications);
+                                String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
+                                ArrayList<String> notificationList = (ArrayList<String>)((User)sender).get(User.ObjectFields.notifications);
                                 notificationList.add(notification);
                                 owner.set(User.ObjectFields.notifications, notificationList);
                                 Database.getInstance().updateOnDb(owner);

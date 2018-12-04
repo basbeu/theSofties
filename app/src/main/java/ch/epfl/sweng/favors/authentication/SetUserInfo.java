@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
 import ch.epfl.sweng.favors.favors.Notification;
@@ -31,7 +32,6 @@ public class SetUserInfo extends AppCompatActivity {
     public ObservableField<String> firstName = user.getObservableObject(User.StringFields.firstName);
     public ObservableField<String> lastName = user.getObservableObject(User.StringFields.lastName);
     public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city); // LocationHandler.getHandler().locationCity;
-
 
     ActivitySetUserInfoBinding binding;
     private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
@@ -63,7 +63,7 @@ public class SetUserInfo extends AppCompatActivity {
         }
         user.set(User.StringFields.email, Authentication.getInstance().getEmail());
         user.set(User.LongFields.tokens, User.DEFAULT_TOKENS_NUMBER);
-        user.set(User.ObjectFields.notifications, new ArrayList<Notification>());
+        user.set(User.ObjectFields.notifications, new ObservableArrayList<String>());
         baseCity.set(LocationHandler.getHandler().locationCity.get());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
