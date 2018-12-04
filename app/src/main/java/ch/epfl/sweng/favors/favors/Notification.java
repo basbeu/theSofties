@@ -13,14 +13,6 @@ public class Notification {
         }
     }
 
-    public NotificationType getNotificationType(){
-        return notificationType;
-    }
-
-    public Favor getFavor(){
-        return favor;
-    }
-
     public String toString() {
         return notificationType.getNotificationMessage() + " " + favor.get(Favor.StringFields.title);
     }
