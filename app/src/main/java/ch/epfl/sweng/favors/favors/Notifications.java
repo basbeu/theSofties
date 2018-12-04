@@ -35,13 +35,18 @@ public class Notifications extends Fragment {
 
         binding.notificationsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        notificationsList = (ArrayList<String>)(User.getMain().get(User.ObjectFields.notifications));
-        try {
-            Thread.sleep(5000);
-        }catch (Exception e){}
-        listAdapter = new NotificationListAdapter(notificationsList);
-        binding.notificationsList.setAdapter(listAdapter);
-        listAdapter.notifyDataSetChanged();
+        User.updateMain();
+        User owner = User.getMain();
+
+        owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                notificationsList = (ArrayList<String>) (User.getMain().get(User.ObjectFields.notifications));
+                listAdapter = new NotificationListAdapter(notificationsList);
+                binding.notificationsList.setAdapter(listAdapter);
+                listAdapter.notifyDataSetChanged();
+            }
+        });
 
         return binding.getRoot();
     }
