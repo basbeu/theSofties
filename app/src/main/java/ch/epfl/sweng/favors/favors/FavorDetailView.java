@@ -54,7 +54,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     public ObservableField<String> ownerEmail;
     public ObservableField<String> posterName;
     public ObservableField<String> user;
-    ObservableField<String> ownerId;
 
     public ObservableField<Long> tokenPerPers;
     public ObservableField<Long> nbPers;
@@ -90,11 +89,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             buttonsEnabled.set(arguments.getBoolean(ENABLE_BUTTONS));
         }
         if (arguments != null && getArguments().containsKey(FAVOR_ID)) {
-            localFavor = new Favor(arguments.getString(FAVOR_ID));
-            setFields(localFavor);
+            setFields(new Favor(arguments.getString(FAVOR_ID)));
         } else {
             model.getFavor().observe(this, newFavor -> {
-                localFavor = newFavor;
                 setFields(newFavor);
                 //TODO add token cost binding with new database implementation
             });
@@ -102,6 +99,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     }
 
     public void setFields(Favor favor) {
+        localFavor = favor;
         title = favor.getObservableObject(Favor.StringFields.title);
         description = favor.getObservableObject(Favor.StringFields.description);
         category = favor.getObservableObject(Favor.StringFields.category);
@@ -113,8 +111,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         nbPers = favor.getObservableObject(Favor.LongFields.nbPerson);
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
-        ownerId = favor.getObservableObject(Favor.StringFields.ownerID);
-        //user.set();
 
         FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
 
@@ -207,7 +203,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             "Sorry an error occurred, try again later...");
 
                     User owner = new User();
-                    UserRequest.getWithId(owner, ownerId.get());
+                    String ownerId = localFavor.get(Favor.StringFields.ownerID);
+                    UserRequest.getWithId(owner, ownerId);
 
                     owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                         @Override
