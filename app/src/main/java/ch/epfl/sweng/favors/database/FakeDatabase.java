@@ -122,18 +122,6 @@ public class FakeDatabase extends Database{
         },500);
     }
 
-    /*private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
-        try{
-            T documentObject = clazz.newInstance();
-            documentObject.set(document.documentID, document.getEncapsulatedObjectOfMaps());
-            list.add(documentObject);
-        }
-        catch (Exception e){
-            Log.e(TAG, "Illegal access exception");
-        }
-    }*/
-
-
     /**
      * Updates a list with the all elements of the database having the @value for the @key
      *
