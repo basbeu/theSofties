@@ -344,7 +344,7 @@ public class FakeDatabase extends Database{
         User.UserGender.setGender(u0, FakeAuthentication.GENDER);
         ArrayList<String> notifications = new ArrayList<String>();
         notifications.add("Someone is interested in your favor !");
-        u1.set(User.ObjectFields.notifications, notifications);
+        u0.set(User.ObjectFields.notifications, notifications);
 
 
 

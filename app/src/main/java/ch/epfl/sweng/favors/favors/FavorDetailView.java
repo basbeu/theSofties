@@ -194,12 +194,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 } else {
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
-                  
-                    EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
-                            "Someone is interested in: " + title.get(),
-                            "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
+
+                    EmailUtils.sendEmail(
+                            new Email(Authentication.getInstance().getEmail(),
+                     ownerEmail.get(), "Someone is interested in: " + title.get(),
+                     "Hi ! I am interested to help you with your favor. Please answer directly to this email."),
                             getActivity(),
-                            "We will inform the poster of the add that you are interested to help!",
+                    "We will inform the poster of the add that you are interested to help!",
                             "Sorry an error occurred, try again later...");
 
                     User owner = new User();
