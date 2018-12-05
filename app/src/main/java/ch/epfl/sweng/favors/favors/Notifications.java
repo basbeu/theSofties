@@ -55,17 +55,4 @@ public class Notifications extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    Observable.OnPropertyChangedCallback listCB = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            updateList((ObservableArrayList)sender);
-        }
-    };
-
-    private void updateList(ObservableArrayList<String> list){
-        listAdapter = new NotificationListAdapter(list);
-        binding.notificationsList.setAdapter(listAdapter);
-        listAdapter.notifyDataSetChanged();
-    }
 }
