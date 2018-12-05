@@ -1,27 +1,42 @@
 package ch.epfl.sweng.favors.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.DatePicker;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.main.FavorsMain;
+
+
 
 public final class Utils {
     private static final int MAXPASSWORDLEN = 20;
@@ -89,6 +104,7 @@ public final class Utils {
         auth.signOut();
         context.startActivity(intent);
         User.resetMain();
+        LocalPreferences.closeInstance();
     }
 
     public static String getYear(Date date) {
@@ -129,15 +145,20 @@ public final class Utils {
     public static String getFavorDate(Date date) {
         Date today = new Date();
         long difference = getDifference(date, today);
+        String dateString = "";
         if(date.before(today)) {
-            return "expired";
+            dateString = "expired";
         } else if (getFullDate(date).equals(getFullDate(today))) {
-            return "today";
+            dateString =  "today";
+        } else if (difference < DAY) {
+            dateString = difference/DAY+1 + " day";
         } else if (difference < DAYS) {
-            return difference/DAY + " days";
+            dateString = difference/DAY+1 + " days";
+        } else {
+            SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
+            dateString = df.format(date);
         }
-        SimpleDateFormat df = new SimpleDateFormat("d.MMM", Locale.getDefault());
-        return df.format(date);
+        return dateString;
     }
 
     /**
@@ -172,6 +193,32 @@ public final class Utils {
         long difference = d1.getTime()-d2.getTime();
         return difference;
     }
+
+    public static String getIconPathFromCategory(String category){
+        return "android.resource://ch.epfl.sweng.favors/drawable/"+getIconNameFromCategory(category);
+    }
+
+    public static String getIconNameFromCategory(String category){
+        return category.toLowerCase().replaceAll("\\s","");
+    }
+
+    /**
+     * Create an Uri from an image bitmap
+     * found on https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri
+     * @param context the context of the fragment that call this method
+     * @param bitmap the bitmap to be converted in Uri
+     * @return Uri to the image bitmap, or null if the path cannot be resolved
+     */
+
+    public static Uri getImageUri(Context context, Bitmap bitmap){
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "favorpic", null);
+        if(path == null){
+            return null;
+        }
+        return Uri.parse(path);
+    }
+
 
 
 }

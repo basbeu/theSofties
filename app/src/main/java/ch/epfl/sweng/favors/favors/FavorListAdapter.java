@@ -1,28 +1,42 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Filter;
+import android.widget.Filterable;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.location.LocationHandler;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.Utils;
 
-public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder>  {
+import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
+
+/**
+ * FavorListAdapter
+ * Class that represents the graphical list view to display Favors
+ * sets the fields that shpould be visible in the ListView
+ * favor_item.xml (item of list) and fragment_favors.xml (list)
+ */
+public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.FavorViewHolder> implements Filterable {
     private ObservableArrayList<Favor> favorList;
+    private ObservableArrayList<Favor> filteredFavorList;
     private SharedViewFavor sharedViewFavor;
     private FragmentActivity fragmentActivity;
     private OnItemClickListener listener;
@@ -32,24 +46,25 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         void onItemClick(Favor item);
     }
 
+    /**
+     * Class that represents a single row in the list of Favor
+     */
     public class FavorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title, timestamp, location, description, distance;
+        public TextView title, timestamp, location, distance, category;
+        public ImageView iconCategory;
         public FavorListAdapter adapter;
-        public Favor selectedFavor = null;
 
+        // FIXME ObservableFields
         public FavorViewHolder(View itemView, FavorListAdapter adapter) {
             super(itemView);
             //initialize TextViews
             title = itemView.findViewById(R.id.title);
             timestamp = itemView.findViewById(R.id.timestamp);
             location = itemView.findViewById(R.id.location);
-            description = itemView.findViewById(R.id.description);
             distance = itemView.findViewById(R.id.distance);
+            category = itemView.findViewById(R.id.category);
+            iconCategory = itemView.findViewById(R.id.iconCategory);
             this.adapter = adapter;
-        }
-
-        public void setFavor(Favor f) {
-            this.selectedFavor = f;
         }
 
         @Override
@@ -57,56 +72,95 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
         public void bind(final Favor item, final OnItemClickListener listener){
             Favor favor = item;
-            setTitleAndDescription(favor);
+            setStringFields(favor);
             setTimestamp(favor);
             setLocation(favor);
+            setIconCategory(favor);
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 
+        /**
+         * sets the location city and
+         * the current distance to a favor
+         * @param favor
+         */
         private void setLocation(Favor favor) {
             if(favor.get(Favor.StringFields.locationCity) != null)
                 location.setText(favor.get(Favor.StringFields.locationCity));
             if(favor.get(Favor.ObjectFields.location) != null) {
                 ObservableField<Object> geo = favor.getObservableObject(Favor.ObjectFields.location);
+                // distanceBetween two
                 distance.setText(LocationHandler.distanceBetween((GeoPoint)geo.get()));
             } else { distance.setText("--"); }
         }
 
-        private void setTitleAndDescription(Favor favor) {
-            if(favor.get(Favor.StringFields.title) != null)
-                title.setText(favor.get(Favor.StringFields.title));
-            if(favor.get(Favor.StringFields.description) != null)
-                description.setText(favor.get(Favor.StringFields.description));
-            setLocation(favor);
+        /**
+         * Sets all the StringFields of a Favor
+         * currently:
+         * Title
+         * Description
+         * Category
+         * @param favor the relevant favor
+         */
+        private void setStringFields(Favor favor) {
+            String titleStr = favor.get(Favor.StringFields.title);
+            if(titleStr != null){
+               if(titleStr.length() > 23){
+                   titleStr = titleStr.subSequence(0, 22).toString();
+                   titleStr = titleStr.concat("...");
+               }
+                title.setText(titleStr);
+            }
+            if(favor.get(Favor.StringFields.category) != null)
+                category.setText(favor.get(Favor.StringFields.category));
         }
 
+        /**
+         * sets the timestamp fetched from the db
+         * @param favor
+         */
         private void setTimestamp(Favor favor) {
             if(favor.get(Favor.ObjectFields.expirationTimestamp) != null) {
-                Date d = (Date)favor.get(Favor.ObjectFields.expirationTimestamp);
+                Date d;
+                if(favor.get(Favor.ObjectFields.expirationTimestamp) instanceof Timestamp)
+                    d = ((Timestamp)favor.get(Favor.ObjectFields.expirationTimestamp)).toDate();
+                else d = (Date) favor.get(Favor.ObjectFields.expirationTimestamp);
                 timestamp.setText(Utils.getFavorDate(d));
             } else { timestamp.setText("--"); }
         }
 
+        /**
+         * sets the icon category
+         * @param favor
+         */
+        private void setIconCategory(Favor favor){
+            if(favor.get(Favor.StringFields.category) != null){
+                iconCategory.setImageURI(Uri.parse(getIconPathFromCategory(favor.get(Favor.StringFields.category))));
+            }
+        }
     }
 
-    //constructor
+    /**
+     * Constructor for a FavorListAdapter
+     * @param fragActivity
+     * @param favorList
+     */
     public FavorListAdapter(FragmentActivity fragActivity, ObservableArrayList<Favor> favorList) {
         this.favorList = favorList;
-        if(!ExecutionMode.getInstance().isTest()){
-            this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
-        }
+        this.filteredFavorList = favorList;
+        if(fragActivity != null) this.sharedViewFavor = ViewModelProviders.of(fragActivity).get(SharedViewFavor.class);
 
         this.fragmentActivity = fragActivity;
-        if(!ExecutionMode.getInstance().isTest()){
-            this.listener = (Favor item) -> {
-                Log.d(TAG,"click recorded");
-                this.sharedViewFavor.select(item);
+
+        this.listener = (Favor item) -> {
+            Log.d(TAG,"click recorded");
+            this.sharedViewFavor.select(item);
+            if(item.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
                 fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
-            };
+            else
+                fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
 
-
-        }
-
+        };
     }
 
     @Override
@@ -118,12 +172,60 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
 
     @Override
     public void onBindViewHolder(FavorViewHolder holder, int position) {
-        holder.bind(favorList.get(position), listener);
+        holder.bind(filteredFavorList.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        return favorList.size();
+        return filteredFavorList.size();
+    }
+
+    /**
+     * @param f favor
+     * @param s string input
+     * @return whether s matches favor's title, description, category or location city
+     */
+    private Boolean checkSearch(Favor f, String s){
+        String slc = s.toLowerCase();
+        return f.get(Favor.StringFields.title).toLowerCase().contains(slc) ||
+                f.get(Favor.StringFields.description).toLowerCase().contains(slc) ||
+                f.get(Favor.StringFields.category).toLowerCase().contains(slc) ||
+                f.get(Favor.StringFields.locationCity).toLowerCase().contains(slc);
+    }
+
+    protected Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            String searchInput = constraint.toString();
+            if (searchInput.isEmpty()) {
+                filteredFavorList = favorList;
+            } else {
+                ObservableArrayList<Favor> filteredList = new ObservableArrayList<>();
+                for (Favor f : favorList) {
+
+                    if (checkSearch(f, searchInput)) {
+                        filteredList.add(f);
+                    }
+                }
+
+                filteredFavorList = filteredList;
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredFavorList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredFavorList = (ObservableArrayList<Favor>) results.values;
+            notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public Filter getFilter() {
+        return searchFilter;
     }
 
 }

@@ -4,6 +4,7 @@ package ch.epfl.sweng.favors.authentication;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
+import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
@@ -13,12 +14,15 @@ public abstract class Authentication {
     private static Authentication auth;
 
     public static Authentication getInstance(){
+        // For espresso tests
+
         if(auth == null){
             if(ExecutionMode.getInstance().isTest()){
                 auth = FakeAuthentication.getInstance();
             }else{
                 auth = FirebaseAuthentication.getInstance();
             }
+            //FakeDatabase.getInstance().createBasicDatabase();
         }
 
         return auth;

@@ -17,6 +17,7 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -55,6 +56,8 @@ public class SetUserInfoComplementTest {
         onView(withId(R.id.profGenderMEdit)).perform(scrollTo(),click());
         onView(withId(R.id.profGenderFEdit)).perform(scrollTo(),click());
         u = new User(Authentication.getInstance().getUid());
+
+        InternalSqliteDb.openDb(intentsTestRule.getActivity().getApplicationContext());
     }
     @Test
     public void testBackButton(){

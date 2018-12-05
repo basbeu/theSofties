@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -30,6 +31,7 @@ public class ConfirmationSentTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
+        InternalSqliteDb.openDb(activityActivityTestRule.getActivity().getApplicationContext());
     }
 
     @Test

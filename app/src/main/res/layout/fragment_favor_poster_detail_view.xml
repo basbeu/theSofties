@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+        <variable
+            name="poster_elements"
+            type="ch.epfl.sweng.favors.favors.FavorPosterDetailView"
+            />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="30dip">
+
+            <TextView
+                android:id="@+id/posterTitle"
+                android:layout_width="match_parent"
+                android:layout_height="91dp"
+                android:paddingTop="30dip"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:text="@string/favorPosterDetailViewTitle" />
+
+            <ImageView
+                android:id="@+id/profilePic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dip"
+                android:gravity="left"
+                android:src="@drawable/profilelogo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30sp"
+                android:layout_marginLeft="30sp"
+                android:text="@string/first_name"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/posterFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30sp"
+                android:paddingBottom="@dimen/profil_fragment_bottom_padding"
+                android:text="@{poster_elements.firstName}"
+                android:textSize="@dimen/profile_fragment_database_content_size" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/last_name"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                android:layout_marginLeft="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/posterLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/profil_fragment_bottom_padding"
+                android:layout_marginLeft="30sp"
+                android:text="@{poster_elements.lastName}"
+                android:textSize="@dimen/profile_fragment_database_content_size" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sex"
+                android:textSize="@dimen/profile_fragment_database_object_size"
+                android:layout_marginLeft="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{poster_elements.sex}"
+                android:textSize="@dimen/profile_fragment_database_content_size"
+                android:layout_marginLeft="30sp"
+                />
+
+            <Button
+                android:id="@+id/okButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="5dp"
+                android:paddingTop="30dip"
+                android:text="@android:string/ok"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/gender" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

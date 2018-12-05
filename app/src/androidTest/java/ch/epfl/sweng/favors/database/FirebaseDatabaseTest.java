@@ -61,6 +61,8 @@ public class FirebaseDatabaseTest {
 
     @After
     public void After(){
+        FakeDatabase.getInstance().addExtraToDb();
+        FakeDatabase.getInstance().removeExtraFromDB();
         Database.cleanUpAll();
     }
 }

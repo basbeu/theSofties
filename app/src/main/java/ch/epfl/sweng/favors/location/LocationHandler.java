@@ -1,21 +1,11 @@
 package ch.epfl.sweng.favors.location;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -66,7 +56,7 @@ public class LocationHandler {
             favLocation.setLatitude(geo.getLatitude());
             favLocation.setLongitude(geo.getLongitude());
             distance = l.distanceTo(favLocation);
-            Log.d("DebugRemove", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude()+", "+favLocation.getLongitude() + ", UserLocation " +l.getLatitude()+","+l.getLongitude());
+            Log.d("Location Debug", "Distance: " + distance + ", FavorLocation " + favLocation.getLatitude()+", "+favLocation.getLongitude() + ", UserLocation " +l.getLatitude()+","+l.getLongitude());
         }
         return distance;
     }
@@ -79,11 +69,13 @@ public class LocationHandler {
         if (distance == Float.MAX_VALUE) {
             return "There is no Location";
         } else if (distance > switchToInt) {
-            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + "km";
+            output = String.format(Locale.getDefault(), "%.0f", (distance/1000)) + " km";
         } else if (distance > switchToMeters) {
-            output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + "km";
+            output = String.format(Locale.getDefault(), "%.1f", (distance/1000)) + " km";
         } else {
-            output = String.format(Locale.getDefault(), "%.0f", distance) + "m";
+            if(distance == 0){
+                return  "Near you";
+            }else output = String.format(Locale.getDefault(), "%.0f", distance) + " m";
         }
         return output + " away";
     }
@@ -142,7 +134,7 @@ public class LocationHandler {
         locationPoint.set(new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude()));
         locationCity.set(getReadableLocation(locationPoint.get()));
         locationUser.set(lastLocation);
-        User.setLocation(locationPoint.get());
+        User.getMain().setLocation(locationPoint.get());
         // if desired the user city can automatically be updated every time location changes
         // User.setCity(locationCity.get());
         Log.d("location", "code:1000 - successfully obtained location of user");
@@ -159,7 +151,7 @@ public class LocationHandler {
             Geocoder gcd = new Geocoder(FavorsMain.getContext(), Locale.getDefault());
             try {
                 List<Address> addresses = gcd.getFromLocation(geoPoint.getLatitude(), geoPoint.getLongitude(), 1);
-                if (addresses.size() > 0) return addresses.get(0).getLocality();
+                if (addresses.size() > 0) return addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryCode();
             } catch (IOException e) {
                 Log.e(TAG, "Failed to get geoPoint information");
             }
@@ -168,6 +160,5 @@ public class LocationHandler {
         else{
             return  "Fake Lausanne";
         }
-
     }
 }

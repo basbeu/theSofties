@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
-
-import android.databinding.ObservableArrayList;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
@@ -12,10 +11,25 @@ public final class FavorRequest extends Request{
     private static final String COLLECTION = "favors";
 
     private FavorRequest(){}
-    public static ObservableArrayList<Favor> getList(DatabaseField element, String value, Integer limit, DatabaseStringField orderBy){
-        return db.getList(Favor.class, COLLECTION, element, value, limit, orderBy);
+    public static void getList(ObservableArrayList<Favor> list, DatabaseField element, Object value, Integer limit, DatabaseField orderBy){
+        db.getList(list, Favor.class, COLLECTION, element, value, limit, orderBy);
     }
-    public static ObservableArrayList<Favor> all(Integer limit, DatabaseStringField orderBy){
-        return db.getAll(Favor.class, COLLECTION, limit, orderBy);
+
+    public static void all(ObservableArrayList<Favor> list, Integer limit, DatabaseField orderBy){
+        db.getAll(list, Favor.class, COLLECTION, limit, orderBy);
     }
+
+    public static void getList(ObservableArrayList<Favor> list, Map<DatabaseField, Object> mapEquals,
+                                Map<DatabaseField, Object> mapLess,
+                                Map<DatabaseField, Object> mapMore,
+                                Integer limit,
+                                DatabaseField orderBy){
+        db.getList(list, Favor.class, COLLECTION, mapEquals, mapLess, mapMore, limit, orderBy);
+    }
+
+    /*public static void getWithId(Favor favor, String value){
+        db.getElement(favor, Favor.class, COLLECTION, value);
+    }*/
+
 }
+

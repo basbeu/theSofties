@@ -9,41 +9,45 @@ import javax.annotation.Nonnull;
 
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
-import ch.epfl.sweng.favors.database.fields.DatabaseIntField;
+import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
-public class User extends DatabaseEntity {
+public class User extends DatabaseEntity{
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
+    public static final Long DEFAULT_TOKENS_NUMBER = 5L;
 
     private static Status status = new Status(Status.Values.NotLogged);
 
-    private static User user = new User();
+    private static User user = new User(Authentication.getInstance().getUid());
+    public static User getMain(){
+        return user;
+    }
+    public static void updateMain(){user = new User(Authentication.getInstance().getUid());}
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city}
-    public enum IntegerFields implements DatabaseIntField {creationTimeStamp}
-    public enum ObjectFields implements DatabaseObjectField {rights, location}
+
+    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, profilePicRef}
+    public enum LongFields implements DatabaseLongField {creationTimeStamp, tokens}
+    public enum ObjectFields implements DatabaseObjectField {rights, location, notifications}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
-                ObjectFields.values(), COLLECTION, Authentication.getInstance().getUid());
-
-        db.updateFromDb(this);
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
+                ObjectFields.values(), COLLECTION, null);
     }
 
     public User(String id){
-        super(StringFields.values(), IntegerFields.values(), BooleanFields.values(),
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
-        db.updateFromDb(this);
+        if(db != null) db.updateFromDb(this);
     }
 
     @Override
     public DatabaseEntity copy() {
-        User u = new User(this.documentID);
-        u.updateLocalData(this.getEncapsulatedObjectOfMaps());
+        User u = new User();
+        u.set(this.documentID, this.getEncapsulatedObjectOfMaps());
         return u;
     }
 
@@ -53,31 +57,14 @@ public class User extends DatabaseEntity {
         user.reset();
     }
 
-    /**
-     * Sets the current location of the user
-     * @param geo the geopoint that will be stored in the database
-     */
-    static public void setLocation(@Nonnull GeoPoint geo){
-        Database.getInstance().updateFromDb(user);
+    public void setLocation(@Nonnull GeoPoint geo){
         if (user.get(StringFields.lastName) != null
                 && user.get(StringFields.email) != null
                     && user.get(StringFields.sex) != null) {
-            user.set(ObjectFields.location, geo);
+            this.set(ObjectFields.location, geo);
             Database.getInstance().updateOnDb(user);
         }
     }
-
-//    /**
-//     * Sets the current city
-//     * @param city the city that will be stored in the database
-//     */
-//    static public void setCity(@Nonnull String city){
-//        Database.getInstance().updateFromDb(user);
-//        if (user != null) {
-//            user.set(StringFields.city, city);
-//            Database.getInstance().updateOnDb(user);
-//        }
-//    }
 
     public enum UserGender {
         M ,F, DEFAULT;

@@ -2,8 +2,9 @@
     <string name="app_name">Favors</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
+    <string name="notifications">Notifications</string>
     <string name="profile_text">Your profile</string>
-    <string name="logout">Log out :(</string>
+    <string name="logout">Log out</string>
     <string name="seeyou">See you soon !</string>
     <string name="logged_in_screen">You successfully logged in !</string>
     <string name="logo">splash screen logo</string>
@@ -13,12 +14,15 @@
     <string name="confirmationSent">Please check your e-mails to confirm your inscription.</string>
     <string name="resetPassword">Reset password</string>
     <string name="resendConfirmation">Resend confirmation.</string>
+    <string name="favorPosterDetailViewTitle">Who is the poster?</string>
     <string name="gotit">Got it !</string>
+
     <string name="next">Next</string>
     <string-array name="sortBy">
         <item>sort by</item>
         <item>location</item>
         <item>recent</item>
+        <item>expiring soon</item>
         <item>category</item>
     </string-array>
 
@@ -31,8 +35,9 @@
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="city">City</string>
+    <string name="city">City:</string>
     <string name="sex">Sex</string>
+    <string name="tokens">Tokens:</string>
     <string name="add_a_new_favor">Add a new Favor</string>
     <string name="titleFavor">Favor Title</string>
     <string name="descriptionFavor">Favor Description</string>
@@ -43,4 +48,13 @@
     <string name="categoryFavor">Add Favor Category</string>
     <string name="title_activity_confirmation_sent">ConfirmationSent</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="nameFavors">Favors</string>
+    <string name="buttonBubble">Done</string>
+
+    <string name="emailNotif">Email notifications</string>
+    <string name="appNotif"> App notifications </string>
+    <string name="colorSetting">The main color of the app :  </string>
+    colorSetting
+
 </resources>

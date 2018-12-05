@@ -12,23 +12,23 @@
     </data>
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/whiteSmoke"
+    >
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/whiteSmoke"
         android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/createFavorTitle"
-
             android:text="@{elements.fragmentTitle}"
             android:textSize="24sp"
-
+            android:textAlignment="center"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30sp"
+            android:layout_marginTop="15sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -42,23 +42,33 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="100dp"
+                android:id="@+id/favorImage"
+                android:layout_width="132dp"
                 android:layout_height="80dp"
                 android:contentDescription="@string/imageFavor"
                 app:srcCompat="@drawable/logo" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floatingActionButton"
+                android:id="@+id/uploadFavorPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="90sp"
                 android:layout_marginLeft="90sp"
+                android:layout_marginStart="90sp"
                 android:layout_marginTop="20sp"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="@color/browser_actions_divider_color"
-                app:srcCompat="@android:drawable/ic_menu_add" />
+                app:srcCompat="@drawable/upload_picture_gallery"/>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/uploadFavorPictureCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20sp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/browser_actions_divider_color"
+                app:srcCompat="@drawable/upload_picture_camera"/>
         </RelativeLayout>
 
         <EditText
@@ -126,11 +136,22 @@
             android:text="@{elements.locationCity}"
             android:hint="@string/locationFavor"
             android:inputType="text"
-            android:layout_marginEnd="35dp"
-            android:layout_marginRight="35dp"
+            android:layout_marginEnd="110dp"
             app:layout_constraintTop_toBottomOf="@+id/descriptionFavor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toStartOf="@+id/search"/>
+
+        <TextView
+            android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:textSize="15dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/locationFavor"
+            app:layout_constraintTop_toTopOf="@+id/locationFavor"
+            app:layout_constraintStart_toEndOf="@+id/locationFavor"
+/>
 
         <ImageView
             android:id="@+id/checkFavorLocation"
@@ -141,7 +162,7 @@
             android:src="@drawable/check_image"
             android:visibility="@{elements.locationCityValid ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/locationFavor"
-            app:layout_constraintStart_toEndOf="@+id/locationFavor"
+            app:layout_constraintStart_toEndOf="@+id/search"
             app:layout_constraintTop_toTopOf="@+id/locationFavor" />
 
 
@@ -170,17 +191,64 @@
             app:layout_constraintStart_toEndOf="@+id/deadlineFavor"
             app:layout_constraintTop_toTopOf="@+id/deadlineFavor" />
 
+        <EditText
+            android:id="@+id/nbTokens"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="@{Long.toString(elements.tokenPerPers)}"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="@+id/categoryFavor"
+            app:layout_constraintBottom_toBottomOf="@+id/categoryFavor"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/nbTokenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" tk for "
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="@+id/categoryFavor"
+            app:layout_constraintBottom_toBottomOf="@+id/categoryFavor"
+            app:layout_constraintStart_toEndOf="@+id/nbTokens"/>
+
+        <EditText
+            android:id="@+id/nbPersons"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:maxLength="1"
+            android:inputType="number"
+            android:text="@{Long.toString(elements.nbPerson)}"
+            android:textAlignment="center"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="@+id/categoryFavor"
+            app:layout_constraintBottom_toBottomOf="@+id/categoryFavor"
+            app:layout_constraintStart_toEndOf="@+id/nbTokenText"/>
+
+        <TextView
+            android:id="@+id/nbPersonsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="persons"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="@+id/categoryFavor"
+            app:layout_constraintBottom_toBottomOf="@+id/categoryFavor"
+            app:layout_constraintStart_toEndOf="@+id/nbPersons"/>
+
         <Spinner
             android:id="@+id/categoryFavor"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
             android:hint="@string/categoryFavor"
             android:inputType="text"
             android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@+id/deadlineFavor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/nbPersonsText"/>
 
         <Button
             android:id="@+id/addFavor"
@@ -193,25 +261,16 @@
             app:layout_constraintTop_toBottomOf="@+id/categoryFavor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-        <TextView
-            android:id="@+id/testText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30sp"
-            android:text="test content"
-            app:layout_constraintTop_toBottomOf="@+id/addFavor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/testFavorDetailButton"/>
+
         <Button
             android:id="@+id/testFavorDetailButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="20sp"
-            android:text="display current favor "
+            android:text="Preview favor"
             app:layout_constraintTop_toBottomOf="@+id/addFavor"
-            app:layout_constraintStart_toEndOf="@+id/testText"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 

@@ -1,14 +1,21 @@
 package ch.epfl.sweng.favors.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Looper;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.util.Date;
 
@@ -17,6 +24,11 @@ import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
+
+    final static long DAY = 86400000;
+
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock private Context context;
 
     @Before
     public void Before() {
@@ -172,10 +184,31 @@ public class UtilsTest {
     }
 
     @Test
+    public void favorFormatDate3(){
+        Date d = new Date(new Date().getTime()+100000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("today", f);
+    }
+
+    @Test
     public void favorFormatDate2(){
         Date d = new Date(new Long("153640875500000"));
         String f = Utils.getFavorDate(d);
         assertEquals("7.Sep", f);
+    }
+
+    @Test
+    public void favorFormatDate4(){
+        Date d = new Date(new Date().getTime()+DAY-100000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("1 day", f);
+    }
+
+    @Test
+    public void favorFormatDate5(){
+        Date d = new Date(new Date().getTime()+2*DAY-100000);
+        String f = Utils.getFavorDate(d);
+        assertEquals("2 days", f);
     }
 
     @Test
@@ -213,5 +246,17 @@ public class UtilsTest {
         long diff = Utils.getDifference(d1, d1);
         assertTrue(Math.abs(diff)<1000);
     }
+
+    @Test
+    public void CreateUtils(){
+        new Utils();
+    }
+
+    @Test
+    public void getImageUriTest(){
+        Utils.getImageUri(context, Bitmap.createBitmap(100, 100, Bitmap.Config.ALPHA_8));
+    }
+
+
 
 }

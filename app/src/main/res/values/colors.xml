@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#035064</color>
     <color name="colorAccent">#FF4081</color>
     <color name= "black">#000000</color>
-    <color name="whiteSmoke">#E8E8E8</color>
+    <color name= "interested">#8B7C96</color>
+    <color name= "not_interested">#00C800</color>
+    <color name="whiteSmoke">#e8e8e8</color>
+    <color name= "white">#FFFFFF</color>
+    <color name="colorToolbar">@android:color/darker_gray</color>
+    <color name="blueStart">#4EFFF3</color>
+    <color name="blueEnd">#0ca6f9</color>
+    <color name="purpleStart">#a369ff</color>
+    <color name="purpleEnd">#0e56ff</color>
+    <color name="roseStart">#FF6A00</color>
+    <color name="roseEnd">#ef0276</color>
+    <color name="greenStart">#a7f56e</color>
+    <color name="greenEnd">#11c612</color>
 </resources>

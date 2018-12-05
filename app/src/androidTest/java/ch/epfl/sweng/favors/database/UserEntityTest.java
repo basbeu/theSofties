@@ -1,11 +1,14 @@
 package ch.epfl.sweng.favors.database;
 
+import android.databinding.Observable;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 ;
 
@@ -18,7 +21,7 @@ public class UserEntityTest {
     private final String FAKE_FIRST_NAME = "toto";
     private final String FAKE_LAST_NAME = "foo";
     private final String FAKE_SEX = "M";
-    private final Integer FAKE_TIMESTAMP = 343354;
+    private final Long FAKE_TIMESTAMP = 343354L;
 
     @Before
     public void Before(){
@@ -30,10 +33,30 @@ public class UserEntityTest {
         u.set(User.StringFields.lastName, FAKE_LAST_NAME);
         u.set(User.StringFields.email, FAKE_EMAIL);
         u.set(User.StringFields.city, FAKE_EMAIL);
-        u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+        u.set(User.LongFields.creationTimeStamp, FAKE_TIMESTAMP);
         User.UserGender.setGender(u, User.UserGender.M);
 
         FakeDatabase.getInstance().updateOnDb(u);
+    }
+
+    public Boolean entered = false;
+    @Test
+    public void observeEntity(){
+        Observable.OnPropertyChangedCallback cb = new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                 entered = true;
+            }
+        };
+        u.addOnPropertyChangedCallback(cb);
+        FakeDatabase.getInstance().updateFromDb(u);
+        try {
+            Thread.sleep(600);
+        } catch (Exception e){
+
+        }
+        assertTrue(entered);
+        u.removeOnPropertyChangedCallback(cb);
     }
 
     @Test
@@ -63,7 +86,7 @@ public class UserEntityTest {
 
     @Test
     public void getTimestampTest(){
-        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, u.get(User.IntegerFields.creationTimeStamp)));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, u.get(User.LongFields.creationTimeStamp)));
     }
 
     @Test
@@ -130,14 +153,14 @@ public class UserEntityTest {
 
     @Test
     public void setTimestampTest(){
-        Integer newTimestamp = 788484;
+        Long newTimestamp = 788484L;
 
         FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->{
-            u.set(User.IntegerFields.creationTimeStamp, newTimestamp);
+            u.set(User.LongFields.creationTimeStamp, newTimestamp);
             FakeDatabase.getInstance().updateOnDb(u);
-            assertEquals(newTimestamp, u.get(User.IntegerFields.creationTimeStamp));
+            assertEquals(newTimestamp, u.get(User.LongFields.creationTimeStamp));
             //Reset basic user info for other tests
-            u.set(User.IntegerFields.creationTimeStamp, FAKE_TIMESTAMP);
+            u.set(User.LongFields.creationTimeStamp, FAKE_TIMESTAMP);
             FakeDatabase.getInstance().updateOnDb(u);
         });
 
@@ -167,7 +190,7 @@ public class UserEntityTest {
 
     @Test
     public void getObservableTimestampTest(){
-        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, u.getObservableObject(User.IntegerFields.creationTimeStamp).get()));
+        FakeDatabase.getInstance().updateFromDb(u).addOnCompleteListener(t->assertEquals(FAKE_TIMESTAMP, u.getObservableObject(User.LongFields.creationTimeStamp).get()));
     }
 
 }
