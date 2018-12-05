@@ -110,18 +110,6 @@ public class FakeDatabase extends Database{
         },500);
     }
 
-    /*private  <T extends DatabaseEntity>  void addToList(Class<T> clazz, T document,ObservableArrayList<T> list){
-        try{
-            T documentObject = clazz.newInstance();
-            documentObject.set(document.documentID, document.getEncapsulatedObjectOfMaps());
-            list.add(documentObject);
-        }
-        catch (Exception e){
-            Log.e(TAG, "Illegal access exception");
-        }
-    }*/
-
-
     /**
      * Updates a list with the all elements of the database having the @value for the @key
      *
@@ -354,6 +342,11 @@ public class FakeDatabase extends Database{
         u0.set(User.StringFields.city, FakeAuthentication.CITY);
         u0.set(User.LongFields.tokens, FakeAuthentication.TOKENS);
         User.UserGender.setGender(u0, FakeAuthentication.GENDER);
+        ArrayList<String> notifications = new ArrayList<String>();
+        notifications.add("Someone is interested in your favor !");
+        u0.set(User.ObjectFields.notifications, notifications);
+
+
 
         u1.set(User.StringFields.firstName, "Jean");
         u1.set(User.StringFields.lastName, "Marchand");
@@ -361,14 +354,15 @@ public class FakeDatabase extends Database{
         u1.set(User.StringFields.city, "Sydney, AU");
         u1.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u1, User.UserGender.M);
+        u1.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         u2.set(User.StringFields.firstName, "Jeanne");
         u2.set(User.StringFields.lastName, "Trousse");
         u2.set(User.StringFields.email, "jeanne.trousse@thesoftie.com");
         u2.set(User.StringFields.city, "New York, US");
         u2.set(User.LongFields.tokens, 10L);
-
         User.UserGender.setGender(u2, User.UserGender.F);
+        u2.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         u3.set(User.StringFields.firstName, "Harvey");
         u3.set(User.StringFields.lastName, "Dent");
@@ -376,6 +370,7 @@ public class FakeDatabase extends Database{
         u3.set(User.StringFields.city, "London, UK");
         u3.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u3, User.UserGender.M);
+        u3.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         u4.set(User.StringFields.firstName, "Marie");
         u4.set(User.StringFields.lastName, "Vaud");
@@ -383,6 +378,7 @@ public class FakeDatabase extends Database{
         u4.set(User.StringFields.city, "Madrid, ES");
         u4.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u4, User.UserGender.F);
+        u4.set(User.ObjectFields.notifications, new ArrayList<String>());
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");

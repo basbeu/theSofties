@@ -1434,6 +1434,39 @@ public class CompleteLoggedUITest {
         appCompatButton14.perform(scrollTo(), click());
 
 
+        ViewInteraction appCompatImageButton34 = onView(
+                allOf(withContentDescription("Open navigation drawer"),
+                        childAtPosition(
+                                allOf(withId(R.id.toolbar),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        appCompatImageButton34.perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction navigationMenuItemView35 = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.design_navigation_view),
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0)),
+                        5),
+                        isDisplayed()));
+        navigationMenuItemView35.perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
