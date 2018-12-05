@@ -30,8 +30,10 @@ import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
+import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.utils.email.Email;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
 import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
@@ -112,7 +114,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
 
-        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView);
+        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, StorageCategories.FAVOR);
 
         if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
             interestedPeople = (ArrayList<String>) favor.get(Favor.ObjectFields.interested);
@@ -167,10 +169,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.setElements(this);
 
         binding.favReportAbusiveAdd.setOnClickListener((l)->
-                EmailUtils.sendEmail(Authentication.getInstance().getEmail(), "report@myfavors.xyz",
-                "Abusive favors : "+title.get(),
-                "The abusive favor is : title"+title.get()+"\ndescription : "+description.get(),
-                getActivity(),
+                EmailUtils.sendEmail(
+                        new Email(Authentication.getInstance().getEmail(), "report@myfavors.xyz", "Abusive favors : " + title.get(), "The abusive favor is : title" + title.get() + "\ndescription : " + description.get()), getActivity(),
                 "issue has been reported! Sorry for the inconvenience",
                 "Sorry an error occured, try again later..."));
 
@@ -194,7 +194,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 } else {
                     interestedPeople.add(User.getMain().getId());
                     isInterested.set(true);
-
+                  
                     EmailUtils.sendEmail(Authentication.getInstance().getEmail(), ownerEmail.get(),
                             "Someone is interested in: " + title.get(),
                             "Hi ! I am interested to help you with your favor. Please answer directly to this email.",
@@ -242,7 +242,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
             Database.getInstance().deleteFromDatabase(localFavor);
-            FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(pictureRef);
+            FirebaseStorageDispatcher.getInstance().deleteImageFromStorage(pictureRef, StorageCategories.FAVOR);
 
             Toast.makeText(this.getContext(), "Favor deleted successfully", Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();
@@ -295,11 +295,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
                     if(propertyId == User.UpdateType.FROM_DB.ordinal()){
-                        EmailUtils.sendEmail(   localFavor.get(Favor.StringFields.ownerEmail),
-                                                ((User)sender).get(User.StringFields.email),
-                                "You have been paid for the favor " + title.get()+ "!",
-                                "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it.",
-                                getActivity(),"Users have been successfully paid.","");
+                        EmailUtils.sendEmail(
+                                new Email(localFavor.get(Favor.StringFields.ownerEmail), ((User) sender).get(User.StringFields.email), "You have been paid for the favor " + title.get() + "!", "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it."), getActivity(),"Users have been successfully paid.","");
                         sender.removeOnPropertyChangedCallback(this);
                     }
                 }

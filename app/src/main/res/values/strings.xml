@@ -51,4 +51,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="nameFavors">Favors</string>
     <string name="buttonBubble">Done</string>
+
+    <string name="emailNotif">Email notifications</string>
+    <string name="appNotif"> App notifications </string>
+    <string name="colorSetting">The main color of the app :  </string>
+    colorSetting
+
 </resources>

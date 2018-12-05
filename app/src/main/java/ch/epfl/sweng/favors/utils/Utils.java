@@ -3,7 +3,9 @@ package ch.epfl.sweng.favors.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +33,7 @@ import java.util.regex.Pattern;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
 
@@ -100,6 +104,7 @@ public final class Utils {
         auth.signOut();
         context.startActivity(intent);
         User.resetMain();
+        LocalPreferences.closeInstance();
     }
 
     public static String getYear(Date date) {
@@ -195,6 +200,23 @@ public final class Utils {
 
     public static String getIconNameFromCategory(String category){
         return category.toLowerCase().replaceAll("\\s","");
+    }
+
+    /**
+     * Create an Uri from an image bitmap
+     * found on https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri
+     * @param context the context of the fragment that call this method
+     * @param bitmap the bitmap to be converted in Uri
+     * @return Uri to the image bitmap, or null if the path cannot be resolved
+     */
+
+    public static Uri getImageUri(Context context, Bitmap bitmap){
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "favorpic", null);
+        if(path == null){
+            return null;
+        }
+        return Uri.parse(path);
     }
 
 

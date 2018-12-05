@@ -8,7 +8,7 @@
     <color name= "not_interested">#00C800</color>
     <color name="whiteSmoke">#e8e8e8</color>
     <color name= "white">#FFFFFF</color>
-
+    <color name="colorToolbar">@android:color/darker_gray</color>
     <color name="blueStart">#4EFFF3</color>
     <color name="blueEnd">#0ca6f9</color>
     <color name="purpleStart">#a369ff</color>

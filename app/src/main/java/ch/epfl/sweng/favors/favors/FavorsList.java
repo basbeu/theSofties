@@ -13,12 +13,18 @@ import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Spinner;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.databinding.FavorsListBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.location.SortLocations;
@@ -77,6 +83,9 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     Observable.OnPropertyChangedCallback locationSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
             Collections.sort((ObservableArrayList) sender, new SortLocations(LocationHandler.getHandler().locationPoint.get()));
             updateList((ObservableArrayList) sender);
         }
@@ -85,7 +94,11 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     Observable.OnPropertyChangedCallback otherSortingCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            updateList((ObservableArrayList) sender);
+            if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
+                return;
+            }
+             updateList((ObservableArrayList) sender);
+
         }
     };
 
@@ -95,22 +108,24 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Map<DatabaseField, Object> querryGreater = new HashMap<>();
+        querryGreater.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
         favorList.changeOnPropertyChangedCallback(otherSortingCb);
         switch (position) {
             case 0:
-                FavorRequest.all(favorList, null, null);
+                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
             case 1: //location
                 favorList.changeOnPropertyChangedCallback(locationSortingCb);
-                FavorRequest.all(favorList, null, null);
+                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
                 break;
             case 2: //recent
-                FavorRequest.all(favorList, null, Favor.ObjectFields.creationTimestamp);
+                FavorRequest.getList(favorList,null,null,querryGreater, null, Favor.ObjectFields.creationTimestamp);
                 break;
             case 3: //soon expiring
-                FavorRequest.all(favorList, null, Favor.ObjectFields.expirationTimestamp);
+                FavorRequest.getList(favorList,null,null,querryGreater,  null, Favor.ObjectFields.expirationTimestamp);
                 break;
             case 4: //category
-                FavorRequest.all(favorList, null, Favor.StringFields.category);
+                FavorRequest.getList(favorList,null,null,querryGreater,  null, Favor.StringFields.category);
                 break;
             default: break;
         }
@@ -128,11 +143,4 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
         binding.favorsList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }
-
-    Observable.OnPropertyChangedCallback listCallBack = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            updateList((ObservableArrayList<Favor>) sender);
-        }
-    };
 }

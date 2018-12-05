@@ -5,24 +5,19 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
@@ -126,7 +121,6 @@ public class FirebaseDatabase extends Database{
             }
 
             else if(task.getResult() instanceof QuerySnapshot){
-                if(list != null) list.clear();
                 ArrayList<T> temp = new ArrayList<>();
                 for (QueryDocumentSnapshot document : (QuerySnapshot) task.getResult()) {
                     try {
@@ -143,7 +137,7 @@ public class FirebaseDatabase extends Database{
                         Log.e(TAG, "Illegal access exception");
                     }
                 }
-                if(list != null) list.addAll(temp);
+                if(list != null) list.update(temp);
             }
 
         }

@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
@@ -45,9 +46,7 @@ public class SetUserInfoTest {
     @Before
     public void Before(){
         ExecutionMode.getInstance().setTest(true);
-        Intent intent = new Intent();
-        intent.putExtra(FavorsMain.TEST_MODE, "true");
-        activityActivityTestRule.launchActivity(intent);
+        activityActivityTestRule.launchActivity(null);
 
         onView(ViewMatchers.withId(R.id.userFirstNameEdit)).perform(scrollTo(),replaceText(FAKEFIRSTNAME)).perform(closeSoftKeyboard());
         onView(withId(R.id.userLastNameEdit)).perform(scrollTo(),replaceText(FAKELASTNAME)).perform(closeSoftKeyboard());
@@ -55,6 +54,8 @@ public class SetUserInfoTest {
         onView(withId(R.id.profGenderFEdit)).perform(scrollTo(),click());
         onView(withId(R.id.submit)).perform(scrollTo(),click());
         u = new User(Authentication.getInstance().getUid());
+
+        InternalSqliteDb.openDb(activityActivityTestRule.getActivity().getApplicationContext());
     }
 
     @Test
