@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.content.Intent;
 import android.databinding.Observable;
 
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ public class ChatRequest extends Request{
                 null, map, null, null );
     }
 
-    public static void chatContentWithId(ObservableArrayList<ChatMessage> list, String chatId, int limit){
+    public static void chatContentWithId(ObservableArrayList<ChatMessage> list, String chatId, Integer limit){
         db.getList(list, ChatMessage.class, COLLECTION_MESSAGES, ChatMessage.StringFields.conversationId, chatId, limit, ChatMessage.LongFields.messageDate);
     }
 
-    public static void chatContentWithUpdates(ObservableArrayList<ChatMessage> list, String chatId, int limit){
+    public static void chatContentWithUpdates(ObservableArrayList<ChatMessage> list, String chatId, Integer limit){
         db.getLiveList(list, ChatMessage.class, COLLECTION_MESSAGES, ChatMessage.StringFields.conversationId, chatId, limit, ChatMessage.LongFields.messageDate);
     }
 

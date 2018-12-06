@@ -3,6 +3,8 @@ package ch.epfl.sweng.favors.database;
 
 import android.databinding.Observable;
 import android.databinding.ObservableField;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class ChatMessage extends DatabaseEntity{
     public enum LongFields implements DatabaseLongField {messageDate}
     public enum ObjectFields implements DatabaseObjectField {}
     public enum BooleanFields implements DatabaseBooleanField {}
+
 
     public ObservableField<String> writerName = new ObservableField<>();
 

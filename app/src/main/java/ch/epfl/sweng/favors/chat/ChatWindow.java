@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.Collections;
 
@@ -34,7 +36,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
 
     public void setChatContent(ChatInformations informations){
         chatsInformations = informations;
-        ChatRequest.chatContentWithId(messages, informations.getId(), 100);
+        ChatRequest.chatContentWithUpdates(messages, informations.getId(), 20);
         messages.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -56,18 +58,13 @@ public class ChatWindow extends android.support.v4.app.Fragment {
         binding.setChatWindow(this);
         binding.sendButton.setEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setStackFromEnd(true);
+        //llm.setStackFromEnd(true);
+        llm.setReverseLayout(true);
         binding.chatConversationList.setLayoutManager(llm);
 
         messages.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
-                    return;
-                }
-                try { // To avoid a graphical bug
-                    Thread.sleep(300);
-                } catch (Exception e ){}
                 updateList((ObservableArrayList<ChatMessage>) sender);
             }
         });
@@ -81,7 +78,6 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 else binding.sendButton.setEnabled(true);
             }
         });
-        ChatRequest.chatContentWithUpdates(messages, chatsInformations.getId(), 100);
         binding.sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +86,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 chatsInformations.addMessageToConversation(value);
                 binding.sendButton.setEnabled(false);
                 binding.chatMessageText.setText("");
+                mustLoadMore = true;
             }
         });
 
@@ -110,9 +107,20 @@ public class ChatWindow extends android.support.v4.app.Fragment {
         return binding.getRoot();
     }
 
+    boolean mustLoadMore = true;
+
     private void updateList(ObservableArrayList<ChatMessage> list){
         if(this.getActivity() == null) return; // Callback
         ChatBubbleAdapter listAdapter = new ChatBubbleAdapter(this, list);
+        listAdapter.setOnTopReachedListener(new OnTopReachedListener() {
+            @Override
+            public void onTopReached() {
+                if(!mustLoadMore) return;
+                Toast.makeText(getContext(), "Older message loading", Toast.LENGTH_SHORT).show();
+                ChatRequest.chatContentWithId(messages, chatsInformations.getId(), null);
+                mustLoadMore = false;
+            }
+        });
         binding.chatConversationList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }

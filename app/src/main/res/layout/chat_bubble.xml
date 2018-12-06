@@ -5,7 +5,9 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="android.view.ViewGroup"/>
         <import type="android.view.Gravity"/>
+        <import type="android.widget.LinearLayout"/>
         <import type="android.view.ViewGroup.MarginLayoutParams"/>
         <import type="ch.epfl.sweng.favors.authentication.Authentication"/>
         <import type="ch.epfl.sweng.favors.database.ChatMessage"/>
@@ -20,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/marginView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"

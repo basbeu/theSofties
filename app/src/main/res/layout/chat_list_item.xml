@@ -13,7 +13,7 @@
             />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/chatListItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,49 +21,42 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:padding="10dp">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:padding="8dp"
+            >
 
             <ImageView
                 android:id="@+id/chatImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="5dp"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/chatTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{chatItem.getObservableObject(ChatInformations.StringFields.title).length() &lt; 3 ? chatItem.allParticipants : chatItem.getObservableObject(ChatInformations.StringFields.title) }"
-                    android:textColor="#000000"
-                    android:textSize="21dp" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="end">
                     <TextView
-                        android:id="@+id/participants"
+                        android:id="@+id/chatTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:hint="test"
-                        android:text="@{chatItem.getObservableObject(ChatInformations.StringFields.title).length() &lt; 3 ? `` : chatItem.allParticipants}"
+                        android:hint="Chat title"
+                        android:text="@{chatItem.getObservableObject(ChatInformations.StringFields.title).length() &lt; 3 ? chatItem.allParticipants : chatItem.getObservableObject(ChatInformations.StringFields.title) }"
                         android:textColor="#000000"
                         android:layout_weight="1"
-                        android:textSize="12dp"/>
+                        android:textSize="18dp" />
                     <TextView
                         android:id="@+id/lastMessageDate"
                         android:layout_width="wrap_content"
@@ -73,23 +66,45 @@
                         android:text="@{Utils.getFullDate(safeUnbox(chatItem.getObservableObject(ChatInformations.LongFields.lastMessageTime)))}"
                         android:textColor="#000000"
                         android:textSize="12dp"/>
-                    <Button
-                        android:layout_marginStart="10dp"
-                        android:id="@+id/deleteChat"
-                        android:layout_width="100dp"
-                        android:layout_height="35dp"
-                        android:text="Delete"
-                        android:textSize="12dp"/>
+
                 </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/participants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{chatItem.getObservableObject(ChatInformations.StringFields.title).length() &lt; 3 ? `` : chatItem.allParticipants}"
+                    android:textColor="#000000"
+                    android:textSize="12dp"/>
+
+
+
+
 
             </LinearLayout>
 
-
+            <Button
+                android:id="@+id/deleteChat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
+                android:background="@android:drawable/ic_menu_delete"
+                android:text="-"
+                android:textSize="12dp" />
 
         </LinearLayout>
 
+        <View
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/common_google_signin_btn_text_dark_disabled" />
 
-    </RelativeLayout>
+
+    </LinearLayout>
 
 
 

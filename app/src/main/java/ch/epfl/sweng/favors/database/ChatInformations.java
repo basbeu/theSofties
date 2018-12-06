@@ -8,6 +8,7 @@ import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.text.style.UpdateAppearance;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

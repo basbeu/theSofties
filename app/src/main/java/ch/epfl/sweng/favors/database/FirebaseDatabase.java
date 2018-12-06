@@ -150,7 +150,10 @@ public class FirebaseDatabase extends Database{
         if(orderBy != null){
             if(orderBy == Favor.ObjectFields.creationTimestamp){
                 query = query.orderBy(orderBy.toString(), Query.Direction.DESCENDING);
-            } else {
+            }
+            else if(orderBy == ChatMessage.LongFields.messageDate){
+                query = query.orderBy(orderBy.toString(), Query.Direction.DESCENDING);
+            }else {
                 query = query.orderBy(orderBy.toString());
             }
         }
@@ -210,9 +213,20 @@ public class FirebaseDatabase extends Database{
         if(element == null || value == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query = addParametersToQuery(query, limit, orderBy);
+        query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
 
 
+    }
 
+    protected <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                      String collection,
+                                                      DatabaseField element,
+                                                      Object value,
+                                                      Integer limit,
+                                                      DatabaseField orderBy){
+        if(element == null || value == null){return;}
+        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
+        query = addParametersToQuery(query, limit, orderBy);
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
@@ -237,19 +251,6 @@ public class FirebaseDatabase extends Database{
                 if(list != null) list.update(temp);
             }
         });
-
-    }
-
-    protected <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
-                                                      String collection,
-                                                      DatabaseField element,
-                                                      Object value,
-                                                      Integer limit,
-                                                      DatabaseField orderBy){
-        if(element == null || value == null){return;}
-        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
-        query = addParametersToQuery(query, limit, orderBy);
-        query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
 
     }
 
