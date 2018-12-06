@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <import type="ch.epfl.sweng.favors.database.ChatInformations"/>
         <variable
             name="chatWindow"
@@ -29,11 +30,23 @@
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/title"
-                    android:hint="New conversation"
+                    android:hint="No title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="@{chatWindow.isEditingTitle ? View.GONE : View.VISIBLE}"
                     android:text="@{chatWindow.chatsInformations.getObservableObject(ChatInformations.StringFields.title)}"
                     android:textSize="22dp"/>
+
+                <EditText
+                    android:id="@+id/editTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Title Here"
+                    android:visibility="@{chatWindow.isEditingTitle ? View.VISIBLE : View.GONE}"
+                    android:text="@{chatWindow.chatsInformations.getObservableObject(ChatInformations.StringFields.title)}"
+                    android:ems="15"
+                    android:inputType="textPersonName" />
+
                 <TextView
                     android:layout_marginStart="10dp"
                     android:id="@+id/editTitle"
@@ -41,6 +54,8 @@
                     android:layout_height="wrap_content"
                     android:text="edit"
                     android:textSize="10dp"/>
+
+
             </LinearLayout>
             <TextView
                 android:id="@+id/participants"

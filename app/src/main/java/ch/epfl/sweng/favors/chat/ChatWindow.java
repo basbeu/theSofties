@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.chat;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.os.Message;
@@ -18,6 +19,7 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.ChatInformations;
 import ch.epfl.sweng.favors.database.ChatMessage;
 import ch.epfl.sweng.favors.database.ChatRequest;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.ChatConversationBinding;
@@ -44,6 +46,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
         });
     }
 
+    public ObservableBoolean isEditingTitle = new ObservableBoolean(false);
 
     @Nullable
     @Override
@@ -87,6 +90,20 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 chatsInformations.addMessageToConversation(value);
                 binding.sendButton.setEnabled(false);
                 binding.chatMessageText.setText("");
+            }
+        });
+
+        binding.editTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isEditingTitle.get() == false) isEditingTitle.set(true);
+                else{
+                    if(binding.editTitleText.getText().toString().length() > 2){
+                        chatsInformations.set(ChatInformations.StringFields.title, binding.editTitleText.getText().toString());
+                        Database.getInstance().updateOnDb(chatsInformations);
+                    }
+                    isEditingTitle.set(false);
+                }
             }
         });
 
