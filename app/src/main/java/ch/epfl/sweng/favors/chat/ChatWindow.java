@@ -1,11 +1,14 @@
 package ch.epfl.sweng.favors.chat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -13,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.Collections;
 
@@ -123,6 +129,26 @@ public class ChatWindow extends android.support.v4.app.Fragment {
         });
         binding.chatConversationList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
+    }
+    public void deleteMessage(ChatMessage message){
+        AlertDialog alertDialog = new AlertDialog.Builder(this.getContext()).create();
+        alertDialog.setTitle("Message deletion !");
+        alertDialog.setMessage("Are you sure you want to delete the message ?");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        message.set(ChatMessage.StringFields.messageContent, "Message deleted");
+                        dialog.dismiss();
+
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 
 }

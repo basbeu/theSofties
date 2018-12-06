@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:id="@+id/messageView"
                 android:gravity="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  Gravity.END : Gravity.START}"
                 android:padding="10dp"
                 android:background="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  @values:color/convOwn : @values:color/convOthers}">

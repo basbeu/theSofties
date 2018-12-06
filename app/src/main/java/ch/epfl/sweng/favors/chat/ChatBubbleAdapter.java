@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.chat;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,15 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.Ch
             item.addOnPropertyChangedCallback(cb);
             cb.onPropertyChanged(null, 0);
             binding.setChatMessage(item);
+            binding.messageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(item.get(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid())){
+                        parent.deleteMessage(item);
+                    }
+                    return false;
+                }
+            });
         }
     }
 
