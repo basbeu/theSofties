@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.database;
 
 
 import android.databinding.Observable;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
@@ -26,12 +27,12 @@ public class ChatInformations extends DatabaseEntity{
 
     public enum StringFields implements DatabaseStringField {title}
     public enum LongFields implements DatabaseLongField {lastMessageTime, creationTime}
-    public enum ObjectFields implements DatabaseObjectField {participants}
+    public enum ObjectFields implements DatabaseObjectField {participants, messageRead}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public ObservableArrayList<User> participantsInfos = new ObservableArrayList<>();
     public ObservableField<String> allParticipants = new ObservableField<>();
-
+    public ObservableBoolean isRead = new ObservableBoolean();
 
     public void updateAllParticipantsNames(){
         String out = "";
@@ -90,6 +91,10 @@ public class ChatInformations extends DatabaseEntity{
         message.set(ChatMessage.LongFields.messageDate, new Date().getTime());
         message.set(ChatMessage.StringFields.writerId, Authentication.getInstance().getUid());
         message.set(ChatMessage.StringFields.messageContent, messageContent);
+
+        this.set(LongFields.lastMessageTime, new Date().getTime());
+        Database.getInstance().updateOnDb(this);
+
         Database.getInstance().updateOnDb(message);
         return true;
 
