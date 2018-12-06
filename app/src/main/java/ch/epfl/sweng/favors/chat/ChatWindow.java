@@ -51,7 +51,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.chat_conversation, container,false);
         binding.setChatWindow(this);
-        binding.sendButton.setEnabled(true);
+        binding.sendButton.setEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setStackFromEnd(true);
         binding.chatConversationList.setLayoutManager(llm);
@@ -78,7 +78,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 else binding.sendButton.setEnabled(true);
             }
         });
-        ChatRequest.chatContentWithUpdates(messages, chatsInformations.getId(), 10);
+        ChatRequest.chatContentWithUpdates(messages, chatsInformations.getId(), 100);
         binding.sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
