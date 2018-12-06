@@ -134,6 +134,10 @@ public final class Utils {
         return Integer.toString(day);
     }
 
+    public static String getFullDate(Long date) {
+        return getFullDate(new Date(date));
+    }
+
     public static String getFullDate(Date date) {
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         return df.format(date);

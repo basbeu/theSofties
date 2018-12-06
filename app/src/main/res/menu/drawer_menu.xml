@@ -10,6 +10,14 @@
             android:icon="@drawable/homelogo"
             android:title="Home"/>
         <item
+            android:id="@+id/notifications"
+            android:icon="@drawable/exclamation_mark"
+            android:title="@string/notifications"/>
+        <item
+            android:id="@+id/discussions"
+            android:icon="@drawable/cooking"
+            android:title="Chat"/>
+        <item
             android:id="@+id/myfavors"
             android:icon="@drawable/databaselogo"
             android:title="My favors"/>
@@ -22,10 +30,7 @@
             android:id="@+id/settings"
             android:icon="@drawable/settingslogo"
             android:title="@string/settings"/>
-        <item
-            android:id="@+id/notifications"
-            android:icon="@drawable/exclamation_mark"
-            android:title="@string/notifications"/>
+
     </group>
 
     <item

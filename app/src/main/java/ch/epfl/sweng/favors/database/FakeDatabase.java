@@ -80,9 +80,11 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
-        if(databaseEntity == null) return;
+    public Task deleteFromDatabase(DatabaseEntity databaseEntity) {
+        if(databaseEntity == null) return Tasks.forResult(false);
         database.remove(databaseEntity.documentID);
+
+        return Tasks.forResult(true);
     }
 
     @Override
@@ -126,6 +128,34 @@ public class FakeDatabase extends Database{
                                                        Object value,
                                                        Integer limit,
                                                        DatabaseField orderBy){
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            ArrayList<T> tempList = new ArrayList<>();
+            for(DatabaseEntity entity : database.values()) {
+                if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
+                    try {
+                        T temp = clazz.newInstance();
+                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                        tempList.add(temp);
+                    } catch (Exception e){
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                }
+            }
+            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
+
+        },500);
+    }
+
+    @Override
+    protected  <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                       String collection,
+                                                       DatabaseField key,
+                                                       Object value,
+                                                       Integer limit,
+                                                       DatabaseField orderBy){
+
+        // TODO
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
             ArrayList<T> tempList = new ArrayList<>();
@@ -191,6 +221,7 @@ public class FakeDatabase extends Database{
                                                         Map<DatabaseField, Object> mapEquals,
                                                         Map<DatabaseField, Object> mapLess,
                                                         Map<DatabaseField, Object> mapMore,
+                                                        Map<DatabaseField, Object> mapContains,
                                                         Integer limit,
                                                         DatabaseField orderBy){
         Log.d(TAG, clazz.getName());
