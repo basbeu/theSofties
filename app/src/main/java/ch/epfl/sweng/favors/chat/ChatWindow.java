@@ -138,6 +138,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         message.set(ChatMessage.StringFields.messageContent, "Message deleted");
+                        Database.getInstance().updateOnDb(message);
                         dialog.dismiss();
 
                     }
