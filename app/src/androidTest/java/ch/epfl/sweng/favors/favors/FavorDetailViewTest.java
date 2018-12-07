@@ -1,6 +1,9 @@
 package ch.epfl.sweng.favors.favors;
 
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.uiautomator.UiDevice;
 
@@ -88,10 +91,6 @@ public class FavorDetailViewTest {
     @Test
     public void imInterestedToastFailed(){
 
-        ExecutionMode.getInstance().setInvalidAuthTest(true);
-
-        mFragmentTestRule.launchActivity(null);
-
         Favor f1 = new Favor("F1");
 
         f1.set(Favor.StringFields.ownerID, "U3");
@@ -103,6 +102,10 @@ public class FavorDetailViewTest {
         f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
 
         Database.getInstance().updateOnDb(f1);
+
+
+        mFragmentTestRule.launchActivity(null);
+
 
         try {
             Thread.sleep(2000);

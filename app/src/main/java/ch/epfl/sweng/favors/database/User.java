@@ -30,13 +30,12 @@ public class User extends DatabaseEntity{
 
     public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, profilePicRef}
     public enum LongFields implements DatabaseLongField {creationTimeStamp, tokens}
-    public enum ObjectFields implements DatabaseObjectField {rights, location}
+    public enum ObjectFields implements DatabaseObjectField {rights, location, notifications}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public User(){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, null);
-
     }
 
     public User(String id){
@@ -44,7 +43,6 @@ public class User extends DatabaseEntity{
                 ObjectFields.values(), COLLECTION,id);
         if(db != null) db.updateFromDb(this);
     }
-
 
     @Override
     public DatabaseEntity copy() {
@@ -67,18 +65,6 @@ public class User extends DatabaseEntity{
             Database.getInstance().updateOnDb(user);
         }
     }
-
-//    /**
-//     * Sets the current city
-//     * @param city the city that will be stored in the database
-//     */
-//    static public void setCity(@Nonnull String city){
-//        Database.getInstance().updateFromDb(user);
-//        if (user != null) {
-//            user.set(StringFields.city, city);
-//            Database.getInstance().updateOnDb(user);
-//        }
-//    }
 
     public enum UserGender {
         M ,F, DEFAULT;
