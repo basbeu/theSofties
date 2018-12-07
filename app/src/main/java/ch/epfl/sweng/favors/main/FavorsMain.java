@@ -13,12 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.functions.FirebaseFunctions;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
-import ch.epfl.sweng.favors.favors.FavorListAdapter;
-import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 
 
@@ -41,6 +41,7 @@ public class FavorsMain extends AppCompatActivity {
     public static Context getContext(){
         return context;
     }
+    private FirebaseFunctions mFunctions;
 
     /**
      * This interface is the contract for receiving the results for permission requests.
@@ -86,6 +87,7 @@ public class FavorsMain extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Permissions.LOCATION_SERVICE.ordinal());
         }
 
+        mFunctions = FirebaseFunctions.getInstance();
     }
 
     public void loginView(AuthenticationProcess.Action action, View view){

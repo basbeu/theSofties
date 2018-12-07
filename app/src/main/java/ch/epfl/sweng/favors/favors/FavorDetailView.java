@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +48,7 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
 public class FavorDetailView extends android.support.v4.app.Fragment  {
     private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
 
+    private FirebaseFirestore mFirestore;
 
     public ObservableField<String> title;
     public ObservableField<String> description;
@@ -102,6 +105,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 //TODO add token cost binding with new database implementation
             });
         }
+
+        mFirestore = FirebaseFirestore.getInstance();
     }
 
     public void setFields(Favor favor) {
