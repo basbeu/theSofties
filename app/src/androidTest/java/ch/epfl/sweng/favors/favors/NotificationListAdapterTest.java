@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.favors.notifications.NotificationListAdapter;
+
 import static org.junit.Assert.assertEquals;
 
 public class NotificationListAdapterTest {

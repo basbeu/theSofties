@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.favors;
+package ch.epfl.sweng.favors.notifications;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.database.ObservableArrayList;
 
 public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.NotificationViewHolder>{
     private ArrayList<String> notificationList;

@@ -18,11 +18,12 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentNotificationsBinding;
+import ch.epfl.sweng.favors.notifications.NotificationListAdapter;
 
 /**
  * The fragment which displays the notification of the current user authenticated.
  */
-public class Notifications extends Fragment {
+public class NotificationsFragment extends Fragment {
     private static final String TAG = "NOTIFICATIONS_LIST";
 
     private FirebaseFirestore mFirestore;

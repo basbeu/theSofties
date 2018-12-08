@@ -12,7 +12,7 @@ import ch.epfl.sweng.favors.utils.FragmentTestRule;
 public class NotificationListTest {
 
     @Rule
-    public FragmentTestRule<Notifications> mFragmentTestRule = new FragmentTestRule<Notifications>(Notifications.class);
+    public FragmentTestRule<NotificationsFragment> mFragmentTestRule = new FragmentTestRule<NotificationsFragment>(NotificationsFragment.class);
 
 
     @Before
