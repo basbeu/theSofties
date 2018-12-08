@@ -43,7 +43,7 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class AuthentificationProcessTest {
+public class AuthenticationProcessTest {
 
     private UiDevice device;
 

@@ -12,7 +12,10 @@ exports.sendNotification = functions.firestore.document(`users/{user_id}/notific
 						const to_data = admin.firestore().collection("users").doc(user_id).get();
 
 						return Promise.all([to_data]).then(result => {
-							const token_id = result[0].token_id;
+							const token_id = result[0]._fieldsProto.token_id.stringValue;
+
+							console.log(result[0]._fieldsProto.token_id);
+							console.log("Sending to token_id: " + token_id);
 
 							if(token_id) {
 

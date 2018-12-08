@@ -24,7 +24,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 @RunWith(AndroidJUnit4.class)
-public class FirebaseAuthentificationTest {
+public class FirebaseAuthenticationTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
@@ -48,7 +48,6 @@ public class FirebaseAuthentificationTest {
         Mockito.when(this.firebaseAuth.signInWithEmailAndPassword("email", "password")).thenReturn(Tasks.forResult(this.fakeAuthResult));
         Mockito.when(this.firebaseAuth.getUid()).thenReturn("I WANT PIZZA");
         Mockito.when(this.firebaseAuth.getCurrentUser()).thenReturn(this.fakeUser);
-        Class firebaseAuthentification = FirebaseAuthentication.class;
         FirebaseAuthentication.setFirebase(this.firebaseAuth);
     }
 
