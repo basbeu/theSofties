@@ -180,6 +180,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.logout:
 
+                User.getMain().set(User.StringFields.token_id, "");
+
+                Database.getInstance().updateOnDb(User.getMain());
+
                 //TODO :CHange this
                 Map<String, Object> tokenMapRemove = new HashMap<>();
                 tokenMapRemove.put("token_id", "");
