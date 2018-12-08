@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,7 +57,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     private String storageRef;
     private ObservableField<String> profilePictureRef;
     private FirebaseStorageDispatcher storage = FirebaseStorageDispatcher.getInstance();
-    private FirebaseFirestore mFirestore;
     private OnSuccessListener deleteSuccess = new OnSuccessListener() {
         @Override
         public void onSuccess(Object o) {
@@ -85,8 +83,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             }
         });
         Database.getInstance().updateFromDb(User.getMain());
-
-        mFirestore = FirebaseFirestore.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
         binding.setElements(this);

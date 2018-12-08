@@ -17,7 +17,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -45,7 +44,6 @@ public class AuthenticationProcess extends Activity {
     public LogInRegisterViewBinding binding;
 
     private Authentication mAuth;
-    private FirebaseFirestore mFirestore;
 
     public Action action;
 
@@ -160,7 +158,6 @@ public class AuthenticationProcess extends Activity {
         Log.d("TestMode", ExecutionMode.getInstance().isTest() ? "true" : "false");
 
         mAuth = Authentication.getInstance();
-        mFirestore = FirebaseFirestore.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
         binding.setElements(this);
