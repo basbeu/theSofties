@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.main.LoggedInScreen;
@@ -124,18 +126,20 @@ public class AuthenticationProcess extends Activity {
                 Log.d(TAG, "signInWithEmail:success");
                 if (mAuth instanceof FirebaseAuthentication) {
 
-                        String tokenId = FirebaseInstanceId.getInstance().getToken();
-                        String currentId = mAuth.getUid();
+                        String tokenId = "1";
+
+                        if(!ExecutionMode.getInstance().isTest()) {
+                            tokenId = FirebaseInstanceId.getInstance().getToken();
+                        }
 
                         Map<String, Object> tokenMap = new HashMap<>();
                         tokenMap.put("token_id", tokenId);
 
-                        mFirestore.collection("users").document(currentId).update(tokenMap)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d(TAG, "logging in");
-                                    loggedinView(action);
-                                })
-                                .addOnFailureListener(e -> Log.e(TAG, "error in setting token id"));
+                        User.getMain().set(User.StringFields.token_id, tokenId);
+                        Database.getInstance().updateOnDb(User.getMain());
+
+                        Log.d(TAG, "logging in");
+                        loggedinView(action);
                 }
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
