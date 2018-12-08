@@ -51,7 +51,7 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    public void updateOnDb(DatabaseEntity databaseEntity) {
+    public Task updateOnDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID != null){
             database.put(databaseEntity.documentID, databaseEntity.copy());
         }
@@ -69,6 +69,7 @@ public class FakeDatabase extends Database{
             String generatedString = buffer.toString();
             database.put( generatedString, databaseEntity.copy());
         }
+        return Tasks.forResult(true);
 
     }
     @Override

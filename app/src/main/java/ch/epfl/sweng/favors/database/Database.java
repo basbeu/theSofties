@@ -20,7 +20,7 @@ public abstract class Database {
      * Method that update on the db a specified record
      * @param databaseEntity DatabaseEntity to update on the DB
      */
-    public abstract void updateOnDb(DatabaseEntity databaseEntity);
+    public abstract Task updateOnDb(DatabaseEntity databaseEntity);
 
     /**
      * Method that checkout the latest record for a DatabaseEntity

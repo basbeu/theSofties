@@ -48,11 +48,11 @@ public class FirebaseDatabase extends Database{
     }
 
     @Override
-    public void updateOnDb(DatabaseEntity databaseEntity){
+    public Task updateOnDb(DatabaseEntity databaseEntity){
         if(databaseEntity.documentID == null){
             // Do the same here if other types of datas
 
-            dbFireStore.collection(databaseEntity.collection).add(databaseEntity.getEncapsulatedObjectOfMaps())
+            return dbFireStore.collection(databaseEntity.collection).add(databaseEntity.getEncapsulatedObjectOfMaps())
                     .addOnSuccessListener(docRef -> {
                         databaseEntity.documentID = docRef.getId();
                         updateFromDb(databaseEntity);
@@ -61,7 +61,7 @@ public class FirebaseDatabase extends Database{
                 /* Feedback of an error here - Impossible to update user informations*/
             });
         }else {
-            dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).set(databaseEntity.getEncapsulatedObjectOfMaps())
+            return dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).set(databaseEntity.getEncapsulatedObjectOfMaps())
                     .addOnSuccessListener(aVoid -> updateFromDb(databaseEntity));
         }
         /* Feedback of an error here - Impossible to update user informations */
