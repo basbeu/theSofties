@@ -71,7 +71,7 @@ public class AuthentificationProcessTest {
         //login process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("bruce.wayne@waynecorp.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("tatata666")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
 
         //Check that we are login in the app
         //onView(withId(R.id.profileTitle)).check(matches(isDisplayed()));
@@ -89,7 +89,7 @@ public class AuthentificationProcessTest {
         //wrong login process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("thisisnotauser@mail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("hsh837dh3")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
 
         //Check that the login is failed
         assertEquals("Wrong email or password or email not verified\nPlease try again",activityActivityTestRule.getActivity().requirementsText.get());
@@ -107,7 +107,7 @@ public class AuthentificationProcessTest {
         //register process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("newuser@mail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("hhs883jj")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
         //Check that we load setUserInfo
 
     }
@@ -124,7 +124,7 @@ public class AuthentificationProcessTest {
         //register process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("notanewuser@mail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("jnd38jd9")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
         //Check that the register process failed
         assertEquals("Register failed, please try again",activityActivityTestRule.getActivity().requirementsText.get());
 
