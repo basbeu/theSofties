@@ -126,17 +126,12 @@ public class AuthenticationProcess extends Activity {
                 Log.d(TAG, "signInWithEmail:success");
                 if (mAuth instanceof FirebaseAuthentication) {
 
-                        String tokenId = "1";
 
-                        if(!ExecutionMode.getInstance().isTest()) {
-                            tokenId = FirebaseInstanceId.getInstance().getToken();
-                        }
 
-                        Map<String, Object> tokenMap = new HashMap<>();
-                        tokenMap.put("token_id", tokenId);
+                        /*Map<String, Object> tokenMap = new HashMap<>();
+                        tokenMap.put("token_id", tokenId);*/
 
-                        User.getMain().set(User.StringFields.token_id, tokenId);
-                        Database.getInstance().updateOnDb(User.getMain());
+
 
                         Log.d(TAG, "logging in");
                         loggedinView(action);
@@ -242,9 +237,25 @@ public class AuthenticationProcess extends Activity {
     private void loggedinView(Action action){
         if(mAuth.isEmailVerified()) {
             User.updateMain();
-            Intent intent = new Intent(this, LoggedInScreen.class);
-            startActivity(intent);
-            finish();
+
+            Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(
+                    (t)->{
+                        String tokenId = "1";
+
+                        if(!ExecutionMode.getInstance().isTest()) {
+                            tokenId = FirebaseInstanceId.getInstance().getToken();
+                        }
+
+                        User.getMain().set(User.StringFields.token_id, tokenId);
+                        Database.getInstance().updateOnDb(User.getMain()).addOnCompleteListener((s)->{
+                            Intent intent = new Intent(this, LoggedInScreen.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                    }
+            );
+
+
         } else {
             Intent intent = new Intent(this, AuthenticationProcess.class);
             startActivity(intent);

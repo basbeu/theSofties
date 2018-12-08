@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -84,7 +85,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             }
         });
         Database.getInstance().updateFromDb(User.getMain());
-        
+
         mFirestore = FirebaseFirestore.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
@@ -116,10 +117,10 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
-       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
+        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                    storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
+                storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
             });
 
         });
@@ -181,11 +182,16 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             case R.id.logout:
 
                 User.getMain().set(User.StringFields.token_id, "");
-
-                Database.getInstance().updateOnDb(User.getMain());
+                Context context = this;
+                Database.getInstance().updateOnDb(User.getMain()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Utils.logout(context, Authentication.getInstance());
+                    }
+                }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
 
                 //TODO :CHange this
-                Map<String, Object> tokenMapRemove = new HashMap<>();
+               /* Map<String, Object> tokenMapRemove = new HashMap<>();
                 tokenMapRemove.put("token_id", "");
                 Context context = this;
                 mFirestore.collection("users").document(User.getMain().getId()).update(tokenMapRemove)
@@ -194,7 +200,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                         public void onSuccess(Void aVoid) {
                             Utils.logout(context, Authentication.getInstance());
                         }
-                    }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
+                    }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));*/
                 break;
         }
 
