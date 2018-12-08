@@ -73,7 +73,6 @@ public class Home extends android.support.v4.app.Fragment  {
         return binding.getRoot();
     }
 
-
     private void updateList(ObservableArrayList<Favor> list){
         listAdapter = new FavorListAdapter(this.getActivity(), (ObservableArrayList)list);
         binding.favorsList.setAdapter(listAdapter);
@@ -83,10 +82,6 @@ public class Home extends android.support.v4.app.Fragment  {
     static String[] modes = {"Discover favors in your area...", "Recent favors..."};
     int currentMode = 0;
     public ObservableField<String> lastFavorsTitle = new ObservableField<>();
-
-
-
-
 
     void setView(){
         Map<DatabaseField, Object> querryGreater = new HashMap<>();

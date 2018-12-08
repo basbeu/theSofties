@@ -19,6 +19,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FirebaseDatabase;
+import ch.epfl.sweng.favors.favors.Notifications;
 import ch.epfl.sweng.favors.main.FavorsMain;
 
 public class PushNotifications extends FirebaseMessagingService {
@@ -30,12 +31,25 @@ public class PushNotifications extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO: Handle FCM messages here.
-        // If the application is in the foreground handle both data and notification messages here.
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated.
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        super.onMessageReceived(remoteMessage);
+        String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(title)
+                .setContentText(body);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
+
+
+        int mNotificationId = (int)System.currentTimeMillis();
+
+        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
     }
 
 

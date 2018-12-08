@@ -4,41 +4,31 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-exports.sendNotification = functions.database.ref('/notifications/messages/{pushId}')
-    .onWrite(event => {
-        const message = event.data.current.val();
-        const senderUid = message.from;
-        const receiverUid = message.to;
-        const promises = [];
+exports.sendNotification = functions.firestore.document(`users/{user_id}/notifications/{notification_id}`)
+					.onCreate((snap, context) => {
+						const user_id = context.params.user_id;
+						const notification_id = context.params.notification_id;
 
-        if (senderUid == receiverUid) {
-            //if sender is receiver, don't send notification
-            promises.push(event.data.current.ref.remove());
-            return Promise.all(promises);
-        }
+						const to_data = admin.firestore().collection("users").doc(user_id).get();
 
-        const getInstanceIdPromise = admin.database().ref(`/users/${receiverUid}/instanceId`).once('value');
-        const getReceiverUidPromise = admin.auth().getUser(receiverUid);
+						return Promise.all([to_data]).then(result => {
+							const token_id = result[0].token_id;
 
-        return Promise.all([getInstanceIdPromise, getReceiverUidPromise]).then(results => {
-            const instanceId = results[0].val();
-            const receiver = results[1];
-            console.log('notifying ' + receiverUid + ' about ' + message.body + ' from ' + senderUid);
+							if(token_id) {
 
-            const payload = {
-                notification: {
-                    title: receiver.displayName,
-                    body: message.body,
-                    icon: receiver.photoURL
-                }
-            };
+								const payload = {
+									notification: {
+										title: "New Notification",
+										body: snap.data().message,
+										icon: "default"
+									}
+								};
 
-            admin.messaging().sendToDevice(instanceId, payload)
-                .then(function (response) {
-                    console.log("Successfully sent message:", response);
-                })
-                .catch(function (error) {
-                    console.log("Error sending message:", error);
-                });
-        });
-    });
+								return admin.messaging().sendToDevice(token_id, payload).then(result => {
+									console.log("Notification sent.");
+								});
+							} else {
+								return console.log('No token_id for user_id: ' + user_id);
+							}
+						});
+					});

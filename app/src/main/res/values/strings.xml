@@ -30,6 +30,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_profile">Edit profile</string>
 
+    <!-- PUSH NOTIFICATIONS -->
+    <string name="default_notification_channel_id">CH_01</string>
 
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>

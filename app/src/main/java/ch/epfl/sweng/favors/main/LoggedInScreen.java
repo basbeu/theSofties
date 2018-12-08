@@ -1,6 +1,6 @@
 package ch.epfl.sweng.favors.main;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -16,13 +16,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,6 +57,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
     private String storageRef;
     private ObservableField<String> profilePictureRef;
     private FirebaseStorageDispatcher storage = FirebaseStorageDispatcher.getInstance();
+    private FirebaseFirestore mFirestore;
     private OnSuccessListener deleteSuccess = new OnSuccessListener() {
         @Override
         public void onSuccess(Object o) {
@@ -85,6 +84,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             }
         });
         Database.getInstance().updateFromDb(User.getMain());
+        
+        mFirestore = FirebaseFirestore.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logged_in__screen);
         binding.setElements(this);
@@ -102,9 +103,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE);
         });
 
-
-
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout,
                 binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -118,7 +116,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
-       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
+       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
         headerBinding.deleteProfilePicture.setOnClickListener(v -> {
             Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
                     storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
@@ -126,8 +124,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         });
     }
-
-    
 
     @Override
     public void onBackPressed() {
@@ -137,7 +133,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         else{
             super.onBackPressed();
         }
-
     }
 
     /**
@@ -184,7 +179,16 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
-                Utils.logout(this, Authentication.getInstance());
+                Map<String, Object> tokenMapRemove = new HashMap<>();
+                tokenMapRemove.put("token_id", "");
+                Context context = this;
+                mFirestore.collection("users").document(User.getMain().getId()).update(tokenMapRemove)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Utils.logout(context, Authentication.getInstance());
+                        }
+                    }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
                 break;
         }
 

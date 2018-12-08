@@ -24,7 +24,6 @@ import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
 public class SetUserInfo extends AppCompatActivity {
 
-
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
 
     private User user = new User(Authentication.getInstance().getUid());

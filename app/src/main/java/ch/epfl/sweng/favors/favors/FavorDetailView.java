@@ -9,6 +9,7 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,19 +143,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     Boolean buttonEnabled = true;
 
-    Observable.OnPropertyChangedCallback notificationCB = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            if(propertyId == DatabaseEntity.UpdateType.FROM_REQUEST.ordinal()) {
-                String fn = ((User) sender).get(User.StringFields.firstName);
-                String ln = ((User) sender).get(User.StringFields.lastName);
-                String key = fn + " " + ln;
-                userNames.put(key,((User) sender));
-                sender.removeOnPropertyChangedCallback(this);
-            }
-        }
-    };
-
     Observable.OnPropertyChangedCallback userInfosCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
@@ -209,25 +197,20 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     "We will inform the poster of the add that you are interested to help!",
                             "Sorry an error occurred, try again later...");
 
-                    User owner = new User();
+                    //User owner = new User();
                     String ownerId = localFavor.get(Favor.StringFields.ownerID);
-                    UserRequest.getWithId(owner, ownerId);
 
-                    owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-                        @Override
-                        public void onPropertyChanged(Observable sender, int propertyId) {
-                            if(propertyId == User.UpdateType.FROM_DB.ordinal()){
-
-                                String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
-                                ArrayList<String> notificationList = (ArrayList<String>)((User)sender).get(User.ObjectFields.notifications);
-                                notificationList.add(notification);
-                                owner.set(User.ObjectFields.notifications, notificationList);
-                                Database.getInstance().updateOnDb(owner);
-
-                                sender.removeOnPropertyChangedCallback(this);
-                            }
-                        }
-                    });
+                    Map<String, Object> notification = new HashMap<>();
+                    String notificationMsg = new Notification(NotificationType.INTEREST, localFavor).toString();
+                    notification.put("message", notificationMsg);
+                    mFirestore.collection("users/" + ownerId + "/notifications")
+                            .add(notification)
+                            .addOnSuccessListener(documentReference ->
+                                    Log.d(TAG, "Notification sent")
+                            )
+                            .addOnFailureListener(e ->
+                                    Log.e(TAG, "Could not sent the notification")
+                            );
                 }
 
                 if (localFavor != null) {
