@@ -28,6 +28,7 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.NotificationEntity;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
@@ -200,9 +201,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     //User owner = new User();
                     String ownerId = localFavor.get(Favor.StringFields.ownerID);
 
-                    Map<String, Object> notification = new HashMap<>();
+                    //Map<String, Object> notification = new HashMap<>();
                     String notificationMsg = new Notification(NotificationType.INTEREST, localFavor).toString();
-                    notification.put("message", notificationMsg);
+                    /*notification.put("message", notificationMsg);
+
                     mFirestore.collection("users/" + ownerId + "/notifications")
                             .add(notification)
                             .addOnSuccessListener(documentReference ->
@@ -210,7 +212,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             )
                             .addOnFailureListener(e ->
                                     Log.e(TAG, "Could not sent the notification")
-                            );
+                            );*/
+                    NotificationEntity notificationEntity = new NotificationEntity(ownerId);
+                    notificationEntity.set(NotificationEntity.StringFields.message,notificationMsg);
+                    Database.getInstance().updateOnDb(notificationEntity);
                 }
 
                 if (localFavor != null) {

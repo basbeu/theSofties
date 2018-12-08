@@ -179,6 +179,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
+
+                //TODO :CHange this
                 Map<String, Object> tokenMapRemove = new HashMap<>();
                 tokenMapRemove.put("token_id", "");
                 Context context = this;

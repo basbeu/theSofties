@@ -47,6 +47,7 @@ public class NotificationsFragment extends Fragment {
         mFirestore = FirebaseFirestore.getInstance();
         String currUserId = User.getMain().getId();
 
+        //TODO : Change
         mFirestore.collection("users").document(currUserId).collection("notifications")
                 .addSnapshotListener(getActivity(), (queryDocumentSnapshots, e) -> {
                     for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
