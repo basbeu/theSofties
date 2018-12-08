@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors.favors;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,8 @@ import ch.epfl.sweng.favors.databinding.FragmentNotificationsBinding;
 public class Notifications extends Fragment {
     private static final String TAG = "NOTIFICATIONS_LIST";
 
+    private FirebaseFirestore mFirestore;
+
     FragmentNotificationsBinding binding;
     ArrayList<String> notificationsList = new ObservableArrayList<>();
     NotificationListAdapter listAdapter;
@@ -33,20 +37,26 @@ public class Notifications extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications,container,false);
         binding.setElements(this);
 
+        notificationsList = new ArrayList<>();
+        listAdapter = new NotificationListAdapter(notificationsList);
+
         binding.notificationsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.notificationsList.setAdapter(listAdapter);
 
-        User.updateMain();
-        User owner = User.getMain();
+        mFirestore = FirebaseFirestore.getInstance();
+        String currUserId = User.getMain().getId();
 
-        owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                notificationsList = (ArrayList<String>) (User.getMain().get(User.ObjectFields.notifications));
-                listAdapter = new NotificationListAdapter(notificationsList);
-                binding.notificationsList.setAdapter(listAdapter);
-                listAdapter.notifyDataSetChanged();
-            }
-        });
+        mFirestore.collection("users").document(currUserId).collection("notifications")
+                .addSnapshotListener(getActivity(), (queryDocumentSnapshots, e) -> {
+                    for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
+
+                        String notificationMsg = doc.getDocument().getData().get("message").toString();
+                        notificationsList.add(notificationMsg);
+
+                        listAdapter.notifyDataSetChanged();
+                    }
+                });
+
 
         return binding.getRoot();
     }

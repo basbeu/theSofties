@@ -61,7 +61,7 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(false);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Login);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Login);
 
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a login title
@@ -82,7 +82,7 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Login);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Login);
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a login title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
@@ -100,7 +100,7 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(false);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Register);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Register);
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a register title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
@@ -117,7 +117,7 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Register);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Register);
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a register title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));

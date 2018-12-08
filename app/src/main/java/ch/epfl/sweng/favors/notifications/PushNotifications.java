@@ -41,7 +41,7 @@ public class PushNotifications extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(body);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
 
 
         int mNotificationId = (int)System.currentTimeMillis();

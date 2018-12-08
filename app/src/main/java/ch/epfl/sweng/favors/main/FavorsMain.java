@@ -90,7 +90,7 @@ public class FavorsMain extends AppCompatActivity {
 
     public void loginView(AuthenticationProcess.Action action, View view){
         Intent intent = new Intent(view.getContext(), AuthenticationProcess.class);
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, action);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, action);
         startActivity(intent);
         finish();
     }
