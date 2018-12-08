@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.NotificationEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentNotificationsBinding;
@@ -48,7 +50,7 @@ public class NotificationsFragment extends Fragment {
         String currUserId = User.getMain().getId();
 
         //TODO : Change
-        mFirestore.collection("users").document(currUserId).collection("notifications")
+        /*mFirestore.collection("users").document(currUserId).collection("notifications")
                 .addSnapshotListener(getActivity(), (queryDocumentSnapshots, e) -> {
                     for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
 
@@ -57,7 +59,17 @@ public class NotificationsFragment extends Fragment {
 
                         listAdapter.notifyDataSetChanged();
                     }
-                });
+                });*/
+
+        Database.getInstance().addSnapshotListener(getActivity(), NotificationEntity.getCollection(currUserId),(queryDocumentSnapshots, e) -> {
+            for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
+
+                String notificationMsg = doc.getDocument().getData().get("message").toString();
+                notificationsList.add(notificationMsg);
+
+                listAdapter.notifyDataSetChanged();
+            }
+        });
 
         return binding.getRoot();
     }

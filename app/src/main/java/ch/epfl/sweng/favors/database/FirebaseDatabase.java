@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,7 +10,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -87,6 +90,11 @@ public class FirebaseDatabase extends Database{
     public void deleteFromDatabase(DatabaseEntity databaseEntity) {
         if(databaseEntity == null) return;
         dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).delete();
+    }
+
+    @Override
+    public ListenerRegistration addSnapshotListener(Activity activity,String collection, EventListener<QuerySnapshot> listener) {
+        return dbFireStore.collection(collection).addSnapshotListener(activity,listener);
     }
 
     class ListRequestFb<T extends DatabaseEntity> implements OnCompleteListener{

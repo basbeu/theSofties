@@ -1,6 +1,12 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
+
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
@@ -30,6 +36,8 @@ public abstract class Database {
     public abstract Task updateFromDb(DatabaseEntity databaseEntity);
 
     public abstract void deleteFromDatabase(DatabaseEntity databaseEntity);
+
+    public abstract ListenerRegistration addSnapshotListener(Activity activity, String collection,EventListener<QuerySnapshot> listener);
 
     /**
      *

@@ -6,7 +6,6 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public class NotificationEntity extends DatabaseEntity{
-
     private static final String TAG = "DB_NOTIFICATION";
 
     public enum StringFields implements DatabaseStringField {message}
@@ -20,7 +19,7 @@ public class NotificationEntity extends DatabaseEntity{
     }
 
     public NotificationEntity(String id,String userId){
-        super(StringFields.values(), LongFields.values(), BooleanFields.values(), ObjectFields.values(), "users/" + userId + "/notifications", id);
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(), ObjectFields.values(), getCollection(userId), id);
 
         if(db != null)
             db.updateFromDb(this);
@@ -30,5 +29,9 @@ public class NotificationEntity extends DatabaseEntity{
     @Override
     public DatabaseEntity copy() {
         return null;
+    }
+
+    public static String getCollection(String userId){
+        return "users/" + userId + "/notifications";
     }
 }

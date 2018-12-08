@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -8,7 +9,10 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,6 +88,16 @@ public class FakeDatabase extends Database{
     public void deleteFromDatabase(DatabaseEntity databaseEntity) {
         if(databaseEntity == null) return;
         database.remove(databaseEntity.documentID);
+    }
+
+    @Override
+    public ListenerRegistration addSnapshotListener(Activity activity, String collection, EventListener<QuerySnapshot> listener) {
+        return new ListenerRegistration() {
+            @Override
+            public void remove() {
+
+            }
+        };
     }
 
     @Override
