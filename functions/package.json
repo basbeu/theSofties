@@ -10,8 +10,10 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
+    "chai": "^4.2.0",
     "firebase-admin": "~6.0.0",
-    "firebase-functions": "^2.1.0"
+    "firebase-functions": "^2.1.0",
+    "sinon": "^7.1.1"
   },
   "private": true,
   "devDependencies": {

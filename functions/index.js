@@ -8,7 +8,7 @@ exports.sendNotification = functions.firestore.document(`users/{user_id}/notific
 					.onCreate((snap, context) => {
 						const user_id = context.params.user_id;
 						const notification_id = context.params.notification_id;
-
+						console.log(user_id)
 						const to_data = admin.firestore().collection("users").doc(user_id).get();
 
 						return Promise.all([to_data]).then(result => {
@@ -17,6 +17,7 @@ exports.sendNotification = functions.firestore.document(`users/{user_id}/notific
 							console.log(result[0]._fieldsProto.token_id);
 							console.log("Sending to token_id: " + token_id);
 
+							console.log(JSON.stringify(snap, null, 2));
 							if(token_id) {
 
 								const payload = {
@@ -28,7 +29,7 @@ exports.sendNotification = functions.firestore.document(`users/{user_id}/notific
 								};
 
 								return admin.messaging().sendToDevice(token_id, payload).then(result => {
-									console.log("Notification sent.");
+									return console.log("Notification sent.");
 								});
 							} else {
 								return console.log('No token_id for user_id: ' + user_id);
