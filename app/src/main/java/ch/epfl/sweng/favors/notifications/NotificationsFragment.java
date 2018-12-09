@@ -49,18 +49,6 @@ public class NotificationsFragment extends Fragment {
         mFirestore = FirebaseFirestore.getInstance();
         String currUserId = User.getMain().getId();
 
-        //TODO : Change
-        /*mFirestore.collection("users").document(currUserId).collection("notifications")
-                .addSnapshotListener(getActivity(), (queryDocumentSnapshots, e) -> {
-                    for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
-
-                        String notificationMsg = doc.getDocument().getData().get("message").toString();
-                        notificationsList.add(notificationMsg);
-
-                        listAdapter.notifyDataSetChanged();
-                    }
-                });*/
-
         Database.getInstance().addSnapshotListener(getActivity(), NotificationEntity.getCollection(currUserId),(queryDocumentSnapshots, e) -> {
             for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
 
