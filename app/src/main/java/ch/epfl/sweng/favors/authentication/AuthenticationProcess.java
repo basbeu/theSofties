@@ -123,14 +123,6 @@ public class AuthenticationProcess extends Activity {
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
                 if (mAuth instanceof FirebaseAuthentication) {
-
-
-
-                        /*Map<String, Object> tokenMap = new HashMap<>();
-                        tokenMap.put("token_id", tokenId);*/
-
-
-
                         Log.d(TAG, "logging in");
                         loggedinView(action);
                 }
