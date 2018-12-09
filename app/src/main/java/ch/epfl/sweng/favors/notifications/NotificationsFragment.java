@@ -28,8 +28,6 @@ import ch.epfl.sweng.favors.notifications.NotificationListAdapter;
 public class NotificationsFragment extends Fragment {
     private static final String TAG = "NOTIFICATIONS_LIST";
 
-    private FirebaseFirestore mFirestore;
-
     FragmentNotificationsBinding binding;
     ArrayList<String> notificationsList = new ObservableArrayList<>();
     NotificationListAdapter listAdapter;
@@ -46,7 +44,6 @@ public class NotificationsFragment extends Fragment {
         binding.notificationsList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.notificationsList.setAdapter(listAdapter);
 
-        mFirestore = FirebaseFirestore.getInstance();
         String currUserId = User.getMain().getId();
 
         Database.getInstance().addSnapshotListener(getActivity(), NotificationEntity.getCollection(currUserId),(queryDocumentSnapshots, e) -> {
