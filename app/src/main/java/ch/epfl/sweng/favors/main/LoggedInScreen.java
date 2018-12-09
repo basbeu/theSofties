@@ -185,18 +185,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                         Utils.logout(context, Authentication.getInstance());
                     }
                 }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
-
-                //TODO :CHange this
-               /* Map<String, Object> tokenMapRemove = new HashMap<>();
-                tokenMapRemove.put("token_id", "");
-                Context context = this;
-                mFirestore.collection("users").document(User.getMain().getId()).update(tokenMapRemove)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Utils.logout(context, Authentication.getInstance());
-                        }
-                    }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));*/
                 break;
         }
 
