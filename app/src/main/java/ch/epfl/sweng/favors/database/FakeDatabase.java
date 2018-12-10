@@ -90,7 +90,7 @@ public class FakeDatabase extends Database{
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
-            if(databaseEntity == null || database.get(databaseEntity.documentID) == null) return;
+            if(database.get(databaseEntity.documentID) == null) return;
             databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
         },500);
 
