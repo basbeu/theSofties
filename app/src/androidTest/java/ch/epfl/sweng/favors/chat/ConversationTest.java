@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.main;
+package ch.epfl.sweng.favors.chat;
 
 
 import android.support.test.espresso.ViewInteraction;
@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.main.SplashScreenActivity;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
