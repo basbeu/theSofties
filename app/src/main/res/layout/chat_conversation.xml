@@ -39,9 +39,10 @@
 
                 <EditText
                     android:id="@+id/editTitleText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Title Here"
+                    android:hint="Enter Title"
+                    android:layout_weight="1"
                     android:visibility="@{chatWindow.isEditingTitle ? View.VISIBLE : View.GONE}"
                     android:text="@{chatWindow.chatsInformations.getObservableObject(ChatInformations.StringFields.title)}"
                     android:ems="15"

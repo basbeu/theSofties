@@ -11,6 +11,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -34,6 +35,17 @@ public class FakeDatabase extends Database{
     private static final String TAG = "FAKE_DB";
 
     final HandlerThread handlerThread = new HandlerThread("background-thread");
+
+    ArrayList<Listener> listeners = new ArrayList<>();
+
+    abstract class Listener{
+        abstract void notifyChange();
+    }
+    private void notifyDatabaseModification(){
+        for(Listener ln: listeners){
+            ln.notifyChange();
+        }
+    }
 
     private FakeDatabase(){
         database = new HashMap<>();
@@ -69,12 +81,18 @@ public class FakeDatabase extends Database{
             String generatedString = buffer.toString();
             database.put( generatedString, databaseEntity.copy());
         }
-
+        notifyDatabaseModification();
     }
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID == null || !database.containsKey(databaseEntity.documentID)){return Tasks.forCanceled();}
         databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
+
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            if(databaseEntity == null || database.get(databaseEntity.documentID) == null) return;
+            databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
+        },500);
 
         return Tasks.forResult(true);
     }
@@ -155,23 +173,28 @@ public class FakeDatabase extends Database{
                                                        Integer limit,
                                                        DatabaseField orderBy){
 
-        // TODO
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
-            ArrayList<T> tempList = new ArrayList<>();
-            for(DatabaseEntity entity : database.values()) {
-                if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
-                    try {
-                        T temp = clazz.newInstance();
-                        temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                        tempList.add(temp);
-                    } catch (Exception e){
-                        Log.e(TAG, "Illegal access exception");
+            listeners.add(new Listener() {
+                @Override
+                void notifyChange() {
+                    ArrayList<T> tempList = new ArrayList<>();
+                    for(DatabaseEntity entity : database.values()) {
+                        if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
+                            try {
+                                T temp = clazz.newInstance();
+                                temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                                tempList.add(temp);
+                            } catch (Exception e){
+                                Log.e(TAG, "Illegal access exception");
+                            }
+                        }
                     }
+                    if(key == ChatMessage.StringFields.conversationId) Collections.reverse(tempList);
+                    new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
                 }
-            }
-            new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
-
+            });
+            notifyDatabaseModification();
         },500);
     }
 
@@ -624,6 +647,70 @@ public class FakeDatabase extends Database{
         i5.set(Interest.StringFields.title, "Shopping");
         i5.set(Interest.StringFields.description, "Yet another great airline");
 
+        ChatInformations c1 = new ChatInformations("C1");
+        ChatInformations c2 = new ChatInformations("C2");
+
+        ArrayList<String> participants1 = new ArrayList<>();
+        participants1.add(u0.getId());
+        participants1.add(u1.getId());
+        participants1.add(u2.getId());
+        c1.set(ChatInformations.ObjectFields.participants, participants1);
+        c1.set(ChatInformations.LongFields.creationTime, System.currentTimeMillis() - 20000000);
+        c1.set(ChatInformations.LongFields.lastMessageTime,  System.currentTimeMillis() - 2000000);
+        c1.set(ChatInformations.StringFields.title,  "Conversation test");
+
+
+        ArrayList<String> participants2 = new ArrayList<>();
+        participants2.add(u0.getId());
+        participants2.add(u3.getId());
+        c2.set(ChatInformations.ObjectFields.participants, participants2);
+        c2.set(ChatInformations.LongFields.creationTime, System.currentTimeMillis() - 10000000);
+        c2.set(ChatInformations.LongFields.lastMessageTime,  System.currentTimeMillis() - 1000000);
+
+
+
+        ChatMessage m0 = new ChatMessage("M0");
+        ChatMessage m1 = new ChatMessage("M1");
+        ChatMessage m2 = new ChatMessage("M2");
+
+        m0.set(ChatMessage.StringFields.conversationId, "C1");
+        m1.set(ChatMessage.StringFields.conversationId, "C1");
+        m2.set(ChatMessage.StringFields.conversationId, "C1");
+
+        m0.set(ChatMessage.StringFields.messageContent, "Hey");
+        m1.set(ChatMessage.StringFields.messageContent, "Salut, tu vas bien ?");
+        m2.set(ChatMessage.StringFields.messageContent, "Bien et toi ?");
+
+        m0.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
+        m1.set(ChatMessage.StringFields.writerId, "U1");
+        m2.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
+
+        m0.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 8600000);
+        m1.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 5000000);
+        m2.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 2000000);
+
+
+        ChatMessage m3 = new ChatMessage("M3");
+        ChatMessage m4 = new ChatMessage("M4");
+        ChatMessage m5 = new ChatMessage("M5");
+
+        m3.set(ChatMessage.StringFields.conversationId, "C2");
+        m4.set(ChatMessage.StringFields.conversationId, "C2");
+        m5.set(ChatMessage.StringFields.conversationId, "C2");
+
+        m3.set(ChatMessage.StringFields.messageContent, "T'es en vacances ?");
+        m4.set(ChatMessage.StringFields.messageContent, "Pas encore");
+        m5.set(ChatMessage.StringFields.messageContent, "Moi non plus");
+
+        m3.set(ChatMessage.StringFields.writerId, "U3");
+        m4.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
+        m5.set(ChatMessage.StringFields.writerId, "U3");
+
+        m3.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 8600000);
+        m4.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 5000000);
+        m5.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 1000000);
+
+
         getInstance().updateOnDb(i1);
         getInstance().updateOnDb(i2);
         getInstance().updateOnDb(i3);
@@ -646,6 +733,16 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(f8);
         getInstance().updateOnDb(f9);
         getInstance().updateOnDb(f10);
+
+        getInstance().updateOnDb(c1);
+        getInstance().updateOnDb(c2);
+
+        getInstance().updateOnDb(m0);
+        getInstance().updateOnDb(m1);
+        getInstance().updateOnDb(m2);
+        getInstance().updateOnDb(m3);
+        getInstance().updateOnDb(m4);
+        getInstance().updateOnDb(m5);
     }
 
     /**
