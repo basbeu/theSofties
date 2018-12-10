@@ -437,18 +437,6 @@ public class ConversationTest {
 
         pressBack();
 
-        pressBack();
-
-        ViewInteraction recyclerView4 = onView(
-                allOf(withId(R.id.favorsList),
-                        childAtPosition(
-                                withClassName(is("android.support.v4.widget.NestedScrollView")),
-                                0)));
-        recyclerView4.perform(actionOnItemAtPosition(1, click()));
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
