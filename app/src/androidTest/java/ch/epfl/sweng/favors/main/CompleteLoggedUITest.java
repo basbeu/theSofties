@@ -142,7 +142,6 @@ public class CompleteLoggedUITest {
         // Click the "More favors button to get the lists"
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.button), withText("More favors")));
-        appCompatButton2.perform(scrollTo());
         appCompatButton2.perform(click());
 
 
