@@ -167,7 +167,7 @@ public class ConversationTest {
 
         ViewInteraction appCompatButton55 = onView(
                 allOf(withId(android.R.id.button3), withText("No")));
-        appCompatButton55.perform(scrollTo(), click());
+        appCompatButton55.perform(click());
 
         try {
             Thread.sleep(300);
@@ -179,7 +179,7 @@ public class ConversationTest {
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(android.R.id.button1), withText("Yes")));
-        appCompatButton.perform(scrollTo(), click());
+        appCompatButton.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -298,7 +298,7 @@ public class ConversationTest {
 
         ViewInteraction appCompatButton44 = onView(
                 allOf(withId(android.R.id.button3), withText("Cancel")));
-        appCompatButton44.perform(scrollTo(), click());
+        appCompatButton44.perform(click());
 
         try {
             Thread.sleep(300);
@@ -311,7 +311,7 @@ public class ConversationTest {
 
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(android.R.id.button1), withText("OK")));
-        appCompatButton4.perform(scrollTo(), click());
+        appCompatButton4.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:

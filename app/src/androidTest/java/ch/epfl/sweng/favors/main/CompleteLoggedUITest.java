@@ -144,17 +144,6 @@ public class CompleteLoggedUITest {
             e.printStackTrace();
         }
 
-
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.title), withText("Most recent favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
-
-        textView5.check(matches(withText("Most recent favor")));
-
         ViewInteraction textView6 = onView(
                 allOf(withId(R.id.title), withText("Expiring soon favor"),
                         childAtPosition(
