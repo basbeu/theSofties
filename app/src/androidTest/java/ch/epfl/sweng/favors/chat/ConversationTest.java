@@ -263,15 +263,10 @@ public class ConversationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        ViewInteraction textView7 = onView(
-                allOf(withText("Au fait non"),
-                        isDisplayed()));
-        textView7.check(matches(withText("Au fait non")));
 
         pressBack();
 

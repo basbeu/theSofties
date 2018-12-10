@@ -265,12 +265,7 @@ public class CompleteLoggedUITest {
             e.printStackTrace();
         }
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.title), withText("Most recent favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
+                allOf(withId(R.id.title), withText("Most recent favor")));
 
         textView5.check(matches(withText("Most recent favor")));
         appCompatSpinner3.perform(scrollTo(), click());
@@ -386,12 +381,7 @@ public class CompleteLoggedUITest {
          */
 
         ViewInteraction textView10 = onView(
-                allOf(withId(R.id.favTitle), withText("Most recent favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                0)));
+                allOf(withId(R.id.favTitle), withText("Most recent favor")));
         textView10.perform(scrollTo());
         textView10.check(matches(withText("Most recent favor")));
 
@@ -475,12 +465,7 @@ public class CompleteLoggedUITest {
         }
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.titleFavor), withText("Most recent favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                2)));
+                allOf(withId(R.id.titleFavor), withText("Most recent favor")));
         appCompatEditText.perform(scrollTo(), replaceText("Renamed favor"));
 
         ViewInteraction appCompatEditText2 = onView(

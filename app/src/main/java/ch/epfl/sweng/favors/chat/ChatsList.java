@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.databinding.ObservableBoolean;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,7 +39,8 @@ public class ChatsList extends android.support.v4.app.Fragment {
 
     ChatsListBinding binding;
     ObservableArrayList<ChatInformations> chatsInformations = new ObservableArrayList<>();
-
+    public ObservableBoolean isHomeScreen = new ObservableBoolean(false);
+    public ObservableBoolean isUnreadMessages = new ObservableBoolean(false);
     @Nullable
     @Override
 
@@ -52,8 +54,19 @@ public class ChatsList extends android.support.v4.app.Fragment {
         chatsInformations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
-                    return;
+                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()) return;
+                if(isHomeScreen.get()){
+                    ArrayList<ChatInformations> toRemove = new ArrayList<>();
+                    for(ChatInformations message : (ObservableArrayList<ChatInformations>) sender){
+                        ArrayList<String> opened = (ArrayList<String>) message.get(ChatInformations.ObjectFields.opened);
+                        if(opened != null && opened.contains(Authentication.getInstance().getUid())){
+                            toRemove.add(message);
+                        }
+                    }
+                    ((ObservableArrayList<ChatInformations>) sender).removeAll(toRemove);
+                    if(((ObservableArrayList<ChatInformations>) sender).size() > 0) isUnreadMessages.set(true);
+                    else isUnreadMessages.set(false);
+
                 }
                 updateList((ObservableArrayList<ChatInformations>) sender);
 

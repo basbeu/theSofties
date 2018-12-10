@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View"/>
         <variable
             name="chatsList"
             type="ch.epfl.sweng.favors.chat.ChatsList"/>
@@ -15,7 +16,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/new_chat"
+                android:visibility="@{chatsList.isHomeScreen ? View.GONE : View.VISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="22dp"
