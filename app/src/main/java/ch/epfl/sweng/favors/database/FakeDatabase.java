@@ -95,7 +95,7 @@ public class FakeDatabase extends Database{
                 databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
             });
 
-        },60);
+        },20);
 
         return Tasks.forResult(true);
     }

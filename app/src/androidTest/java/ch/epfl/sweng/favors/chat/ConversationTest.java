@@ -280,12 +280,6 @@ public class ConversationTest {
 
         ViewInteraction textView7 = onView(
                 allOf(withText("Au fait non"),
-                        childAtPosition(
-                                allOf(withId(R.id.messageView),
-                                        childAtPosition(
-                                                withId(R.id.marginView),
-                                                0)),
-                                1),
                         isDisplayed()));
         textView7.check(matches(withText("Au fait non")));
 
