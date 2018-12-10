@@ -201,7 +201,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             if(propertyId == User.UpdateType.FROM_DB.ordinal()){
                                 interestedPeople.add(User.getMain().getId());
                                 isInterested.set(true);
-                                sendMessage(localFavor.get(Favor.StringFields.ownerID), "I'm interested in your favor : " + localFavor.get(Favor.StringFields.title));
                                 if(owner.get(User.BooleanFields.emailNotifications)) {
                                     EmailUtils.sendEmail(
                                             new Email(Authentication.getInstance().getEmail(),
