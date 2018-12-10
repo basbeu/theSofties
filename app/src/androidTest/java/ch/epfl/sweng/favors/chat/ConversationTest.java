@@ -166,12 +166,7 @@ public class ConversationTest {
         textView5.perform(longClick());
 
         ViewInteraction appCompatButton55 = onView(
-                allOf(withId(android.R.id.button3), withText("No"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                0)));
+                allOf(withId(android.R.id.button3), withText("No")));
         appCompatButton55.perform(scrollTo(), click());
 
         try {
@@ -183,12 +178,7 @@ public class ConversationTest {
         textView5.perform(longClick());
 
         ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button1), withText("Yes"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("Yes")));
         appCompatButton.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
@@ -307,12 +297,7 @@ public class ConversationTest {
         appCompatButton3.perform(click());
 
         ViewInteraction appCompatButton44 = onView(
-                allOf(withId(android.R.id.button3), withText("Cancel"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                0)));
+                allOf(withId(android.R.id.button3), withText("Cancel")));
         appCompatButton44.perform(scrollTo(), click());
 
         try {
@@ -325,12 +310,7 @@ public class ConversationTest {
 
 
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("OK")));
         appCompatButton4.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
