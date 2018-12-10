@@ -7,6 +7,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -79,7 +80,7 @@ public class CompleteLoggedUITest {
                 allOf(withId(R.id.welcomeTitle), withText("Welcome back Fake!"),
                         childAtPosition(
                                 childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        IsInstanceOf.<View>instanceOf(NestedScrollView.class),
                                         0),
                                 0),
                         isDisplayed()));
@@ -125,18 +126,15 @@ public class CompleteLoggedUITest {
                                         1),
                                 1),
                         isDisplayed()));
-        appCompatButton.perform(click());
 
         try {
             Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        appCompatButton.perform(click());
 
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("Expiring soon favor")));
-        textView6.perform(scrollTo());
-        textView6.check(matches(withText("Expiring soon favor")));
+
 
 
         // Click the "More favors button to get the lists"
