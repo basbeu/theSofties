@@ -421,7 +421,7 @@ public class ConversationTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -469,13 +469,7 @@ public class ConversationTest {
         }
 
         ViewInteraction appCompatButton6 = onView(
-                allOf(withId(R.id.button), withText("More favors"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.fragment_container),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.button), withText("More favors")));
         appCompatButton6.perform(click());
 
         // Added a sleep statement to match the app's execution delay.

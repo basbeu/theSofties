@@ -109,13 +109,8 @@ public class CompleteLoggedUITest {
 
         // Check if the "More favors" button is here
         ViewInteraction button2 = onView(
-                allOf(withId(R.id.button), withText("More favors"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.fragment_container),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.button), withText("More favors")));
+        button2.perform(scrollTo());
         button2.check(matches(isDisplayed()));
 
         ViewInteraction textView8 = onView(
@@ -157,13 +152,8 @@ public class CompleteLoggedUITest {
 
         // Click the "More favors button to get the lists"
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.button), withText("More favors"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.fragment_container),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.button), withText("More favors")));
+        appCompatButton2.perform(scrollTo());
         appCompatButton2.perform(click());
 
 
