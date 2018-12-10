@@ -976,7 +976,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         withId(R.id.nav_view),
                                         0)),
-                        3),
+                        5),
                         isDisplayed()));
         navigationMenuItemView2.perform(click());
 
@@ -1144,7 +1144,7 @@ public class CompleteLoggedUITest {
                                 childAtPosition(
                                         withId(R.id.nav_view),
                                         0)),
-                        2),
+                        4),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 

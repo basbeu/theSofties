@@ -5,10 +5,14 @@ import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.style.UpdateAppearance;
 import android.util.Log;
 import android.view.ViewGroup;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -28,12 +32,11 @@ public class ChatInformations extends DatabaseEntity{
 
     public enum StringFields implements DatabaseStringField {title}
     public enum LongFields implements DatabaseLongField {lastMessageTime, creationTime}
-    public enum ObjectFields implements DatabaseObjectField {participants, messageRead}
+    public enum ObjectFields implements DatabaseObjectField {participants, opened}
     public enum BooleanFields implements DatabaseBooleanField {}
 
     public ObservableArrayList<User> participantsInfos = new ObservableArrayList<>();
     public ObservableField<String> allParticipants = new ObservableField<>();
-    public ObservableBoolean isRead = new ObservableBoolean();
 
     public void updateAllParticipantsNames(){
         String out = "";
@@ -84,6 +87,30 @@ public class ChatInformations extends DatabaseEntity{
         });
     }
 
+    public void markAsRead(){
+        Database.getInstance().updateFromDb(this).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                ArrayList<String> temp = (ArrayList<String>) ChatInformations.this.get(ObjectFields.opened);
+                if(temp == null) temp = new ArrayList<>();
+                if(!temp.contains(Authentication.getInstance().getUid())){
+                    temp.add(Authentication.getInstance().getUid());
+                    ChatInformations.this.set(ObjectFields.opened, temp);
+                    Database.getInstance().updateOnDb(ChatInformations.this);
+                }
+            }
+        });
+    }
+
+    public boolean isRead(){
+        ArrayList<String> temp = (ArrayList<String>) ChatInformations.this.get(ObjectFields.opened);
+        if(temp != null && temp.contains(Authentication.getInstance().getUid())){
+            return true;
+        }
+        return false;
+    }
+
+
     public boolean addMessageToConversation(String messageContent){
         if(this.getId() == null) return false;
 
@@ -93,6 +120,10 @@ public class ChatInformations extends DatabaseEntity{
         message.set(ChatMessage.StringFields.writerId, Authentication.getInstance().getUid());
         message.set(ChatMessage.StringFields.messageContent, messageContent);
 
+        ArrayList<String> temp = new ArrayList<>();
+        temp.add(Authentication.getInstance().getUid());
+
+        this.set(ObjectFields.opened, temp);
         this.set(LongFields.lastMessageTime, new Date().getTime());
         Database.getInstance().updateOnDb(this);
 

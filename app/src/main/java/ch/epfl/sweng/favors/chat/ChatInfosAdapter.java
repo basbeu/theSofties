@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.chat;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,8 @@ public class ChatInfosAdapter extends RecyclerView.Adapter<ChatInfosAdapter.Chat
 
         public void bind(ChatInformations item) {
             binding.setChatItem(item);
+            if(!item.isRead())
+                binding.chatTitle.setTypeface(null, Typeface.BOLD);;
             binding.deleteChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

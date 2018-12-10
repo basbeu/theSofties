@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.Collections;
@@ -127,6 +128,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 mustLoadMore = false;
             }
         });
+        chatsInformations.markAsRead();
         binding.chatConversationList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
     }

@@ -45,12 +45,7 @@ public class ChatsList extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.chats_list,container,false);
         binding.setChatsList(this);
-        binding.newChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+       
         binding.chatsListItems.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ChatRequest.allChatsOf(chatsInformations, Authentication.getInstance().getUid());
