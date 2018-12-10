@@ -107,12 +107,6 @@ public class CompleteLoggedUITest {
                         isDisplayed()));
         button.check(matches(isDisplayed()));
 
-        // Check if the "More favors" button is here
-        ViewInteraction button2 = onView(
-                allOf(withId(R.id.button), withText("More favors")));
-        button2.perform(scrollTo());
-        button2.check(matches(isDisplayed()));
-
         ViewInteraction textView8 = onView(
                 allOf(withId(R.id.title), withText("Closest favor"),
                         childAtPosition(
@@ -140,13 +134,8 @@ public class CompleteLoggedUITest {
         }
 
         ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("Expiring soon favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
-
+                allOf(withId(R.id.title), withText("Expiring soon favor")));
+        textView6.perform(scrollTo());
         textView6.check(matches(withText("Expiring soon favor")));
 
 
