@@ -374,12 +374,10 @@ public class ConversationTest {
             e.printStackTrace();
         }
 
-        ViewInteraction recyclerView3 = onView(
-                allOf(withId(R.id.favorsList),
-                        childAtPosition(
-                                withClassName(is("android.support.v4.widget.NestedScrollView")),
-                                0)));
-        recyclerView3.perform(actionOnItemAtPosition(0, click()));
+        ViewInteraction textView8 = onView(
+                allOf(withId(R.id.title), withText("Closest favor")));
+        textView8.perform(click());
+
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -481,12 +479,9 @@ public class ConversationTest {
             e.printStackTrace();
         }
 
-        ViewInteraction recyclerView5 = onView(
-                allOf(withId(R.id.favorsList),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
-        recyclerView5.perform(actionOnItemAtPosition(2, click()));
+        ViewInteraction textView85 = onView(
+                allOf(withId(R.id.title), withText("My dog is sick")));
+        textView85.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
