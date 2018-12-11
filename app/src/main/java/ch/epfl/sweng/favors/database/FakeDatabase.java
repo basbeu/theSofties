@@ -80,11 +80,11 @@ public class FakeDatabase extends Database{
                 buffer.append((char) randomLimitedInt);
             }
             String generatedString = buffer.toString();
-            databaseEntity.documentID = generatedString;
             database.put( generatedString, databaseEntity.copy());
+            databaseEntity.documentID = generatedString;
+            databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
         }
         notifyDatabaseModification();
-        updateFromDb(databaseEntity);
 
     }
     @Override
