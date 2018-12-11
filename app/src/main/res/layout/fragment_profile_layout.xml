@@ -147,7 +147,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/check_image"
-                android:visibility="@{elements.isPasswordCorrect ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="@id/passwordEntry"
                 app:layout_constraintStart_toEndOf="@+id/passwordEntry"
                 app:layout_constraintTop_toTopOf="@id/passwordEntry"

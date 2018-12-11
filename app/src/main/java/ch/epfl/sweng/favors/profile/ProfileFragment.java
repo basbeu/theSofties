@@ -40,6 +40,8 @@ public class ProfileFragment extends Fragment {
     public ObservableField<String> requirementsText = new ObservableField<>();
     public AuthenticationProcess.Action action;
 
+    FragmentProfileLayoutBinding binding;
+
     /**
      * sets the boolean to whether password is correct or not
      */
@@ -57,7 +59,6 @@ public class ProfileFragment extends Fragment {
             isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordEntry.getText().toString()));
         }
     };
-    FragmentProfileLayoutBinding binding;
 
     @Nullable
     @Override
