@@ -13,6 +13,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -79,9 +80,12 @@ public class FakeDatabase extends Database{
                 buffer.append((char) randomLimitedInt);
             }
             String generatedString = buffer.toString();
+            databaseEntity.documentID = generatedString;
             database.put( generatedString, databaseEntity.copy());
         }
         notifyDatabaseModification();
+        updateFromDb(databaseEntity);
+
     }
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
@@ -236,6 +240,11 @@ public class FakeDatabase extends Database{
                 if(type == CheckType.Greater) return out > 0;
                 if(type == CheckType.Less) return out < 0;
             }
+            if(temp instanceof ArrayList) {
+                if(!(entry.getValue() instanceof String)) return false;
+                if(((ArrayList<String>) temp).contains((String) entry.getValue())) return true;
+                return false;
+            }
         }
         Log.d(TAG, "Performing a not implemented comparison in fake database");
         return false;
@@ -264,6 +273,7 @@ public class FakeDatabase extends Database{
                 toAdd = processMap(mapEquals, entity, toAdd, CheckType.Equal);
                 toAdd = processMap(mapLess, entity, toAdd, CheckType.Less);
                 toAdd = processMap(mapMore, entity, toAdd,  CheckType.Greater);
+                toAdd = processMap(mapContains, entity, toAdd,  CheckType.Equal);
                 if(toAdd) {
                     addToList(clazz, tempList, entity);
                 }

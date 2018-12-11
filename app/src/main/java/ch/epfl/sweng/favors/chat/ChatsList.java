@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,11 +142,14 @@ public class ChatsList extends android.support.v4.app.Fragment {
         chatInformations.set(ChatInformations.ObjectFields.participants, participants);
 
         if(title != null && title.length() > 2 ) chatInformations.set(ChatInformations.StringFields.title, title);
+        Log.d(TAG, "TESTTTTTT");
         chatInformations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+                Log.d(TAG, "HJGDHASGHJKD");
                 if(propertyId != DatabaseEntity.UpdateType.FROM_DB.ordinal()) return ;
                 ChatsList.open(chatInformations, fm);
+                Log.d(TAG, "E");
                 chatInformations.removeOnPropertyChangedCallback(this);
             }
         });
