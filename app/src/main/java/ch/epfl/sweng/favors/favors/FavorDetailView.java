@@ -298,7 +298,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             toUpdate.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
-                    if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                    if(propertyId == User.UpdateType.FROM_DB.ordinal() && toUpdate.get(User.BooleanFields.emailNotifications)){
                         EmailUtils.sendEmail(
                                 new Email(localFavor.get(Favor.StringFields.ownerEmail), ((User) sender).get(User.StringFields.email), "You have been paid for the favor " + title.get() + "!", "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it."), getActivity(),"Users have been successfully paid.","");
                         sender.removeOnPropertyChangedCallback(this);
