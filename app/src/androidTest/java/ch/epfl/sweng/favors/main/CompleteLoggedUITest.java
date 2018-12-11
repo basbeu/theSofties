@@ -236,7 +236,7 @@ public class CompleteLoggedUITest {
         textView15.perform(click());
 
         try {
-            Thread.sleep(600);
+            Thread.sleep(800);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -262,6 +262,27 @@ public class CompleteLoggedUITest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        appCompatSpinner3.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        textView15 = onView(
+                allOf(withText("recent")));
+        textView15.perform(scrollTo());
+        textView15.check(matches(withText("recent")));
+        textView15.perform(click());
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
