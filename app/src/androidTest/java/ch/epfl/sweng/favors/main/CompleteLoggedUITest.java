@@ -332,7 +332,25 @@ public class CompleteLoggedUITest {
 
         listSortingTests();
 
-        ViewInteraction recyclerView2 = onView(allOf(withChild(allOf(withId(R.id.title), withText("Most recent favor")))));
+        pressBack();
+
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(R.id.button), withText("More favors")));
+        appCompatButton2.perform(click());
+
+        try {
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction recyclerView2 = onView(allOf(withId(R.id.title), withText("Most recent favor")));
         recyclerView2.perform(click());
 
         try {
