@@ -142,14 +142,11 @@ public class ChatsList extends android.support.v4.app.Fragment {
         chatInformations.set(ChatInformations.ObjectFields.participants, participants);
 
         if(title != null && title.length() > 2 ) chatInformations.set(ChatInformations.StringFields.title, title);
-        Log.d(TAG, "TESTTTTTT");
         chatInformations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                Log.d(TAG, "HJGDHASGHJKD");
                 if(propertyId != DatabaseEntity.UpdateType.FROM_DB.ordinal()) return ;
                 ChatsList.open(chatInformations, fm);
-                Log.d(TAG, "E");
                 chatInformations.removeOnPropertyChangedCallback(this);
             }
         });

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -470,8 +471,8 @@ public class FakeDatabase extends Database{
 
         f1.set(Favor.StringFields.locationCity, "London, UK");
         f1.set(Favor.ObjectFields.location, new GeoPoint(51.509865, -0.118092));
-        f1.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(13), 0));
-        f1.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(1), 0));
+        f1.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(13), 0));
+        f1.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(1), 0));
 
         f1.set(Favor.ObjectFields.interested, interestedPeople1);
         f1.set(Favor.LongFields.nbPerson, 1L);
@@ -491,8 +492,8 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.locationCity, "Strasbourg, FR");
         f2.set(Favor.ObjectFields.location, new GeoPoint(48.58392, 7.74553));
         f2.set(Favor.ObjectFields.interested, interestedPeople2);
-        f2.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(11), 0));
-        f2.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(11), 0));
+        f2.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(11), 0));
+        f2.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(11), 0));
 
         f2.set(Favor.LongFields.nbPerson, 2L);
         f2.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -511,8 +512,8 @@ public class FakeDatabase extends Database{
         f3.set(Favor.StringFields.locationCity, "Paris, FR");
         f3.set(Favor.ObjectFields.location, new GeoPoint(48.864716, 2.349014));
         f3.set(Favor.ObjectFields.interested, interestedPeople3);
-        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(9), 0));
-        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(9), 0));
+        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(9), 0));
+        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(9), 0));
 
 
         f3.set(Favor.LongFields.nbPerson, 2L);
@@ -533,8 +534,8 @@ public class FakeDatabase extends Database{
         f4.set(Favor.StringFields.locationCity, "Vienna, AT");
         f4.set(Favor.ObjectFields.location, new GeoPoint(48.210033, 16.363449));
         f4.set(Favor.ObjectFields.interested, interestedPeople4);
-        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(8), 0));
-        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(8), 0));
+        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(8), 0));
+        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(8), 0));
 
         f4.set(Favor.LongFields.nbPerson, 1L);
         f4.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -549,8 +550,8 @@ public class FakeDatabase extends Database{
 
         f5.set(Favor.StringFields.locationCity, "Stockholm, SE");
         f5.set(Favor.ObjectFields.location, new GeoPoint(59.334591, 18.063240));
-        f5.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(7), 0));
-        f5.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(7), 0));
+        f5.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(7), 0));
+        f5.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(7), 0));
 
         f5.set(Favor.LongFields.nbPerson, 1L);
         f5.set(Favor.LongFields.tokenPerPerson, 2L);
@@ -564,8 +565,8 @@ public class FakeDatabase extends Database{
 
         f6.set(Favor.StringFields.locationCity, "Hong Kong");
         f6.set(Favor.ObjectFields.location, new GeoPoint(22.286394, 114.149139));
-        f6.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(6), 0));
-        f6.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(6), 0));
+        f6.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(6), 0));
+        f6.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(6), 0));
 
 
         f6.set(Favor.LongFields.nbPerson, 1L);
@@ -580,8 +581,8 @@ public class FakeDatabase extends Database{
 
         f7.set(Favor.StringFields.locationCity, "Lausanne, CH");
         f7.set(Favor.ObjectFields.location, new GeoPoint(46.516, 6.63282));
-        f7.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(5), 0));
-        f7.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(5), 0));
+        f7.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(5), 0));
+        f7.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(5), 0));
 
 
         f7.set(Favor.LongFields.nbPerson, 2L);
@@ -596,8 +597,8 @@ public class FakeDatabase extends Database{
 
         f8.set(Favor.StringFields.locationCity, "Los Angeles, US");
         f8.set(Favor.ObjectFields.location, new GeoPoint(34.05223, -118.24368));
-        f8.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(4), 0));
-        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
+        f8.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(4), 0));
+        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(2), 0));
 
 
         f8.set(Favor.LongFields.nbPerson, 1L);
@@ -612,8 +613,8 @@ public class FakeDatabase extends Database{
 
         f9.set(Favor.StringFields.locationCity, "Zurich, CH");
         f9.set(Favor.ObjectFields.location, new GeoPoint(47.36667, 8.55));
-        f9.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(3), 0));
-        f9.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(3), 0));
+        f9.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(3), 0));
+        f9.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(3), 0));
 
         f9.set(Favor.LongFields.nbPerson, 1L);
         f9.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -632,8 +633,8 @@ public class FakeDatabase extends Database{
         f10.set(Favor.StringFields.locationCity, "Basel, CH");
         f10.set(Favor.ObjectFields.location, new GeoPoint(47.559601, 7.588576));
         f10.set(Favor.ObjectFields.interested, interestedPeople6);
-        f10.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
-        f10.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(2), 0));
+        f10.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(2), 0));
+        f10.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(2), 0));
 
         f10.set(Favor.LongFields.nbPerson, 3L);
         f10.set(Favor.LongFields.tokenPerPerson, 2L);
@@ -668,8 +669,8 @@ public class FakeDatabase extends Database{
         participants1.add(u1.getId());
         participants1.add(u2.getId());
         c1.set(ChatInformations.ObjectFields.participants, participants1);
-        c1.set(ChatInformations.LongFields.creationTime, System.currentTimeMillis() - 20000000);
-        c1.set(ChatInformations.LongFields.lastMessageTime,  System.currentTimeMillis() - 2000000);
+        c1.set(ChatInformations.LongFields.creationTime, new Date().getTime() - 20000000);
+        c1.set(ChatInformations.LongFields.lastMessageTime,  new Date().getTime() - 2000000);
         c1.set(ChatInformations.StringFields.title,  "Conversation test");
 
 
@@ -677,8 +678,8 @@ public class FakeDatabase extends Database{
         participants2.add(u0.getId());
         participants2.add(u3.getId());
         c2.set(ChatInformations.ObjectFields.participants, participants2);
-        c2.set(ChatInformations.LongFields.creationTime, System.currentTimeMillis() - 10000000);
-        c2.set(ChatInformations.LongFields.lastMessageTime,  System.currentTimeMillis() - 1000000);
+        c2.set(ChatInformations.LongFields.creationTime, new Date().getTime() - 10000000);
+        c2.set(ChatInformations.LongFields.lastMessageTime,  new Date().getTime() - 1000000);
 
 
 
@@ -698,9 +699,9 @@ public class FakeDatabase extends Database{
         m1.set(ChatMessage.StringFields.writerId, "U1");
         m2.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
 
-        m0.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 8600000);
-        m1.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 5000000);
-        m2.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 2000000);
+        m0.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 8600000);
+        m1.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 5000000);
+        m2.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 2000000);
 
 
         ChatMessage m3 = new ChatMessage("M3");
@@ -719,9 +720,9 @@ public class FakeDatabase extends Database{
         m4.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
         m5.set(ChatMessage.StringFields.writerId, "U3");
 
-        m3.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 8600000);
-        m4.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 5000000);
-        m5.set(ChatMessage.LongFields.messageDate, System.currentTimeMillis() - 1000000);
+        m3.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 8600000);
+        m4.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 5000000);
+        m5.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 1000000);
 
 
         getInstance().updateOnDb(i1);

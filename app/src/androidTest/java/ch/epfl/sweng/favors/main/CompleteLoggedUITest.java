@@ -240,10 +240,10 @@ public class CompleteLoggedUITest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ViewInteraction textView5 = onView(
+        /*ViewInteraction textView5 = onView(
                 allOf(withId(R.id.title), withText("Most recent favor")));
 
-        textView5.check(matches(withText("Most recent favor")));
+        textView5.check(matches(withText("Most recent favor")));*/
         appCompatSpinner3.perform(scrollTo(), click());
 
         try {
