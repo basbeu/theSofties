@@ -23,6 +23,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(AndroidJUnit4.class)
 public class FirebaseAuthenticationTest {
     @Rule
@@ -88,12 +90,17 @@ public class FirebaseAuthenticationTest {
 
     @Test
     public void getEmailReturns() {
-        FirebaseAuthentication.getInstance().getEmail();
+        assertEquals("email", FirebaseAuthentication.getInstance().getEmail());
     }
 
     @Test
     public void deleteReturns() {
         FirebaseAuthentication.getInstance().delete();
+    }
+
+    @Test
+    public void getCurrentUserTest(){
+        assertEquals(this.fakeUser, FirebaseAuthentication.getInstance().getCurrentUser());
     }
 
     @After
