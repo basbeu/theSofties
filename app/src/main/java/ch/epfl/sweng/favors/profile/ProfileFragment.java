@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
         binding.delete.setOnClickListener((v)-> {
             //toast if account has been correctly deleted or not
             Utils.logout(this.getContext(), Authentication.getInstance());
-            
+            Authentication.getInstance().delete();
 
         });
 
