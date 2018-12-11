@@ -101,11 +101,6 @@ public class FavorsMain extends AppCompatActivity {
         finish();
     }
 
-//    private void favorListView(){
-//        Intent intent = new Intent(this, FavorsFragment.class);
-//        startActivity(intent);
-//        finish();
-//    }
 
     @Override
     public void onBackPressed() {

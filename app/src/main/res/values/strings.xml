@@ -17,6 +17,8 @@
     <string name="favorPosterDetailViewTitle">Who is the poster?</string>
     <string name="gotit">Got it !</string>
     <string name="deleteButton">Delete account</string>
+    <string name="passwordConfirmation">Please enter your password to confirm the deletion</string>
+    <string name="confirmDeletion">Confirm</string>
 
 
     <string name="next">Next</string>

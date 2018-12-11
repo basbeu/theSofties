@@ -119,20 +119,50 @@
             android:id="@+id/reauthenticateMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/last_name"
-            android:textAlignment="center"
             android:layout_marginTop="@dimen/profile_fragment_database_object_size"
-            android:textSize="18sp"
-            tools:text="Please enter your password to confirm the deletion" />
+            android:text="@string/passwordConfirmation"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/passwordEntry"
+                android:layout_width="288dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.38"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
-        <EditText
-            android:id="@+id/passwordEntry"
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/checkPasswordImage"
+                android:layout_width="29dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/check_image"
+                android:visibility="@{elements.isPasswordCorrect ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@id/passwordEntry"
+                app:layout_constraintStart_toEndOf="@+id/passwordEntry"
+                app:layout_constraintTop_toTopOf="@id/passwordEntry"
+                tools:layout_editor_absoluteY="106dp" />
+        </LinearLayout>
+
+
+
+
+        <Button
+            android:id="@+id/confirmDeletion"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/profil_fragment_bottom_padding"
-            android:singleLine="true"
-            android:text="@{elements.firstName}"
-            android:textSize="@dimen/profile_fragment_database_content_size" />
+            android:layout_gravity="center"
+            android:text="@string/confirmDeletion" />
 
     </LinearLayout>
 
