@@ -362,28 +362,7 @@ public class CompleteLoggedUITest {
         ViewInteraction textView9 = onView(
                 allOf(withId(R.id.favReportAbusiveAdd)));
         textView9.perform(scrollTo());
-/*
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.interestedUsers), withText("see interested users")));
-        appCompatButton.perform(click());
 
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.buttonDone), withText("Cancel"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.fragment_container),
-                                        1),
-                                0),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
-*/
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.payButton), withText("Pay")));
         appCompatButton3.perform(scrollTo(), click());
