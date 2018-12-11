@@ -185,6 +185,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.logout:
                 Utils.logout(this, Authentication.getInstance());
+                Toast.makeText(this, R.string.seeyou, Toast.LENGTH_SHORT).show();
                 break;
         }
 

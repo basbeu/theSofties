@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
+import ch.epfl.sweng.favors.utils.Utils;
 
 public class ProfileFragment extends Fragment {
 
@@ -43,6 +45,13 @@ public class ProfileFragment extends Fragment {
             Fragment fragment = null;
             fragment = new EditProfileFragment();
             replaceFragment(fragment);
+        });
+
+        binding.delete.setOnClickListener((v)-> {
+            //toast if account has been correctly deleted or not
+            Utils.logout(this.getContext(), Authentication.getInstance());
+            
+
         });
 
         updateTitle();
