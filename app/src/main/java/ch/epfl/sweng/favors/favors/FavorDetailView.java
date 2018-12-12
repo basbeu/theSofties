@@ -31,6 +31,7 @@ import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.NotificationEntity;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
@@ -232,7 +233,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
                                 String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
                                 NotificationEntity notificationEntity = new NotificationEntity(ownerId);
-                                notificationEntity.set(NotificationEntity.StringFields.message,notificationMsg);
+                                notificationEntity.set(NotificationEntity.StringFields.message,notification);
                                 Database.getInstance().updateOnDb(notificationEntity);
 
                                 sender.removeOnPropertyChangedCallback(this);
