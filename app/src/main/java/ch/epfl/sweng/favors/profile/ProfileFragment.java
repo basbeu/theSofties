@@ -14,6 +14,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
@@ -72,9 +80,30 @@ public class ProfileFragment extends Fragment {
         });
 
         binding.confirmDeletion.setOnClickListener((v)-> {
-            //toast if account has been correctly deleted or not
-            Utils.logout(this.getContext(), Authentication.getInstance());
-           // Authentication.getInstance().delete();
+            Authentication auth = Authentication.getInstance();
+            AuthCredential credential = EmailAuthProvider.getCredential(auth.getEmail(),
+                    binding.passwordEntry.getText().toString());
+            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            //We have to reauthenticate user because we don't know how long
+            //it was the sign-in. Calling reauthenticate, will update the
+            //user login and prevent FirebaseException (CREDENTIAL_TOO_OLD_LOGIN_AGAIN) on user.delete()
+            //FIXME: ERASED EVEN IF RANDOM PASSWORD IS PUT !!!! NOT OKAY RE RESTER ET VOIR TOASTS
+            //TODO: NETTOYER TOUT LE RESTE DE LA DATABASE SUR EFFACEMENT
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(task -> {
+                        user.delete().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                Toast.makeText(getContext(), R.string.userDeletionSuccessful,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), R.string.userDeletionFail,
+                                        Toast.LENGTH_SHORT).show();
+                                task1.getException();
+                            }
+                        });
+                    });
+            Utils.logout(this.getContext(), auth);
+
 
         });
 

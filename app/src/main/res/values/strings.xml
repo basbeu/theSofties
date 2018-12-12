@@ -19,6 +19,9 @@
     <string name="deleteButton">Delete account</string>
     <string name="passwordConfirmation">Please enter your password to confirm the deletion</string>
     <string name="confirmDeletion">Confirm</string>
+    <string name="userDeletionSuccessful">Your account has been successfully deleted</string>
+    <string name="userDeletionFail">Sorry, a problem occured. Please try again.</string>
+
 
 
     <string name="next">Next</string>
