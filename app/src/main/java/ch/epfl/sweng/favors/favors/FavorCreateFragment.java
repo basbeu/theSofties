@@ -319,6 +319,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             Fragment fr = new FavorDetailView();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FavorDetailView.ENABLE_BUTTONS, false);
+            if(selectedImage != null){
+                bundle.putCharSequence("uri", selectedImage.toString());
+            }
             fr.setArguments(bundle);
             updateFavorObject(newFavor);
             sharedViewFavor.select(newFavor);
