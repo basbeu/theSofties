@@ -108,10 +108,6 @@ public final class Utils {
     }
 
     public static String getYear(Date date) {
-//        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        int year  = localDate.getYear();
-//        int month = localDate.getMonthValue();
-//        int day   = localDate.getDayOfMonth();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
@@ -132,6 +128,10 @@ public final class Utils {
         calendar.setTime(date);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         return Integer.toString(day);
+    }
+
+    public static String getFullDate(Long date) {
+        return getFullDate(new Date(date));
     }
 
     public static String getFullDate(Date date) {

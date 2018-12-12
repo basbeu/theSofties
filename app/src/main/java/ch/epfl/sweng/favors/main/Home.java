@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.main;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.chat.ChatsList;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
@@ -30,7 +32,10 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.location.SortLocations;
 
 public class Home extends android.support.v4.app.Fragment  {
+
     private ObservableArrayList<Favor> favorList = new ObservableArrayList<>();
+    public ObservableBoolean isUnreadMessages;
+
     FavorListAdapter listAdapter;
     HomeBinding binding;
 
@@ -70,6 +75,11 @@ public class Home extends android.support.v4.app.Fragment  {
         binding.switchList.setOnClickListener(v -> {currentMode++;setView();});
         binding.favorsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        ChatsList unreadChats = new ChatsList();
+        unreadChats.isHomeScreen.set(true);
+        isUnreadMessages = unreadChats.isUnreadMessages;
+        getFragmentManager().beginTransaction().add(R.id.frag_container, unreadChats).commit();
+
         return binding.getRoot();
     }
 
@@ -80,7 +90,7 @@ public class Home extends android.support.v4.app.Fragment  {
         listAdapter.notifyDataSetChanged();
     }
 
-    static String[] modes = {"Discover favors in your area...", "Recent favors..."};
+    static String[] modes = {"Discover favors in your area...", "Expiring soon favors..."};
     int currentMode = 0;
     public ObservableField<String> lastFavorsTitle = new ObservableField<>();
 
@@ -91,6 +101,7 @@ public class Home extends android.support.v4.app.Fragment  {
     void setView(){
         Map<DatabaseField, Object> querryGreater = new HashMap<>();
         querryGreater.put(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date()));
+
         if(currentMode >= modes.length){currentMode=0;};
         switch (currentMode){
             case 0 :
@@ -99,7 +110,7 @@ public class Home extends android.support.v4.app.Fragment  {
                 break;
             case 1 :
                 favorList.changeOnPropertyChangedCallback(otherSortingCb);
-                FavorRequest.getList(favorList,null,null,querryGreater, 5, Favor.ObjectFields.creationTimestamp);
+                FavorRequest.getList(favorList,null,null,querryGreater, 5, Favor.ObjectFields.expirationTimestamp);
                 break;
             default:
 

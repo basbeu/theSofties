@@ -14,7 +14,6 @@ public abstract class Authentication {
     private static Authentication auth;
 
     public static Authentication getInstance(){
-        // For espresso tests
 
         if(auth == null){
             if(ExecutionMode.getInstance().isTest()){

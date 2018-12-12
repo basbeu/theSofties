@@ -29,7 +29,7 @@ public abstract class Database {
      */
     public abstract Task updateFromDb(DatabaseEntity databaseEntity);
 
-    public abstract void deleteFromDatabase(DatabaseEntity databaseEntity);
+    public abstract Task deleteFromDatabase(DatabaseEntity databaseEntity);
 
     /**
      *
@@ -53,11 +53,19 @@ public abstract class Database {
                                                           Integer limit,
                                                                 DatabaseField orderBy);
 
+    protected  abstract <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                                String collection,
+                                                                DatabaseField element,
+                                                                Object value,
+                                                                Integer limit,
+                                                                DatabaseField orderBy);
+
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                 String collection,
                                                                 Map<DatabaseField, Object> mapEquals,
                                                                 Map<DatabaseField, Object> mapLess,
                                                                 Map<DatabaseField, Object> mapMore,
+                                                                Map<DatabaseField, Object> mapContains,
                                                                 Integer limit,
                                                                 DatabaseField orderBy);
 
