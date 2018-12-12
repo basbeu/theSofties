@@ -2,6 +2,7 @@ package ch.epfl.sweng.favors.database;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -87,9 +89,9 @@ public class FirebaseDatabase extends Database{
     }
 
     @Override
-    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
-        if(databaseEntity == null) return;
-        dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).delete();
+    public Task deleteFromDatabase(DatabaseEntity databaseEntity) {
+        if(databaseEntity == null) return Tasks.forResult(false);
+        return dbFireStore.collection(databaseEntity.collection).document(databaseEntity.documentID).delete();
     }
 
     @Override
@@ -155,7 +157,10 @@ public class FirebaseDatabase extends Database{
         if(orderBy != null){
             if(orderBy == Favor.ObjectFields.creationTimestamp){
                 query = query.orderBy(orderBy.toString(), Query.Direction.DESCENDING);
-            } else {
+            }
+            else if(orderBy == ChatMessage.LongFields.messageDate){
+                query = query.orderBy(orderBy.toString(), Query.Direction.DESCENDING);
+            }else {
                 query = query.orderBy(orderBy.toString());
             }
         }
@@ -180,8 +185,9 @@ public class FirebaseDatabase extends Database{
     protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                          String collection,
                                                                          Map<DatabaseField, Object> mapEquals,
-                                                                        Map<DatabaseField, Object> mapLess,
-                                                                            Map<DatabaseField, Object> mapMore,
+                                                       Map<DatabaseField, Object> mapLess,
+                                                                         Map<DatabaseField, Object> mapMore,
+                                                                         Map<DatabaseField, Object> mapContains,
                                                                          Integer limit,
                                                                          DatabaseField orderBy){
 
@@ -196,6 +202,9 @@ public class FirebaseDatabase extends Database{
         }
         if(mapMore != null) for(Map.Entry<DatabaseField, Object> el : mapMore.entrySet()){
             query = query.whereGreaterThan(el.getKey().toString(), el.getValue());
+        }
+        if(mapContains != null) for(Map.Entry<DatabaseField, Object> el : mapContains.entrySet()){
+            query = query.whereArrayContains(el.getKey().toString(), el.getValue());
         }
 
         query = addParametersToQuery(query, limit, orderBy);
@@ -212,6 +221,43 @@ public class FirebaseDatabase extends Database{
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
+
+
+    }
+
+    protected <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                      String collection,
+                                                      DatabaseField element,
+                                                      Object value,
+                                                      Integer limit,
+                                                      DatabaseField orderBy){
+        if(element == null || value == null){return;}
+        Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
+        query = addParametersToQuery(query, limit, orderBy);
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                ArrayList<T> temp = new ArrayList<>();
+                for (QueryDocumentSnapshot document : value) {
+                    try {
+                        if (list != null) {
+                            T documentObject = clazz.newInstance();
+                            documentObject.set(document.getId(), document.getData());
+                            temp.add(documentObject);
+                        }
+                    } catch (Exception e2) {
+                        Log.e(TAG, "Illegal access exception");
+                    }
+                }
+                if(list != null) list.update(temp);
+            }
+        });
 
     }
 

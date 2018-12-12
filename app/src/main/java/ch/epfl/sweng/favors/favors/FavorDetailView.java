@@ -24,6 +24,9 @@ import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.chat.ChatsList;
+import ch.epfl.sweng.favors.database.ChatInformations;
+import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
@@ -153,6 +156,29 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
     };
 
+
+    private void sendMessage(String uid, String message){
+        ObservableArrayList<ChatInformations> conversations = new ObservableArrayList<>();
+        ChatRequest.allChatsOf(conversations, uid);
+        conversations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()) return;
+                for(ChatInformations chat : conversations){
+                    ArrayList<String> participantsId = (ArrayList<String>) chat.get(ChatInformations.ObjectFields.participants);
+                    if(participantsId.contains(Authentication.getInstance().getUid()) && participantsId.size() == 2){
+                        chat.addMessageToConversation(message);
+                        return;
+                    }
+                }
+                ChatsList.createChat(localFavor.get(Favor.StringFields.title), new String[]{uid, Authentication.getInstance().getUid()}, message);
+            }
+        });
+
+
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -180,38 +206,40 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 buttonEnabled = false;
                 //if user is in the list -> remove him from the list
                 if(interestedPeople.contains(User.getMain().getId())) {
+                    sendMessage(localFavor.get(Favor.StringFields.ownerID), "Sorry, I'm not anymore interested in your favor : " + localFavor.get(Favor.StringFields.title));
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
                 } else {
-                    interestedPeople.add(User.getMain().getId());
-                    isInterested.set(true);
-
-                    EmailUtils.sendEmail(
-                            new Email(Authentication.getInstance().getEmail(),
-                     ownerEmail.get(), "Someone is interested in: " + title.get(),
-                     "Hi ! I am interested to help you with your favor. Please answer directly to this email."),
-                            getActivity(),
-                    "We will inform the poster of the add that you are interested to help!",
-                            "Sorry an error occurred, try again later...");
-
-                    //User owner = new User();
+                    User owner = new User();
                     String ownerId = localFavor.get(Favor.StringFields.ownerID);
+                    UserRequest.getWithId(owner, ownerId);
+                    owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                        @Override
+                        public void onPropertyChanged(Observable sender, int propertyId) {
+                            if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                                interestedPeople.add(User.getMain().getId());
+                                isInterested.set(true);
+                                sendMessage(localFavor.get(Favor.StringFields.ownerID), "I'm interested in your favor : " + localFavor.get(Favor.StringFields.title));
+                                if(owner.get(User.BooleanFields.emailNotifications)) {
+                                    EmailUtils.sendEmail(
+                                            new Email(Authentication.getInstance().getEmail(),
+                                                    ownerEmail.get(), "Someone is interested in: " + title.get(),
+                                                    "Hi ! I am interested to help you with your favor. Please answer directly to this email."),
+                                            getActivity(),
+                                            "We will inform the poster of the add that you are interested to help!",
+                                            "Sorry an error occurred, try again later...");
+                                }
 
-                    //Map<String, Object> notification = new HashMap<>();
-                    String notificationMsg = new Notification(NotificationType.INTEREST, localFavor).toString();
-                    /*notification.put("message", notificationMsg);
+                                String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
+                                NotificationEntity notificationEntity = new NotificationEntity(ownerId);
+                                notificationEntity.set(NotificationEntity.StringFields.message,notificationMsg);
+                                Database.getInstance().updateOnDb(notificationEntity);
 
-                    mFirestore.collection("users/" + ownerId + "/notifications")
-                            .add(notification)
-                            .addOnSuccessListener(documentReference ->
-                                    Log.d(TAG, "Notification sent")
-                            )
-                            .addOnFailureListener(e ->
-                                    Log.e(TAG, "Could not sent the notification")
-                            );*/
-                    NotificationEntity notificationEntity = new NotificationEntity(ownerId);
-                    notificationEntity.set(NotificationEntity.StringFields.message,notificationMsg);
-                    Database.getInstance().updateOnDb(notificationEntity);
+                                sender.removeOnPropertyChangedCallback(this);
+                            }
+                        }
+                    });
+
                 }
 
                 if (localFavor != null) {
@@ -285,7 +313,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             toUpdate.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
-                    if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                    if(propertyId == User.UpdateType.FROM_DB.ordinal() && toUpdate.get(User.BooleanFields.emailNotifications)){
                         EmailUtils.sendEmail(
                                 new Email(localFavor.get(Favor.StringFields.ownerEmail), ((User) sender).get(User.StringFields.email), "You have been paid for the favor " + title.get() + "!", "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it."), getActivity(),"Users have been successfully paid.","");
                         sender.removeOnPropertyChangedCallback(this);
