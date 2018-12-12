@@ -178,7 +178,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
     public static final String KEY_FRAGMENT_ID = "fragment_id";
     ArrayAdapter<String> adapter = null;
 
-    //TEST CODE FOR DETAIL FRAGMENT
     private SharedViewFavor sharedViewFavor;
 
     private Favor newFavor;

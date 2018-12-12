@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="java.lang.Long"/>
+        <import type="android.view.View"/>
         <variable
             name="elements"
             type="ch.epfl.sweng.favors.profile.ProfileFragment"
@@ -121,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/profile_fragment_database_object_size"
             android:text="@string/passwordConfirmation"
+            android:visibility="invisible"
             android:textAlignment="center"
             android:textSize="18sp" />
         <LinearLayout
@@ -133,6 +135,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/password"
+                android:visibility="invisible"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"
@@ -150,6 +153,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/passwordEntry"
                 app:layout_constraintStart_toEndOf="@+id/passwordEntry"
                 app:layout_constraintTop_toTopOf="@id/passwordEntry"
+                android:visibility="@{elements.isPasswordCorrect ? View.VISIBLE : View.GONE}"
                 tools:layout_editor_absoluteY="106dp" />
         </LinearLayout>
 
@@ -161,6 +165,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:visibility="invisible"
+            android:enabled="@{elements.isPasswordCorrect}"
             android:text="@string/confirmDeletion" />
 
     </LinearLayout>
