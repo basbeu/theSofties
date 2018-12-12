@@ -166,7 +166,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     };
 
 
-    void sendMessage(String uid, String message){
+    private void sendMessage(String uid, String message){
         ObservableArrayList<ChatInformations> conversations = new ObservableArrayList<>();
         ChatRequest.allChatsOf(conversations, uid);
         conversations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {

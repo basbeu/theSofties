@@ -15,12 +15,7 @@ import ch.epfl.sweng.favors.database.ChatInformations;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.ChatListItemBinding;
 
-/**
- * FavorListAdapter
- * Class that represents the graphical list view to display Favors
- * sets the fields that shpould be visible in the ListView
- * favor_item.xml (item of list) and fragment_favors.xml (list)
- */
+
 public class ChatInfosAdapter extends RecyclerView.Adapter<ChatInfosAdapter.ChatItemViewHolder> {
     private ObservableArrayList<ChatInformations> chatsList;
     private ChatsList parent;
