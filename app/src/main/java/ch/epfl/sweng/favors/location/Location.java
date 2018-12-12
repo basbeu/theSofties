@@ -18,8 +18,7 @@ public abstract class Location {
     abstract public void requestLocationUpdates(LocationRequest request, OnSuccessListener <android.location.Location> cb);
 
     abstract public void getLastLocation(OnSuccessListener <android.location.Location> cb);
-
-
+    
     /**
      * @return Database that is the DB for the current session
      */
