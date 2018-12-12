@@ -59,16 +59,13 @@ public class ChatWindow extends android.support.v4.app.Fragment {
 
     @Nullable
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.chat_conversation, container,false);
         binding.setChatWindow(this);
         binding.sendButton.setEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        //llm.setStackFromEnd(true);
         llm.setReverseLayout(true);
         binding.chatConversationList.setLayoutManager(llm);
-
         messages.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -76,7 +73,14 @@ public class ChatWindow extends android.support.v4.app.Fragment {
             }
         });
         binding.sendButton.setEnabled(true);
+        setChatMesage();
+        setSendButton();
+        setEditTitle();
 
+        return binding.getRoot();
+    }
+
+    private void setChatMesage(){
         binding.chatMessageText.addTextChangedListener(new TextWatcherCustom() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -85,6 +89,8 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 else binding.sendButton.setEnabled(true);
             }
         });
+    }
+    private void setSendButton(){
         binding.sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +102,9 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 mustLoadMore = true;
             }
         });
+    }
 
+    private void setEditTitle(){
         binding.editTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,8 +118,6 @@ public class ChatWindow extends android.support.v4.app.Fragment {
                 }
             }
         });
-
-        return binding.getRoot();
     }
 
     boolean mustLoadMore = true;

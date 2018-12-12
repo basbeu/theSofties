@@ -47,7 +47,23 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.Ch
         }
 
         public void bind(ChatMessage item) {
-            Observable.OnPropertyChangedCallback cb = new Observable.OnPropertyChangedCallback() {
+            Observable.OnPropertyChangedCallback cb = setMarginCb(item);
+            item.addOnPropertyChangedCallback(cb);
+            cb.onPropertyChanged(null, 0);
+            binding.setChatMessage(item);
+            binding.messageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(item.get(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid())){
+                        parent.deleteMessage(item);
+                    }
+                    return false;
+                }
+            });
+        }
+
+        private Observable.OnPropertyChangedCallback setMarginCb(ChatMessage item){
+            return new Observable.OnPropertyChangedCallback() {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.marginView.getLayoutParams();
@@ -61,18 +77,6 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.Ch
                     }
                     binding.marginView.setLayoutParams(params);
                 }};
-            item.addOnPropertyChangedCallback(cb);
-            cb.onPropertyChanged(null, 0);
-            binding.setChatMessage(item);
-            binding.messageView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if(item.get(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid())){
-                        parent.deleteMessage(item);
-                    }
-                    return false;
-                }
-            });
         }
     }
 

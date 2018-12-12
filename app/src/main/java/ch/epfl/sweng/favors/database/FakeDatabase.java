@@ -413,6 +413,7 @@ public class FakeDatabase extends Database{
         ArrayList<String> notifications = new ArrayList<String>();
         notifications.add("Someone is interested in your favor !");
         u0.set(User.ObjectFields.notifications, notifications);
+        u0.set(User.BooleanFields.emailNotifications,true);
 
 
 
@@ -423,6 +424,7 @@ public class FakeDatabase extends Database{
         u1.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u1, User.UserGender.M);
         u1.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u1.set(User.BooleanFields.emailNotifications,true);
 
         u2.set(User.StringFields.firstName, "Jeanne");
         u2.set(User.StringFields.lastName, "Trousse");
@@ -431,6 +433,7 @@ public class FakeDatabase extends Database{
         u2.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u2, User.UserGender.F);
         u2.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u2.set(User.BooleanFields.emailNotifications,true);
 
         u3.set(User.StringFields.firstName, "Harvey");
         u3.set(User.StringFields.lastName, "Dent");
@@ -439,6 +442,7 @@ public class FakeDatabase extends Database{
         u3.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u3, User.UserGender.M);
         u3.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u3.set(User.BooleanFields.emailNotifications,true);
 
         u4.set(User.StringFields.firstName, "Marie");
         u4.set(User.StringFields.lastName, "Vaud");
@@ -447,6 +451,7 @@ public class FakeDatabase extends Database{
         u4.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u4, User.UserGender.F);
         u4.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u4.set(User.BooleanFields.emailNotifications,true);
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
@@ -793,12 +798,14 @@ public class FakeDatabase extends Database{
         uNew.set(User.StringFields.email, "oliver.queen@queencorp.com");
         uNew.set(User.StringFields.city, "Starling City");
         User.UserGender.setGender(uNew, User.UserGender.M);
+        uNew.set(User.BooleanFields.emailNotifications,true);
 
         uNew2.set(User.StringFields.firstName, "Barry");
         uNew2.set(User.StringFields.lastName, "Allen");
         uNew2.set(User.StringFields.email, "barry.allen@ccpd.com");
         uNew2.set(User.StringFields.city, "Starling City");
         User.UserGender.setGender(uNew2, User.UserGender.M);
+        uNew2.set(User.BooleanFields.emailNotifications,true);
 
         Interest iNew = new Interest("iNew");
         Interest iNew2 = new Interest("iNew2");

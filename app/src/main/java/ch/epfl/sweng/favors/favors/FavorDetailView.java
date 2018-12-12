@@ -219,25 +219,25 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
                 } else {
-                    interestedPeople.add(User.getMain().getId());
-                    isInterested.set(true);
-                    sendMessage(localFavor.get(Favor.StringFields.ownerID), "I'm interested in your favor : " + localFavor.get(Favor.StringFields.title));
-                    EmailUtils.sendEmail(
-                            new Email(Authentication.getInstance().getEmail(),
-                     ownerEmail.get(), "Someone is interested in: " + title.get(),
-                     "Hi ! I am interested to help you with your favor. Please answer directly to this email."),
-                            getActivity(),
-                    "We will inform the poster of the add that you are interested to help!",
-                            "Sorry an error occurred, try again later...");
-
                     User owner = new User();
                     String ownerId = localFavor.get(Favor.StringFields.ownerID);
                     UserRequest.getWithId(owner, ownerId);
-
                     owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                         @Override
                         public void onPropertyChanged(Observable sender, int propertyId) {
                             if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                                interestedPeople.add(User.getMain().getId());
+                                isInterested.set(true);
+                                sendMessage(localFavor.get(Favor.StringFields.ownerID), "I'm interested in your favor : " + localFavor.get(Favor.StringFields.title));
+                                if(owner.get(User.BooleanFields.emailNotifications)) {
+                                    EmailUtils.sendEmail(
+                                            new Email(Authentication.getInstance().getEmail(),
+                                                    ownerEmail.get(), "Someone is interested in: " + title.get(),
+                                                    "Hi ! I am interested to help you with your favor. Please answer directly to this email."),
+                                            getActivity(),
+                                            "We will inform the poster of the add that you are interested to help!",
+                                            "Sorry an error occurred, try again later...");
+                                }
 
                                 String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
                                 ArrayList<String> notificationList = (ArrayList<String>)((User)sender).get(User.ObjectFields.notifications);
@@ -249,6 +249,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                             }
                         }
                     });
+
+
+
+
                 }
 
                 if (localFavor != null) {
@@ -322,7 +326,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             toUpdate.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
-                    if(propertyId == User.UpdateType.FROM_DB.ordinal()){
+                    if(propertyId == User.UpdateType.FROM_DB.ordinal() && toUpdate.get(User.BooleanFields.emailNotifications)){
                         EmailUtils.sendEmail(
                                 new Email(localFavor.get(Favor.StringFields.ownerEmail), ((User) sender).get(User.StringFields.email), "You have been paid for the favor " + title.get() + "!", "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it."), getActivity(),"Users have been successfully paid.","");
                         sender.removeOnPropertyChangedCallback(this);
