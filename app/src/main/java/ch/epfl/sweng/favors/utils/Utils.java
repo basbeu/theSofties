@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -228,8 +229,9 @@ public final class Utils {
      */
     public static Uri compressImageUri(Context context, Uri uri){
         try {
+            Log.d("TESTSTORAGE", "COMPRESS");
             Bitmap bitmapToBeCompressed = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-
+            Log.d("TESTSTORAGE", "SUSPENS PASSED");
             int width = bitmapToBeCompressed.getWidth();
             int height = bitmapToBeCompressed.getHeight();
             int maxSize = 640;
@@ -242,10 +244,12 @@ public final class Utils {
                 height = maxSize;
                 width = (int) (height * bitmapRatio);
             }
+            Log.d("TESTSTORAGE", "WASFINE");
             return getImageUri(context, Bitmap.createScaledBitmap(bitmapToBeCompressed, width, height, true));
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("TESTSTORAGE", "EXCEPTION");
             return null;
         }
 
