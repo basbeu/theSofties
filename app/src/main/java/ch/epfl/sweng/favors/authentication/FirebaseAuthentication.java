@@ -29,7 +29,8 @@ public class FirebaseAuthentication extends Authentication{
     public static void setFirebase(FirebaseAuth firebaseAuth){
         if(!ExecutionMode.getInstance().isTest()) throw new IllegalStateException();
         Log.d("DEBUG_TEST", "I am here2");
-        if(auth == null) new FirebaseAuthentication(firebaseAuth);
+        if(auth == null)
+            auth = new FirebaseAuthentication(firebaseAuth);
         else throw new IllegalStateException();
     }
 

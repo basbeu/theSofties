@@ -15,7 +15,10 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,6 +41,17 @@ public class FakeDatabase extends Database{
     private static final String TAG = "FAKE_DB";
 
     final HandlerThread handlerThread = new HandlerThread("background-thread");
+
+    ArrayList<Listener> listeners = new ArrayList<>();
+
+    abstract class Listener{
+        abstract void notifyChange();
+    }
+    private void notifyDatabaseModification(){
+        for(Listener ln: listeners){
+            ln.notifyChange();
+        }
+    }
 
     private FakeDatabase(){
         database = new HashMap<>();
@@ -72,22 +86,36 @@ public class FakeDatabase extends Database{
             }
             String generatedString = buffer.toString();
             database.put( generatedString, databaseEntity.copy());
+            databaseEntity.documentID = generatedString;
+            databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
         }
+      
+        notifyDatabaseModification();
         return Tasks.forResult(true);
-
     }
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID == null || !database.containsKey(databaseEntity.documentID)){return Tasks.forCanceled();}
         databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
 
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if(database.get(databaseEntity.documentID) == null) return;
+                databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
+            });
+
+        },20);
+
         return Tasks.forResult(true);
     }
 
     @Override
-    public void deleteFromDatabase(DatabaseEntity databaseEntity) {
-        if(databaseEntity == null) return;
+    public Task deleteFromDatabase(DatabaseEntity databaseEntity) {
+        if(databaseEntity == null) return Tasks.forResult(false);
         database.remove(databaseEntity.documentID);
+
+        return Tasks.forResult(true);
     }
 
     @Override
@@ -160,6 +188,39 @@ public class FakeDatabase extends Database{
         },500);
     }
 
+    @Override
+    protected  <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                       String collection,
+                                                       DatabaseField key,
+                                                       Object value,
+                                                       Integer limit,
+                                                       DatabaseField orderBy){
+
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(()->{
+            listeners.add(new Listener() {
+                @Override
+                void notifyChange() {
+                    ArrayList<T> tempList = new ArrayList<>();
+                    for(DatabaseEntity entity : database.values()) {
+                        if (clazz.isInstance(entity) && value instanceof String && entity.get((DatabaseStringField) key).equals(value)) {
+                            try {
+                                T temp = clazz.newInstance();
+                                temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+                                tempList.add(temp);
+                            } catch (Exception e){
+                                Log.e(TAG, "Illegal access exception");
+                            }
+                        }
+                    }
+                    if(key == ChatMessage.StringFields.conversationId) Collections.reverse(tempList);
+                    new Handler(Looper.getMainLooper()).post(() -> list.update(tempList));
+                }
+            });
+            notifyDatabaseModification();
+        },500);
+    }
+
     enum CheckType{Greater, Equal, Less}
 
     private boolean check(CheckType type, Map.Entry<DatabaseField, Object>  entry, DatabaseEntity entity){
@@ -195,6 +256,11 @@ public class FakeDatabase extends Database{
                 if(type == CheckType.Greater) return out > 0;
                 if(type == CheckType.Less) return out < 0;
             }
+            if(temp instanceof ArrayList) {
+                if(!(entry.getValue() instanceof String)) return false;
+                if(((ArrayList<String>) temp).contains((String) entry.getValue())) return true;
+                return false;
+            }
         }
         Log.d(TAG, "Performing a not implemented comparison in fake database");
         return false;
@@ -206,6 +272,7 @@ public class FakeDatabase extends Database{
                                                         Map<DatabaseField, Object> mapEquals,
                                                         Map<DatabaseField, Object> mapLess,
                                                         Map<DatabaseField, Object> mapMore,
+                                                        Map<DatabaseField, Object> mapContains,
                                                         Integer limit,
                                                         DatabaseField orderBy){
         Log.d(TAG, clazz.getName());
@@ -222,6 +289,7 @@ public class FakeDatabase extends Database{
                 toAdd = processMap(mapEquals, entity, toAdd, CheckType.Equal);
                 toAdd = processMap(mapLess, entity, toAdd, CheckType.Less);
                 toAdd = processMap(mapMore, entity, toAdd,  CheckType.Greater);
+                toAdd = processMap(mapContains, entity, toAdd,  CheckType.Equal);
                 if(toAdd) {
                     addToList(clazz, tempList, entity);
                 }
@@ -360,6 +428,7 @@ public class FakeDatabase extends Database{
         ArrayList<String> notifications = new ArrayList<String>();
         notifications.add("Someone is interested in your favor !");
         u0.set(User.ObjectFields.notifications, notifications);
+        u0.set(User.BooleanFields.emailNotifications,true);
 
 
 
@@ -370,6 +439,7 @@ public class FakeDatabase extends Database{
         u1.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u1, User.UserGender.M);
         u1.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u1.set(User.BooleanFields.emailNotifications,true);
 
         u2.set(User.StringFields.firstName, "Jeanne");
         u2.set(User.StringFields.lastName, "Trousse");
@@ -378,6 +448,7 @@ public class FakeDatabase extends Database{
         u2.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u2, User.UserGender.F);
         u2.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u2.set(User.BooleanFields.emailNotifications,true);
 
         u3.set(User.StringFields.firstName, "Harvey");
         u3.set(User.StringFields.lastName, "Dent");
@@ -386,6 +457,7 @@ public class FakeDatabase extends Database{
         u3.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u3, User.UserGender.M);
         u3.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u3.set(User.BooleanFields.emailNotifications,true);
 
         u4.set(User.StringFields.firstName, "Marie");
         u4.set(User.StringFields.lastName, "Vaud");
@@ -394,6 +466,7 @@ public class FakeDatabase extends Database{
         u4.set(User.LongFields.tokens, 10L);
         User.UserGender.setGender(u4, User.UserGender.F);
         u4.set(User.ObjectFields.notifications, new ArrayList<String>());
+        u4.set(User.BooleanFields.emailNotifications,true);
 
         Favor f1 = new Favor("F1");
         Favor f2 = new Favor("F2");
@@ -418,8 +491,8 @@ public class FakeDatabase extends Database{
 
         f1.set(Favor.StringFields.locationCity, "London, UK");
         f1.set(Favor.ObjectFields.location, new GeoPoint(51.509865, -0.118092));
-        f1.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(13), 0));
-        f1.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(1), 0));
+        f1.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(13), 0));
+        f1.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(1), 0));
 
         f1.set(Favor.ObjectFields.interested, interestedPeople1);
         f1.set(Favor.LongFields.nbPerson, 1L);
@@ -439,8 +512,8 @@ public class FakeDatabase extends Database{
         f2.set(Favor.StringFields.locationCity, "Strasbourg, FR");
         f2.set(Favor.ObjectFields.location, new GeoPoint(48.58392, 7.74553));
         f2.set(Favor.ObjectFields.interested, interestedPeople2);
-        f2.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(11), 0));
-        f2.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(11), 0));
+        f2.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(11), 0));
+        f2.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(11), 0));
 
         f2.set(Favor.LongFields.nbPerson, 2L);
         f2.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -459,8 +532,8 @@ public class FakeDatabase extends Database{
         f3.set(Favor.StringFields.locationCity, "Paris, FR");
         f3.set(Favor.ObjectFields.location, new GeoPoint(48.864716, 2.349014));
         f3.set(Favor.ObjectFields.interested, interestedPeople3);
-        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(9), 0));
-        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(9), 0));
+        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(9), 0));
+        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(9), 0));
 
 
         f3.set(Favor.LongFields.nbPerson, 2L);
@@ -481,8 +554,8 @@ public class FakeDatabase extends Database{
         f4.set(Favor.StringFields.locationCity, "Vienna, AT");
         f4.set(Favor.ObjectFields.location, new GeoPoint(48.210033, 16.363449));
         f4.set(Favor.ObjectFields.interested, interestedPeople4);
-        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(8), 0));
-        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(8), 0));
+        f4.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(8), 0));
+        f4.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(8), 0));
 
         f4.set(Favor.LongFields.nbPerson, 1L);
         f4.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -497,8 +570,8 @@ public class FakeDatabase extends Database{
 
         f5.set(Favor.StringFields.locationCity, "Stockholm, SE");
         f5.set(Favor.ObjectFields.location, new GeoPoint(59.334591, 18.063240));
-        f5.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(7), 0));
-        f5.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(7), 0));
+        f5.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(7), 0));
+        f5.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(7), 0));
 
         f5.set(Favor.LongFields.nbPerson, 1L);
         f5.set(Favor.LongFields.tokenPerPerson, 2L);
@@ -512,8 +585,8 @@ public class FakeDatabase extends Database{
 
         f6.set(Favor.StringFields.locationCity, "Hong Kong");
         f6.set(Favor.ObjectFields.location, new GeoPoint(22.286394, 114.149139));
-        f6.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(6), 0));
-        f6.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(6), 0));
+        f6.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(6), 0));
+        f6.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(6), 0));
 
 
         f6.set(Favor.LongFields.nbPerson, 1L);
@@ -528,8 +601,8 @@ public class FakeDatabase extends Database{
 
         f7.set(Favor.StringFields.locationCity, "Lausanne, CH");
         f7.set(Favor.ObjectFields.location, new GeoPoint(46.516, 6.63282));
-        f7.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(5), 0));
-        f7.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(5), 0));
+        f7.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(5), 0));
+        f7.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(5), 0));
 
 
         f7.set(Favor.LongFields.nbPerson, 2L);
@@ -544,8 +617,8 @@ public class FakeDatabase extends Database{
 
         f8.set(Favor.StringFields.locationCity, "Los Angeles, US");
         f8.set(Favor.ObjectFields.location, new GeoPoint(34.05223, -118.24368));
-        f8.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(4), 0));
-        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
+        f8.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(4), 0));
+        f8.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(2), 0));
 
 
         f8.set(Favor.LongFields.nbPerson, 1L);
@@ -560,8 +633,8 @@ public class FakeDatabase extends Database{
 
         f9.set(Favor.StringFields.locationCity, "Zurich, CH");
         f9.set(Favor.ObjectFields.location, new GeoPoint(47.36667, 8.55));
-        f9.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(3), 0));
-        f9.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(3), 0));
+        f9.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(3), 0));
+        f9.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(3), 0));
 
         f9.set(Favor.LongFields.nbPerson, 1L);
         f9.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -580,8 +653,8 @@ public class FakeDatabase extends Database{
         f10.set(Favor.StringFields.locationCity, "Basel, CH");
         f10.set(Favor.ObjectFields.location, new GeoPoint(47.559601, 7.588576));
         f10.set(Favor.ObjectFields.interested, interestedPeople6);
-        f10.set(Favor.ObjectFields.creationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L - dayToMs(2), 0));
-        f10.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(System.currentTimeMillis() / 1000L + dayToMs(2), 0));
+        f10.set(Favor.ObjectFields.creationTimestamp, new Timestamp(new Date().getTime() / 1000L - dayToMs(2), 0));
+        f10.set(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date().getTime() / 1000L + dayToMs(2), 0));
 
         f10.set(Favor.LongFields.nbPerson, 3L);
         f10.set(Favor.LongFields.tokenPerPerson, 2L);
@@ -608,6 +681,70 @@ public class FakeDatabase extends Database{
         i5.set(Interest.StringFields.title, "Shopping");
         i5.set(Interest.StringFields.description, "Yet another great airline");
 
+        ChatInformations c1 = new ChatInformations("C1");
+        ChatInformations c2 = new ChatInformations("C2");
+
+        ArrayList<String> participants1 = new ArrayList<>();
+        participants1.add(u0.getId());
+        participants1.add(u1.getId());
+        participants1.add(u2.getId());
+        c1.set(ChatInformations.ObjectFields.participants, participants1);
+        c1.set(ChatInformations.LongFields.creationTime, new Date().getTime() - 20000000);
+        c1.set(ChatInformations.LongFields.lastMessageTime,  new Date().getTime() - 2000000);
+        c1.set(ChatInformations.StringFields.title,  "Conversation test");
+
+
+        ArrayList<String> participants2 = new ArrayList<>();
+        participants2.add(u0.getId());
+        participants2.add(u3.getId());
+        c2.set(ChatInformations.ObjectFields.participants, participants2);
+        c2.set(ChatInformations.LongFields.creationTime, new Date().getTime() - 10000000);
+        c2.set(ChatInformations.LongFields.lastMessageTime,  new Date().getTime() - 1000000);
+
+
+
+        ChatMessage m0 = new ChatMessage("M0");
+        ChatMessage m1 = new ChatMessage("M1");
+        ChatMessage m2 = new ChatMessage("M2");
+
+        m0.set(ChatMessage.StringFields.conversationId, "C1");
+        m1.set(ChatMessage.StringFields.conversationId, "C1");
+        m2.set(ChatMessage.StringFields.conversationId, "C1");
+
+        m0.set(ChatMessage.StringFields.messageContent, "Hey");
+        m1.set(ChatMessage.StringFields.messageContent, "Salut, tu vas bien ?");
+        m2.set(ChatMessage.StringFields.messageContent, "Bien et toi ?");
+
+        m0.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
+        m1.set(ChatMessage.StringFields.writerId, "U1");
+        m2.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
+
+        m0.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 8600000);
+        m1.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 5000000);
+        m2.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 2000000);
+
+
+        ChatMessage m3 = new ChatMessage("M3");
+        ChatMessage m4 = new ChatMessage("M4");
+        ChatMessage m5 = new ChatMessage("M5");
+
+        m3.set(ChatMessage.StringFields.conversationId, "C2");
+        m4.set(ChatMessage.StringFields.conversationId, "C2");
+        m5.set(ChatMessage.StringFields.conversationId, "C2");
+
+        m3.set(ChatMessage.StringFields.messageContent, "T'es en vacances ?");
+        m4.set(ChatMessage.StringFields.messageContent, "Pas encore");
+        m5.set(ChatMessage.StringFields.messageContent, "Moi non plus");
+
+        m3.set(ChatMessage.StringFields.writerId, "U3");
+        m4.set(ChatMessage.StringFields.writerId, FakeAuthentication.UID);
+        m5.set(ChatMessage.StringFields.writerId, "U3");
+
+        m3.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 8600000);
+        m4.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 5000000);
+        m5.set(ChatMessage.LongFields.messageDate, new Date().getTime() - 1000000);
+
+
         getInstance().updateOnDb(i1);
         getInstance().updateOnDb(i2);
         getInstance().updateOnDb(i3);
@@ -630,6 +767,16 @@ public class FakeDatabase extends Database{
         getInstance().updateOnDb(f8);
         getInstance().updateOnDb(f9);
         getInstance().updateOnDb(f10);
+
+        getInstance().updateOnDb(c1);
+        getInstance().updateOnDb(c2);
+
+        getInstance().updateOnDb(m0);
+        getInstance().updateOnDb(m1);
+        getInstance().updateOnDb(m2);
+        getInstance().updateOnDb(m3);
+        getInstance().updateOnDb(m4);
+        getInstance().updateOnDb(m5);
     }
 
     /**
@@ -666,12 +813,14 @@ public class FakeDatabase extends Database{
         uNew.set(User.StringFields.email, "oliver.queen@queencorp.com");
         uNew.set(User.StringFields.city, "Starling City");
         User.UserGender.setGender(uNew, User.UserGender.M);
+        uNew.set(User.BooleanFields.emailNotifications,true);
 
         uNew2.set(User.StringFields.firstName, "Barry");
         uNew2.set(User.StringFields.lastName, "Allen");
         uNew2.set(User.StringFields.email, "barry.allen@ccpd.com");
         uNew2.set(User.StringFields.city, "Starling City");
         User.UserGender.setGender(uNew2, User.UserGender.M);
+        uNew2.set(User.BooleanFields.emailNotifications,true);
 
         Interest iNew = new Interest("iNew");
         Interest iNew2 = new Interest("iNew2");

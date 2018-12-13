@@ -9,8 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.chat.ChatsList;
+import ch.epfl.sweng.favors.database.ChatInformations;
+import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.DatabaseEntity;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.storage.Storage;
@@ -65,7 +73,30 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
         profilePicRef = favorCreatorUser.getObservableObject(User.StringFields.profilePicRef);
 
 
+
     }
+
+    View.OnClickListener loadOrCreateConversation = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ObservableArrayList<ChatInformations> conversations = new ObservableArrayList<>();
+            ChatRequest.allChatsOf(conversations, favorCreatorUser.getId());
+            conversations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()) return;
+                    for(ChatInformations chat : conversations){
+                        ArrayList<String> participantsId = (ArrayList<String>) chat.get(ChatInformations.ObjectFields.participants);
+                        if(participantsId.contains(Authentication.getInstance().getUid()) && participantsId.size() == 2){
+                            ChatsList.open(chat, getFragmentManager());
+                            return;
+                        }
+                    }
+                    ChatsList.createChatAndOpen(null, new String[]{favorCreatorUser.getId(), Authentication.getInstance().getUid()}, getFragmentManager());
+                }
+            });
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +105,10 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
         binding.setPosterElements(this);
         binding.okButton.setOnClickListener((View v) -> getActivity().onBackPressed());
         profilePicRef.addOnPropertyChangedCallback(pictureCallback);
+
+        binding.writeMessage.setOnClickListener(loadOrCreateConversation);
+
+
 
         return binding.getRoot();
     }

@@ -25,10 +25,13 @@ public class NotificationEntity extends DatabaseEntity{
             db.updateFromDb(this);
     }
 
+    private NotificationEntity(NotificationEntity notif){
+        super(StringFields.values(), LongFields.values(), BooleanFields.values(), ObjectFields.values(), notif.collection, notif.documentID);
+    }
 
     @Override
     public DatabaseEntity copy() {
-        return null;
+        return new NotificationEntity(this);
     }
 
     public static String getCollection(String userId){

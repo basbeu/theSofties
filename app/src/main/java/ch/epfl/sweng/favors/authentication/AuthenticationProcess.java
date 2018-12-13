@@ -122,10 +122,10 @@ public class AuthenticationProcess extends Activity {
             Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
-                if (mAuth instanceof FirebaseAuthentication) {
+                //if (mAuth instanceof FirebaseAuthentication) {
                         Log.d(TAG, "logging in");
                         loggedinView(action);
-                }
+                //}
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                 requirementsText.set("Wrong email or password or email not verified\nPlease try again");
