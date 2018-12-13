@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.favors;
+package ch.epfl.sweng.favors.notifications;
 
 import org.junit.Before;
 import org.junit.Test;
