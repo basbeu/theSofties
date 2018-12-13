@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
+import ch.epfl.sweng.favors.utils.Utils;
 
 /**
  * Handle the real storage related to FirebaseStorage
@@ -116,9 +117,12 @@ public class Storage extends FirebaseStorageDispatcher{
             progressDialog.show();
             String storageRef = ExecutionMode.getInstance().isTest() ? "test" : UUID.randomUUID().toString();
             StorageReference ref = storageReference.child(path + storageRef);
-            ref.putFile(selectedImage).addOnSuccessListener(successListener).addOnFailureListener(failureListener).addOnProgressListener(progressListener);
+            Uri compressedImage = Utils.compressImageUri(context, selectedImage);
+            if(compressedImage != null){
+                ref.putFile(compressedImage).addOnSuccessListener(successListener).addOnFailureListener(failureListener).addOnProgressListener(progressListener);
+                return storageRef;
+            }
 
-            return storageRef;
         }
 
         return null;

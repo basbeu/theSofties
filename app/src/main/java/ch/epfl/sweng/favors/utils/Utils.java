@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -211,8 +212,7 @@ public final class Utils {
      */
 
     public static Uri getImageUri(Context context, Bitmap bitmap){
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "favorpic", null);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "picture", null);
         if(path == null){
             return null;
         }
@@ -220,5 +220,36 @@ public final class Utils {
     }
 
 
+    /**
+     * https://stackoverflow.com/questions/15759195/reduce-size-of-bitmap-to-some-specified-pixel-in-android
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static Uri compressImageUri(Context context, Uri uri){
+        try {
+            Bitmap bitmapToBeCompressed = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+
+            int width = bitmapToBeCompressed.getWidth();
+            int height = bitmapToBeCompressed.getHeight();
+            int maxSize = 640;
+
+            float bitmapRatio = (float) width / (float) height;
+            if (bitmapRatio > 1) {
+                width = maxSize;
+                height = (int) (width / bitmapRatio);
+            } else {
+                height = maxSize;
+                width = (int) (height * bitmapRatio);
+            }
+            return getImageUri(context, Bitmap.createScaledBitmap(bitmapToBeCompressed, width, height, true));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
 
 }
