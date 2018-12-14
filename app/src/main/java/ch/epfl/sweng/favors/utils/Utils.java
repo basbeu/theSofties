@@ -229,9 +229,12 @@ public final class Utils {
      */
     public static Uri compressImageUri(Context context, Uri uri){
         try {
-            Log.d("TESTSTORAGE", "COMPRESS");
-            Bitmap bitmapToBeCompressed = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-            Log.d("TESTSTORAGE", "SUSPENS PASSED");
+            Bitmap bitmapToBeCompressed;
+            if(ExecutionMode.getInstance().isTest()){
+                bitmapToBeCompressed = Bitmap.createBitmap(100, 100, Bitmap.Config.ALPHA_8);
+            }else{
+                bitmapToBeCompressed = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            }
             int width = bitmapToBeCompressed.getWidth();
             int height = bitmapToBeCompressed.getHeight();
             int maxSize = 640;
@@ -244,12 +247,12 @@ public final class Utils {
                 height = maxSize;
                 width = (int) (height * bitmapRatio);
             }
-            Log.d("TESTSTORAGE", "WASFINE");
-            return getImageUri(context, Bitmap.createScaledBitmap(bitmapToBeCompressed, width, height, true));
+            Uri compressedUri = ExecutionMode.getInstance().isTest() ? uri : getImageUri(context, Bitmap.createScaledBitmap(bitmapToBeCompressed, width, height, true));
+
+            return compressedUri;
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("TESTSTORAGE", "EXCEPTION");
             return null;
         }
 

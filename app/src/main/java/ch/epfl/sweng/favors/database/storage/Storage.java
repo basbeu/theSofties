@@ -117,7 +117,8 @@ public class Storage extends FirebaseStorageDispatcher{
             progressDialog.show();
             String storageRef = ExecutionMode.getInstance().isTest() ? "test" : UUID.randomUUID().toString();
             StorageReference ref = storageReference.child(path + storageRef);
-            Uri compressedImage = Utils.compressImageUri(context, selectedImage);
+            Uri compressedImage;
+            compressedImage = ExecutionMode.getInstance().isTest() ? selectedImage : Utils.compressImageUri(context, selectedImage);
             if(compressedImage != null){
                 ref.putFile(compressedImage).addOnSuccessListener(successListener).addOnFailureListener(failureListener).addOnProgressListener(progressListener);
                 return storageRef;

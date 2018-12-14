@@ -102,14 +102,15 @@ public class StorageTest {
         }
 
         String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.FAVOR);
-        //assertEquals("test", refStorage);
+        assertEquals("test", refStorage);
+
         String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.PROFILE);
-        //assertEquals("validRef", f1);
+        assertEquals("validRef", f1);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         String f2 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.PROFILE);
         assertEquals("invalidRef", f2);
-//        String f3 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), "test");
-//        assertEquals(null, f3);
+        String f3 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), null);
+        assertEquals(null, f3);
 
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);
