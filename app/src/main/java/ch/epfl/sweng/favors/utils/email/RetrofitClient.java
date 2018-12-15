@@ -44,16 +44,16 @@ class RetrofitClient extends RetrofitDispatcher{
 
         OkHttpClient okClient = new OkHttpClient.Builder()
                 .addInterceptor((chain)-> {
-                                Request original = chain.request();
+                    Request original = chain.request();
 
-                                //Adding basic auth
-                                Request.Builder requestBuilder = original.newBuilder()
-                                        .header("Authorization", AUTH)
-                                        .method(original.method(), original.body());
+                    //Adding basic auth
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", AUTH)
+                            .method(original.method(), original.body());
 
-                                Request request = requestBuilder.build();
-                                return chain.proceed(request);
-                            })
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
                 .build();
 
         retrofit = new Retrofit.Builder()

@@ -98,7 +98,7 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
                 return;
             }
-             updateList((ObservableArrayList) sender);
+            updateList((ObservableArrayList) sender);
 
         }
     };

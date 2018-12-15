@@ -63,7 +63,7 @@ public abstract class FirebaseStorageDispatcher {
      * @param category the category of the picture to be deleted (favor or profile)
      */
     public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category);
-    
+
     /**
      * Extracts an image from data and displays it
      * Inspired from : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934

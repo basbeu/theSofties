@@ -175,11 +175,11 @@ public class FakeDatabase extends Database{
 
     @Override
     protected  <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
-                                                       String collection,
-                                                       DatabaseField key,
-                                                       Object value,
-                                                       Integer limit,
-                                                       DatabaseField orderBy){
+                                                           String collection,
+                                                           DatabaseField key,
+                                                           Object value,
+                                                           Integer limit,
+                                                           DatabaseField orderBy){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -313,14 +313,14 @@ public class FakeDatabase extends Database{
      * @param <T> Tape of entityType
      */
     private <T extends DatabaseEntity> void addToList(Class<T> clazz, ArrayList<T> tempList, DatabaseEntity entity) {
-            try {
-                T temp = clazz.newInstance();
-                temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                tempList.add(temp);
-                Log.d(TAG, "Added element to return");
-            } catch (Exception e) {
-                Log.e(TAG, "Illegal access exception");
-            }
+        try {
+            T temp = clazz.newInstance();
+            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+            tempList.add(temp);
+            Log.d(TAG, "Added element to return");
+        } catch (Exception e) {
+            Log.e(TAG, "Illegal access exception");
+        }
     }
 
 
