@@ -121,7 +121,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
 
-        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, StorageCategories.FAVOR);
+        if(imageToDisplay==null){
+            FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, StorageCategories.FAVOR);
+        }
 
         if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
             interestedPeople = (ArrayList<String>) favor.get(Favor.ObjectFields.interested);
