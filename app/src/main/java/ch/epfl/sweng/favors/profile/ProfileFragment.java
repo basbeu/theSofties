@@ -17,24 +17,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.FavorRequest;
-import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.utils.Utils;
@@ -103,6 +103,7 @@ public class ProfileFragment extends Fragment {
                                     .addOnCompleteListener (task12 -> {
                                         if (task12.isSuccessful()) {
                                             Log.e("TAG", "User account deleted.");
+                                            Utils.logout(getContext(), auth);
                                             Toast.makeText(getContext(), R.string.userDeletionSuccessful,
                                                     Toast.LENGTH_SHORT).show();
                                             //clean/delete Cloudstore documents related to that
@@ -117,8 +118,14 @@ public class ProfileFragment extends Fragment {
 
                                                 }
                                             });
-                                            Utils.logout(getContext(), auth);
+                                            Query favorsQuery = db.collection("favors").whereEqualTo("ownerID", userID);
+                                            favorsQuery.get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                                for(QueryDocumentSnapshot favor : queryDocumentSnapshots){
+                                                    favor.getReference().delete();
+                                                }
+                                                Log.e("TAG", "All user's favors have been deleted..");
 
+                                            });
                                         } else {
                                             Log.e("TAG", "User account deletion unsuccessful.");
                                             Toast.makeText(getContext(), R.string.userDeletionFail,
