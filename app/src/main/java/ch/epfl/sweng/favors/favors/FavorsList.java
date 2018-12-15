@@ -67,7 +67,8 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             @Override
             public boolean onQueryTextChange(String query) {
                 // filter recycler view when text is changed
-                listAdapter.getFilter().filter(query);
+                if(listAdapter!=null)
+                    listAdapter.getFilter().filter(query);
                 return false;
             }
         });
