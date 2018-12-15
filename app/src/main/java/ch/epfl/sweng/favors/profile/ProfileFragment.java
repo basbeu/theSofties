@@ -23,12 +23,18 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.FavorRequest;
+import ch.epfl.sweng.favors.database.FirebaseDatabase;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.utils.Utils;
@@ -85,10 +91,10 @@ public class ProfileFragment extends Fragment {
             AuthCredential credential = EmailAuthProvider.getCredential(auth.getEmail(),
                     binding.passwordEntry.getText().toString());
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String userID = user.getUid();
             //Reauthentication is necessary because the user session may be logged in for a long time.
-            //Reauthenticate, will update the user login session and prevent FirebaseException
+            //Reauthenticate will update the user login session and prevent FirebaseException
             // (CREDENTIAL_TOO_OLD_LOGIN_AGAIN) on user.delete()
-            //TODO: NETTOYER TOUT LE RESTE DE LA DATABASE SUR EFFACEMENT
             user.reauthenticate(credential)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -99,7 +105,20 @@ public class ProfileFragment extends Fragment {
                                             Log.e("TAG", "User account deleted.");
                                             Toast.makeText(getContext(), R.string.userDeletionSuccessful,
                                                     Toast.LENGTH_SHORT).show();
+                                            //clean/delete Cloudstore documents related to that
+                                            //deleted user
+                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                            //update all collections one by one
+                                            db.collection("users").document(userID).delete().addOnCompleteListener(task1 -> {
+                                                if(task1.isSuccessful()){
+                                            Log.e("TAG", "User document successfully deleted.");
+                                                } else {
+                                                    Log.e("TAG", "User document deletion failed.");
+
+                                                }
+                                            });
                                             Utils.logout(getContext(), auth);
+
                                         } else {
                                             Log.e("TAG", "User account deletion unsuccessful.");
                                             Toast.makeText(getContext(), R.string.userDeletionFail,

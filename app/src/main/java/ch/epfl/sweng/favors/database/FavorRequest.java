@@ -27,9 +27,5 @@ public final class FavorRequest extends Request{
         db.getList(list, Favor.class, COLLECTION, mapEquals, mapLess, mapMore, limit, orderBy);
     }
 
-    /*public static void getWithId(Favor favor, String value){
-        db.getElement(favor, Favor.class, COLLECTION, value);
-    }*/
-
 }
 
