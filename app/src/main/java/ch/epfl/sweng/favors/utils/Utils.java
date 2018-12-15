@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.utils;
 
 import android.app.ProgressDialog;
+import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -206,7 +207,7 @@ public final class Utils {
 
     /**
      * Create an Uri from an image bitmap
-     * found on https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri
+     * @see <a href="https://stackoverflow.com/questions/8295773/how-can-i-transform-a-bitmap-into-a-uri"></a>
      * @param context the context of the fragment that call this method
      * @param bitmap the bitmap to be converted in Uri
      * @return Uri to the image bitmap, or null if the path cannot be resolved
@@ -222,41 +223,55 @@ public final class Utils {
 
 
     /**
-     * https://stackoverflow.com/questions/15759195/reduce-size-of-bitmap-to-some-specified-pixel-in-android
+     * Compress a return an Uri image
+     * @see <a href="https://stackoverflow.com/questions/15759195/reduce-size-of-bitmap-to-some-specified-pixel-in-android"></a>
      * @param context
      * @param uri
      * @return
      */
     public static Uri compressImageUri(Context context, Uri uri){
+        Bitmap bitmapToBeCompressed;
         try {
-            Bitmap bitmapToBeCompressed;
-            if(ExecutionMode.getInstance().isTest()){
-                bitmapToBeCompressed = Bitmap.createBitmap(100, 100, Bitmap.Config.ALPHA_8);
-            }else{
-                bitmapToBeCompressed = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-            }
-            int width = bitmapToBeCompressed.getWidth();
-            int height = bitmapToBeCompressed.getHeight();
-            int maxSize = 640;
-
-            float bitmapRatio = (float) width / (float) height;
-            if (bitmapRatio > 1) {
-                width = maxSize;
-                height = (int) (width / bitmapRatio);
-            } else {
-                height = maxSize;
-                width = (int) (height * bitmapRatio);
-            }
-            Uri compressedUri = ExecutionMode.getInstance().isTest() ? uri : getImageUri(context, Bitmap.createScaledBitmap(bitmapToBeCompressed, width, height, true));
-
-            return compressedUri;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            bitmapToBeCompressed = getBitmapFromUri(context, uri);
+        }catch (IOException e) {
+                e.printStackTrace();
+                return null;
         }
 
+        int width = bitmapToBeCompressed.getWidth();
+        int height = bitmapToBeCompressed.getHeight();
+        int maxSize = 640;
 
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        Uri compressedUri = ExecutionMode.getInstance().isTest() ? uri : getImageUri(context, Bitmap.createScaledBitmap(bitmapToBeCompressed, width, height, true));
+
+        return compressedUri;
+
+    }
+
+    /**
+     * Helper method to get a bitmap form an Uri
+     * @param context actual context
+     * @param uri Uri to be converted in bitmap
+     * @return Bitmap from the Uri
+     * @throws IOException
+     */
+    private static Bitmap getBitmapFromUri(Context context, Uri uri) throws IOException {
+        Bitmap bitmapToBeCompressed = Bitmap.createBitmap(100, 100, Bitmap.Config.ALPHA_8);
+        if(uri == null){
+            throw new IOException("Uri cannot be null !");
+        }
+        if(!ExecutionMode.getInstance().isTest()){
+            bitmapToBeCompressed = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        }
+        return bitmapToBeCompressed;
     }
 
 }

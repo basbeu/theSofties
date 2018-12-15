@@ -1,61 +1,34 @@
 package ch.epfl.sweng.favors.utils;
 
-import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.storage.FirebaseStorage;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Date;
-
-import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.ConfirmationSent;
-import ch.epfl.sweng.favors.database.FakeDatabase;
-import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
-import ch.epfl.sweng.favors.main.LoggedInScreen;
-import okhttp3.internal.Util;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static org.mockito.ArgumentMatchers.matches;
-import static org.mockito.Mockito.when;
+
 
 @RunWith(AndroidJUnit4.class)
 public class UtilsTest {
 
     final static long DAY = 86400000;
 
-    @Rule public ActivityTestRule<ConfirmationSent> mActivityTestRule = new ActivityTestRule<>(ConfirmationSent.class, true, false);
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-    @Mock private Context context;
-    private Uri uri = Uri.parse("test");
-
 
     @Before
-    public void Before() throws FileNotFoundException, InterruptedException {
+    public void Before(){
         ExecutionMode.getInstance().setTest(true);
     }
 
@@ -275,36 +248,4 @@ public class UtilsTest {
     public void CreateUtils(){
         new Utils();
     }
-
-    @Test
-    public void getImageUriTest(){
-        Utils.getImageUri(context, Bitmap.createBitmap(100, 100, Bitmap.Config.ALPHA_8));
-    }
-
-
-    @Test
-    public void compressImageUriTest() throws InterruptedException {
-        ExecutionMode.getInstance().setTest(true);
-
-        if(Looper.myLooper() == null){
-            Looper.prepare();
-        }
-
-        mActivityTestRule.launchActivity(null);
-        InternalSqliteDb.openDb(mActivityTestRule.getActivity().getApplicationContext());
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        Uri path = Uri.parse("android.resource://ch.epfl.sweng.favors.utils/" + R.drawable.no_image);
-        Uri result = Utils.compressImageUri(mActivityTestRule.getActivity().getApplicationContext(), path);
-        assertEquals(result, path);
-        Looper.myLooper().quitSafely();
-    }
-
-
 }

@@ -115,10 +115,10 @@ public class Storage extends FirebaseStorageDispatcher{
             progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            String storageRef = ExecutionMode.getInstance().isTest() ? "test" : UUID.randomUUID().toString();
+            String storageRef = getStorageRef();
             StorageReference ref = storageReference.child(path + storageRef);
             Uri compressedImage;
-            compressedImage = ExecutionMode.getInstance().isTest() ? selectedImage : Utils.compressImageUri(context, selectedImage);
+            compressedImage = getCompressedImage(context, selectedImage);
             if(compressedImage != null){
                 ref.putFile(compressedImage).addOnSuccessListener(successListener).addOnFailureListener(failureListener).addOnProgressListener(progressListener);
                 return storageRef;
@@ -127,6 +127,24 @@ public class Storage extends FirebaseStorageDispatcher{
         }
 
         return null;
+    }
+
+    /**
+     * Helper method to return the storage reference based on if it is a test or not
+     * @return the storage ref
+     */
+    private String getStorageRef(){
+        return ExecutionMode.getInstance().isTest() ? "test" : UUID.randomUUID().toString();
+    }
+
+    /**
+     * Helper method to get the compressed Uri image based on if it is a test or not
+     * @param context actual context
+     * @param selectedImage Uri to be compressed
+     * @return compressed Uri
+     */
+    private Uri getCompressedImage(Context context, Uri selectedImage){
+        return ExecutionMode.getInstance().isTest() ? selectedImage : Utils.compressImageUri(context, selectedImage);
     }
 
     @Override
