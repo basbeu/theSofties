@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,29 +85,33 @@ public class ProfileFragment extends Fragment {
             AuthCredential credential = EmailAuthProvider.getCredential(auth.getEmail(),
                     binding.passwordEntry.getText().toString());
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            //We have to reauthenticate user because we don't know how long
-            //it was the sign-in. Calling reauthenticate, will update the
-            //user login and prevent FirebaseException (CREDENTIAL_TOO_OLD_LOGIN_AGAIN) on user.delete()
-            //FIXME: ERASED EVEN IF RANDOM PASSWORD IS PUT !!!! NOT OKAY RE RESTER ET VOIR TOASTS
+            //Reauthentication is necessary because the user session may be logged in for a long time.
+            //Reauthenticate, will update the user login session and prevent FirebaseException
+            // (CREDENTIAL_TOO_OLD_LOGIN_AGAIN) on user.delete()
             //TODO: NETTOYER TOUT LE RESTE DE LA DATABASE SUR EFFACEMENT
             user.reauthenticate(credential)
                     .addOnCompleteListener(task -> {
-                        user.delete().addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                Toast.makeText(getContext(), R.string.userDeletionSuccessful,
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), R.string.userDeletionFail,
-                                        Toast.LENGTH_SHORT).show();
-                                task1.getException();
-                            }
-                        });
+                        if (task.isSuccessful()) {
+                            Log.e("TAG", "onComplete: authentication complete");
+                            user.delete()
+                                    .addOnCompleteListener (task12 -> {
+                                        if (task12.isSuccessful()) {
+                                            Log.e("TAG", "User account deleted.");
+                                            Toast.makeText(getContext(), R.string.userDeletionSuccessful,
+                                                    Toast.LENGTH_SHORT).show();
+                                            Utils.logout(getContext(), auth);
+                                        } else {
+                                            Log.e("TAG", "User account deletion unsuccessful.");
+                                            Toast.makeText(getContext(), R.string.userDeletionFail,
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(getContext(), R.string.wrongPassword,
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     });
-            Utils.logout(this.getContext(), auth);
-
-
         });
-
 
         updateTitle();
 
