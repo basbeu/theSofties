@@ -5,7 +5,6 @@ import com.google.android.gms.tasks.Task;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 

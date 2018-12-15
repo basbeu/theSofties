@@ -7,7 +7,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Before;
 import org.junit.Rule;

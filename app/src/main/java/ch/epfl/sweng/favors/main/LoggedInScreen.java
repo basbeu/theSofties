@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -8,8 +7,6 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,13 +14,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -100,9 +94,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         binding.navView.addHeaderView(headerBinding.getRoot());
 
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
-        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
-            storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE);
-        });
+        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE));
 
 
 
@@ -121,12 +113,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
         headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
-        headerBinding.deleteProfilePicture.setOnClickListener(v -> {
-            Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
-            });
-
-        });
+        headerBinding.deleteProfilePicture.setOnClickListener(v -> Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess)));
     }
 
 

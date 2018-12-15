@@ -82,12 +82,17 @@ public class User extends DatabaseEntity{
             String gender = user.get(User.StringFields.sex);
             if (genderIsValid(gender)) {
                 gender = gender.trim().substring(0, 1);
-                if (gender.toUpperCase().equals("M"))
-                    userGender =  M;
-                else if (gender.toUpperCase().equals("F"))
-                    userGender = F;
-                else
-                    Log.e(TAG, "Failed to parse the gender returned by the database");
+                switch (gender.toUpperCase()) {
+                    case "M":
+                        userGender = M;
+                        break;
+                    case "F":
+                        userGender = F;
+                        break;
+                    default:
+                        Log.e(TAG, "Failed to parse the gender returned by the database");
+                        break;
+                }
             }
 
             return userGender;
@@ -115,7 +120,7 @@ public class User extends DatabaseEntity{
 class Status extends ObservableField<Status.Values>{
     private static final String TAG = "User_Status";
 
-    public enum Values{NotLogged, Logged};
+    public enum Values{NotLogged, Logged}
 
     public Status(Status.Values value){
         super(value);

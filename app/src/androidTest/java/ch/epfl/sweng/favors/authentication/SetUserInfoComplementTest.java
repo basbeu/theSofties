@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
@@ -30,13 +29,13 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static java.lang.Thread.sleep;
-import static junit.framework.TestCase.assertEquals;
+
 /**
  * Used as container to test fragments in isolation with Espresso
  */
 @RunWith(AndroidJUnit4.class)
 public class SetUserInfoComplementTest {
-    @Rule public IntentsTestRule<SetUserInfo> intentsTestRule = new IntentsTestRule<SetUserInfo>(SetUserInfo.class, true,  false);
+    @Rule public IntentsTestRule<SetUserInfo> intentsTestRule = new IntentsTestRule<>(SetUserInfo.class, true, false);
     private final String FAKEFIRSTNAME = "Bastien";
     private final String FAKELASTNAME = "Beuchat";
     private final String FAKECITY = "Lausanne";

@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{chatMessage.writerName}"
                     android:textColor="#000000"
-                    android:textSize="13dp" />
+                    android:textSize="13sp" />
 
 
                 <TextView
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{chatMessage.getObservableObject(ChatMessage.StringFields.messageContent)}"
                     android:textColor="#000000"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -69,7 +69,7 @@
                 android:textAlignment="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START}"
                 android:text="@{Utils.getFullDate(safeUnbox(chatMessage.getObservableObject(ChatMessage.LongFields.messageDate)))}"
                 android:textColor="#000000"
-                android:textSize="12dp"/>
+                android:textSize="12sp"/>
 
         </LinearLayout>
 

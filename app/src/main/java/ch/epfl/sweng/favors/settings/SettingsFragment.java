@@ -64,9 +64,7 @@ public class SettingsFragment extends Fragment {
             Database.getInstance().updateOnDb(User.getMain());
         });
 
-        binding.appNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) ->{
-            LocalPreferences.getInstance().setAppNotifEnabled(isChecked);
-        } );
+        binding.appNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) -> LocalPreferences.getInstance().setAppNotifEnabled(isChecked));
 
         colorsMap = new HashMap<>();
         colorsMap.put("Grey", R.color.colorToolbar);

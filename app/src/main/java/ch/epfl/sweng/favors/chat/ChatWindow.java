@@ -5,31 +5,19 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.Collections;
-
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.ChatInformations;
 import ch.epfl.sweng.favors.database.ChatMessage;
 import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.ChatConversationBinding;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
@@ -91,16 +79,13 @@ public class ChatWindow extends android.support.v4.app.Fragment {
         });
     }
     private void setSendButton(){
-        binding.sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String value = binding.chatMessageText.getText().toString();
-                if(value.length() < 1) return;
-                chatsInformations.addMessageToConversation(value);
-                binding.sendButton.setEnabled(false);
-                binding.chatMessageText.setText("");
-                mustLoadMore = true;
-            }
+        binding.sendButton.setOnClickListener(v -> {
+            String value = binding.chatMessageText.getText().toString();
+            if(value.length() < 1) return;
+            chatsInformations.addMessageToConversation(value);
+            binding.sendButton.setEnabled(false);
+            binding.chatMessageText.setText("");
+            mustLoadMore = true;
         });
     }
 
@@ -108,7 +93,7 @@ public class ChatWindow extends android.support.v4.app.Fragment {
         binding.editTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEditingTitle.get() == false) isEditingTitle.set(true);
+                if(!isEditingTitle.get()) isEditingTitle.set(true);
                 else{
                     if(binding.editTitleText.getText().toString().length() > 2){
                         chatsInformations.set(ChatInformations.StringFields.title, binding.editTitleText.getText().toString());

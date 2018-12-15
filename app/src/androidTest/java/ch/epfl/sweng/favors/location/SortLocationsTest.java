@@ -2,18 +2,13 @@ package ch.epfl.sweng.favors.location;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.util.Log;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static junit.framework.TestCase.assertEquals;
 

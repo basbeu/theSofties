@@ -6,9 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
-import com.google.api.Distribution;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.ChatInformations;
@@ -38,13 +35,8 @@ public class ChatInfosAdapter extends RecyclerView.Adapter<ChatInfosAdapter.Chat
         public void bind(ChatInformations item) {
             binding.setChatItem(item);
             if(!item.isRead())
-                binding.chatTitle.setTypeface(null, Typeface.BOLD);;
-            binding.deleteChat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    parent.delete(item);
-                }
-            });
+                binding.chatTitle.setTypeface(null, Typeface.BOLD);
+            binding.deleteChat.setOnClickListener(v -> parent.delete(item));
             binding.chatListItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

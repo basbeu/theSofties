@@ -112,12 +112,7 @@ public class LocationHandler {
         isRecurrent(recurrent);
     }
 
-    OnSuccessListener<Location> successListerner = new OnSuccessListener<Location>() {
-        @Override
-        public void onSuccess(Location location) {
-            updateLocationInformations(location);
-        }
-    };
+    OnSuccessListener<Location> successListerner = location -> updateLocationInformations(location);
 
     public void updateLocation() {
         location.getLastLocation(successListerner);
