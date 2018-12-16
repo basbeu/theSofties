@@ -158,8 +158,8 @@ public class ProfileFragment extends Fragment {
                                                             f.set(Favor.ObjectFields.interested, interestedPeople);
                                                             Database.getInstance().updateOnDb(f);
                                                         }
-
                                                         Log.i("TAG", "All occurrences of the user have been deleted in the favors he was interested in.");
+
                                                         //2.2 - selectedPeople
                                                         ObservableArrayList<Favor> selectedFavorsList = new ObservableArrayList<>();
                                                         Map<DatabaseField, Object> selectedPeopleUserId = new HashMap<>();
@@ -176,16 +176,11 @@ public class ProfileFragment extends Fragment {
                                                                     f.set(Favor.ObjectFields.selectedPeople, selectedPeople);
                                                                     Database.getInstance().updateOnDb(f);
                                                                 }
-
                                                                 Log.i("TAG", "All occurrences of the user have been deleted in the favors for which he was selected.");
-
                                                             }
-
                                                         });
                                                     }
-
                                                 });
-
                                             }
                                         } else {
                                             Log.e("TAG", "User account deletion unsuccessful.");
