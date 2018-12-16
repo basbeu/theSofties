@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,13 +29,22 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.FavorRequest;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.databinding.FragmentProfileLayoutBinding;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.utils.Utils;
@@ -102,30 +112,81 @@ public class ProfileFragment extends Fragment {
                             user.delete()
                                     .addOnCompleteListener (task12 -> {
                                         if (task12.isSuccessful()) {
-                                            Log.e("TAG", "User account deleted.");
+                                            Log.i("TAG", "User account deleted.");
                                             Utils.logout(getContext(), auth);
                                             Toast.makeText(getContext(), R.string.userDeletionSuccessful,
                                                     Toast.LENGTH_SHORT).show();
                                             //clean/delete Cloudstore documents related to that
                                             //deleted user
                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            //update all collections one by one
+                                            //update "users" Firestore collection
                                             db.collection("users").document(userID).delete().addOnCompleteListener(task1 -> {
                                                 if(task1.isSuccessful()){
-                                            Log.e("TAG", "User document successfully deleted.");
+                                            Log.i("TAG", "User document successfully deleted.");
                                                 } else {
                                                     Log.e("TAG", "User document deletion failed.");
 
                                                 }
                                             });
+                                            //update "favors" Firestore collection
+                                            //1 - remove user's favors
                                             Query favorsQuery = db.collection("favors").whereEqualTo("ownerID", userID);
                                             favorsQuery.get().addOnSuccessListener(queryDocumentSnapshots -> {
                                                 for(QueryDocumentSnapshot favor : queryDocumentSnapshots){
                                                     favor.getReference().delete();
                                                 }
-                                                Log.e("TAG", "All user's favors have been deleted..");
+                                                Log.i("TAG", "All user's favors have been deleted.");
 
                                             });
+                                            //2 - remove the user from all interested and selected
+                                                //people lists from the other favors
+                                            ReentrantLock lock = new ReentrantLock();
+                                            synchronized (lock) {
+                                                //2.1 - interested people
+                                                ObservableArrayList<Favor> interestingFavorsList = new ObservableArrayList<>();
+                                                Map<DatabaseField, Object> interestedPeopleUserId = new HashMap<>();
+                                                FavorRequest.getList(interestingFavorsList, interestedPeopleUserId,
+                                                        null, null, null, null);
+                                                interestingFavorsList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                                                    @Override
+                                                    public void onPropertyChanged(Observable sender, int propertyId) {
+                                                        interestedPeopleUserId.put(Favor.ObjectFields.interested, userID);
+                                                        for (Favor f : interestingFavorsList) {
+                                                            ArrayList<String> interestedPeople;
+                                                            interestedPeople = (ArrayList<String>) f.get(Favor.ObjectFields.interested);
+                                                            interestedPeople.remove(userID);
+                                                            f.set(Favor.ObjectFields.interested, interestedPeople);
+                                                            Database.getInstance().updateOnDb(f);
+                                                        }
+
+                                                        Log.i("TAG", "All occurrences of the user have been deleted in the favors he was interested in.");
+                                                        //2.2 - selectedPeople
+                                                        ObservableArrayList<Favor> selectedFavorsList = new ObservableArrayList<>();
+                                                        Map<DatabaseField, Object> selectedPeopleUserId = new HashMap<>();
+                                                        FavorRequest.getList(selectedFavorsList, selectedPeopleUserId,
+                                                                null, null, null, null);
+                                                        selectedFavorsList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                                                            @Override
+                                                            public void onPropertyChanged(Observable sender, int propertyId) {
+                                                                selectedPeopleUserId.put(Favor.ObjectFields.selectedPeople, userID);
+                                                                for (Favor f : selectedFavorsList) {
+                                                                    ArrayList<String> selectedPeople;
+                                                                    selectedPeople = (ArrayList<String>) f.get(Favor.ObjectFields.selectedPeople);
+                                                                    selectedPeople.remove(userID);
+                                                                    f.set(Favor.ObjectFields.selectedPeople, selectedPeople);
+                                                                    Database.getInstance().updateOnDb(f);
+                                                                }
+
+                                                                Log.i("TAG", "All occurrences of the user have been deleted in the favors for which he was selected.");
+
+                                                            }
+
+                                                        });
+                                                    }
+
+                                                });
+
+                                            }
                                         } else {
                                             Log.e("TAG", "User account deletion unsuccessful.");
                                             Toast.makeText(getContext(), R.string.userDeletionFail,
