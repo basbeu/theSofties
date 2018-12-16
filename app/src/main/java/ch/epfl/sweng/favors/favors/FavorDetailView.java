@@ -9,6 +9,8 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +28,6 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
-import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
@@ -68,22 +69,17 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     private Favor localFavor;
 
     private ArrayList<String> interestedPeople = new ArrayList<>();
-    private ArrayList<String> selectedUsers = new ArrayList<>();
-    // Map K: uid, V: name
     private Map<String, User> userNames;
 
     FragmentFavorDetailViewBinding binding;
 
     public static final String FAVOR_ID = "favor_id";
     public static final String ENABLE_BUTTONS = "enable_buttons";
-    private ArrayList<String> bubblesResult;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userNames = new HashMap<>();
-        selectedUsers = new ArrayList<>();
-        bubblesResult = new ArrayList<>();
 
         Bundle arguments = getArguments();
         SharedViewFavor model = ViewModelProviders.of(getActivity()).get(SharedViewFavor.class);
@@ -118,14 +114,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
             interestedPeople = (ArrayList<String>) favor.get(Favor.ObjectFields.interested);
+            //TODO: favor.getRef(Favor.ObjectFields.interested) and set a listener;
             if(isItsOwn.get()) {
                 for (String uid : interestedPeople) {
                     User u = new User();
                     u.addOnPropertyChangedCallback(userInfosCb);
                     UserRequest.getWithId(u, uid);
                 }
-            }
-            else if (interestedPeople.contains(User.getMain().getId()))
+            } else if (interestedPeople.contains(User.getMain().getId()))
                 isInterested.set(true);
         }
 
@@ -136,31 +132,16 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     Boolean buttonEnabled = true;
 
-    Observable.OnPropertyChangedCallback notificationCB = new Observable.OnPropertyChangedCallback() {
+    Observable.OnPropertyChangedCallback userInfosCb = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
             if(propertyId == DatabaseEntity.UpdateType.FROM_REQUEST.ordinal()) {
-                String fn = ((User) sender).get(User.StringFields.firstName);
-                String ln = ((User) sender).get(User.StringFields.lastName);
-                String key = fn + " " + ln;
-                userNames.put(key,((User) sender));
+                userNames.put(((User)sender).getId(),((User)sender));
                 sender.removeOnPropertyChangedCallback(this);
             }
         }
     };
 
-    Observable.OnPropertyChangedCallback userInfosCb = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            if(propertyId == DatabaseEntity.UpdateType.FROM_REQUEST.ordinal()) {
-                String fn = ((User) sender).get(User.StringFields.firstName);
-                String ln = ((User) sender).get(User.StringFields.lastName);
-                String key = fn + " " + ln;
-                userNames.put(key,((User) sender));
-                sender.removeOnPropertyChangedCallback(this);
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -237,7 +218,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             }
         });
 
-
         binding.deleteButton.setOnClickListener((l)->{
             long newUserTokens = User.getMain().get(User.LongFields.tokens) + 1;
             User.getMain().set(User.LongFields.tokens, newUserTokens);
@@ -258,8 +238,38 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     mFrag).addToBackStack("interested").commit();
         });
 
+        binding.selectButton.setOnClickListener(v -> {
+            UsersSelectionFragment mFrag = new UsersSelectionFragment();
+            Bundle bundle = new Bundle();
+            Database.getInstance().updateFromDb(localFavor);
+            localFavor.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    ArrayList<String> selectedPeople = (ArrayList<String>) ((Favor) sender).get(Favor.ObjectFields.selectedPeople);
+                    Log.d(TAG, ""+selectedPeople.size());
+                    bundle.putStringArrayList(UsersSelectionFragment.INTERESTED_PEOPLE, interestedPeople);
+                    bundle.putStringArrayList(UsersSelectionFragment.SELECTED_PEOPLE, selectedPeople);
+                    bundle.putString(UsersSelectionFragment.FAVOR, localFavor.getId());
+                    mFrag.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            mFrag).addToBackStack(null).commit();
+                    localFavor.removeOnPropertyChangedCallback(this);
+                }
+            });
+        });
+
         binding.payButton.setOnClickListener(v -> {
-           paySelectedPeople();
+            //to update the selected People
+            Database.getInstance().updateFromDb(localFavor);
+            localFavor.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    if(propertyId == User.UpdateType.FROM_DB.ordinal()) {
+                        paySelectedPeople((ArrayList<String>) ((Favor) sender).get(Favor.ObjectFields.selectedPeople));
+                        localFavor.removeOnPropertyChangedCallback(this);
+                    }
+                }
+            });
         });
 
         return binding.getRoot();
@@ -279,7 +289,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         }
     }
 
-    public void paySelectedPeople() {
+    public void paySelectedPeople(ArrayList<String> selectedUsers) {
 
         long tokenPerPerson = localFavor.get(Favor.LongFields.tokenPerPerson);
 
@@ -287,11 +297,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Toast.makeText(getContext(), "No user selected.", Toast.LENGTH_SHORT).show();
         }
 
-        for (String selName : selectedUsers) {
-            User toUpdate = userNames.get(selName);
+        for (String selectedUserId : selectedUsers) {
+            User toUpdate = userNames.get(selectedUserId);
             toUpdate.set(User.LongFields.tokens, toUpdate.get(User.LongFields.tokens) + tokenPerPerson);
             Database.getInstance().updateOnDb(toUpdate);
-
             toUpdate.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
@@ -312,7 +321,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
             Toast.makeText(getContext(), "Users have been successfully paid. Reaming : " + localFavor.get(Favor.LongFields.nbPerson).toString(), Toast.LENGTH_SHORT).show();
         else{
             Toast.makeText(getContext(), "No token are reaming for this favor", Toast.LENGTH_LONG).show();
-
         }
 
     }
