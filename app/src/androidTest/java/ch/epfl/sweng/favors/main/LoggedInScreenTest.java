@@ -169,6 +169,7 @@ public class LoggedInScreenTest {
         Looper.myLooper().quitSafely();
     }
 
+    @Ignore
     @Test
     public void logoutTest(){
         if(Looper.myLooper() == null){
