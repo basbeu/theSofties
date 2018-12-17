@@ -15,6 +15,7 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
 import ch.epfl.sweng.favors.favors.Notification;
 import ch.epfl.sweng.favors.location.LocationHandler;
@@ -61,7 +62,6 @@ public class SetUserInfo extends AppCompatActivity {
         user.set(User.StringFields.email, Authentication.getInstance().getEmail());
         user.set(User.LongFields.tokens, User.DEFAULT_TOKENS_NUMBER);
         user.set(User.ObjectFields.notifications, new ArrayList<String>());
-        user.set(User.BooleanFields.emailNotifications, true);
         baseCity.set(LocationHandler.getHandler().locationCity.get());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_set_user_info);
         binding.setElements(this);
@@ -91,6 +91,7 @@ public class SetUserInfo extends AppCompatActivity {
         });
 
         binding.submit.setOnClickListener(v->{
+            user.set(User.BooleanFields.emailNotifications, LocalPreferences.getInstance().isEmailNotifEnabled());
             Database.getInstance().updateOnDb(user);
             Intent intent = new Intent(this, ConfirmationSent.class);
             startActivity(intent);
