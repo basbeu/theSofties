@@ -105,10 +105,10 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         private void setStringFields(Favor favor) {
             String titleStr = favor.get(Favor.StringFields.title);
             if(titleStr != null){
-               if(titleStr.length() > 23){
-                   titleStr = titleStr.subSequence(0, 22).toString();
-                   titleStr = titleStr.concat("...");
-               }
+                if(titleStr.length() > 23){
+                    titleStr = titleStr.subSequence(0, 22).toString();
+                    titleStr = titleStr.concat("...");
+                }
                 title.setText(titleStr);
             }
             if(favor.get(Favor.StringFields.category) != null)

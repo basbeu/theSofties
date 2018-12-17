@@ -33,15 +33,15 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
 
 
         binding.modeSwitch.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  currentMode++;
-                  if(currentMode>= modes.length){
-                      currentMode = 0;
-                  }
-                  setView(currentMode);
-              }
-            }
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      currentMode++;
+                                                      if(currentMode>= modes.length){
+                                                          currentMode = 0;
+                                                      }
+                                                      setView(currentMode);
+                                                  }
+                                              }
 
         );
 

@@ -17,4 +17,4 @@ public enum NotificationType {
         return notificationMessage;
     }
 
-    }
+}

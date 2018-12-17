@@ -60,7 +60,7 @@ public class User extends DatabaseEntity{
     public void setLocation(@Nonnull GeoPoint geo){
         if (user.get(StringFields.lastName) != null
                 && user.get(StringFields.email) != null
-                    && user.get(StringFields.sex) != null) {
+                && user.get(StringFields.sex) != null) {
             this.set(ObjectFields.location, geo);
             Database.getInstance().updateOnDb(user);
         }
