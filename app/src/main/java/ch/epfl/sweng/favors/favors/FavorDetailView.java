@@ -361,6 +361,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 EmailUtils.sendEmail(
                         new Email(localFavor.get(Favor.StringFields.ownerEmail), toUpdate.get(User.StringFields.email), "You have been paid for the favor " + title.get() + "!", "Thank you for helping me with my favor named :" + title.get() + ". You have been paid for it."), getActivity(),"Users have been successfully paid.","");
             }
+            sendMessage(toUpdate.getId(), "You have been paid for : " + localFavor.get(Favor.StringFields.title));
             localFavor.set(Favor.LongFields.nbPerson, localFavor.get(Favor.LongFields.nbPerson)-1);
             localFavor.set(Favor.ObjectFields.interested, interestedPeople.remove(toUpdate.getId()));
         }
