@@ -1,6 +1,7 @@
 package ch.epfl.sweng.favors.notifications;
 
 import android.app.NotificationManager;
+import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -20,22 +21,25 @@ public class PushNotifications extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
+        sendNotification(title, body, this);
+    }
+
+    public void sendNotification(String title, String body, Context context){
+        if(context == null)
+            throw new IllegalArgumentException();
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
-                .setSmallIcon(R.drawable.logo)
-                .setContentTitle(title)
-                .setContentText(body);
-
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).addToBackStack(null).commit();
+                new NotificationCompat.Builder(context, context.getString(R.string.default_notification_channel_id))
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle(title)
+                        .setContentText(body);
 
 
         int mNotificationId = (int)System.currentTimeMillis();
 
-        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
-
     }
 
 
