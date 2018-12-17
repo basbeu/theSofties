@@ -176,6 +176,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     }
 
 
+    Boolean canPayTimer = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -304,6 +306,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         binding.payButton.setOnClickListener(v -> {
             //to update the selected People
+            if(!canPayTimer) return;
+            canPayTimer = false;
             Database.getInstance().updateFromDb(localFavor);
             localFavor.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
@@ -314,6 +318,10 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     }
                 }
             });
+            new Handler().postDelayed(() -> {
+                // This method will be executed once the timer is over
+                canPayTimer = true;
+            },5000);
         });
 
         if(imageToDisplay != null){
