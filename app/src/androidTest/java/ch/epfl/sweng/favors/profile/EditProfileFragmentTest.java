@@ -14,7 +14,6 @@ import ch.epfl.sweng.favors.authentication.FirebaseAuthentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
@@ -34,7 +33,7 @@ import static junit.framework.TestCase.assertEquals;
 
 public class EditProfileFragmentTest {
 
-    @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<EditProfileFragment>(EditProfileFragment.class);
+    @Rule public FragmentTestRule<EditProfileFragment> mFragmentTestRule = new FragmentTestRule<>(EditProfileFragment.class);
 
 
     private User u;

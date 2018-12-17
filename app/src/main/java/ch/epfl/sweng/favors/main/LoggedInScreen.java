@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -8,7 +7,6 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,13 +14,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +25,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.chat.ChatsList;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
@@ -98,9 +94,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         binding.navView.addHeaderView(headerBinding.getRoot());
 
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
-        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
-            storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE);
-        });
+        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE));
 
 
 
@@ -118,16 +112,11 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
-       headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
-        headerBinding.deleteProfilePicture.setOnClickListener(v -> {
-            Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                    storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
-            });
-
-        });
+        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
+        headerBinding.deleteProfilePicture.setOnClickListener(v -> Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess)));
     }
 
-    
+
 
     @Override
     public void onBackPressed() {
@@ -183,10 +172,14 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             case R.id.notifications:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
                 break;
+            case R.id.discussions:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsList()).addToBackStack(null).commit();
+                break;
             case R.id.logout:
                 Utils.logout(this, Authentication.getInstance());
                 Toast.makeText(this, R.string.seeyou, Toast.LENGTH_SHORT).show();
                 break;
+
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);

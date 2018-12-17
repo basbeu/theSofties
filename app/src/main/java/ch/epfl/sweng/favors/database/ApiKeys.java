@@ -31,6 +31,7 @@ public class ApiKeys extends DatabaseEntity {
 
     /**
      * You need to call Database.getInstance.updateFromDb(apiKey) to be sure that the key is loaded
+     *
      * @return An API key object
      */
     public static synchronized ApiKeys getInstance() {

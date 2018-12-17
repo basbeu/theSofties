@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.authentication;
 
-import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -14,7 +13,6 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
-import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -35,7 +33,7 @@ import static junit.framework.TestCase.assertEquals;
 //TODO: HANDLE NULL POINTER EXCEPTION SETUSERINFO.HAVA LINE 51 AND 56 TO MAKE TESTS PASS
 public class SetUserInfoTest {
 
-    @Rule public ActivityTestRule<SetUserInfo> activityActivityTestRule = new ActivityTestRule<SetUserInfo>(SetUserInfo.class, true,  false);
+    @Rule public ActivityTestRule<SetUserInfo> activityActivityTestRule = new ActivityTestRule<>(SetUserInfo.class, true, false);
 
     private final String FAKEFIRSTNAME = "Bastien";
     private final String FAKELASTNAME = "Beuchat";
@@ -61,9 +59,7 @@ public class SetUserInfoTest {
     @Test
     public void userHasCorrectFirstName() {
 
-        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)->{
-            assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName));
-        });
+        Database.getInstance().updateFromDb(u).addOnCompleteListener((v)-> assertEquals(FAKEFIRSTNAME, u.get(User.StringFields.firstName)));
 
     }
     @Test

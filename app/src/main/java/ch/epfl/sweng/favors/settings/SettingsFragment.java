@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.databinding.SettingsLayoutBinding;
 
@@ -58,11 +60,11 @@ public class SettingsFragment extends Fragment {
 
         binding.emailNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             LocalPreferences.getInstance().setEmailNotifEnabled(isChecked);
+            User.getMain().set(User.BooleanFields.emailNotifications,isChecked);
+            Database.getInstance().updateOnDb(User.getMain());
         });
 
-        binding.appNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) ->{
-            LocalPreferences.getInstance().setAppNotifEnabled(isChecked);
-        } );
+        binding.appNotifToggle.setOnCheckedChangeListener((buttonView, isChecked) -> LocalPreferences.getInstance().setAppNotifEnabled(isChecked));
 
         colorsMap = new HashMap<>();
         colorsMap.put("Grey", R.color.colorToolbar);

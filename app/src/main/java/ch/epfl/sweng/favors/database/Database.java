@@ -5,7 +5,6 @@ import com.google.android.gms.tasks.Task;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 
@@ -29,7 +28,7 @@ public abstract class Database {
      */
     public abstract Task updateFromDb(DatabaseEntity databaseEntity);
 
-    public abstract void deleteFromDatabase(DatabaseEntity databaseEntity);
+    public abstract Task deleteFromDatabase(DatabaseEntity databaseEntity);
 
     /**
      *
@@ -41,31 +40,39 @@ public abstract class Database {
      * @return An observable Arraylist of all the DatabaseEntity of type <T> in the database
      */
     protected abstract <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
-                                                                                String collection,
-                                                                                Integer limit,
-                                                                                DatabaseField orderBy);
+                                                              String collection,
+                                                              Integer limit,
+                                                              DatabaseField orderBy);
 
 
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                          String collection,
-                                                          DatabaseField element,
-                                                          Object value,
-                                                          Integer limit,
+                                                                String collection,
+                                                                DatabaseField element,
+                                                                Object value,
+                                                                Integer limit,
                                                                 DatabaseField orderBy);
+
+    protected  abstract <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                                    String collection,
+                                                                    DatabaseField element,
+                                                                    Object value,
+                                                                    Integer limit,
+                                                                    DatabaseField orderBy);
 
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                 String collection,
                                                                 Map<DatabaseField, Object> mapEquals,
                                                                 Map<DatabaseField, Object> mapLess,
                                                                 Map<DatabaseField, Object> mapMore,
+                                                                Map<DatabaseField, Object> mapContains,
                                                                 Integer limit,
                                                                 DatabaseField orderBy);
 
     protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             String value);
+                                                                  String value);
 
     protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField element, Object value);
+                                                                  DatabaseField element, Object value);
 
     /**
      * @return Database that is the DB for the current session

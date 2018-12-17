@@ -1,12 +1,7 @@
 package ch.epfl.sweng.favors.database;
 
-import android.databinding.ObservableList;
-import android.os.Looper;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 

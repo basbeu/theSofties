@@ -3,7 +3,6 @@ package ch.epfl.sweng.favors.database;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public final class FavorRequest extends Request{
 
@@ -20,11 +19,11 @@ public final class FavorRequest extends Request{
     }
 
     public static void getList(ObservableArrayList<Favor> list, Map<DatabaseField, Object> mapEquals,
-                                Map<DatabaseField, Object> mapLess,
-                                Map<DatabaseField, Object> mapMore,
-                                Integer limit,
-                                DatabaseField orderBy){
-        db.getList(list, Favor.class, COLLECTION, mapEquals, mapLess, mapMore, limit, orderBy);
+                               Map<DatabaseField, Object> mapLess,
+                               Map<DatabaseField, Object> mapMore,
+                               Integer limit,
+                               DatabaseField orderBy){
+        db.getList(list, Favor.class, COLLECTION, mapEquals, mapLess, mapMore, null, limit, orderBy);
     }
 
 }

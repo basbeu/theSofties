@@ -17,4 +17,7 @@
     <color name="roseEnd">#ef0276</color>
     <color name="greenStart">#a7f56e</color>
     <color name="greenEnd">#11c612</color>
+    <color name="convOwn">#bad4ff</color>
+    <color name="convOthers">#f9e2a7</color>
+
 </resources>

@@ -14,7 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
- class FakeRetrofitClient extends RetrofitDispatcher {
+class FakeRetrofitClient extends RetrofitDispatcher {
     private static FakeRetrofitClient mInstance;
 
     public static synchronized FakeRetrofitClient getInstance() {
@@ -31,32 +31,27 @@ import retrofit2.Retrofit;
 
     @Override
     RetrofitApi getApi() {
-        return new RetrofitApi() {
+        return (from, to, subject, text) -> new Call<ResponseBody>() {
             @Override
-            public Call<ResponseBody> sendEmail(String from, String to, String subject, String text) {
-                return new Call<ResponseBody>() {
-                    @Override
-                    public Response<ResponseBody> execute() throws IOException { return null; }
+            public Response<ResponseBody> execute() throws IOException { return null; }
 
-                    @Override
-                    public void enqueue(Callback<ResponseBody> callback) { callback.onFailure(null,null); }
+            @Override
+            public void enqueue(Callback<ResponseBody> callback) { callback.onFailure(null,null); }
 
-                    @Override
-                    public boolean isExecuted() { return true; }
+            @Override
+            public boolean isExecuted() { return true; }
 
-                    @Override
-                    public void cancel() { }
+            @Override
+            public void cancel() { }
 
-                    @Override
-                    public boolean isCanceled() {return false;}
+            @Override
+            public boolean isCanceled() {return false;}
 
-                    @Override
-                    public Call<ResponseBody> clone() {return null; }
+            @Override
+            public Call<ResponseBody> clone() {return null; }
 
-                    @Override
-                    public Request request() { return null;}
-                };
-            }
+            @Override
+            public Request request() { return null;}
         };
     }
 

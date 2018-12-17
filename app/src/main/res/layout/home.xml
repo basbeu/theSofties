@@ -9,87 +9,90 @@
             />
     </data>
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
         <LinearLayout
+            android:descendantFocusability="blocksDescendants"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:minHeight="500dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:orientation="vertical">
 
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/welcomeTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:layout_weight="1"
-                android:textSize="24dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="24sp"
                 android:text="@{`Welcome back ` + elements.userName + `!`}" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40sp"
-            android:layout_marginStart="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40sp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/lastFavorsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:text="@{elements.lastFavorsTitle}" />
+
+                <Button
+                    android:id="@+id/switchList"
+                    android:layout_height="40dp"
+                    android:layout_width="70dp"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+                    android:text=">" />
+
+            </LinearLayout>
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="180dp">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/favorsList"
+                    android:text="TEST"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </android.support.v7.widget.RecyclerView>
+
+            </android.support.v4.widget.NestedScrollView>
+            <Button
+                android:layout_gravity="right"
+                android:id="@+id/button"
+                android:layout_width="120dp"
+                android:layout_height="38dp"
+                android:textSize="12sp"
+                android:layout_weight="0"
+                android:text="More favors" />
             <TextView
-                android:id="@+id/lastFavorsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="18dp"
-                android:text="@{elements.lastFavorsTitle}" />
+                android:layout_marginStart="10dp"
+                android:textSize="18sp"
+                android:text="@{elements.isUnreadMessages ? `Unread messages` : `No unread messages`}" />
 
-            <Button
-                android:id="@+id/switchList"
-                android:layout_height="40dp"
-                android:layout_width="70dp"
-                android:textSize="13dp"
-                android:layout_weight="1"
-                android:text=">" />
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <android.support.v7.widget.ContentFrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/frag_container"
+                />
+            </android.support.v4.widget.NestedScrollView>
 
-        </LinearLayout>
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="140dp">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/favorsList"
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
-
-        </android.support.v4.widget.NestedScrollView>
-        <Button
-            android:layout_gravity="right"
-            android:id="@+id/button"
-            android:layout_width="120dp"
-            android:layout_height="38dp"
-            android:textSize="12dp"
-            android:layout_weight="0"
-            android:text="More favors" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:layout_marginStart="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:gravity="center"
-            android:orientation="horizontal">
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </layout>

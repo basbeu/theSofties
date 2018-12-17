@@ -17,8 +17,6 @@ import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
-import ch.epfl.sweng.favors.favors.FavorListAdapter;
-import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 
 
@@ -35,7 +33,7 @@ public class FavorsMain extends AppCompatActivity {
 
     public ActivityMainBinding binding;
 
-    public enum Permissions{LOCATION_SERVICE};
+    public enum Permissions{LOCATION_SERVICE}
 
     private static Context context;
     public static Context getContext(){

@@ -22,7 +22,6 @@ import com.google.firebase.storage.UploadTask;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 public class StorageTest {
 
-    @Rule public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<FavorCreateFragment>(FavorCreateFragment.class);
+    @Rule public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock private FirebaseStorage firebaseStorage;
@@ -86,6 +85,7 @@ public class StorageTest {
 
     }
 
+
     @Test
     public void userCanUploadPicture(){
         if(Looper.myLooper() == null){
@@ -102,13 +102,14 @@ public class StorageTest {
 
         String refStorage = Storage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.FAVOR);
         assertEquals("test", refStorage);
+
         String f1 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.PROFILE);
         assertEquals("validRef", f1);
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         String f2 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), StorageCategories.PROFILE);
         assertEquals("invalidRef", f2);
-//        String f3 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), "test");
-//        assertEquals(null, f3);
+        String f3 = FakeStorage.getInstance().uploadImage(storageReference, mFragmentTestRule.getActivity(), Uri.parse("fakeUri"), null);
+        assertEquals(null, f3);
 
 
         ExecutionMode.getInstance().setInvalidAuthTest(false);
