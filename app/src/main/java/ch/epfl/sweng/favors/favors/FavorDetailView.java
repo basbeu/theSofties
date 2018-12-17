@@ -176,6 +176,8 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
     }
 
 
+    Boolean canPayTimer = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -307,6 +309,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 return;
             }
             paySelectedPeople(selectedUsers);
+
         });
 
         if(imageToDisplay != null){
