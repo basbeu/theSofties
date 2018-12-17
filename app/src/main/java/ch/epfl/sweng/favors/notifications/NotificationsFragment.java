@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -47,16 +49,18 @@ public class NotificationsFragment extends Fragment {
         String currUserId = User.getMain().getId();
 
         Database.getInstance().addSnapshotListener(getActivity(), NotificationEntity.getCollection(currUserId),(queryDocumentSnapshots, e) -> {
-            for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
-
-                String notificationMsg = doc.getDocument().getData().get("message").toString();
-                notificationsList.add(notificationMsg);
-
-                listAdapter.notifyDataSetChanged();
-            }
+            updateList(queryDocumentSnapshots);
         });
 
         return binding.getRoot();
+    }
+
+    public void updateList(QuerySnapshot queryDocumentSnapshots){
+        for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
+            String notificationMsg = doc.getDocument().getData().get("message").toString();
+            notificationsList.add(notificationMsg);
+            listAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
