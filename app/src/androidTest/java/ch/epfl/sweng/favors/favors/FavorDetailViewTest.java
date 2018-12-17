@@ -240,7 +240,6 @@ public class FavorDetailViewTest {
         f1.set(Favor.StringFields.title, "KILL THE BATMAN");
         f1.set(Favor.StringFields.locationCity, "Gotham City");
         f1.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-        f1.set(Favor.ObjectFields.selectedPeople, selectedPeople1);
         f1.set(Favor.ObjectFields.interested, interestedPeople1);
         f1.set(Favor.LongFields.nbPerson, 1L);
         f1.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -295,7 +294,6 @@ public class FavorDetailViewTest {
         f2.set(Favor.StringFields.title, "I am hungry pls hurry");
         f2.set(Favor.StringFields.locationCity, "Tombouctou");
         f2.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-        f2.set(Favor.ObjectFields.selectedPeople, selectedPeople2);
         f2.set(Favor.ObjectFields.interested, interestedPeople2);
         f2.set(Favor.LongFields.nbPerson, 1L);
         f2.set(Favor.LongFields.tokenPerPerson, 1L);
@@ -363,7 +361,6 @@ public class FavorDetailViewTest {
         f3.set(Favor.StringFields.title, "TICK TOK");
         f3.set(Favor.StringFields.locationCity, "Gotham City");
         f3.set(Favor.StringFields.ownerEmail, "toto.tata@pipi.com");
-        f3.set(Favor.ObjectFields.selectedPeople, selectedPeople3);
         f3.set(Favor.ObjectFields.interested, interestedPeople3);
         f3.set(Favor.LongFields.nbPerson, 1L);
         f3.set(Favor.LongFields.tokenPerPerson, 1L);

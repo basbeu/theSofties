@@ -191,7 +191,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         binding.favReportAbusiveAdd.setOnClickListener((l)->
                 EmailUtils.sendEmail(
-                        new Email(Authentication.getInstance().getEmail(), "report@myfavors.xyz", "Abusive favors : " + title.get(), "The abusive favor is : title" + title.get() + "\ndescription : " + description.get()), getActivity(),
+                        new Email(Authentication.getInstance().getEmail(), "report@myfavors.xyz", "Abusive favors : " + title.get(), "The abusive favor is : title" + title.get() + "\ndescription : " + description.get()), getContext(),
                 "issue has been reported! Sorry for the inconvenience",
                 "Sorry an error occured, try again later..."));
 
@@ -300,13 +300,13 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                     @Override
                     public void onPropertyChanged(Observable sender, int propertyId) {
-                        if (propertyId == User.UpdateType.FROM_DB.ordinal()) {
+                        if (propertyId == User.UpdateType.FROM_REQUEST.ordinal()) {
                             if (owner.get(User.BooleanFields.emailNotifications)) {
                                 EmailUtils.sendEmail(
                                         new Email(Authentication.getInstance().getEmail(),
                                                 ownerEmail.get(), "Someone is interested in: " + title.get(),
                                                 "Hi ! I am interested to help you with your favor. Please answer directly to this email."),
-                                        getActivity(),
+                                        getContext(),
                                         "We will inform the poster of the add that you are interested to help!",
                                         "Sorry an error occurred, try again later...");
                             }
