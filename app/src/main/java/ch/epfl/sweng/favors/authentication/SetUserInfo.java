@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
+import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 import ch.epfl.sweng.favors.databinding.ActivitySetUserInfoBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
 public class SetUserInfo extends AppCompatActivity {
-
 
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
 
@@ -87,6 +88,7 @@ public class SetUserInfo extends AppCompatActivity {
         });
 
         binding.submit.setOnClickListener(v->{
+            user.set(User.BooleanFields.emailNotifications, LocalPreferences.getInstance().isEmailNotifEnabled());
             Database.getInstance().updateOnDb(user);
             Intent intent = new Intent(this, ConfirmationSent.class);
             startActivity(intent);

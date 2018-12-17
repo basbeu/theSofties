@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.favors;
+package ch.epfl.sweng.favors.notifications;
 
 public enum NotificationType {
     INTEREST("Someone is interested in your favor"),

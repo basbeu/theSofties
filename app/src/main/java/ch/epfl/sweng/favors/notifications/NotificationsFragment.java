@@ -1,7 +1,6 @@
-package ch.epfl.sweng.favors.favors;
+package ch.epfl.sweng.favors.notifications;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,17 +9,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
+import ch.epfl.sweng.favors.database.NotificationEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.FragmentNotificationsBinding;
+import ch.epfl.sweng.favors.notifications.NotificationListAdapter;
 
 /**
  * The fragment which displays the notification of the current user authenticated.
  */
-public class Notifications extends Fragment {
+public class NotificationsFragment extends Fragment {
     private static final String TAG = "NOTIFICATIONS_LIST";
 
     FragmentNotificationsBinding binding;
@@ -33,22 +40,27 @@ public class Notifications extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications,container,false);
         binding.setElements(this);
 
+        notificationsList = new ArrayList<>();
+        listAdapter = new NotificationListAdapter(notificationsList);
+
         binding.notificationsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.notificationsList.setAdapter(listAdapter);
 
-        User.updateMain();
-        User owner = User.getMain();
+        String currUserId = User.getMain().getId();
 
-        owner.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                notificationsList = (ArrayList<String>) (User.getMain().get(User.ObjectFields.notifications));
-                listAdapter = new NotificationListAdapter(notificationsList);
-                binding.notificationsList.setAdapter(listAdapter);
-                listAdapter.notifyDataSetChanged();
-            }
+        Database.getInstance().addSnapshotListener(getActivity(), NotificationEntity.getCollection(currUserId),(queryDocumentSnapshots, e) -> {
+            updateList(queryDocumentSnapshots);
         });
 
         return binding.getRoot();
+    }
+
+    public void updateList(QuerySnapshot queryDocumentSnapshots){
+        for (DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()) {
+            String notificationMsg = doc.getDocument().getData().get("message").toString();
+            notificationsList.add(notificationMsg);
+            listAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

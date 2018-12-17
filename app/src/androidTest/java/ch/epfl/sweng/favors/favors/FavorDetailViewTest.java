@@ -35,7 +35,6 @@ import static org.mockito.Mockito.when;
 public class FavorDetailViewTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-
     private UiDevice device;
 
     @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<>(FavorDetailView.class);

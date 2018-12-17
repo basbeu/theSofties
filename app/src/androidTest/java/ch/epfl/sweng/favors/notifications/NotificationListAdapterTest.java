@@ -1,9 +1,11 @@
-package ch.epfl.sweng.favors.favors;
+package ch.epfl.sweng.favors.notifications;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+
+import ch.epfl.sweng.favors.notifications.NotificationListAdapter;
 
 import static org.junit.Assert.assertEquals;
 

@@ -72,7 +72,7 @@
             app:layout_constraintTop_toBottomOf="@+id/resetPasswordButton" />
 
         <Button
-            android:id="@+id/authentificationButton"
+            android:id="@+id/authenticationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -118,7 +118,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/authentificationButton" />
+            app:layout_constraintTop_toBottomOf="@+id/authenticationButton" />
 
         <Button
             android:id="@+id/logOutButton"
@@ -149,7 +149,7 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/authentificationButton" />
+            app:layout_constraintTop_toBottomOf="@+id/authenticationButton" />
 
         <Button
             android:id="@+id/nextButton"

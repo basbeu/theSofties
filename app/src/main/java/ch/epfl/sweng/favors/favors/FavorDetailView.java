@@ -30,6 +30,7 @@ import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.NotificationEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
@@ -37,6 +38,8 @@ import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.notifications.Notification;
+import ch.epfl.sweng.favors.notifications.NotificationType;
 import ch.epfl.sweng.favors.utils.email.Email;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
@@ -104,6 +107,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                 //TODO add token cost binding with new database implementation
             });
         }
+      
         if(arguments != null && getArguments().containsKey("uri")){
             imageToDisplay = Uri.parse(arguments.getCharSequence("uri").toString());
         }
@@ -146,19 +150,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
     }
 
     Boolean buttonEnabled = true;
-
-    Observable.OnPropertyChangedCallback notificationCB = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            if (propertyId == DatabaseEntity.UpdateType.FROM_REQUEST.ordinal()) {
-                String fn = ((User) sender).get(User.StringFields.firstName);
-                String ln = ((User) sender).get(User.StringFields.lastName);
-                String key = fn + " " + ln;
-                userNames.put(key, ((User) sender));
-                sender.removeOnPropertyChangedCallback(this);
-            }
-        }
-    };
 
     Observable.OnPropertyChangedCallback userInfosCb = new Observable.OnPropertyChangedCallback() {
         @Override
@@ -248,17 +239,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                                 }
 
                                 String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
-                                ArrayList<String> notificationList = (ArrayList<String>) ((User) sender).get(User.ObjectFields.notifications);
-                                notificationList.add(notification);
-                                owner.set(User.ObjectFields.notifications, notificationList);
-                                Database.getInstance().updateOnDb(owner);
+                                NotificationEntity notificationEntity = new NotificationEntity(ownerId);
+                                notificationEntity.set(NotificationEntity.StringFields.message,notification);
+                                Database.getInstance().updateOnDb(notificationEntity);
 
                                 sender.removeOnPropertyChangedCallback(this);
                             }
                         }
                     });
-
-
                 }
 
                 if (localFavor != null) {

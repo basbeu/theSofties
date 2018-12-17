@@ -13,7 +13,8 @@
 
 .signing/
 
-
+# node files
+*/node_modules/
 
 # User-specific configurations
 
