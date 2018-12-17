@@ -31,6 +31,7 @@ import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
@@ -244,6 +245,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
                 if (localFavor != null) {
                     localFavor.set(Favor.ObjectFields.interested, interestedPeople);
+                    Log.d(TAG, "updating local favor on DP");
                     Database.getInstance().updateOnDb(localFavor);
                 }
 

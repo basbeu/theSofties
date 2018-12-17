@@ -41,7 +41,8 @@
         <activity
             android:name=".main.LoggedInScreen"
             android:label="@string/title_activity_logged_in__screen"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".authentication.ConfirmationSent"
             android:label="@string/title_activity_confirmation_sent"
