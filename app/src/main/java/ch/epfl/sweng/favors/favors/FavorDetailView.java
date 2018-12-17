@@ -207,6 +207,14 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                     interestedPeople.remove(User.getMain().getId());
                     isInterested.set(false);
                 } else {
+                    // Update interested people list
+                    interestedPeople.add(User.getMain().getId());
+                    isInterested.set(true);
+
+                    // Send chat message
+                    sendMessage(localFavor.get(Favor.StringFields.ownerID), "I'm interested in your favor : " + localFavor.get(Favor.StringFields.title));
+
+                    // Create email and new notif
                     User owner = new User();
                     String ownerId = localFavor.get(Favor.StringFields.ownerID);
                     UserRequest.getWithId(owner, ownerId);
@@ -214,9 +222,6 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                         @Override
                         public void onPropertyChanged(Observable sender, int propertyId) {
                             if(propertyId == User.UpdateType.FROM_DB.ordinal()){
-                                interestedPeople.add(User.getMain().getId());
-                                isInterested.set(true);
-                                sendMessage(localFavor.get(Favor.StringFields.ownerID), "I'm interested in your favor : " + localFavor.get(Favor.StringFields.title));
                                 if(owner.get(User.BooleanFields.emailNotifications)) {
                                     EmailUtils.sendEmail(
                                             new Email(Authentication.getInstance().getEmail(),
