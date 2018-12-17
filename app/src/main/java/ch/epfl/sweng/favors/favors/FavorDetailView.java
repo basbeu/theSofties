@@ -79,7 +79,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     public static final String FAVOR_ID = "favor_id";
     public static final String ENABLE_BUTTONS = "enable_buttons";
-    private ArrayList<String> bubblesResult;
+    private ArrayList<String> selectedUsers = new ArrayList<>();
     private Uri imageToDisplay = null;
 
     @Override
@@ -283,33 +283,34 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         });
 
         binding.selectButton.setOnClickListener(v -> {
+
+            if (interestedPeople.isEmpty()){
+                Toast.makeText(getContext(), "Currently no interested people available.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            else if (interestedPeople.size() != userNames.size()){
+                Toast.makeText(getContext(), "Impossible to reach the server.", Toast.LENGTH_LONG).show();
+                return;
+            }
             UsersSelectionFragment mFrag = new UsersSelectionFragment();
-            Bundle bundle = new Bundle();
-            Database.getInstance().updateFromDb(localFavor);
-            localFavor.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-                @Override
-                public void onPropertyChanged(Observable sender, int propertyId) {
-                    ArrayList<String> selectedPeople = (ArrayList<String>) ((Favor) sender).get(Favor.ObjectFields.selectedPeople);
-                    Log.d(TAG, ""+selectedPeople.size());
-                    bundle.putStringArrayList(UsersSelectionFragment.INTERESTED_PEOPLE, interestedPeople);
-                    bundle.putStringArrayList(UsersSelectionFragment.SELECTED_PEOPLE, selectedPeople);
-                    bundle.putString(UsersSelectionFragment.FAVOR, localFavor.getId());
-                    mFrag.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            mFrag).addToBackStack(null).commit();
-                    localFavor.removeOnPropertyChangedCallback(this);
-                }
-            });
+
+            mFrag.setSelectedUsers(selectedUsers);
+            mFrag.setUserNames(userNames);
+            mFrag.setMaxToSelect(localFavor.get(Favor.LongFields.nbPerson));
+
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mFrag).addToBackStack(null).commit();
         });
 
         binding.payButton.setOnClickListener(v -> {
-            //to update the selected People
+            if(selectedUsers.size() == 0){
+                Toast.makeText(getContext(), "No user selected.", Toast.LENGTH_SHORT).show();
+            }
             Database.getInstance().updateFromDb(localFavor);
             localFavor.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
                 public void onPropertyChanged(Observable sender, int propertyId) {
                     if(propertyId == User.UpdateType.FROM_DB.ordinal()) {
-                        paySelectedPeople((ArrayList<String>) ((Favor) sender).get(Favor.ObjectFields.selectedPeople));
+                        paySelectedPeople(selectedUsers);
                         localFavor.removeOnPropertyChangedCallback(this);
                     }
                 }

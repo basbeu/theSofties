@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
@@ -20,14 +21,23 @@ import ch.epfl.sweng.favors.databinding.FragmentUsersSelectionBinding;
 
 public class UsersSelectionFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "USERS_SELECTION_FRAG";
-    protected static final String INTERESTED_PEOPLE = "INTERESTED_PEOPLE";
-    protected static final String SELECTED_PEOPLE = "SELECTED_PEOPLE";
-    protected static final String FAVOR = "FAVOR";
 
     FragmentUsersSelectionBinding binding;
-    ArrayList<String> interestedUsers = new ArrayList<>();
+    Map<String, User> interestedUsers = new ArrayList<>();
     ArrayList<String> selectedUsers = new ArrayList<>();
-    Favor localFavor;
+    private Long maxToSelect;
+
+    public void setUserNames(Map<String, User> interestedUsers) {
+        this.interestedUsers = interestedUsers;
+    }
+    public void setSelectedUsers(ArrayList<String> selectedUsers) {
+        this.selectedUsers = selectedUsers;
+    }
+
+    public void setMaxToSelect(Long maxToSelect) {
+        this.maxToSelect = maxToSelect;
+    }
+
 
     @Nullable
     @Override
@@ -36,8 +46,6 @@ public class UsersSelectionFragment extends android.support.v4.app.Fragment {
         binding.setElements(this);
 
         binding.selectionDone.setOnClickListener(v -> {
-            localFavor.set(Favor.ObjectFields.selectedPeople, selectedUsers);
-            Database.getInstance().updateOnDb(localFavor);
             getActivity().onBackPressed();
         });
 
@@ -52,25 +60,6 @@ public class UsersSelectionFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle arguments = getArguments();
-
-        if (arguments != null) {
-            if(arguments.containsKey(INTERESTED_PEOPLE)) {
-                ArrayList<String> interested = arguments.getStringArrayList(INTERESTED_PEOPLE);
-                interestedUsers.addAll(interested);
-            }
-            if(arguments.containsKey(SELECTED_PEOPLE)) {
-                ArrayList<String> selected = arguments.getStringArrayList(SELECTED_PEOPLE);
-                Log.d(TAG, ""+selected.size());
-                selectedUsers.addAll(selected);
-            }
-            if(arguments.containsKey(FAVOR)) {
-                String favorId = arguments.getString(FAVOR);
-                localFavor = new Favor(favorId);
-            }
-        }
-
     }
 
 

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +117,7 @@ public abstract class DatabaseEntity implements Observable {
         convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
         convertObjectMapToTypedMap(incommingData, objectData, Object.class);
         convertObjectMapToTypedMap(incommingData, longData, Long.class);
+
         for (OnPropertyChangedCallback callback : callbacks){
             callback.onPropertyChanged(this, UpdateType.FROM_DB.ordinal());
         }
@@ -190,7 +192,7 @@ public abstract class DatabaseEntity implements Observable {
         }
     }
 
-    List<OnPropertyChangedCallback> callbacks = new ArrayList<>();
+    List<OnPropertyChangedCallback> callbacks = Collections.synchronizedList(new ArrayList<>());
     @Override
     public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
         assert(callback != null);
