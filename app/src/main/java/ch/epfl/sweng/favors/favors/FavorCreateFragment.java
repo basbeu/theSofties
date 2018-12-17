@@ -155,7 +155,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         newFavor.set(Favor.LongFields.nbPerson,Long.parseLong(binding.nbPersons.getText().toString()));
         newFavor.set(Favor.LongFields.tokenPerPerson, Long.parseLong(binding.nbTokens.getText().toString()));
-        newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(favorLocation != null){

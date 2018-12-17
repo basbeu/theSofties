@@ -23,11 +23,11 @@ public class UsersSelectionFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "USERS_SELECTION_FRAG";
 
     FragmentUsersSelectionBinding binding;
-    Map<String, User> interestedUsers = new ArrayList<>();
+    ArrayList<User> interestedUsers = new ArrayList<>();
     ArrayList<String> selectedUsers = new ArrayList<>();
     private Long maxToSelect;
 
-    public void setUserNames(Map<String, User> interestedUsers) {
+    public void setUserNames(ArrayList<User> interestedUsers) {
         this.interestedUsers = interestedUsers;
     }
     public void setSelectedUsers(ArrayList<String> selectedUsers) {

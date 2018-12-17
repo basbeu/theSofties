@@ -48,6 +48,10 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
     private User favorCreatorUser;
 
 
+    public void setUser(User user){
+        favorCreatorUser = user;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -55,17 +59,22 @@ public class FavorPosterDetailView extends android.support.v4.app.Fragment {
 
         if(getArguments() != null && getArguments().getString(OWNER_ID) != null){
             ownerEmail = getArguments().getString(OWNER_ID);
+
         }
         else if(getActivity() != null && getActivity().getIntent() != null &&
-                getActivity().getIntent().getStringExtra(OWNER_ID) != null){
+                getActivity().getIntent().getStringExtra(OWNER_ID) != null) {
             ownerEmail = getActivity().getIntent().getStringExtra(OWNER_ID);
         }
-        else{
+        else if(favorCreatorUser == null){
             Log.e(TAG, "Trying to intent a the fragment without the email of the favor owner");
+            (FavorPosterDetailView.this).getFragmentManager().beginTransaction().remove(this).commit();
+            return;
         }
 
-        favorCreatorUser = new User();
-        UserRequest.getWithId(favorCreatorUser, ownerEmail);
+        if(favorCreatorUser == null){
+            favorCreatorUser = new User();
+            UserRequest.getWithId(favorCreatorUser, ownerEmail);
+        }
 
         firstName = favorCreatorUser.getObservableObject(User.StringFields.firstName);
         lastName = favorCreatorUser.getObservableObject(User.StringFields.lastName);

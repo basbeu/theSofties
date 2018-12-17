@@ -6,6 +6,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Favor;
@@ -25,66 +27,65 @@ import ch.epfl.sweng.favors.databinding.UsersSelectionItemBinding;
 
 public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelectionListAdapter.UsersSelectionViewHolder>{
     private static final String TAG = "SELECTION_LIST_ADAPTER";
-    private ArrayList<String> interestedPeople;
+    ArrayList<User>  interestedPeople;
     private ArrayList<String> selectedPeople;
 
-    private Activity fragmentActivity;
+    private FragmentActivity fragmentActivity;
 
     public interface OnItemClickListener {
         void onItemClick(String item);
     }
 
     public class UsersSelectionViewHolder extends RecyclerView.ViewHolder{
-        public TextView username;
         public ImageView profilePicture;
         public UsersSelectionItemBinding binding;
         public ObservableBoolean selected;
-        private String id;
+        private User user;
+        private FragmentActivity activity;
 
-        public UsersSelectionViewHolder(UsersSelectionItemBinding binding) {
+        public UsersSelectionViewHolder(UsersSelectionItemBinding binding, FragmentActivity activity) {
             super(binding.getRoot());
 
             this.binding = binding;
+            this.activity = activity;
 
             this.binding.selected.setOnClickListener(v -> {
                 if(this.selected.get()) {
-                    selectedPeople.remove(id);
+                    selectedPeople.remove(user.getId());
                 } else {
-                    selectedPeople.add(id);
+                    selectedPeople.add(user.getId());
                 }
                 this.selected.set(!this.selected.get());
             });
 
-            username = itemView.findViewById(R.id.username);
-            profilePicture = itemView.findViewById(R.id.profilePicture);
             //TODO: bind the buttons to see user's profile
             //TODO: bind the button to do sth when user is selected
         }
 
-        public void bind(final String userId, final UsersSelectionListAdapter.OnItemClickListener listener){
-            this.id = userId;
-            this.selected = new ObservableBoolean(selectedPeople.contains(id));
+        public void bind(final User user, final UsersSelectionListAdapter.OnItemClickListener listener){
+            this.user = user;
+            this.selected = new ObservableBoolean(selectedPeople.contains(user.getId()));
             this.binding.setElements(this);
-            this.setFields(userId);
-        }
-
-        private void setFields(String id) {
-            User u = new User(id);
-            //this.selected = selectedPeople.contains(id);
-            u.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            this.setFields(user);
+            binding.profileViewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onPropertyChanged(Observable sender, int propertyId) {
-                    String fn = ((User)sender).get(User.StringFields.firstName);
-                    String ln = ((User)sender).get(User.StringFields.lastName);
-                    username.setText(fn + ln);
+                public void onClick(View v) {
+                    FavorPosterDetailView mFrag = new FavorPosterDetailView();
+                    mFrag.setUser(user);
+                    activity.getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                            mFrag).addToBackStack("interested").commit();
                 }
             });
+        }
+
+        private void setFields(User user) {
+            binding.username.setText(user.get(User.StringFields.firstName) + user.get(User.StringFields.lastName));
             //TODO: set profile picture
         }
 
     }
 
-    public UsersSelectionListAdapter(FragmentActivity fragActivity, ArrayList<String> interestedPeopleList, ArrayList<String> selectedPeopleList) {
+    public UsersSelectionListAdapter(FragmentActivity fragActivity, ArrayList<User> interestedPeopleList, ArrayList<String> selectedPeopleList) {
         this.interestedPeople = interestedPeopleList;
         this.selectedPeople = selectedPeopleList;
         this.fragmentActivity = fragActivity;
@@ -95,7 +96,7 @@ public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelecti
     public UsersSelectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         UsersSelectionItemBinding itemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.users_selection_item, parent, false);
-        return new UsersSelectionViewHolder(itemBinding);
+        return new UsersSelectionViewHolder(itemBinding, fragmentActivity);
     }
 
     @Override
