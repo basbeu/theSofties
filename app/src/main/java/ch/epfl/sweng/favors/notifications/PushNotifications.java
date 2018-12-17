@@ -8,6 +8,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.internal_db.LocalPreferences;
 
 public class PushNotifications extends FirebaseMessagingService {
     private static final String TAG = "FCM Service";
@@ -28,18 +29,20 @@ public class PushNotifications extends FirebaseMessagingService {
         if(context == null)
             throw new IllegalArgumentException();
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context, context.getString(R.string.default_notification_channel_id))
-                        .setSmallIcon(R.drawable.logo)
-                        .setContentTitle(title)
-                        .setContentText(body);
+        if(LocalPreferences.getInstance().isAppNotifEnabled()) {
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context, context.getString(R.string.default_notification_channel_id))
+                            .setSmallIcon(R.drawable.logo)
+                            .setContentTitle(title)
+                            .setContentText(body);
 
 
-        int mNotificationId = (int)System.currentTimeMillis();
+            int mNotificationId = (int) System.currentTimeMillis();
 
-        NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        }
     }
 
 
