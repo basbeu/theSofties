@@ -51,7 +51,7 @@ public class UsersSelectionFragment extends android.support.v4.app.Fragment {
 
         binding.interestedPeopleList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        UsersSelectionListAdapter adapter = new UsersSelectionListAdapter(this.getActivity(), interestedUsers, selectedUsers);
+        UsersSelectionListAdapter adapter = new UsersSelectionListAdapter(this.getActivity(), interestedUsers, selectedUsers, maxToSelect);
         binding.interestedPeopleList.setAdapter(adapter);
 
         return binding.getRoot();

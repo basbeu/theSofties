@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,6 +32,8 @@ public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelecti
     private ArrayList<String> selectedPeople;
 
     private FragmentActivity fragmentActivity;
+    private Long maxNumber;
+
 
     public interface OnItemClickListener {
         void onItemClick(String item);
@@ -43,7 +46,7 @@ public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelecti
         private User user;
         private FragmentActivity activity;
 
-        public UsersSelectionViewHolder(UsersSelectionItemBinding binding, FragmentActivity activity) {
+        public UsersSelectionViewHolder(UsersSelectionItemBinding binding, FragmentActivity activity, Long maxNumber) {
             super(binding.getRoot());
 
             this.binding = binding;
@@ -53,7 +56,11 @@ public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelecti
                 if(this.selected.get()) {
                     selectedPeople.remove(user.getId());
                 } else {
-                    selectedPeople.add(user.getId());
+                    if(selectedPeople.size() > maxNumber){
+                        Toast.makeText(activity.getApplicationContext(), "You can't select more people", Toast.LENGTH_LONG).show();
+                    }else{
+                        selectedPeople.add(user.getId());
+                    }
                 }
                 this.selected.set(!this.selected.get());
             });
@@ -85,10 +92,11 @@ public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelecti
 
     }
 
-    public UsersSelectionListAdapter(FragmentActivity fragActivity, ArrayList<User> interestedPeopleList, ArrayList<String> selectedPeopleList) {
+    public UsersSelectionListAdapter(FragmentActivity fragActivity, ArrayList<User> interestedPeopleList, ArrayList<String> selectedPeopleList, Long maxNumber) {
         this.interestedPeople = interestedPeopleList;
         this.selectedPeople = selectedPeopleList;
         this.fragmentActivity = fragActivity;
+        this.maxNumber = maxNumber;
     }
 
 
@@ -96,7 +104,7 @@ public class UsersSelectionListAdapter extends RecyclerView.Adapter<UsersSelecti
     public UsersSelectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         UsersSelectionItemBinding itemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.users_selection_item, parent, false);
-        return new UsersSelectionViewHolder(itemBinding, fragmentActivity);
+        return new UsersSelectionViewHolder(itemBinding, fragmentActivity, maxNumber);
     }
 
     @Override
