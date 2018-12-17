@@ -52,12 +52,8 @@ public class FusedLocationClient extends Location{
     }
 
     private boolean checkPermission(){
-        if (ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(FavorsMain.getContext(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
+        return ActivityCompat.checkSelfPermission(FavorsMain.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(FavorsMain.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private LocationCallback locationCallback;

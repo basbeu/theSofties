@@ -1,14 +1,8 @@
 package ch.epfl.sweng.favors.database;
 
 
-import android.databinding.Observable;
 import android.databinding.ObservableField;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import java.util.List;
-
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.fields.DatabaseBooleanField;
 import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;

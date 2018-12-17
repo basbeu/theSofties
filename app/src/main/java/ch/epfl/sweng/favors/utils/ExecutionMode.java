@@ -10,7 +10,7 @@ public final class ExecutionMode {
     private boolean invalidAuthTest;
     private GeocoderExecutionTestMode geocoderExecutionTestMode;
 
-    public enum GeocoderExecutionTestMode {SUCCESS, FAILURE, EXCEPTION};
+    public enum GeocoderExecutionTestMode {SUCCESS, FAILURE, EXCEPTION}
 
     /**
      * Construct the singleton class

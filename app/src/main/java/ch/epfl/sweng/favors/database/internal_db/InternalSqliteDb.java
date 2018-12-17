@@ -3,8 +3,6 @@ package ch.epfl.sweng.favors.database.internal_db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import ch.epfl.sweng.favors.database.User;
-
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
 public final class InternalSqliteDb {

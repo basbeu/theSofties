@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public final class UserRequest extends Request{
     private static final String TAG = "DB_USER_REQUEST";

@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class ConfirmationSentTest {
-    @Rule public ActivityTestRule<ConfirmationSent> activityActivityTestRule = new ActivityTestRule<ConfirmationSent>(ConfirmationSent.class);
+    @Rule public ActivityTestRule<ConfirmationSent> activityActivityTestRule = new ActivityTestRule<>(ConfirmationSent.class);
 
     @Before
     public void Before(){

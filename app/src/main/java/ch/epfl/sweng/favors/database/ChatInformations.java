@@ -2,19 +2,12 @@ package ch.epfl.sweng.favors.database;
 
 
 import android.databinding.Observable;
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.text.style.UpdateAppearance;
-import android.util.Log;
-import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +36,7 @@ public class ChatInformations extends DatabaseEntity{
         for(int i=0; i < participantsInfos.size();){
             String userName = participantsInfos.get(i).get(User.StringFields.firstName);
             i++;
-            if(userName == null || userName == "") continue;
+            if(userName == null || userName.isEmpty()) continue;
             out = out.concat(participantsInfos.get(i-1).getId().equals(Authentication.getInstance().getUid()) ? "You" : userName);
             if(i < participantsInfos.size() - 1){ out = out.concat(", ");}
             else if(i == participantsInfos.size() - 1){ out = out.concat(" and ");}
@@ -88,26 +81,20 @@ public class ChatInformations extends DatabaseEntity{
     }
 
     public void markAsRead(){
-        Database.getInstance().updateFromDb(this).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                ArrayList<String> temp = (ArrayList<String>) ChatInformations.this.get(ObjectFields.opened);
-                if(temp == null) temp = new ArrayList<>();
-                if(!temp.contains(Authentication.getInstance().getUid())){
-                    temp.add(Authentication.getInstance().getUid());
-                    ChatInformations.this.set(ObjectFields.opened, temp);
-                    Database.getInstance().updateOnDb(ChatInformations.this);
-                }
+        Database.getInstance().updateFromDb(this).addOnCompleteListener(task -> {
+            ArrayList<String> temp = (ArrayList<String>) ChatInformations.this.get(ObjectFields.opened);
+            if(temp == null) temp = new ArrayList<>();
+            if(!temp.contains(Authentication.getInstance().getUid())){
+                temp.add(Authentication.getInstance().getUid());
+                ChatInformations.this.set(ObjectFields.opened, temp);
+                Database.getInstance().updateOnDb(ChatInformations.this);
             }
         });
     }
 
     public boolean isRead(){
         ArrayList<String> temp = (ArrayList<String>) ChatInformations.this.get(ObjectFields.opened);
-        if(temp != null && temp.contains(Authentication.getInstance().getUid())){
-            return true;
-        }
-        return false;
+        return temp != null && temp.contains(Authentication.getInstance().getUid());
     }
 
 

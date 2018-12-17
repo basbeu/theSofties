@@ -3,7 +3,6 @@ package ch.epfl.sweng.favors.database;
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 public final class FavorRequest extends Request{
 

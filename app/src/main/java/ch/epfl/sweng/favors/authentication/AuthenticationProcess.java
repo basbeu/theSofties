@@ -33,7 +33,7 @@ public class AuthenticationProcess extends Activity {
     public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
 
     public static String AUTHENTIFICATION_ACTION = "AUTHENTIFICATION_ACTION";
-    public enum Action{Login, Register} ;
+    public enum Action{Login, Register}
 
     public LogInRegisterViewBinding binding;
     private Authentication mAuth;

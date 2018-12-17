@@ -71,11 +71,10 @@ public class FavorListAdapter extends RecyclerView.Adapter<FavorListAdapter.Favo
         public void onClick(View v) {}
 
         public void bind(final Favor item, final OnItemClickListener listener){
-            Favor favor = item;
-            setStringFields(favor);
-            setTimestamp(favor);
-            setLocation(favor);
-            setIconCategory(favor);
+            setStringFields(item);
+            setTimestamp(item);
+            setLocation(item);
+            setIconCategory(item);
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 

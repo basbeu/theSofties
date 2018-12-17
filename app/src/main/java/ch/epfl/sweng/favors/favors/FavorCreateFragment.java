@@ -1,7 +1,5 @@
 package ch.epfl.sweng.favors.favors;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -13,17 +11,12 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +27,6 @@ import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,7 +48,6 @@ import ch.epfl.sweng.favors.utils.DatePickerFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.utils.Utils;
-import io.grpc.PickFirstBalancerFactory;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -300,20 +288,13 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         binding.descriptionFavor.addTextChangedListener(descriptionFavorTextWatcher);
         binding.deadlineFavor.addTextChangedListener(deadlineFavorTextWatcher);
 
-        binding.addFavor.setOnClickListener(v-> {
-            createFavorIfValid(newFavor);
-        });
+        binding.addFavor.setOnClickListener(v-> createFavorIfValid(newFavor));
 
         spinner = binding.categoryFavor;
 
         InterestRequest.all(interestsList, null, null);
         interestsList.addOnPropertyChangedCallback(callbackInterestList);
-        binding.search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAddress(binding.locationFavor.getText().toString());
-            }
-        });
+        binding.search.setOnClickListener(v -> checkAddress(binding.locationFavor.getText().toString()));
 
         binding.testFavorDetailButton.setOnClickListener(v->{
             Fragment fr = new FavorDetailView();
@@ -339,7 +320,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             return;
         }
         GeocodingLocation locationAddress = new GeocodingLocation();
-        locationAddress.getAddressFromLocation(value, getContext(), new GeocoderHandler());
+        GeocodingLocation.getAddressFromLocation(value, getContext(), new GeocoderHandler());
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {

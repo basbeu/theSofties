@@ -45,7 +45,7 @@ public class FavorEntityTest {
     }
 
     @Test
-    public void getDescriptionTest(){;
+    public void getDescriptionTest(){
 
         Database.getInstance().updateFromDb(f).addOnCompleteListener(t->assertEquals(FAKE_DESCRIPTION, f.get(Favor.StringFields.description)));
     }

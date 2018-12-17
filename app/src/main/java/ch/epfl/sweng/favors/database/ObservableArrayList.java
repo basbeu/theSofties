@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ObservableArrayList<T> extends ArrayList<T> implements Observable {
 
-    public enum ContentChangeType{All, Clear, Add, AddAll, Remove, Update};
+    public enum ContentChangeType{All, Clear, Add, AddAll, Remove, Update}
 
     @Override
     public boolean add(T value){

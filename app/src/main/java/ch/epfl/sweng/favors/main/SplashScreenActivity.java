@@ -2,7 +2,6 @@ package ch.epfl.sweng.favors.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,13 +9,9 @@ import android.widget.TextView;
 
 import ch.epfl.sweng.favors.BuildConfig;
 import ch.epfl.sweng.favors.R;
-import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
-import ch.epfl.sweng.favors.utils.ExecutionMode;
-
-import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
 public class SplashScreenActivity extends Activity {
 

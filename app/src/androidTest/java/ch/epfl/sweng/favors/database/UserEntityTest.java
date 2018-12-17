@@ -10,7 +10,7 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-;
+
 
 public class UserEntityTest {
 

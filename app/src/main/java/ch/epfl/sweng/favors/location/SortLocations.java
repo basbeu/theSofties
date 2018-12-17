@@ -1,7 +1,5 @@
 package ch.epfl.sweng.favors.location;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Comparator;
