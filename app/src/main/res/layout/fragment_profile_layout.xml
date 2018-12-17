@@ -83,7 +83,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="35dp"
             android:orientation="horizontal">
 
             <TextView
@@ -111,36 +111,37 @@
 
         <Button
             android:id="@+id/delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_fragment_database_object_size"
-            android:text="@string/deleteButton" />
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="@string/deleteButton"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/reauthenticateMessage"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/profile_fragment_database_object_size"
             android:text="@string/passwordConfirmation"
             android:visibility="invisible"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="14sp"
+            />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <EditText
                 android:id="@+id/passwordEntry"
                 android:layout_width="288dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/password"
-                android:visibility="invisible"
                 android:inputType="textPassword"
+                android:textSize="12sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/checkPasswordImage"
@@ -158,16 +159,15 @@
         </LinearLayout>
 
 
-
-
         <Button
             android:id="@+id/confirmDeletion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="33dp"
             android:layout_gravity="center"
-            android:visibility="invisible"
             android:enabled="@{elements.isPasswordCorrect}"
-            android:text="@string/confirmDeletion" />
+            android:text="@string/confirmDeletionText"
+            android:textSize="10sp"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

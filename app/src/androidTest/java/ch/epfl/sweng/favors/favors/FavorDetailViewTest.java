@@ -202,7 +202,6 @@ public class FavorDetailViewTest {
         }
 
         onView(withId(R.id.favReportAbusiveAdd)).perform(scrollTo(), click());
-        //onView(withText("issue has been reported! Sorry for the inconvenience")).inRoot(withDecorView(not(is(mFragmentTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
     @Ignore

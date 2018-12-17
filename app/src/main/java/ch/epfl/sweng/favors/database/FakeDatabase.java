@@ -346,8 +346,6 @@ public class FakeDatabase extends Database{
         notifications.add("Someone is interested in your favor !");
         u0.set(User.ObjectFields.notifications, notifications);
 
-
-
         u1.set(User.StringFields.firstName, "Jean");
         u1.set(User.StringFields.lastName, "Marchand");
         u1.set(User.StringFields.email, "jean.marchand@thesoftie.com");
