@@ -59,7 +59,7 @@ public class GeocodingLocationTest {
         };
 
         Handler handler = new Handler(callback);
-        locationAddress.getAddressFromLocation(FakeGeocoder.FAKE_LOCATION_CITY, mFragmentTestRule.getFragment().getContext(), handler);
+        GeocodingLocation.getAddressFromLocation(FakeGeocoder.FAKE_LOCATION_CITY, mFragmentTestRule.getFragment().getContext(), handler);
 
         Looper.loop();
     }

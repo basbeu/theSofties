@@ -8,19 +8,15 @@ import android.databinding.ObservableBoolean;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,7 +24,6 @@ import java.util.Date;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.database.ChatInformations;
-import ch.epfl.sweng.favors.database.ChatMessage;
 import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
@@ -48,7 +43,7 @@ public class ChatsList extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.chats_list,container,false);
         binding.setChatsList(this);
-       
+
         binding.chatsListItems.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ChatRequest.allChatsOf(chatsInformations, Authentication.getInstance().getUid());
@@ -90,17 +85,15 @@ public class ChatsList extends android.support.v4.app.Fragment {
         alertDialog.setTitle("Deletion !");
         alertDialog.setMessage("Are you sure you want to delete your conversation with "+ element.allParticipants.get() + ".");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Database.getInstance().deleteFromDatabase(element).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                ChatRequest.allChatsOf(chatsInformations, Authentication.getInstance().getUid());
-                            }
-                        });
-                        dialog.dismiss();
+                (dialog, which) -> {
+                    Database.getInstance().deleteFromDatabase(element).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            ChatRequest.allChatsOf(chatsInformations, Authentication.getInstance().getUid());
+                        }
+                    });
+                    dialog.dismiss();
 
-                    }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel",
                 new DialogInterface.OnClickListener() {

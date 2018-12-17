@@ -82,7 +82,7 @@ public class FirebaseDatabase extends Database{
                         databaseEntity.updateLocalData(document.getData());
                     } else {
                         Toast.makeText(FavorsMain.getContext(), "An error occured while requesting " +
-                                "data from database",Toast.LENGTH_LONG);
+                                "data from database",Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -172,9 +172,9 @@ public class FirebaseDatabase extends Database{
 
     @Override
     protected <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
-                                                                       String collection,
-                                                                       Integer limit,
-                                                                       DatabaseField orderBy){
+                                                     String collection,
+                                                     Integer limit,
+                                                     DatabaseField orderBy){
         Query query = dbFireStore.collection(collection);
         query = addParametersToQuery(query, limit, orderBy);
         query.get().addOnCompleteListener(new ListRequestFb<T>(list, clazz));
@@ -183,13 +183,13 @@ public class FirebaseDatabase extends Database{
 
     @Override
     protected  <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                                         String collection,
-                                                                         Map<DatabaseField, Object> mapEquals,
+                                                       String collection,
+                                                       Map<DatabaseField, Object> mapEquals,
                                                        Map<DatabaseField, Object> mapLess,
-                                                                         Map<DatabaseField, Object> mapMore,
-                                                                         Map<DatabaseField, Object> mapContains,
-                                                                         Integer limit,
-                                                                         DatabaseField orderBy){
+                                                       Map<DatabaseField, Object> mapMore,
+                                                       Map<DatabaseField, Object> mapContains,
+                                                       Integer limit,
+                                                       DatabaseField orderBy){
 
 
         Query query = dbFireStore.collection(collection);
@@ -212,11 +212,11 @@ public class FirebaseDatabase extends Database{
     }
 
     protected <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                                String collection,
-                                                                DatabaseField element,
-                                                                Object value,
-                                                                Integer limit,
-                                                                DatabaseField orderBy){
+                                                      String collection,
+                                                      DatabaseField element,
+                                                      Object value,
+                                                      Integer limit,
+                                                      DatabaseField orderBy){
         if(element == null || value == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query = addParametersToQuery(query, limit, orderBy);
@@ -226,44 +226,40 @@ public class FirebaseDatabase extends Database{
     }
 
     protected <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
-                                                      String collection,
-                                                      DatabaseField element,
-                                                      Object value,
-                                                      Integer limit,
-                                                      DatabaseField orderBy){
+                                                          String collection,
+                                                          DatabaseField element,
+                                                          Object value,
+                                                          Integer limit,
+                                                          DatabaseField orderBy){
         if(element == null || value == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query = addParametersToQuery(query, limit, orderBy);
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-
-                ArrayList<T> temp = new ArrayList<>();
-                for (QueryDocumentSnapshot document : value) {
-                    try {
-                        if (list != null) {
-                            T documentObject = clazz.newInstance();
-                            documentObject.set(document.getId(), document.getData());
-                            temp.add(documentObject);
-                        }
-                    } catch (Exception e2) {
-                        Log.e(TAG, "Illegal access exception");
-                    }
-                }
-                if(list != null) list.update(temp);
+        query.addSnapshotListener((value1, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
             }
+
+            ArrayList<T> temp = new ArrayList<>();
+            for (QueryDocumentSnapshot document : value1) {
+                try {
+                    if (list != null) {
+                        T documentObject = clazz.newInstance();
+                        documentObject.set(document.getId(), document.getData());
+                        temp.add(documentObject);
+                    }
+                } catch (Exception e2) {
+                    Log.e(TAG, "Illegal access exception");
+                }
+            }
+            if(list != null) list.update(temp);
         });
 
     }
 
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             String value){
+                                                          String value){
         if(value == null || toUpdate == null){return;}
         DocumentReference query = dbFireStore.collection(collection).document(value);
         query.get().addOnCompleteListener(new ListRequestFb<T>(toUpdate, clazz));
@@ -273,7 +269,7 @@ public class FirebaseDatabase extends Database{
 
     @Override
     protected  <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField element, Object value){
+                                                          DatabaseField element, Object value){
         if(value == null || toUpdate == null){return;}
         Query query = dbFireStore.collection(collection).whereEqualTo(element.toString(), value);
         query.get().addOnCompleteListener(new ListRequestFb<T>(toUpdate, clazz));

@@ -8,8 +8,6 @@ import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -98,9 +96,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         binding.navView.addHeaderView(headerBinding.getRoot());
 
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
-        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> {
-            storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE);
-        });
+        Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout,
                 binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,13 +111,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.toolbar.setBackgroundResource(LocalPreferences.getInstance().getColor());
 
-        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
-        headerBinding.deleteProfilePicture.setOnClickListener(v -> {
-            Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> {
-                storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess);
-            });
-
-        });
+        headerBinding.uploadProfilePicture.setOnClickListener(v-> startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), FirebaseStorageDispatcher.GET_FROM_GALLERY));
+        headerBinding.deleteProfilePicture.setOnClickListener(v -> Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess)));
     }
 
     @Override

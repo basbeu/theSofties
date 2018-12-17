@@ -5,19 +5,14 @@ import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Tasks;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
 import ch.epfl.sweng.favors.database.ApiKeys;
-import ch.epfl.sweng.favors.database.Database;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,16 +39,16 @@ class RetrofitClient extends RetrofitDispatcher{
 
         OkHttpClient okClient = new OkHttpClient.Builder()
                 .addInterceptor((chain)-> {
-                                Request original = chain.request();
+                    Request original = chain.request();
 
-                                //Adding basic auth
-                                Request.Builder requestBuilder = original.newBuilder()
-                                        .header("Authorization", AUTH)
-                                        .method(original.method(), original.body());
+                    //Adding basic auth
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", AUTH)
+                            .method(original.method(), original.body());
 
-                                Request request = requestBuilder.build();
-                                return chain.proceed(request);
-                            })
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
                 .build();
 
         retrofit = new Retrofit.Builder()

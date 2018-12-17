@@ -67,7 +67,8 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             @Override
             public boolean onQueryTextChange(String query) {
                 // filter recycler view when text is changed
-                listAdapter.getFilter().filter(query);
+                if(listAdapter!=null)
+                    listAdapter.getFilter().filter(query);
                 return false;
             }
         });
@@ -97,7 +98,7 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
                 return;
             }
-             updateList((ObservableArrayList) sender);
+            updateList((ObservableArrayList) sender);
 
         }
     };

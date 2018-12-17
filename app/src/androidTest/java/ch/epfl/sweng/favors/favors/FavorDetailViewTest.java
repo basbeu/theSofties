@@ -1,9 +1,6 @@
 package ch.epfl.sweng.favors.favors;
 
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.uiautomator.UiDevice;
 
@@ -30,7 +27,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.when;
@@ -41,7 +37,7 @@ public class FavorDetailViewTest {
 
     private UiDevice device;
 
-    @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<FavorDetailView>(FavorDetailView.class);
+    @Rule public FragmentTestRule<FavorDetailView> mFragmentTestRule = new FragmentTestRule<>(FavorDetailView.class);
     @Mock private User mainUser;
 
     @Before
@@ -221,7 +217,7 @@ public class FavorDetailViewTest {
         u3.set(User.StringFields.city, "Arkham Asylum");
         User.UserGender.setGender(u3, User.UserGender.M);
 
-        when(mainUser.getMain()).thenReturn(u3);
+        when(User.getMain()).thenReturn(u3);
 
 
         ArrayList<String> selectedPeople1 = new ArrayList<>();

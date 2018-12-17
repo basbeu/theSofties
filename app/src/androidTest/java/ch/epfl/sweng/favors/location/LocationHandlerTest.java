@@ -14,9 +14,6 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(AndroidJUnit4.class)

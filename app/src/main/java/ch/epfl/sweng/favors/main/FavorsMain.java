@@ -36,7 +36,7 @@ public class FavorsMain extends AppCompatActivity {
 
     public ActivityMainBinding binding;
 
-    public enum Permissions{LOCATION_SERVICE};
+    public enum Permissions{LOCATION_SERVICE}
 
     private static Context context;
     public static Context getContext(){

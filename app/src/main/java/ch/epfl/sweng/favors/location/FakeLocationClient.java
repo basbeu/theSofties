@@ -1,13 +1,7 @@
 package ch.epfl.sweng.favors.location;
 
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
 
 public class FakeLocationClient extends Location{
 

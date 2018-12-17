@@ -97,7 +97,7 @@ public class Home extends android.support.v4.app.Fragment  {
         Map<DatabaseField, Object> querryGreater = new HashMap<>();
         querryGreater.put(Favor.ObjectFields.expirationTimestamp, new Timestamp(new Date()));
 
-        if(currentMode >= modes.length){currentMode=0;};
+        if(currentMode >= modes.length){currentMode=0;}
         switch (currentMode){
             case 0 :
                 favorList.changeOnPropertyChangedCallback(locationSortingCb);

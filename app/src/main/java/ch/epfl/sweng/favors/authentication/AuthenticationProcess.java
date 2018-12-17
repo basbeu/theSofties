@@ -19,13 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.main.LoggedInScreen;
@@ -40,6 +36,7 @@ public class AuthenticationProcess extends Activity {
 
     public static String AUTHENTICATION_ACTION = "AUTHENTICATION_ACTION";
     public enum Action{Login, Register} ;
+
 
     public LogInRegisterViewBinding binding;
 

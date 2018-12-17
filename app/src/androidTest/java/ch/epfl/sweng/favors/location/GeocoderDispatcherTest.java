@@ -1,6 +1,5 @@
 package ch.epfl.sweng.favors.location;
 
-import android.location.Geocoder;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 

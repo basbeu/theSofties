@@ -11,8 +11,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

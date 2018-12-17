@@ -2,23 +2,17 @@ package ch.epfl.sweng.favors.favors;
 
 import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Observable;
-
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
-import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -31,7 +25,7 @@ import static java.lang.Thread.sleep;
 
 public class FavorPosterDetailViewTest {
 
-    @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<FavorPosterDetailView>(FavorPosterDetailView.class);
+    @Rule public FragmentTestRule<FavorPosterDetailView> mFragmentTestRule = new FragmentTestRule<>(FavorPosterDetailView.class);
 
     public static final String fakePosterId = "U2"; // Email of the profile we want to show
 
@@ -58,7 +52,7 @@ public class FavorPosterDetailViewTest {
         mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterId));
         try {
             sleep(1000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
 
         }
         onView(withId(R.id.posterFirstName)).check(matches(withText("Jeanne")));

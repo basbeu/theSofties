@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        >
+
         <service
             android:name=".notifications.PushNotifications"
             android:stopWithTask="false">
@@ -39,6 +39,7 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+
         <activity android:name=".main.FavorsMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
