@@ -60,6 +60,10 @@ public class UsersSelectionFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(interestedUsers == null || selectedUsers == null || maxToSelect == null) {
+            Log.e(TAG, "The fragment can't be intent, data are missing");
+            (UsersSelectionFragment.this).getFragmentManager().beginTransaction().remove(this).commit();
+        }
     }
 
 

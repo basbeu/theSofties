@@ -304,17 +304,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
         binding.payButton.setOnClickListener(v -> {
             if(selectedUsers.size() == 0){
                 Toast.makeText(getContext(), "No user selected.", Toast.LENGTH_SHORT).show();
+                return;
             }
-            Database.getInstance().updateFromDb(localFavor);
-            localFavor.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-                @Override
-                public void onPropertyChanged(Observable sender, int propertyId) {
-                    if(propertyId == User.UpdateType.FROM_DB.ordinal()) {
-                        paySelectedPeople(selectedUsers);
-                        localFavor.removeOnPropertyChangedCallback(this);
-                    }
-                }
-            });
+            paySelectedPeople(selectedUsers);
         });
 
         if(imageToDisplay != null){
