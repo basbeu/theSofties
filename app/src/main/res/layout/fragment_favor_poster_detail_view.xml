@@ -32,13 +32,24 @@
                 android:textSize="30sp"
                 android:text="@string/favorPosterDetailViewTitle" />
 
-            <ImageView
-                android:id="@+id/profilePic"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dip"
-                android:gravity="left"
-                android:src="@drawable/profilelogo" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/view2"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                app:cardCornerRadius="80dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profilePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profilelogo" />
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
