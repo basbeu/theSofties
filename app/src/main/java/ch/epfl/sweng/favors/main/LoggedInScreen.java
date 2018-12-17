@@ -181,20 +181,24 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsList()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
-                User.getMain().set(User.StringFields.token_id, "");
-                Context context = this;
-                Database.getInstance().updateOnDb(User.getMain()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Utils.logout(context, Authentication.getInstance());
-                    }
-                }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
+                logout();
                 break;
 
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void logout(){
+        User.getMain().set(User.StringFields.token_id, "");
+        Context context = this;
+        Database.getInstance().updateOnDb(User.getMain()).addOnSuccessListener(new OnSuccessListener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aVoid) {
+                Utils.logout(context, Authentication.getInstance());
+            }
+        }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
     }
 
     void reimburseExpiredFavors(){

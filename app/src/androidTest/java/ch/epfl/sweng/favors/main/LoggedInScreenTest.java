@@ -169,6 +169,28 @@ public class LoggedInScreenTest {
         Looper.myLooper().quitSafely();
     }
 
+    @Test
+    public void logoutTest(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
+        activityActivityTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        activityActivityTestRule.getActivity().logout();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Looper.myLooper().quitSafely();
+    }
+
     @After
     public void cleanUp(){
         FakeDatabase.cleanUpAll();
