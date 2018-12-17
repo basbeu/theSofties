@@ -30,8 +30,6 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.favors,container,false);
         binding.setElements(this);
-
-
         binding.modeSwitch.setOnClickListener(v -> {
             currentMode++;
             if(currentMode>= modes.length){
@@ -39,6 +37,7 @@ public class FavorsFragment extends android.support.v4.app.Fragment {
             }
             setView(currentMode);
         }
+
 
         );
 
