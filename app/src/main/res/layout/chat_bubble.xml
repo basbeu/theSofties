@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.view.ViewGroup"/>
+        <import type="android.view.Gravity"/>
+        <import type="android.widget.LinearLayout"/>
+        <import type="android.view.ViewGroup.MarginLayoutParams"/>
+        <import type="ch.epfl.sweng.favors.authentication.Authentication"/>
+        <import type="ch.epfl.sweng.favors.database.ChatMessage"/>
+        <import type="ch.epfl.sweng.favors.utils.Utils"/>
+        <import type="java.util.Date"/>
+        <variable
+            name="chatMessage"
+            type="ch.epfl.sweng.favors.database.ChatMessage"
+            />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/marginView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:gravity="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ? Gravity.END : Gravity.START}">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/messageView"
+                android:gravity="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  Gravity.END : Gravity.START}"
+                android:padding="10dp"
+                android:background="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  @values:color/convOwn : @values:color/convOthers}">
+
+
+                <TextView
+                    android:visibility="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  View.GONE : View.VISIBLE}"
+                    android:textAlignment="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START}"
+                    android:textAllCaps="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{chatMessage.writerName}"
+                    android:textColor="#000000"
+                    android:textSize="13dp" />
+
+
+                <TextView
+                    android:textAlignment="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{chatMessage.getObservableObject(ChatMessage.StringFields.messageContent)}"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/lastMessageDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:hint="Last message"
+                android:textAlignment="@{chatMessage.getObservableObject(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid()) ?  View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START}"
+                android:text="@{Utils.getFullDate(safeUnbox(chatMessage.getObservableObject(ChatMessage.LongFields.messageDate)))}"
+                android:textColor="#000000"
+                android:textSize="12dp"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</layout>

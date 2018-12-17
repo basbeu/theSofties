@@ -121,6 +121,20 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
         }
+
+
+        if(selectedImage != null){
+            storage.deleteImageFromStorage(pictureReference, StorageCategories.FAVOR);
+            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage, StorageCategories.FAVOR);
+            newFavor.set(Favor.StringFields.pictureReference, pictureRef);
+
+        } else if(pictureReference != null){
+            newFavor.set(Favor.StringFields.pictureReference, pictureReference.get());
+        }
+        else{
+            newFavor.set(Favor.StringFields.pictureReference, null);
+        }
+
         Database.getInstance().updateOnDb(newFavor);
         launchToast(validationText.get());
         updateUI(true);
@@ -143,18 +157,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.LongFields.tokenPerPerson, Long.parseLong(binding.nbTokens.getText().toString()));
         newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
-
-        if(selectedImage != null){
-            storage.deleteImageFromStorage(pictureReference, StorageCategories.FAVOR);
-            String pictureRef = storage.uploadImage(storage.getReference(), this.getContext(), selectedImage, StorageCategories.FAVOR);
-            newFavor.set(Favor.StringFields.pictureReference, pictureRef);
-
-        } else if(pictureReference != null){
-            newFavor.set(Favor.StringFields.pictureReference, pictureReference.get());
-        }
-        else{
-            newFavor.set(Favor.StringFields.pictureReference, null);
-        }
 
         if(favorLocation != null){
             newFavor.set(Favor.ObjectFields.location, favorLocation);
@@ -317,6 +319,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             Fragment fr = new FavorDetailView();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FavorDetailView.ENABLE_BUTTONS, false);
+            if(selectedImage != null){
+                bundle.putCharSequence("uri", selectedImage.toString());
+            }
             fr.setArguments(bundle);
             updateFavorObject(newFavor);
             sharedViewFavor.select(newFavor);
@@ -374,7 +379,12 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
             validationButtonText.set("Edit the favor");
             fragmentTitle.set("Edit an existing favor");
             validationText.set("Favor edited successfully");
-            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> storage.displayImage(pictureReference, binding.favorImage, StorageCategories.FAVOR));
+            Database.getInstance().updateFromDb(newFavor).addOnSuccessListener(v -> {
+                if(pictureReference != null){
+                    storage.displayImage(pictureReference, binding.favorImage, StorageCategories.FAVOR);
+                }
+            });
+            selectedImage = null;
         } else {
             validationButtonText.set("Create the favor");
             fragmentTitle.set("Create a new favor");

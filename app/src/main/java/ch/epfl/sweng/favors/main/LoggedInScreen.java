@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
+import ch.epfl.sweng.favors.chat.ChatsList;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
@@ -183,9 +185,13 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
             case R.id.notifications:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
                 break;
+            case R.id.discussions:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsList()).addToBackStack(null).commit();
+                break;
             case R.id.logout:
                 Utils.logout(this, Authentication.getInstance());
                 break;
+
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);
