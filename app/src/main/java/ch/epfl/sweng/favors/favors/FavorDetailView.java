@@ -82,6 +82,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
     public static final String FAVOR_ID = "favor_id";
     public static final String ENABLE_BUTTONS = "enable_buttons";
     private ArrayList<String> bubblesResult;
+    private Uri imageToDisplay = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                 //TODO add token cost binding with new database implementation
             });
         }
+        if(arguments != null && getArguments().containsKey("uri")){
+            imageToDisplay = Uri.parse(arguments.getCharSequence("uri").toString());
+        }
     }
 
     public void setFields(Favor favor) {
@@ -119,7 +123,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
         isItsOwn.set(favor.get(Favor.StringFields.ownerID).equals(User.getMain().getId()));
         pictureRef = favor.getObservableObject(Favor.StringFields.pictureReference);
 
-        FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, StorageCategories.FAVOR);
+        if(imageToDisplay==null){
+            FirebaseStorageDispatcher.getInstance().displayImage(pictureRef, binding.imageView, StorageCategories.FAVOR);
+        }
 
         if (favor.get(Favor.ObjectFields.interested) != null && favor.get(Favor.ObjectFields.interested) instanceof ArrayList) {
             //noinspection unchecked
@@ -290,6 +296,11 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
         });
 
         binding.payButton.setOnClickListener(v -> paySelectedPeople());
+
+        if(imageToDisplay != null){
+            binding.imageView.setImageURI(imageToDisplay);
+        }
+
 
         return binding.getRoot();
     }

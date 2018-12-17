@@ -212,7 +212,7 @@ public class FavorsCreateFragmentTest {
         }
         mFragmentTestRule.launchActivity(null);
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
 
         }catch (Exception e){
 
@@ -235,7 +235,7 @@ public class FavorsCreateFragmentTest {
         }
         mFragmentTestRule.launchActivity(null);
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
 
         }catch (Exception e){
 

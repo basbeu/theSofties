@@ -373,10 +373,11 @@ public class CompleteLoggedUITest {
         ViewInteraction imageView = onView(
                 allOf(withId(R.id.imageView), withContentDescription("image"),
                         childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                1),
+                                allOf(withId(R.id.view2),
+                                        childAtPosition(
+                                                IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                                1)),
+                                0),
                         isDisplayed()));
         imageView.check(matches(isDisplayed()));
 
@@ -713,10 +714,11 @@ public class CompleteLoggedUITest {
         ViewInteraction imageView4 = onView(
                 allOf(withId(R.id.profilePic),
                         childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                1),
+                                allOf(withId(R.id.view2),
+                                        childAtPosition(
+                                                IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                                1)),
+                                0),
                         isDisplayed()));
         imageView4.check(matches(isDisplayed()));
 

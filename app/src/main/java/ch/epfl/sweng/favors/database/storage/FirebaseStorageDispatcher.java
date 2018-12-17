@@ -39,7 +39,7 @@ public abstract class FirebaseStorageDispatcher {
 
     /**
      * Upload an image on firestore
-     * Inspired from this tutorial : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
+     * @see <a href="https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934"></a>
      * @param storageReference the storage reference of the Firestoreplot
      * @param context actual context
      * @param selectedImage Uri corresponding to the picture to be uploaded
@@ -65,8 +65,8 @@ public abstract class FirebaseStorageDispatcher {
 
     /**
      * Extracts an image from data and displays it
-     * Inspired from : https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
-     * and : https://androidkennel.org/android-camera-access-tutorial/
+     * @see <a href="https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934"></a>
+     * @see <a href="https://stackoverflow.com/questions/15759195/reduce-size-of-bitmap-to-some-specified-pixel-in-android"></a>
      * @param requestCode 66 if it's an image from the gallery, 99 if from the camera
      * @param data the intent containing the image
      * @param context the context from which the method has been called
