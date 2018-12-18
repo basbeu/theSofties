@@ -36,14 +36,14 @@ public class FavorPosterDetailViewTest {
     }
 
     @Test
-    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException {
-        mFragmentTestRule.launchActivity(null);
-
+    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException, InterruptedException {
+        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterId));
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
+
     }
     @Test
     public void profilePictureDisplayed(){
-        mFragmentTestRule.launchActivity(null);
+        mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterId));
         onView(withId(R.id.profilePic)).check(matches(isDisplayed()));
     }
 
