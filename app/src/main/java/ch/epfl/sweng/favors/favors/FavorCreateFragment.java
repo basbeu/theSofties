@@ -57,7 +57,6 @@ import com.google.firebase.firestore.GeoPoint;
  */
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
-    private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
     private FirebaseStorageDispatcher storage;
     private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
@@ -272,6 +271,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         }
         else{
             newFavor = new Favor();
+            long defaultToken = 1;
+            newFavor.set(Favor.LongFields.nbPerson, defaultToken);
+            newFavor.set(Favor.LongFields.tokenPerPerson, defaultToken);
             updateUI(false);
         }
 
@@ -319,7 +321,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         if (value.length() < 4) {
             return;
         }
-        GeocodingLocation locationAddress = new GeocodingLocation();
         GeocodingLocation.getAddressFromLocation(value, getContext(), new GeocoderHandler());
     }
 
