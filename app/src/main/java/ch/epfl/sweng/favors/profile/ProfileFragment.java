@@ -49,8 +49,11 @@ public class ProfileFragment extends Fragment {
     public ObservableField<String> email = User.getMain().getObservableObject(User.StringFields.email);
     public ObservableField<String> profileName =  new ObservableField<>();
     public ObservableField<Long> tokens = User.getMain().getObservableObject(User.LongFields.tokens);
-
+    public ObservableArrayList<Favor> interestingFavorsList = new ObservableArrayList<>();
+    public Map<DatabaseField, Object> interestedPeopleUserId = new HashMap<>();
     public AuthenticationProcess.Action action;
+    public Authentication auth = Authentication.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     FragmentProfileLayoutBinding binding;
 
@@ -84,7 +87,6 @@ public class ProfileFragment extends Fragment {
         });
 
         binding.confirmDeletion.setOnClickListener((v)-> {
-            Authentication auth = Authentication.getInstance();
             AuthCredential credential = EmailAuthProvider.getCredential(auth.getEmail(),
                     binding.passwordEntry.getText().toString());
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -100,9 +102,6 @@ public class ProfileFragment extends Fragment {
                                         if (task12.isSuccessful()) {
                                             Utils.logout(getContext(), auth);
                                             //clean/delete Cloudstore documents related to that
-                                            //deleted user
-                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            //update "users" Firestore collection
                                             db.collection("users").document(userID).delete();
                                             //update "favors" Firestore collection
                                             //1 - remove user's favors
@@ -113,8 +112,6 @@ public class ProfileFragment extends Fragment {
                                                 }
                                             });
                                             //2 - remove the user from all interested
-                                                ObservableArrayList<Favor> interestingFavorsList = new ObservableArrayList<>();
-                                                Map<DatabaseField, Object> interestedPeopleUserId = new HashMap<>();
                                                 FavorRequest.getList(interestingFavorsList, interestedPeopleUserId,
                                                         null, null, null, null);
                                                 interestingFavorsList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
@@ -123,16 +120,13 @@ public class ProfileFragment extends Fragment {
                                                         removeUserFromInterestedPeopleInFavors(interestedPeopleUserId, interestingFavorsList,userID);
                                                     }
                                                 });
-                                            Toast.makeText(getContext(), R.string.userDeletionSuccessful,
-                                                    Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.userDeletionSuccessful, Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Toast.makeText(getContext(), R.string.userDeletionFail,
-                                                    Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.userDeletionFail, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } else {
-                            Toast.makeText(getContext(), R.string.wrongPassword,
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.wrongPassword, Toast.LENGTH_SHORT).show();
                         }
                     });
         });
