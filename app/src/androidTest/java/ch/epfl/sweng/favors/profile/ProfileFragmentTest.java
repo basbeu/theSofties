@@ -84,7 +84,7 @@ public class ProfileFragmentTest {
     }
 
     @Test
-    public void deleteUserIdInInterested(){
+    public void cccdeleteUserIdInInterested(){
         mFragmentTestRule.launchActivity(null);
         String userID = "1234";
         Favor favor = new Favor();
