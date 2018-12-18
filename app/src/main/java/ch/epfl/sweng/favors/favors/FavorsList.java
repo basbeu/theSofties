@@ -15,6 +15,7 @@ import android.widget.Spinner;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import ch.epfl.sweng.favors.database.Favor;
 import ch.epfl.sweng.favors.database.FavorRequest;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
+import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.databinding.FavorsListBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.location.SortLocations;
@@ -98,8 +100,15 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()){
                 return;
             }
-            updateList((ObservableArrayList) sender);
+            ObservableArrayList<Favor> obs = (ObservableArrayList) sender;
+            ArrayList<Favor> toDelete = new ArrayList<>();
 
+            for(Favor f : obs){
+                if(((Date)f.get(Favor.ObjectFields.expirationTimestamp)).compareTo(new Date()) <0)
+                    toDelete.add(f);
+            }
+            obs.removeAll(toDelete);
+            updateList(obs);
         }
     };
 
@@ -110,23 +119,23 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Map<DatabaseField, Object> querryGreater = new HashMap<>();
-        querryGreater.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
+        //querryGreater.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
         favorList.changeOnPropertyChangedCallback(otherSortingCb);
         switch (position) {
             case 0:
-                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
+                FavorRequest.getList(favorList,null,null,null, null, null);
             case 1: //location
                 favorList.changeOnPropertyChangedCallback(locationSortingCb);
-                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
+                FavorRequest.getList(favorList,null,null,null, null, null);
                 break;
             case 2: //recent
-                FavorRequest.getList(favorList,null,null,querryGreater, null, Favor.ObjectFields.creationTimestamp);
+                FavorRequest.getList(favorList,null,null,null, null, Favor.ObjectFields.creationTimestamp);
                 break;
             case 3: //soon expiring
-                FavorRequest.getList(favorList,null,null,querryGreater,  null, Favor.ObjectFields.expirationTimestamp);
+                FavorRequest.getList(favorList,null,null,null,  null, Favor.ObjectFields.expirationTimestamp);
                 break;
             case 4: //category
-                FavorRequest.getList(favorList,null,null,querryGreater,  null, Favor.StringFields.category);
+                FavorRequest.getList(favorList,null,null,null,  null, Favor.StringFields.category);
                 break;
             default: break;
         }
