@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,30 +11,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
@@ -110,17 +99,11 @@ public class ProfileFragment extends Fragment {
                                     .addOnCompleteListener (task12 -> {
                                         if (task12.isSuccessful()) {
                                             Utils.logout(getContext(), auth);
-                                            Toast.makeText(getContext(), R.string.userDeletionSuccessful,
-                                                    Toast.LENGTH_SHORT).show();
                                             //clean/delete Cloudstore documents related to that
                                             //deleted user
                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                                             //update "users" Firestore collection
-                                            db.collection("users").document(userID).delete().addOnCompleteListener(task1 -> {
-                                                if(task1.isSuccessful()){
-                                            Log.i("TAG", "User document successfully deleted.");
-                                                }
-                                            });
+                                            db.collection("users").document(userID).delete();
                                             //update "favors" Firestore collection
                                             //1 - remove user's favors
                                             Query favorsQuery = db.collection("favors").whereEqualTo("ownerID", userID);
@@ -129,7 +112,7 @@ public class ProfileFragment extends Fragment {
                                                     favor.getReference().delete();
                                                 }
                                             });
-                                            //2 - remove the user from all interested and selected
+                                            //2 - remove the user from all interested
                                                 ObservableArrayList<Favor> interestingFavorsList = new ObservableArrayList<>();
                                                 Map<DatabaseField, Object> interestedPeopleUserId = new HashMap<>();
                                                 FavorRequest.getList(interestingFavorsList, interestedPeopleUserId,
@@ -137,16 +120,11 @@ public class ProfileFragment extends Fragment {
                                                 interestingFavorsList.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                                                     @Override
                                                     public void onPropertyChanged(Observable sender, int propertyId) {
-                                                        interestedPeopleUserId.put(Favor.ObjectFields.interested, userID);
-                                                        for (Favor f : interestingFavorsList) {
-                                                            ArrayList<String> interestedPeople;
-                                                            interestedPeople = (ArrayList<String>) f.get(Favor.ObjectFields.interested);
-                                                            interestedPeople.remove(userID);
-                                                            f.set(Favor.ObjectFields.interested, interestedPeople);
-                                                            Database.getInstance().updateOnDb(f);
-                                                        }
+                                                        removeUserFromInterestedPeopleInFavors(interestedPeopleUserId, interestingFavorsList,userID);
                                                     }
                                                 });
+                                            Toast.makeText(getContext(), R.string.userDeletionSuccessful,
+                                                    Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getContext(), R.string.userDeletionFail,
                                                     Toast.LENGTH_SHORT).show();
@@ -178,6 +156,20 @@ public class ProfileFragment extends Fragment {
         transaction.replace(R.id.fragment_container, someFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public static void removeUserFromInterestedPeopleInFavors(Map<DatabaseField, Object>
+                                                               interestedPeopleUserId,
+                                                       ObservableArrayList<Favor> interestingFavorsList,
+                                                       String userID){
+        interestedPeopleUserId.put(Favor.ObjectFields.interested, userID);
+        for (Favor f : interestingFavorsList) {
+            ArrayList<String> interestedPeople;
+            interestedPeople = (ArrayList<String>) f.get(Favor.ObjectFields.interested);
+            interestedPeople.remove(userID);
+            f.set(Favor.ObjectFields.interested, interestedPeople);
+            Database.getInstance().updateOnDb(f);
+        }
     }
 
 }

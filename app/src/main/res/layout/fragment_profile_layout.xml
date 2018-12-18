@@ -113,10 +113,10 @@
             android:id="@+id/delete"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:text="@string/deleteButton"
-            android:textSize="10sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/reauthenticateMessage"
@@ -138,7 +138,7 @@
                 android:ems="10"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"
@@ -162,12 +162,12 @@
 
         <Button
             android:id="@+id/confirmDeletion"
-            android:layout_width="75dp"
-            android:layout_height="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:enabled="@{elements.isPasswordCorrect}"
             android:text="@string/confirmDeletionText"
-            android:textSize="10sp"
+            android:textSize="14sp"
             android:visibility="invisible" />
 
     </LinearLayout>

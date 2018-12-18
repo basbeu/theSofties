@@ -17,9 +17,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.FakeAuthentication;
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.ObservableArrayList;
+import ch.epfl.sweng.favors.database.fields.DatabaseField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
@@ -34,6 +43,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ProfileFragmentTest {
@@ -70,6 +81,24 @@ public class ProfileFragmentTest {
     public void deleteAccount(){
         mFragmentTestRule.launchActivity(null);
         onView(withId(R.id.delete)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void deleteUserIdInInterested(){
+        mFragmentTestRule.launchActivity(null);
+        String userID = "1234";
+        Favor favor = new Favor();
+        favor.set(Favor.StringFields.ownerID, userID);
+        List<String> userIDs = new ArrayList<>();
+        userIDs.add(userID);
+        favor.set(Favor.ObjectFields.interested, userIDs);
+        ObservableArrayList<Favor> interestingFavorsList = new ObservableArrayList<>();
+        interestingFavorsList.add(favor);
+        Map<DatabaseField, Object> interestedPeopleUserId = new HashMap<>();
+        ProfileFragment.removeUserFromInterestedPeopleInFavors(interestedPeopleUserId,
+                interestingFavorsList, userID);
+        List<String> interestedPeople = (List<String>) interestingFavorsList.get(0).get(Favor.ObjectFields.interested);
+        assertTrue(interestedPeople.isEmpty());
     }
 
 }
