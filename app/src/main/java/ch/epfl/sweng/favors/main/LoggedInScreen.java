@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.ActivityLoggedInScreenBinding;
 import ch.epfl.sweng.favors.databinding.NavHeaderBinding;
 import ch.epfl.sweng.favors.favors.MyFavorsFragment;
-import ch.epfl.sweng.favors.favors.Notifications;
+import ch.epfl.sweng.favors.notifications.NotificationsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.profile.ProfileFragment;
 import ch.epfl.sweng.favors.settings.SettingsFragment;
@@ -97,9 +99,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         profilePictureRef = User.getMain().getObservableObject(User.StringFields.profilePicRef);
         Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(v -> storage.displayImage(profilePictureRef, headerBinding.profilePicture, StorageCategories.PROFILE));
 
-
-
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout,
                 binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -117,8 +116,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         headerBinding.deleteProfilePicture.setOnClickListener(v -> Database.getInstance().updateFromDb(User.getMain()).addOnSuccessListener(t -> storage.deleteImageFromStorage(profilePictureRef, StorageCategories.PROFILE).addOnSuccessListener(deleteSuccess)));
     }
 
-
-
     @Override
     public void onBackPressed() {
         if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -127,7 +124,6 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
         else{
             super.onBackPressed();
         }
-
     }
 
     /**
@@ -171,7 +167,7 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.notifications:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notifications()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.discussions:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsList()).addToBackStack(null).commit();
@@ -185,6 +181,17 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void logout(){
+        User.getMain().set(User.StringFields.token_id, "");
+        Context context = this;
+        Database.getInstance().updateOnDb(User.getMain()).addOnSuccessListener(new OnSuccessListener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aVoid) {
+                Utils.logout(context, Authentication.getInstance());
+            }
+        }).addOnFailureListener(e -> Log.e("LOGOUT", "Error logging out!"));
     }
 
     void reimburseExpiredFavors(){

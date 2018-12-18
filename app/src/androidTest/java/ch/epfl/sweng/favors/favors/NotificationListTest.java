@@ -6,13 +6,14 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.favors.database.FakeDatabase;
+import ch.epfl.sweng.favors.notifications.NotificationsFragment;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.FragmentTestRule;
 
 public class NotificationListTest {
 
     @Rule
-    public FragmentTestRule<Notifications> mFragmentTestRule = new FragmentTestRule<>(Notifications.class);
+    public FragmentTestRule<NotificationsFragment> mFragmentTestRule = new FragmentTestRule<>(NotificationsFragment.class);
 
 
     @Before

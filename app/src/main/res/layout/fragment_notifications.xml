@@ -5,7 +5,7 @@
     <data>
         <variable
             name="elements"
-            type="ch.epfl.sweng.favors.favors.Notifications"
+            type="ch.epfl.sweng.favors.notifications.NotificationsFragment"
             />
     </data>
 

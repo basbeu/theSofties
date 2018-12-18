@@ -6,7 +6,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
@@ -27,7 +29,8 @@ public class FirebaseAuthentication extends Authentication{
     public static void setFirebase(FirebaseAuth firebaseAuth){
         if(!ExecutionMode.getInstance().isTest()) throw new IllegalStateException();
         Log.d("DEBUG_TEST", "I am here2");
-        if(auth == null) new FirebaseAuthentication(firebaseAuth);
+        if(auth == null)
+            auth = new FirebaseAuthentication(firebaseAuth);
         else throw new IllegalStateException();
     }
 
@@ -41,6 +44,10 @@ public class FirebaseAuthentication extends Authentication{
             auth = new FirebaseAuthentication();
         }
         return auth;
+    }
+
+    public FirebaseUser getCurrentUser() {
+        return firebaseAuth.getCurrentUser();
     }
 
     @Override

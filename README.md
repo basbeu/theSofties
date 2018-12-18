@@ -46,7 +46,7 @@ We are 7 computer science and communication system students at EPFL, currently e
 
 ##### Scrum Master: Jeremy, presenter: Bastien
 
-- git setup, filling backlog, authentification and rudimentary database and UI
+- git setup, filling backlog, authentication and rudimentary database and UI
 
 ### Sprint 2
 

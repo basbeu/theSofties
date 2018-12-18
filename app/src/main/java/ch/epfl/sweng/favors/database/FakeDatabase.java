@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -8,7 +9,10 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +68,7 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    public void updateOnDb(DatabaseEntity databaseEntity) {
+    public Task updateOnDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID != null){
             database.put(databaseEntity.documentID, databaseEntity.copy());
         }
@@ -84,8 +88,9 @@ public class FakeDatabase extends Database{
             databaseEntity.documentID = generatedString;
             databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
         }
+      
         notifyDatabaseModification();
-
+        return Tasks.forResult(true);
     }
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
@@ -107,6 +112,16 @@ public class FakeDatabase extends Database{
         database.remove(databaseEntity.documentID);
 
         return Tasks.forResult(true);
+    }
+
+    @Override
+    public ListenerRegistration addSnapshotListener(Activity activity, String collection, EventListener<QuerySnapshot> listener) {
+        return new ListenerRegistration() {
+            @Override
+            public void remove() {
+
+            }
+        };
     }
 
     @Override

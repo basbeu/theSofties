@@ -141,7 +141,7 @@ public class AuthenticationUITest {
         imageView2.check(matches(isDisplayed()));
 
         ViewInteraction button = onView(
-                allOf(withId(R.id.authentificationButton),
+                allOf(withId(R.id.authenticationButton),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),

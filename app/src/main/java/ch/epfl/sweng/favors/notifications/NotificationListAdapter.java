@@ -1,4 +1,4 @@
-package ch.epfl.sweng.favors.favors;
+package ch.epfl.sweng.favors.notifications;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
