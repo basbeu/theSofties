@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,6 +107,15 @@ public class ProfileFragment extends Fragment {
                                         if (task12.isSuccessful()) {
                                             Utils.logout(getContext(), auth);
                                             //clean/delete Cloudstore documents related to that
+                                            db.collection("users").document(userID).collection("notifications")
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot notification : task1.getResult()) {
+                                                                notification.getReference().delete();
+                                                            }
+                                                        }
+                                                    });
                                             db.collection("users").document(userID).delete();
                                             //update "favors" Firestore collection
                                             //1 - remove user's favors
