@@ -97,6 +97,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         if(Long.parseLong(binding.nbTokens.getText().toString()) < 1 || Long.parseLong(binding.nbPersons.getText().toString()) < 1){
             Toast.makeText(getContext(), "Please non zero values for token and persons number", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if(newUserTokens < 0 && newFavor.getId() == null ) {
