@@ -92,8 +92,6 @@ public class ProfileFragment extends Fragment {
             getView().findViewById(R.id.reauthenticateMessage).setVisibility(View.VISIBLE);
             getView().findViewById(R.id.passwordEntry).setVisibility(View.VISIBLE);
             getView().findViewById(R.id.confirmDeletion).setVisibility(View.VISIBLE);
-
-
         });
 
         binding.confirmDeletion.setOnClickListener((v)-> {
@@ -136,7 +134,6 @@ public class ProfileFragment extends Fragment {
                                                     favor.getReference().delete();
                                                 }
                                                 Log.i("TAG", "All user's favors have been deleted.");
-
                                             });
                                             //2 - remove the user from all interested and selected
                                                 //people lists from the other favors
@@ -215,4 +212,5 @@ public class ProfileFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
 }

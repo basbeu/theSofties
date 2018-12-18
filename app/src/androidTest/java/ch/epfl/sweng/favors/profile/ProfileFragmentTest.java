@@ -66,4 +66,10 @@ public class ProfileFragmentTest {
         onView(withId(R.id.editProfileButton)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void deleteAccount(){
+        mFragmentTestRule.launchActivity(null);
+        onView(withId(R.id.delete)).check(matches(isDisplayed()));
+    }
+
 }
