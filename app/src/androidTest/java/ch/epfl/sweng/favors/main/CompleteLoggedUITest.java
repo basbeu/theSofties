@@ -204,15 +204,7 @@ public class CompleteLoggedUITest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("Expiring soon favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
 
-        textView6.check(matches(withText("Expiring soon favor")));
         appCompatSpinner3.perform(scrollTo(), click());
 
         try {
