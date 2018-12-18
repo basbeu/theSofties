@@ -1318,7 +1318,7 @@ public class CompleteLoggedUITest {
         textView15.perform(click());
 
         ViewInteraction appCompatEditText19 = onView(
-                allOf(withId(R.id.nbTokens), withText("0"),
+                allOf(withId(R.id.nbTokens), withText("1"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
@@ -1327,7 +1327,7 @@ public class CompleteLoggedUITest {
         appCompatEditText19.perform(scrollTo(), click());
 
         ViewInteraction appCompatEditText20 = onView(
-                allOf(withId(R.id.nbTokens), withText("0"),
+                allOf(withId(R.id.nbTokens), withText("1"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
@@ -1346,7 +1346,7 @@ public class CompleteLoggedUITest {
         appCompatEditText21.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatEditText22 = onView(
-                allOf(withId(R.id.nbPersons), withText("0"),
+                allOf(withId(R.id.nbPersons), withText("1"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),

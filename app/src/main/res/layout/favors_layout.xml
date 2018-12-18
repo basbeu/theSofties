@@ -222,7 +222,7 @@
             android:id="@+id/nbTokenText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" tk for "
+            android:text=" tk per "
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="@+id/categoryFavor"
             app:layout_constraintBottom_toBottomOf="@+id/categoryFavor"

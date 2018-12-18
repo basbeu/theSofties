@@ -104,8 +104,11 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
             ArrayList<Favor> toDelete = new ArrayList<>();
 
             for(Favor f : obs){
-                if(((Date)f.get(Favor.ObjectFields.expirationTimestamp)).compareTo(new Date()) <0)
-                    toDelete.add(f);
+                if( f.get(Favor.ObjectFields.expirationTimestamp) instanceof Date &&
+                    ((Date)f.get(Favor.ObjectFields.expirationTimestamp)).compareTo(new Date()) <0 ||
+                    f.get(Favor.ObjectFields.expirationTimestamp) instanceof Timestamp &&
+                    ((Timestamp)f.get(Favor.ObjectFields.expirationTimestamp)).compareTo(new Timestamp(new Date())) <0)
+                        toDelete.add(f);
             }
             obs.removeAll(toDelete);
             updateList(obs);
