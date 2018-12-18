@@ -119,22 +119,25 @@ public class FavorsList extends android.support.v4.app.Fragment implements Adapt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Map<DatabaseField, Object> querryGreater = new HashMap<>();
-        //querryGreater.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
+        querryGreater.put(Favor.ObjectFields.expirationTimestamp,new Timestamp(new Date()));
         favorList.changeOnPropertyChangedCallback(otherSortingCb);
         switch (position) {
             case 0:
-                FavorRequest.getList(favorList,null,null,null, null, null);
+                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
             case 1: //location
                 favorList.changeOnPropertyChangedCallback(locationSortingCb);
-                FavorRequest.getList(favorList,null,null,null, null, null);
+                FavorRequest.getList(favorList,null,null,querryGreater, null, null);
                 break;
             case 2: //recent
+                //will remove expired favors in callback. We cannot do it here since we are receiving a sorted list from firestore
                 FavorRequest.getList(favorList,null,null,null, null, Favor.ObjectFields.creationTimestamp);
                 break;
             case 3: //soon expiring
+                //will remove expired favors in callback. We cannot do it here since we are receiving a sorted list from firestore
                 FavorRequest.getList(favorList,null,null,null,  null, Favor.ObjectFields.expirationTimestamp);
                 break;
             case 4: //category
+                //will remove expired favors in callback. We cannot do it here since we are receiving a sorted list from firestore
                 FavorRequest.getList(favorList,null,null,null,  null, Favor.StringFields.category);
                 break;
             default: break;
