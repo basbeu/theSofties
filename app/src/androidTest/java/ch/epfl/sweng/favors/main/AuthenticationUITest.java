@@ -18,7 +18,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -142,7 +141,7 @@ public class AuthenticationUITest {
         imageView2.check(matches(isDisplayed()));
 
         ViewInteraction button = onView(
-                allOf(withId(R.id.authentificationButton),
+                allOf(withId(R.id.authenticationButton),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),

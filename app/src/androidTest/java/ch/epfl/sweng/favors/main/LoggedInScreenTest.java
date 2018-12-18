@@ -7,7 +7,6 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -29,7 +28,6 @@ import org.mockito.junit.MockitoRule;
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.database.FakeDatabase;
 import ch.epfl.sweng.favors.database.User;
-import ch.epfl.sweng.favors.database.internal_db.InternalSqliteDb;
 import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
@@ -166,6 +164,29 @@ public class LoggedInScreenTest {
             e.printStackTrace();
         }
         activityActivityTestRule.getActivity().onActivityResult(FirebaseStorageDispatcher.GET_FROM_GALLERY, -1, data);
+        Looper.myLooper().quitSafely();
+    }
+
+    @Ignore
+    @Test
+    public void logoutTest(){
+        if(Looper.myLooper() == null){
+            Looper.prepare();
+        }
+
+        activityActivityTestRule.launchActivity(null);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        activityActivityTestRule.getActivity().logout();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Looper.myLooper().quitSafely();
     }
 

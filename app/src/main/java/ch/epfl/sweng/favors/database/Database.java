@@ -1,11 +1,16 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
+
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
-import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 
@@ -20,7 +25,7 @@ public abstract class Database {
      * Method that update on the db a specified record
      * @param databaseEntity DatabaseEntity to update on the DB
      */
-    public abstract void updateOnDb(DatabaseEntity databaseEntity);
+    public abstract Task updateOnDb(DatabaseEntity databaseEntity);
 
     /**
      * Method that checkout the latest record for a DatabaseEntity
@@ -30,6 +35,8 @@ public abstract class Database {
     public abstract Task updateFromDb(DatabaseEntity databaseEntity);
 
     public abstract Task deleteFromDatabase(DatabaseEntity databaseEntity);
+
+    public abstract ListenerRegistration addSnapshotListener(Activity activity, String collection,EventListener<QuerySnapshot> listener);
 
     /**
      *
@@ -41,24 +48,24 @@ public abstract class Database {
      * @return An observable Arraylist of all the DatabaseEntity of type <T> in the database
      */
     protected abstract <T extends DatabaseEntity> void getAll(ObservableArrayList<T> list, Class<T> clazz,
-                                                                                String collection,
-                                                                                Integer limit,
-                                                                                DatabaseField orderBy);
+                                                              String collection,
+                                                              Integer limit,
+                                                              DatabaseField orderBy);
 
 
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
-                                                          String collection,
-                                                          DatabaseField element,
-                                                          Object value,
-                                                          Integer limit,
-                                                                DatabaseField orderBy);
-
-    protected  abstract <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
                                                                 String collection,
                                                                 DatabaseField element,
                                                                 Object value,
                                                                 Integer limit,
                                                                 DatabaseField orderBy);
+
+    protected  abstract <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
+                                                                    String collection,
+                                                                    DatabaseField element,
+                                                                    Object value,
+                                                                    Integer limit,
+                                                                    DatabaseField orderBy);
 
     protected  abstract <T extends DatabaseEntity> void getList(ObservableArrayList<T> list, Class<T> clazz,
                                                                 String collection,
@@ -70,10 +77,10 @@ public abstract class Database {
                                                                 DatabaseField orderBy);
 
     protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             String value);
+                                                                  String value);
 
     protected abstract <T extends DatabaseEntity> void getElement(T toUpdate, Class<T> clazz, String collection,
-                                                             DatabaseField element, Object value);
+                                                                  DatabaseField element, Object value);
 
     /**
      * @return Database that is the DB for the current session

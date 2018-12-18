@@ -1,7 +1,6 @@
 package ch.epfl.sweng.favors.authentication;
 
 import android.content.Intent;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -30,20 +29,13 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class AuthentificationProcessTest {
+public class AuthenticationProcessTest {
 
     private UiDevice device;
 
@@ -61,7 +53,7 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(false);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Login);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Login);
 
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a login title
@@ -71,7 +63,7 @@ public class AuthentificationProcessTest {
         //login process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("bruce.wayne@waynecorp.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("tatata666")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
 
         //Check that we are login in the app
         //onView(withId(R.id.profileTitle)).check(matches(isDisplayed()));
@@ -82,14 +74,14 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Login);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Login);
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a login title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
         //wrong login process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("thisisnotauser@mail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("hsh837dh3")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
 
         //Check that the login is failed
         assertEquals("Wrong email or password or email not verified\nPlease try again",activityActivityTestRule.getActivity().requirementsText.get());
@@ -100,14 +92,14 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(false);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Register);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Register);
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a register title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
         //register process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("newuser@mail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("hhs883jj")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
         //Check that we load setUserInfo
 
     }
@@ -117,14 +109,14 @@ public class AuthentificationProcessTest {
         ExecutionMode.getInstance().setInvalidAuthTest(true);
         ActivityTestRule<AuthenticationProcess> activityActivityTestRule = new ActivityTestRule<>(AuthenticationProcess.class);
         Intent intent = new Intent();
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, AuthenticationProcess.Action.Register);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, AuthenticationProcess.Action.Register);
         activityActivityTestRule.launchActivity(intent);
         // Check if the title correspond to a register title
         onView(withId(R.id.loginMessageText)).check(matches(isDisplayed()));
         //register process
         onView(withId(R.id.emailTextField)).perform(scrollTo(),replaceText("notanewuser@mail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("jnd38jd9")).perform(closeSoftKeyboard());
-        onView(withId(R.id.authentificationButton)).perform(scrollTo(), click());
+        onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
         //Check that the register process failed
         assertEquals("Register failed, please try again",activityActivityTestRule.getActivity().requirementsText.get());
 

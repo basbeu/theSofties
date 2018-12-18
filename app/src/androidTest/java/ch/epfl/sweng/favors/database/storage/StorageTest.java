@@ -22,7 +22,6 @@ import com.google.firebase.storage.UploadTask;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 public class StorageTest {
 
-    @Rule public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<FavorCreateFragment>(FavorCreateFragment.class);
+    @Rule public FragmentTestRule<FavorCreateFragment> mFragmentTestRule = new FragmentTestRule<>(FavorCreateFragment.class);
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock private FirebaseStorage firebaseStorage;

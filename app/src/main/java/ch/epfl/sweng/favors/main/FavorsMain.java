@@ -10,15 +10,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.firebase.functions.FirebaseFunctions;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.authentication.AuthenticationProcess;
 import ch.epfl.sweng.favors.databinding.ActivityMainBinding;
-import ch.epfl.sweng.favors.favors.FavorListAdapter;
-import ch.epfl.sweng.favors.favors.FavorsFragment;
 import ch.epfl.sweng.favors.location.LocationHandler;
 
 
@@ -35,7 +36,7 @@ public class FavorsMain extends AppCompatActivity {
 
     public ActivityMainBinding binding;
 
-    public enum Permissions{LOCATION_SERVICE};
+    public enum Permissions{LOCATION_SERVICE}
 
     private static Context context;
     public static Context getContext(){
@@ -67,6 +68,7 @@ public class FavorsMain extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "launching the application now");
         context = this;
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setElements(this);
@@ -77,7 +79,6 @@ public class FavorsMain extends AppCompatActivity {
         // if logged in -> display main view
         if(Authentication.getInstance().isEmailVerified()){
             loggedinView();
-//            favorListView();
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -85,12 +86,11 @@ public class FavorsMain extends AppCompatActivity {
             // request permission
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Permissions.LOCATION_SERVICE.ordinal());
         }
-
     }
 
     public void loginView(AuthenticationProcess.Action action, View view){
         Intent intent = new Intent(view.getContext(), AuthenticationProcess.class);
-        intent.putExtra(AuthenticationProcess.AUTHENTIFICATION_ACTION, action);
+        intent.putExtra(AuthenticationProcess.AUTHENTICATION_ACTION, action);
         startActivity(intent);
         finish();
     }
@@ -101,14 +101,6 @@ public class FavorsMain extends AppCompatActivity {
         finish();
     }
 
-//    private void favorListView(){
-//        Intent intent = new Intent(this, FavorsFragment.class);
-//        startActivity(intent);
-//        finish();
-//    }
-
     @Override
-    public void onBackPressed() {
-
-    }
+    public void onBackPressed() {}
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
@@ -63,7 +62,7 @@ public abstract class FirebaseStorageDispatcher {
      * @param category the category of the picture to be deleted (favor or profile)
      */
     public abstract Task<Void> deleteImageFromStorage(ObservableField<String> pictureRef, StorageCategories category);
-    
+
     /**
      * Extracts an image from data and displays it
      * @see <a href="https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934"></a>

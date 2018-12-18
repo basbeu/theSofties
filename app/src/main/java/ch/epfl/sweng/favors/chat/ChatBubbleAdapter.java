@@ -3,21 +3,16 @@ package ch.epfl.sweng.favors.chat;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import ch.epfl.sweng.favors.R;
 import ch.epfl.sweng.favors.authentication.Authentication;
-import ch.epfl.sweng.favors.database.ChatInformations;
 import ch.epfl.sweng.favors.database.ChatMessage;
-import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.databinding.ChatBubbleBinding;
-import ch.epfl.sweng.favors.databinding.ChatListItemBinding;
 
 public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.ChatBubbleViewHolder> {
     private ObservableArrayList<ChatMessage> chatsList;
@@ -45,14 +40,11 @@ public class ChatBubbleAdapter extends RecyclerView.Adapter<ChatBubbleAdapter.Ch
             item.addOnPropertyChangedCallback(cb);
             cb.onPropertyChanged(null, 0);
             binding.setChatMessage(item);
-            binding.messageView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if(item.get(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid())){
-                        parent.deleteMessage(item);
-                    }
-                    return false;
+            binding.messageView.setOnLongClickListener(v -> {
+                if(item.get(ChatMessage.StringFields.writerId).equals(Authentication.getInstance().getUid())){
+                    parent.deleteMessage(item);
                 }
+                return false;
             });
         }
 

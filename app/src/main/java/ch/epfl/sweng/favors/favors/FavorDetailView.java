@@ -33,6 +33,7 @@ import ch.epfl.sweng.favors.database.ChatRequest;
 import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.Favor;
+import ch.epfl.sweng.favors.database.NotificationEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.database.UserRequest;
@@ -40,6 +41,8 @@ import ch.epfl.sweng.favors.database.storage.FirebaseStorageDispatcher;
 import ch.epfl.sweng.favors.database.storage.StorageCategories;
 import ch.epfl.sweng.favors.databinding.FragmentFavorDetailViewBinding;
 import ch.epfl.sweng.favors.location.LocationHandler;
+import ch.epfl.sweng.favors.notifications.Notification;
+import ch.epfl.sweng.favors.notifications.NotificationType;
 import ch.epfl.sweng.favors.utils.email.Email;
 import ch.epfl.sweng.favors.utils.email.EmailUtils;
 
@@ -51,7 +54,8 @@ import static ch.epfl.sweng.favors.utils.Utils.getIconPathFromCategory;
  * when you click on a Favor in the ListAdapter
  * fragment_favor_detail_view.xml
  */
-public class FavorDetailView extends android.support.v4.app.Fragment  {
+@SuppressWarnings("unchecked")
+public class FavorDetailView extends android.support.v4.app.Fragment {
     private static final String TAG = "FAVOR_DETAIL_FRAGMENT";
 
     public ObservableField<String> title;
@@ -102,6 +106,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 //TODO add token cost binding with new database implementation
             });
         }
+      
         if(arguments != null && getArguments().containsKey("uri")){
             imageToDisplay = Uri.parse(arguments.getCharSequence("uri").toString());
         }
@@ -161,16 +166,16 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
     }
 
-    private void sendMessage(String uid, String message){
+    private void sendMessage(String uid, String message) {
         ObservableArrayList<ChatInformations> conversations = new ObservableArrayList<>();
         ChatRequest.allChatsOf(conversations, uid);
         conversations.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if(propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()) return;
-                for(ChatInformations chat : conversations){
+                if (propertyId != ObservableArrayList.ContentChangeType.Update.ordinal()) return;
+                for (ChatInformations chat : conversations) {
                     ArrayList<String> participantsId = (ArrayList<String>) chat.get(ChatInformations.ObjectFields.participants);
-                    if(participantsId.contains(Authentication.getInstance().getUid()) && participantsId.size() == 2){
+                    if (participantsId.contains(Authentication.getInstance().getUid()) && participantsId.size() == 2) {
                         chat.addMessageToConversation(message);
                         return;
                     }
@@ -184,12 +189,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favor_detail_view, container, false);
         binding.setElements(this);
 
-        binding.favReportAbusiveAdd.setOnClickListener((l)->
+        binding.favReportAbusiveAdd.setOnClickListener((l) ->
                 EmailUtils.sendEmail(
                         new Email(Authentication.getInstance().getEmail(), "report@myfavors.xyz", "Abusive favors : " + title.get(), "The abusive favor is : title" + title.get() + "\ndescription : " + description.get()), getContext(),
                 "issue has been reported! Sorry for the inconvenience",
@@ -205,7 +210,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                         mFrag).addToBackStack(null).commit();
             } else {
                 //return if the timer is not over yet
-                if(!buttonEnabled) return;
+                if (!buttonEnabled) return;
                 //disable the button for preventing non-determinism
                 buttonEnabled = false;
                 //if user is in the list -> remove him from the list
@@ -216,12 +221,12 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
                 new Handler().postDelayed(() -> {
                     // This method will be executed once the timer is over
                     buttonEnabled = true;
-                },5000);
+                }, 5000);
             }
         });
 
 
-        binding.deleteButton.setOnClickListener((l)->{
+        binding.deleteButton.setOnClickListener((l) -> {
             long newUserTokens = User.getMain().get(User.LongFields.tokens) + 1;
             User.getMain().set(User.LongFields.tokens, newUserTokens);
             Database.getInstance().updateOnDb(User.getMain());
@@ -349,7 +354,7 @@ public class FavorDetailView extends android.support.v4.app.Fragment  {
 
         long tokenPerPerson = localFavor.get(Favor.LongFields.tokenPerPerson);
 
-        if(selectedUsers.size() == 0){
+        if (selectedUsers.size() == 0) {
             Toast.makeText(getContext(), "No user selected.", Toast.LENGTH_SHORT).show();
         }
 

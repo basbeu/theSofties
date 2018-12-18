@@ -26,13 +26,10 @@ public class EmailUtils {
 
         //Ensure that API Keys are up to date before calling the API
         ApiKeys key = ApiKeys.getInstance();
-        Database.getInstance().updateFromDb(key).addOnCompleteListener(t->{
-
-            RetrofitDispatcher.getInstance()
-                    .getApi()
-                    .sendEmail(email.getFrom(), email.getTo(), email.getSubject(), email.getMessage())
-                    .enqueue(RetrofitDispatcher.getInstance().getCallback(context, successMsg, failureMsg));
-        });
+        Database.getInstance().updateFromDb(key).addOnCompleteListener(t-> RetrofitDispatcher.getInstance()
+                .getApi()
+                .sendEmail(email.getFrom(), email.getTo(), email.getSubject(), email.getMessage())
+                .enqueue(RetrofitDispatcher.getInstance().getCallback(context, successMsg, failureMsg)));
 
     }
 }

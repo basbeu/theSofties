@@ -1,5 +1,6 @@
 package ch.epfl.sweng.favors.database;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -8,13 +9,15 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -65,7 +68,7 @@ public class FakeDatabase extends Database{
     }
 
     @Override
-    public void updateOnDb(DatabaseEntity databaseEntity) {
+    public Task updateOnDb(DatabaseEntity databaseEntity) {
         if(databaseEntity.documentID != null){
             database.put(databaseEntity.documentID, databaseEntity.copy());
         }
@@ -85,8 +88,9 @@ public class FakeDatabase extends Database{
             databaseEntity.documentID = generatedString;
             databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
         }
+      
         notifyDatabaseModification();
-
+        return Tasks.forResult(true);
     }
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity) {
@@ -94,13 +98,10 @@ public class FakeDatabase extends Database{
         databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
 
         Handler handler = new Handler(handlerThread.getLooper());
-        handler.postDelayed(()->{
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if(database.get(databaseEntity.documentID) == null) return;
-                databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
-            });
-
-        },20);
+        handler.postDelayed(()-> new Handler(Looper.getMainLooper()).post(() -> {
+            if(database.get(databaseEntity.documentID) == null) return;
+            databaseEntity.updateLocalData(database.get(databaseEntity.documentID).getEncapsulatedObjectOfMaps());
+        }),20);
 
         return Tasks.forResult(true);
     }
@@ -111,6 +112,16 @@ public class FakeDatabase extends Database{
         database.remove(databaseEntity.documentID);
 
         return Tasks.forResult(true);
+    }
+
+    @Override
+    public ListenerRegistration addSnapshotListener(Activity activity, String collection, EventListener<QuerySnapshot> listener) {
+        return new ListenerRegistration() {
+            @Override
+            public void remove() {
+
+            }
+        };
     }
 
     @Override
@@ -175,11 +186,11 @@ public class FakeDatabase extends Database{
 
     @Override
     protected  <T extends DatabaseEntity> void getLiveList(ObservableArrayList<T> list, Class<T> clazz,
-                                                       String collection,
-                                                       DatabaseField key,
-                                                       Object value,
-                                                       Integer limit,
-                                                       DatabaseField orderBy){
+                                                           String collection,
+                                                           DatabaseField key,
+                                                           Object value,
+                                                           Integer limit,
+                                                           DatabaseField orderBy){
 
         Handler handler = new Handler(handlerThread.getLooper());
         handler.postDelayed(()->{
@@ -243,8 +254,7 @@ public class FakeDatabase extends Database{
             }
             if(temp instanceof ArrayList) {
                 if(!(entry.getValue() instanceof String)) return false;
-                if(((ArrayList<String>) temp).contains((String) entry.getValue())) return true;
-                return false;
+                return ((ArrayList<String>) temp).contains((String) entry.getValue());
             }
         }
         Log.d(TAG, "Performing a not implemented comparison in fake database");
@@ -313,14 +323,14 @@ public class FakeDatabase extends Database{
      * @param <T> Tape of entityType
      */
     private <T extends DatabaseEntity> void addToList(Class<T> clazz, ArrayList<T> tempList, DatabaseEntity entity) {
-            try {
-                T temp = clazz.newInstance();
-                temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
-                tempList.add(temp);
-                Log.d(TAG, "Added element to return");
-            } catch (Exception e) {
-                Log.e(TAG, "Illegal access exception");
-            }
+        try {
+            T temp = clazz.newInstance();
+            temp.set(entity.documentID, entity.getEncapsulatedObjectOfMaps());
+            tempList.add(temp);
+            Log.d(TAG, "Added element to return");
+        } catch (Exception e) {
+            Log.e(TAG, "Illegal access exception");
+        }
     }
 
 
@@ -410,7 +420,7 @@ public class FakeDatabase extends Database{
         u0.set(User.StringFields.city, FakeAuthentication.CITY);
         u0.set(User.LongFields.tokens, FakeAuthentication.TOKENS);
         User.UserGender.setGender(u0, FakeAuthentication.GENDER);
-        ArrayList<String> notifications = new ArrayList<String>();
+        ArrayList<String> notifications = new ArrayList<>();
         notifications.add("Someone is interested in your favor !");
         u0.set(User.ObjectFields.notifications, notifications);
         u0.set(User.BooleanFields.emailNotifications,true);

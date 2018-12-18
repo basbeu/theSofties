@@ -11,8 +11,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,8 +22,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(AndroidJUnit4.class)
-public class FirebaseAuthentificationTest {
+public class FirebaseAuthenticationTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
@@ -48,7 +49,6 @@ public class FirebaseAuthentificationTest {
         Mockito.when(this.firebaseAuth.signInWithEmailAndPassword("email", "password")).thenReturn(Tasks.forResult(this.fakeAuthResult));
         Mockito.when(this.firebaseAuth.getUid()).thenReturn("I WANT PIZZA");
         Mockito.when(this.firebaseAuth.getCurrentUser()).thenReturn(this.fakeUser);
-        Class firebaseAuthentification = FirebaseAuthentication.class;
         FirebaseAuthentication.setFirebase(this.firebaseAuth);
     }
 
@@ -89,12 +89,17 @@ public class FirebaseAuthentificationTest {
 
     @Test
     public void getEmailReturns() {
-        FirebaseAuthentication.getInstance().getEmail();
+        assertEquals("email", FirebaseAuthentication.getInstance().getEmail());
     }
 
     @Test
     public void deleteReturns() {
         FirebaseAuthentication.getInstance().delete();
+    }
+
+    @Test
+    public void getCurrentUserTest(){
+        assertEquals(this.fakeUser, FirebaseAuthentication.getInstance().getCurrentUser());
     }
 
     @After

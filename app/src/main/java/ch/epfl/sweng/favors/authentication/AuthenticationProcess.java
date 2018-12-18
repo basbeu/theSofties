@@ -17,8 +17,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import ch.epfl.sweng.favors.R;
+import ch.epfl.sweng.favors.database.Database;
 import ch.epfl.sweng.favors.database.User;
 import ch.epfl.sweng.favors.databinding.LogInRegisterViewBinding;
 import ch.epfl.sweng.favors.main.FavorsMain;
@@ -32,11 +34,14 @@ public class AuthenticationProcess extends Activity {
     public static final String TAG = FavorsMain.TAG + "_Auth";
     public static final String REQUIREMENTS_STRING = "Password must:\n" + "- Be between 8 and 20 characters\n" + "- Mix numbers and letters";
 
-    public static String AUTHENTIFICATION_ACTION = "AUTHENTIFICATION_ACTION";
+    public static String AUTHENTICATION_ACTION = "AUTHENTICATION_ACTION";
     public enum Action{Login, Register} ;
 
+
     public LogInRegisterViewBinding binding;
+
     private Authentication mAuth;
+
     public Action action;
 
     public ObservableField<String> headerText = new ObservableField<>();
@@ -51,10 +56,6 @@ public class AuthenticationProcess extends Activity {
             isEmailCorrect.set(Utils.isEmailValid(binding.emailTextField.getText().toString()));
         }
     };
-    public void setUserInfoLoad(View view){
-        Intent intent = new Intent(view.getContext(), SetUserInfo.class);
-        startActivity(intent);
-    }
 
     private TextWatcher passwordTextWatcher = new TextWatcherCustom() {
         @Override
@@ -62,10 +63,10 @@ public class AuthenticationProcess extends Activity {
             isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordTextField.getText().toString()));
         }
     };
-    private View.OnClickListener authentificationButtonListener = new View.OnClickListener() {
+    private View.OnClickListener authenticationButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            authentification(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
+            authentication(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     };
 
@@ -118,7 +119,10 @@ public class AuthenticationProcess extends Activity {
             Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
-                loggedinView(action);
+                //if (mAuth instanceof FirebaseAuthentication) {
+                        Log.d(TAG, "logging in");
+                        loggedinView(action);
+                //}
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                 requirementsText.set("Wrong email or password or email not verified\nPlease try again");
@@ -127,7 +131,6 @@ public class AuthenticationProcess extends Activity {
     };
 
     private void sendConfirmationMail(){
-
         mAuth.sendEmailVerification().addOnCompleteListener(AuthenticationProcess.this, task-> {
             // Re-enable button
             findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
@@ -142,6 +145,7 @@ public class AuthenticationProcess extends Activity {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         }
         Log.d("TestMode", ExecutionMode.getInstance().isTest() ? "true" : "false");
+
         mAuth = Authentication.getInstance();
 
         binding = DataBindingUtil.setContentView(this, R.layout.log_in_register_view);
@@ -153,9 +157,9 @@ public class AuthenticationProcess extends Activity {
         // Get the Intent that started this activity and extract the string
 
 
-        if(getIntent().hasExtra(AUTHENTIFICATION_ACTION)){
+        if(getIntent().hasExtra(AUTHENTICATION_ACTION)){
 
-            action = (Action) getIntent().getExtras().get(AUTHENTIFICATION_ACTION);
+            action = (Action) getIntent().getExtras().get(AUTHENTICATION_ACTION);
             setUI(action);
         }
         else{
@@ -163,7 +167,7 @@ public class AuthenticationProcess extends Activity {
         }
 
 
-        binding.authentificationButton.setOnClickListener(authentificationButtonListener);
+        binding.authenticationButton.setOnClickListener(authenticationButtonListener);
         binding.resetPasswordButton.setOnClickListener(resetButtonListener);
     }
 
@@ -194,14 +198,14 @@ public class AuthenticationProcess extends Activity {
      * @param email The email to log in with
      * @param password The user password
      */
-    private void authentification(String email, String password) {
+    private void authentication(String email, String password) {
         if(!Utils.isEmailValid(email)){
-            Log.d(TAG,"coucou");
+            Log.d(TAG,"invalid email format");
             requirementsText.set("Wrong email format");
             return;
         }
         if(!Utils.passwordFitsRequirements(password)){
-            Log.d(TAG,"coucou");
+            Log.d(TAG,"invalid password format");
             requirementsText.set("Wrong password format");
             return;
         }
@@ -219,9 +223,25 @@ public class AuthenticationProcess extends Activity {
     private void loggedinView(Action action){
         if(mAuth.isEmailVerified()) {
             User.updateMain();
-            Intent intent = new Intent(this, LoggedInScreen.class);
-            startActivity(intent);
-            finish();
+
+            Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(
+                    (t)->{
+                        String tokenId = "1";
+
+                        if(!ExecutionMode.getInstance().isTest()) {
+                            tokenId = FirebaseInstanceId.getInstance().getToken();
+                        }
+
+                        User.getMain().set(User.StringFields.token_id, tokenId);
+                        Database.getInstance().updateOnDb(User.getMain()).addOnCompleteListener((s)->{
+                            Intent intent = new Intent(this, LoggedInScreen.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                    }
+            );
+
+
         } else {
             Intent intent = new Intent(this, AuthenticationProcess.class);
             startActivity(intent);

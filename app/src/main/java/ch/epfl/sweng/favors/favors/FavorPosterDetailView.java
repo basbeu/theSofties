@@ -16,8 +16,6 @@ import ch.epfl.sweng.favors.authentication.Authentication;
 import ch.epfl.sweng.favors.chat.ChatsList;
 import ch.epfl.sweng.favors.database.ChatInformations;
 import ch.epfl.sweng.favors.database.ChatRequest;
-import ch.epfl.sweng.favors.database.Database;
-import ch.epfl.sweng.favors.database.DatabaseEntity;
 import ch.epfl.sweng.favors.database.ObservableArrayList;
 import ch.epfl.sweng.favors.database.UserRequest;
 import ch.epfl.sweng.favors.database.User;

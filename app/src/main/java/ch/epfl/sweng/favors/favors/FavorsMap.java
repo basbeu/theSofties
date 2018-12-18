@@ -55,18 +55,15 @@ public class FavorsMap extends android.support.v4.app.Fragment implements OnMapR
     /**
      * Action that is executed when click is perfomed on a marker
      */
-    private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
-        @Override
-        public boolean onMarkerClick(Marker marker) {
-            Favor favor = favorsMap.get(marker.getId());
-            ViewModelProviders.of(FavorsMap.this.getActivity()).get(SharedViewFavor.class).select(favor);
-            if(favor.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
-            else
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+    private GoogleMap.OnMarkerClickListener markerClickListener = marker -> {
+        Favor favor = favorsMap.get(marker.getId());
+        ViewModelProviders.of(FavorsMap.this.getActivity()).get(SharedViewFavor.class).select(favor);
+        if(favor.get(Favor.StringFields.ownerID).equals(Authentication.getInstance().getUid()))
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FavorDetailView()).addToBackStack(null).commit();
 
-            return true;
-        }
+        return true;
     };
 
     @Nullable

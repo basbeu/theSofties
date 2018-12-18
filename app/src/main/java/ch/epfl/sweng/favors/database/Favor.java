@@ -26,7 +26,7 @@ public class Favor extends DatabaseEntity {
     public Favor(){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,null);
-        }
+    }
 
     public Favor(String id){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),

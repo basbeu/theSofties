@@ -30,7 +30,7 @@ public abstract class DatabaseEntity implements Observable {
     protected final String collection;
     protected String documentID;
 
-    public enum UpdateType{DATA, FROM_DB, FROM_REQUEST};
+    public enum UpdateType{DATA, FROM_DB, FROM_REQUEST}
 
     private final static String TAG = "Favors_DatabaseHandler";
 
@@ -134,7 +134,7 @@ public abstract class DatabaseEntity implements Observable {
      * @param <V>   The ObservableField content type
      * @param <U>   The ObservableField
      */
-    private <T extends DatabaseField, V extends Object, U extends ObservableField<V>> void convertObjectMapToTypedMap(Map<String, Object> from, Map<T, U> to, Class<V> clazz) {
+    private <T extends DatabaseField, V , U extends ObservableField<V>> void convertObjectMapToTypedMap(Map<String, Object> from, Map<T, U> to, Class<V> clazz) {
         if(from == null || to == null){return;}
         for (Map.Entry<T, U> entry : to.entrySet()){
             T fieldName = entry.getKey();

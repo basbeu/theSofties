@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:visibility="@{chatWindow.isEditingTitle ? View.GONE : View.VISIBLE}"
                     android:text="@{chatWindow.chatsInformations.getObservableObject(ChatInformations.StringFields.title)}"
-                    android:textSize="22dp"/>
+                    android:textSize="22sp"/>
 
                 <EditText
                     android:id="@+id/editTitleText"
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{chatWindow.isEditingTitle ? `OK` : `Edit`}"
-                    android:textSize="10dp"/>
+                    android:textSize="10sp"/>
 
 
             </LinearLayout>
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{chatWindow.chatsInformations.allParticipants}"
-                android:textSize="16dp"/>
+                android:textSize="16sp"/>
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:layout_marginTop="15dp"
