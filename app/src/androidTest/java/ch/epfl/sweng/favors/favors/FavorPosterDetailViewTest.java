@@ -36,7 +36,7 @@ public class FavorPosterDetailViewTest {
     }
 
     @Test
-    public void titleIsCorrectlyDisplayed() throws UiObjectNotFoundException, InterruptedException {
+    public void titleIsCorrectlyDisplayed(){
         mFragmentTestRule.launchActivity(new Intent().putExtra(OWNER_ID, fakePosterId));
         onView(ViewMatchers.withId(R.id.posterTitle)).perform(scrollTo()).check(matches(isDisplayed()));
 

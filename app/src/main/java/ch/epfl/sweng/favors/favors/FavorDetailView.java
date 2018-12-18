@@ -317,10 +317,9 @@ public class FavorDetailView extends android.support.v4.app.Fragment {
                             }
 
                             String notification = new Notification(NotificationType.INTEREST, localFavor).toString();
-                            ArrayList<String> notificationList = (ArrayList<String>) ((User) sender).get(User.ObjectFields.notifications);
-                            notificationList.add(notification);
-                            owner.set(User.ObjectFields.notifications, notificationList);
-                            Database.getInstance().updateOnDb(owner);
+                            NotificationEntity notificationEntity = new NotificationEntity(ownerId);
+                            notificationEntity.set(NotificationEntity.StringFields.message,notification);
+                            Database.getInstance().updateOnDb(notificationEntity);
                         }
                     }
                 });
