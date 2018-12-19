@@ -27,7 +27,16 @@ import ch.epfl.sweng.favors.main.FavorsMain;
 
 import static ch.epfl.sweng.favors.main.FavorsMain.TAG;
 
-public class FirebaseDatabase extends Database{
+/**
+ * Firebase is used as our backend, specifically Firestore
+ *
+ * the important methods of this class are the
+ * updateFromDB,
+ * update(TO)OnDB and
+ * deleteFromDB
+ *
+ */
+public class FirebaseDatabase extends Database {
 
     private static FirebaseDatabase db = null;
     private static FirebaseFirestore dbFireStore = null;
@@ -52,6 +61,15 @@ public class FirebaseDatabase extends Database{
         dbFireStore = newFireStore;
     }
 
+    /**
+     * Updates a database entry (Favor, User, Chat) that was locally modified or created
+     * by the user on his phone.
+     * As always Firestore tasks are asynchronous and there is logging capability to
+     * debug the status of a push to the database
+     *
+     * @param databaseEntity DatabaseEntity to update on the DB
+     * @return asynchronous task completing the store on the remote db
+     */
     @Override
     public Task updateOnDb(DatabaseEntity databaseEntity){
         if(databaseEntity.documentID == null){
@@ -72,6 +90,16 @@ public class FirebaseDatabase extends Database{
         /* Feedback of an error here - Impossible to update user informations */
     }
 
+    /**
+     * Gets a database entry from the firestore database
+     * since all of the requests are asynchronous
+     * the provision is made in the form of a task that will
+     * load the updated db entry into the specified DatabaseEntity
+     * which could be a remotely changed favor, chat or even user
+     *
+     * @param databaseEntity DatabaseEntity that must be updated with the db version
+     * @return an asynchronous task that will update the db entry passed as argument
+     */
     @Override
     public Task updateFromDb(DatabaseEntity databaseEntity){
         if(databaseEntity.documentID == null){return Tasks.forCanceled();}
@@ -88,6 +116,13 @@ public class FirebaseDatabase extends Database{
 
     }
 
+    /**
+     * Deletes an entry from the DB
+     * this can either be a favor, a user or chat
+     *
+     * @param databaseEntity - the Object referencing the database entry
+     * @return Task that will delete the entry
+     */
     @Override
     public Task deleteFromDatabase(DatabaseEntity databaseEntity) {
         if(databaseEntity == null) return Tasks.forResult(false);

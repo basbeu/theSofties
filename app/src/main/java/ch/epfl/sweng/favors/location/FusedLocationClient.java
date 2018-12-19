@@ -15,6 +15,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import ch.epfl.sweng.favors.main.FavorsMain;
 
+/**
+ * This class handles the location provider
+ *
+ * the important part here is the user's approval to access the location
+ * We request the location permissions declared in the manifest
+ *
+ * these include fine grained location data (GPS)
+ * and coarse-grained location data (cell triangulation, nearby wifi stations)
+ * which can act as backfall in case of GPS being unavailable due to
+ * being in a building or perhaps garage
+ *
+ * We want to hide this as much as possible away and want a smooth interaction for the user
+ * The request for permission is only issued upon first opening or reinstall of the application.
+ *
+ * The convenient method provided is getLastLocation
+ */
 public class FusedLocationClient extends Location{
 
     private static String TAG = "FUSE_LOCATION";
@@ -38,7 +54,7 @@ public class FusedLocationClient extends Location{
     }
 
     /**
-     * this method checks if we have the permission to access a user's location
+     * this method requests the user's permission to access the device's location if it has not been granted (or denied?)
      * @return if we are allowed (boolean)
      */
     private boolean requestPermission() {
@@ -51,6 +67,10 @@ public class FusedLocationClient extends Location{
         return true;
     }
 
+    /**
+     * this method checks if we have the permission to access a user's location
+     * @return if we are allowed (boolean)
+     */
     private boolean checkPermission(){
         return ActivityCompat.checkSelfPermission(FavorsMain.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(FavorsMain.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;

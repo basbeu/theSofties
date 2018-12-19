@@ -8,6 +8,14 @@ import android.widget.Toast;
 
 import ch.epfl.sweng.favors.R;
 
+/**
+ * After sign-up one is transferred to this screen
+ * with 2 buttons:
+ * acknowledgment of the E-Mail -> ready to login
+ * resend confirmation mail in case it was lost
+ *
+ * UI activity: ctivity_confirmation_sent
+ */
 public class ConfirmationSent extends Activity {
 
     @Override

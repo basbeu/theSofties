@@ -29,6 +29,10 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.utils.Utils;
 
+/**
+ * Authentication Process
+ * This class
+ */
 public class AuthenticationProcess extends Activity {
 
     public static final String TAG = FavorsMain.TAG + "_Auth";
@@ -63,13 +67,17 @@ public class AuthenticationProcess extends Activity {
             isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordTextField.getText().toString()));
         }
     };
+
+    // login button
     private View.OnClickListener authenticationButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            // perform the login
             authentication(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     };
 
+    // password reset button - checks if there is such a user account
     private View.OnClickListener resetButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -84,7 +92,7 @@ public class AuthenticationProcess extends Activity {
     };
 
     /**
-     * sets the boolean to whether password is correct or not
+     * sets if the password is valid
      */
     public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){
         @Override
@@ -94,53 +102,63 @@ public class AuthenticationProcess extends Activity {
         }
     };
 
+    /**
+     * Changes UI depending on whether user is already signed-in
+     */
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        if(mAuth.isEmailVerified()){
+        if (mAuth.isEmailVerified()){
             headerText.set("You're already logged in");
         }
     }
 
     private OnCompleteListener<AuthResult> registerComplete = task -> {
         if (task.isSuccessful()) {
-
             Log.d(TAG, "createUserWithEmail:success");
 
             sendConfirmationMail();
             confirmationSent();
         } else {
             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-            requirementsText.set("Register failed, please try again");
+            requirementsText.set("Register failed, please try again!");
         }
     };
 
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
                 //if (mAuth instanceof FirebaseAuthentication) {
-                        Log.d(TAG, "logging in");
-                        loggedinView(action);
+                Log.d(TAG, "logging in");
+                loggedinView(action);
                 //}
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                requirementsText.set("Wrong email or password or email not verified\nPlease try again");
+                requirementsText.set("Wrong email or password or email not verified\nPlease try again!");
             }
         }
     };
 
+    /**
+     * Sends a verification email to the user's email and displays a toast with success or failure
+     */
     private void sendConfirmationMail(){
         mAuth.sendEmailVerification().addOnCompleteListener(AuthenticationProcess.this, task-> {
             // Re-enable button
             findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
-            Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this, "Verification email sent to " + mAuth.getEmail(),"Failed to send verification email.");
+            Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this,
+                    "Verification email sent to " + mAuth.getEmail(),
+                    "Failed to send verification email.");
         });
     }
 
+    /**
+     * Creates
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,18 +175,14 @@ public class AuthenticationProcess extends Activity {
         binding.emailTextField.addTextChangedListener(emailTextWatcher);
         // Check if the password is correct each time a letter was added
         binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
+
         // Get the Intent that started this activity and extract the string
-
-
-        if(getIntent().hasExtra(AUTHENTICATION_ACTION)){
-
+        if (getIntent().hasExtra(AUTHENTICATION_ACTION)) {
             action = (Action) getIntent().getExtras().get(AUTHENTICATION_ACTION);
             setUI(action);
-        }
-        else{
+        } else {
             setUI(Action.Login);
         }
-
 
         binding.authenticationButton.setOnClickListener(authenticationButtonListener);
         binding.resetPasswordButton.setOnClickListener(resetButtonListener);
@@ -202,12 +216,12 @@ public class AuthenticationProcess extends Activity {
      * @param password The user password
      */
     private void authentication(String email, String password) {
-        if(!Utils.isEmailValid(email)){
+        if (!Utils.isEmailValid(email)){
             Log.d(TAG,"invalid email format");
             requirementsText.set("Wrong email format");
             return;
         }
-        if(!Utils.passwordFitsRequirements(password)){
+        if (!Utils.passwordFitsRequirements(password)){
             Log.d(TAG,"invalid password format");
             requirementsText.set("Wrong password format");
             return;
@@ -224,14 +238,14 @@ public class AuthenticationProcess extends Activity {
     }
 
     private void loggedinView(Action action){
-        if(mAuth.isEmailVerified()) {
+        if (mAuth.isEmailVerified()) {
             User.updateMain();
 
             Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(
                     (t)->{
                         String tokenId = "1";
 
-                        if(!ExecutionMode.getInstance().isTest()) {
+                        if (!ExecutionMode.getInstance().isTest()) {
                             tokenId = FirebaseInstanceId.getInstance().getToken();
                         }
 
