@@ -29,6 +29,10 @@ import ch.epfl.sweng.favors.utils.ExecutionMode;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 import ch.epfl.sweng.favors.utils.Utils;
 
+/**
+ * Authentication Process
+ * This class
+ */
 public class AuthenticationProcess extends Activity {
 
     public static final String TAG = FavorsMain.TAG + "_Auth";
