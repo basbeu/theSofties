@@ -14,7 +14,7 @@ public abstract class Authentication {
 
     public static Authentication getInstance(){
 
-        if(auth == null) {
+        if (auth == null) {
             if(ExecutionMode.getInstance().isTest()){
                 auth = FakeAuthentication.getInstance();
             } else {
