@@ -28,16 +28,61 @@ public class User extends DatabaseEntity{
     public static void updateMain(){user = new User(Authentication.getInstance().getUid());}
 
 
-    public enum StringFields implements DatabaseStringField {firstName, lastName, email, sex, pseudo, city, profilePicRef, token_id}
-    public enum LongFields implements DatabaseLongField {creationTimeStamp, tokens}
-    public enum ObjectFields implements DatabaseObjectField {rights, location, notifications}
-    public enum BooleanFields implements DatabaseBooleanField {emailNotifications}
+    /**
+     * User Database fields: String
+     */
+    public enum StringFields implements DatabaseStringField {
+        firstName, lastName,
+        email,
+        sex,
+        pseudo,
+        city, // a string of the homecity selected by the user
+        profilePicRef, // a reference to the image stored on Firebase
+        token_id
+    }
 
+    /**
+     * User Database fields: Numbers
+     */
+    public enum LongFields implements DatabaseLongField {
+        creationTimeStamp,
+        tokens
+    }
+
+    /**
+     * User Database fields: Objects
+     * Database objects are more complex non-primitive types
+     * such as a location, rights or settings
+     */
+    public enum ObjectFields implements DatabaseObjectField {
+        rights,
+        location,
+        notifications
+    }
+
+    /**
+     * User Database fields: Boolean
+     */
+    public enum BooleanFields implements DatabaseBooleanField {
+        emailNotifications // set whether a user will receive E-Mail notifications
+    }
+
+    /**
+     * Empty user constructor required by Firebase
+     */
     public User(){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, null);
     }
 
+    /**
+     * Creates a new user object from the unique ID
+     *
+     * TODO As a future improvement that could be changed to a Static Factory singleton
+     * which would not allow to create more than one instance of an already existing user
+     * which should not be newly constructed but rather called e.g. getUser(UID id)
+     * @param id
+     */
     public User(String id){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION,id);
@@ -52,7 +97,6 @@ public class User extends DatabaseEntity{
     }
 
     static public void resetMain() {
-
         status.disconnect();
         user.reset();
     }

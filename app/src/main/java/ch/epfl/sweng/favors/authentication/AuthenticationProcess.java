@@ -129,28 +129,36 @@ public class AuthenticationProcess extends Activity {
     private OnCompleteListener<AuthResult> signInComplete = new OnCompleteListener<AuthResult>(){
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            Log.d(TAG,"hello");
             if (task.isSuccessful() && mAuth.isEmailVerified()) {
                 Log.d(TAG, "signInWithEmail:success");
                 //if (mAuth instanceof FirebaseAuthentication) {
-                        Log.d(TAG, "logging in");
-                        loggedinView(action);
+                Log.d(TAG, "logging in");
+                loggedinView(action);
                 //}
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                requirementsText.set("Wrong email or password or email not verified\nPlease try again");
+                requirementsText.set("Wrong email or password or email not verified\nPlease try again!");
             }
         }
     };
 
+    /**
+     * Sends a verification email to the user's email and displays a toast with success or failure
+     */
     private void sendConfirmationMail(){
         mAuth.sendEmailVerification().addOnCompleteListener(AuthenticationProcess.this, task-> {
             // Re-enable button
             findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
-            Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this, "Verification email sent to " + mAuth.getEmail(),"Failed to send verification email.");
+            Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this,
+                    "Verification email sent to " + mAuth.getEmail(),
+                    "Failed to send verification email.");
         });
     }
 
+    /**
+     * Creates
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,18 +175,14 @@ public class AuthenticationProcess extends Activity {
         binding.emailTextField.addTextChangedListener(emailTextWatcher);
         // Check if the password is correct each time a letter was added
         binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
+
         // Get the Intent that started this activity and extract the string
-
-
-        if(getIntent().hasExtra(AUTHENTICATION_ACTION)){
-
+        if(getIntent().hasExtra(AUTHENTICATION_ACTION)) {
             action = (Action) getIntent().getExtras().get(AUTHENTICATION_ACTION);
             setUI(action);
-        }
-        else{
+        } else{
             setUI(Action.Login);
         }
-
 
         binding.authenticationButton.setOnClickListener(authenticationButtonListener);
         binding.resetPasswordButton.setOnClickListener(resetButtonListener);
