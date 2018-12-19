@@ -1101,15 +1101,16 @@ public class CompleteLoggedUITest {
         textView21.check(matches(withText("Nom's Profile")));
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withId(R.id.delete), withText("Delete account")));
         appCompatImageButton3.perform(click());
+
+        ViewInteraction appCompatImageButton38 = onView(
+                allOf(withId(R.id.passwordEntry)));
+
+        appCompatImageButton38.perform(replaceText("testtes45"), closeSoftKeyboard());
+
+        ViewInteraction appCompatImageButton378 = onView(
+                allOf(withId(R.id.confirmDeletion)));
 
     }
 
