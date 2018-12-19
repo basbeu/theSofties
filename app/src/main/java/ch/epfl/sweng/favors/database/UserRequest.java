@@ -2,6 +2,11 @@ package ch.epfl.sweng.favors.database;
 
 import ch.epfl.sweng.favors.database.fields.DatabaseField;
 
+/**
+ * UserRequest allows to get a list of users that fulfill certain criteria
+ * Equally it allows retrieving a user by its unique id from the database
+ * and via email as a legacy method
+ */
 public final class UserRequest extends Request{
     private static final String TAG = "DB_USER_REQUEST";
     private static final String COLLECTION = "users";
