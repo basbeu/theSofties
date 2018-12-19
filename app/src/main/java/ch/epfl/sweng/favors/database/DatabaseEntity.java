@@ -3,6 +3,7 @@ package ch.epfl.sweng.favors.database;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public abstract class DatabaseEntity implements Observable {
     }
 
     /**
-     * @return documentID if the database entity
+     * @return documentID of this database entity
      */
     public String getId() {return documentID;}
 
@@ -239,7 +240,7 @@ public abstract class DatabaseEntity implements Observable {
     /**
      * Callback that indicates a DATA update
      */
-    private void notifyContentChange(){
+    private void notifyContentChange() {
         for (OnPropertyChangedCallback callback : callbacks){
             callback.onPropertyChanged(this, UpdateType.DATA.ordinal());
         }
@@ -252,10 +253,10 @@ public abstract class DatabaseEntity implements Observable {
      * @param id documentID of this database entity
      * @param content to be set (changed)
      */
-    public void set(String id, Map<String, Object> content){
+    public void set(String id, Map<String, Object> content) {
         this.documentID = id;
         this.updateLocalData(content);
-        for (OnPropertyChangedCallback callback : callbacks){
+        for (OnPropertyChangedCallback callback : callbacks) {
             callback.onPropertyChanged(this, UpdateType.FROM_REQUEST.ordinal());
         }
     }
@@ -265,67 +266,119 @@ public abstract class DatabaseEntity implements Observable {
      * @param field
      * @return
      */
-    public String get(DatabaseStringField field){
+    public String get(DatabaseStringField field) {
         if(stringData.get(field) != null)
             return stringData.get(field).get();
         else
             return null;
     }
 
-    public void set(DatabaseStringField field, String value){
+    /**
+     * Sets a new String in the database and issues a DATA update
+     *
+     * @param field in the database
+     * @param value string to be put there
+     */
+    public void set(DatabaseStringField field, String value) {
         stringData.get(field).set(value);
         notifyContentChange();
     }
 
-    public ObservableField<String> getObservableObject(DatabaseStringField field){
+    public ObservableField<String> getObservableObject(DatabaseStringField field) {
         return stringData.get(field);
     }
 
-    public Object get(DatabaseObjectField field){
+    /**
+     * Gets an Object like location from the database
+     * TODO the if is redundant since objectData.get is nullable and will return without an exception
+     * Although we agree it is good to explicitly show this, it would perhaps be better
+     * to return an Optional Object
+     *
+     * @param field in the database representing an object
+     * @return the Object from the database
+     */
+    @Nullable
+    public Object get(DatabaseObjectField field) {
         if(objectData.get(field) != null)
             return objectData.get(field).get();
         else
             return null;
     }
 
+    /**
+     * Sets a new Object in the database and issues a DATA update
+     *
+     * @param field in the database
+     * @param value Object to be put there
+     */
     public void set(DatabaseObjectField field, Object value){
         objectData.get(field).set(value);
         notifyContentChange();
     }
 
-    public ObservableField<Object> getObservableObject(DatabaseObjectField field){
+    public ObservableField<Object> getObservableObject(DatabaseObjectField field) {
         return objectData.get(field);
     }
 
-    public Long get(DatabaseLongField field){
+    /**
+     * Gets a Long value from the database
+     * TODO the if is redundant since longData.get is nullable and will return without an exception
+     * Although we agree it is good to explicitly show this, it would perhaps be better
+     * to return an Optional value
+     *
+     * @param field in the database representing a Long
+     * @return the Long from the database
+     */
+    public Long get(DatabaseLongField field) {
         if(longData.get(field) != null)
             return longData.get(field).get();
         else
             return null;
     }
 
-    public void set(DatabaseLongField field, Long value){
+    /**
+     * Sets a new long in the database and issues a DATA update
+     *
+     * @param field in the database
+     * @param value long to be put in database
+     */
+    public void set(DatabaseLongField field, Long value) {
         longData.get(field).set(value);
         notifyContentChange();
     }
 
-    public ObservableField<Long> getObservableObject(DatabaseLongField field){
+    public ObservableField<Long> getObservableObject(DatabaseLongField field) {
         return longData.get(field);
     }
 
-    public Boolean get(DatabaseBooleanField field){
+    /**
+     * Gets a Boolean value from the database
+     * TODO the if is redundant since booleanData.get is nullable and will return without an exception
+     * Although we agree it is good to explicitly show this, it would perhaps be better
+     * to return an Optional value
+     *
+     * @param field in the database representing a Boolean
+     * @return the Boolean from the database
+     */
+    public Boolean get(DatabaseBooleanField field) {
         if(booleanData.get(field) != null)
             return booleanData.get(field).get();
         else
             return null;
     }
 
-    public void set(DatabaseBooleanField field, Boolean value){
+    /**
+     * Sets a new Boolean in the database and issues a DATA update
+     *
+     * @param field in the database
+     * @param value Boolean to be put in database
+     */
+    public void set(DatabaseBooleanField field, Boolean value) {
         booleanData.get(field).set(value);
         notifyContentChange();
     }
 
-    public ObservableField<Boolean> getObservableObject(DatabaseBooleanField field){
+    public ObservableField<Boolean> getObservableObject(DatabaseBooleanField field) {
         return booleanData.get(field);
     }
 
