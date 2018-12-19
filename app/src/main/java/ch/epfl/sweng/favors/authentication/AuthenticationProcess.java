@@ -122,7 +122,7 @@ public class AuthenticationProcess extends Activity {
             confirmationSent();
         } else {
             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-            requirementsText.set("Register failed, please try again");
+            requirementsText.set("Register failed, please try again!");
         }
     };
 
