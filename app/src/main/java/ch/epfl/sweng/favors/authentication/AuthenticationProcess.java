@@ -67,13 +67,17 @@ public class AuthenticationProcess extends Activity {
             isPasswordCorrect.set(Utils.passwordFitsRequirements(binding.passwordTextField.getText().toString()));
         }
     };
+
+    // login button
     private View.OnClickListener authenticationButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            // perform the login
             authentication(binding.emailTextField.getText().toString(), binding.passwordTextField.getText().toString());
         }
     };
 
+    // password reset button - checks if there is such a user account
     private View.OnClickListener resetButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -88,7 +92,7 @@ public class AuthenticationProcess extends Activity {
     };
 
     /**
-     * sets the boolean to whether password is correct or not
+     * sets if the password is valid
      */
     public ObservableBoolean isPasswordCorrect = new ObservableBoolean(false){
         @Override
@@ -98,6 +102,9 @@ public class AuthenticationProcess extends Activity {
         }
     };
 
+    /**
+     * Changes UI depending on whether user is already signed-in
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -109,7 +116,6 @@ public class AuthenticationProcess extends Activity {
 
     private OnCompleteListener<AuthResult> registerComplete = task -> {
         if (task.isSuccessful()) {
-
             Log.d(TAG, "createUserWithEmail:success");
 
             sendConfirmationMail();
