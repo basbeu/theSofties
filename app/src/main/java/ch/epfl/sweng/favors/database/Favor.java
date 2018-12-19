@@ -7,6 +7,20 @@ import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 /**
  * The Favor class is an extension of the Database handler
+ *
+ * represents a favor, the basis of our app, which users can then react with
+ *
+ * A favor has a:
+ * title & an owner
+ * a description, location and deadline
+ * optionally it is also possible to upload a picture (which is saved as reference in the favor)
+ *
+ * as helpers we store the creation date and the owner email
+ *
+ * and most importantly: how many token is it worth and for how many people is the favor accessible
+ * and last but not least a list of people which are interested
+ *
+ * A favor is a favor and should have a database entry (since it is not literally one)
  */
 public class Favor extends DatabaseEntity {
 
@@ -28,6 +42,11 @@ public class Favor extends DatabaseEntity {
                 ObjectFields.values(), COLLECTION,null);
     }
 
+    /**
+     * This constructor allows to retrieve a favor using its unique id
+     *
+     * @param id unique id of the favor
+     */
     public Favor(String id){
         super(StringFields.values(), LongFields.values(), BooleanFields.values(),
                 ObjectFields.values(), COLLECTION, id);

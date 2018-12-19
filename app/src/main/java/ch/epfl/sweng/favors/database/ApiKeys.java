@@ -7,6 +7,10 @@ import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
+/**
+ * The API keys are used to provide the mail service for Favors
+ * (and the maps service?)
+ */
 public class ApiKeys extends DatabaseEntity {
     public enum StringFields implements DatabaseStringField {mailGun}
 
