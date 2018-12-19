@@ -8,7 +8,7 @@
 /build
 /captures
 .externalNativeBuild
-
+functions/
 # Signing files
 
 .signing/

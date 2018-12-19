@@ -57,7 +57,6 @@ import com.google.firebase.firestore.GeoPoint;
  */
 public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
-    private static final String TAG = "FAVOR_FRAGMENT";
     private static final int MIN_STRING_SIZE = 1;
     private FirebaseStorageDispatcher storage;
     private Uri selectedImage = ExecutionMode.getInstance().isTest() ? Uri.parse("test/picture") : null;
@@ -97,6 +96,7 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
 
         if(Long.parseLong(binding.nbTokens.getText().toString()) < 1 || Long.parseLong(binding.nbPersons.getText().toString()) < 1){
             Toast.makeText(getContext(), "Please non zero values for token and persons number", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if(newUserTokens < 0 && newFavor.getId() == null ) {
@@ -143,7 +143,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         newFavor.set(Favor.StringFields.ownerID, Authentication.getInstance().getUid());
         newFavor.set(Favor.LongFields.nbPerson,Long.parseLong(binding.nbPersons.getText().toString()));
         newFavor.set(Favor.LongFields.tokenPerPerson, Long.parseLong(binding.nbTokens.getText().toString()));
-        newFavor.set(Favor.ObjectFields.selectedPeople, new ArrayList<User>());
         newFavor.set(Favor.ObjectFields.interested, new ArrayList<User>());
 
         if(favorLocation != null){
@@ -271,6 +270,9 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         }
         else{
             newFavor = new Favor();
+            long defaultToken = 1;
+            newFavor.set(Favor.LongFields.nbPerson, defaultToken);
+            newFavor.set(Favor.LongFields.tokenPerPerson, defaultToken);
             updateUI(false);
         }
 
@@ -318,7 +320,6 @@ public class FavorCreateFragment extends android.support.v4.app.Fragment {
         if (value.length() < 4) {
             return;
         }
-        GeocodingLocation locationAddress = new GeocodingLocation();
         GeocodingLocation.getAddressFromLocation(value, getContext(), new GeocoderHandler());
     }
 
