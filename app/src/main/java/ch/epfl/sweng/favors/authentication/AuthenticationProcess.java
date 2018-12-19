@@ -151,7 +151,7 @@ public class AuthenticationProcess extends Activity {
             findViewById(R.id.resendConfirmationMailButton).setEnabled(true);
             Utils.displayToastOnTaskCompletion(task,AuthenticationProcess.this,
                     "Verification email sent to " + mAuth.getEmail(),
-                    "Failed to send verification email!");
+                    "Failed to send verification email.");
         });
     }
 
