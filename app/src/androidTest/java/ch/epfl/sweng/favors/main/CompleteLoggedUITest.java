@@ -7,6 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -203,15 +204,7 @@ public class CompleteLoggedUITest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.title), withText("Expiring soon favor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
-                                1)));
 
-        textView6.check(matches(withText("Expiring soon favor")));
         appCompatSpinner3.perform(scrollTo(), click());
 
         try {
@@ -354,6 +347,40 @@ public class CompleteLoggedUITest {
                 allOf(withId(R.id.favReportAbusiveAdd)));
         textView9.perform(scrollTo());
 
+        ViewInteraction appCompatButton34 = onView(
+                allOf(withId(R.id.selectButton), withText("Select people")));
+        appCompatButton34.perform(scrollTo(), click());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction textView88 = onView(
+            allOf(withId(R.id.selected), withText("Select"),
+                childAtPosition(
+                    childAtPosition(
+                        childAtPosition(
+                            childAtPosition(
+                                IsInstanceOf.<View>instanceOf(RecyclerView.class),
+                                0),
+                            0),
+                        2),
+                    0)));
+        textView88.check(matches(withText("Select")));
+
+        textView88.perform(click());
+
+        ViewInteraction appCompatButton38 = onView(
+                allOf(withId(R.id.selectionDone), withText("Done")));
+        appCompatButton38.perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.payButton), withText("Pay")));
         appCompatButton3.perform(scrollTo(), click());
@@ -426,14 +453,14 @@ public class CompleteLoggedUITest {
         button7.check(matches(isDisplayed()));
 
         ViewInteraction textView12 = onView(
-                allOf(withId(R.id.favTokAmmount), withText("3 * 2"),
+                allOf(withId(R.id.favTokAmmount), withText("2 * 2"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         5),
                                 2)));
         textView12.perform(scrollTo());
-        textView12.check(matches(withText("3 * 2")));
+        textView12.check(matches(withText("2 * 2")));
 
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.interestedButton), withText("Edit"),
@@ -1283,7 +1310,7 @@ public class CompleteLoggedUITest {
         textView15.perform(click());
 
         ViewInteraction appCompatEditText19 = onView(
-                allOf(withId(R.id.nbTokens), withText("0"),
+                allOf(withId(R.id.nbTokens), withText("1"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
@@ -1292,7 +1319,7 @@ public class CompleteLoggedUITest {
         appCompatEditText19.perform(scrollTo(), click());
 
         ViewInteraction appCompatEditText20 = onView(
-                allOf(withId(R.id.nbTokens), withText("0"),
+                allOf(withId(R.id.nbTokens), withText("1"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
@@ -1311,7 +1338,7 @@ public class CompleteLoggedUITest {
         appCompatEditText21.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatEditText22 = onView(
-                allOf(withId(R.id.nbPersons), withText("0"),
+                allOf(withId(R.id.nbPersons), withText("1"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),

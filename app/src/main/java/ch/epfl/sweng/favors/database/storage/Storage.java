@@ -37,7 +37,7 @@ public class Storage extends FirebaseStorageDispatcher{
 
     private static FirebaseStorage firebaseStorage = null;
     private static  Storage storage = null;
-    protected static final int MAX_BYTE_SIZE = 2160*2160;
+    protected static final int MAX_BYTE_SIZE = 5000*5000;
     private static Context context_ext;
     private static ProgressDialog progressDialog;
     private static ImageView view;
