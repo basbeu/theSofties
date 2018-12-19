@@ -84,7 +84,7 @@ public class AuthenticationProcessTest {
         onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
 
         //Check that the login is failed
-        assertEquals("Wrong email or password or email not verified\nPlease try again",activityActivityTestRule.getActivity().requirementsText.get());
+        assertEquals("Wrong email or password or email not verified\nPlease try again!",activityActivityTestRule.getActivity().requirementsText.get());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class AuthenticationProcessTest {
         onView(withId(R.id.passwordTextField)).perform(scrollTo(),replaceText("jnd38jd9")).perform(closeSoftKeyboard());
         onView(withId(R.id.authenticationButton)).perform(scrollTo(), click());
         //Check that the register process failed
-        assertEquals("Register failed, please try again",activityActivityTestRule.getActivity().requirementsText.get());
+        assertEquals("Register failed, please try again!",activityActivityTestRule.getActivity().requirementsText.get());
 
     }
 
