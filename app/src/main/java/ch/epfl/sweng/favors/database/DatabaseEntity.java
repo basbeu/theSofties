@@ -382,6 +382,9 @@ public abstract class DatabaseEntity implements Observable {
         return booleanData.get(field);
     }
 
+    /**
+     * @return database entity for class extending this entity (user / favor)
+     */
     public abstract DatabaseEntity copy();
 
 }

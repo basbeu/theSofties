@@ -13,7 +13,18 @@ import ch.epfl.sweng.favors.database.fields.DatabaseLongField;
 import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
-public class User extends DatabaseEntity{
+/**
+ * User
+ *
+ * a user has several fields characterizing him
+ * a first and last name, hometown and a location
+ * but also capabilities like tokens
+ * or settings such as notifications or email preferenes
+ * that have to be taken care of
+ *
+ * a user is not a Database entity but should have a database entry
+ */
+public class User extends DatabaseEntity {
 
     private static final String TAG = "DB_USER";
     private static final String COLLECTION = "users";
@@ -22,6 +33,12 @@ public class User extends DatabaseEntity{
     private static Status status = new Status(Status.Values.NotLogged);
 
     private static User user = new User(Authentication.getInstance().getUid());
+
+    /**
+     * allows access to the current user in the app which is signed-in
+     * TODO probably preferable to return currently signed-in user with a factory method
+     * @return the user
+     */
     public static User getMain(){
         return user;
     }
@@ -35,7 +52,7 @@ public class User extends DatabaseEntity{
         firstName, lastName,
         email,
         sex,
-        pseudo,
+        pseudo, // FIXME: pseudo currently not used
         city, // a string of the homecity selected by the user
         profilePicRef, // a reference to the image stored on Firebase
         token_id
@@ -101,6 +118,10 @@ public class User extends DatabaseEntity{
         user.reset();
     }
 
+    /**
+     * associates the geopoint passed as argument with the user
+     * @param geo a geopoint with latitude and longitude information
+     */
     public void setLocation(@Nonnull GeoPoint geo){
         if (user.get(StringFields.lastName) != null
                 && user.get(StringFields.email) != null
@@ -110,8 +131,16 @@ public class User extends DatabaseEntity{
         }
     }
 
+    /**
+     * Represents the gender of a user: Male / Female
+     *
+     * the enum provides a method to
+     * retrieve the gender of a specific user,
+     * whether the gender is valid &
+     * to set the gender
+     */
     public enum UserGender {
-        M ,F, DEFAULT;
+        M, F, DEFAULT;
 
         private static final String TAG = "USER_GENDER";
 
@@ -127,18 +156,14 @@ public class User extends DatabaseEntity{
             if (genderIsValid(gender)) {
                 gender = gender.trim().substring(0, 1);
                 switch (gender.toUpperCase()) {
-                    case "M":
-                        userGender = M;
+                    case "M": userGender = M;
                         break;
-                    case "F":
-                        userGender = F;
+                    case "F": userGender = F;
                         break;
-                    default:
-                        Log.e(TAG, "Failed to parse the gender returned by the database");
+                    default: Log.e(TAG, "Failed to parse the gender returned by the database");
                         break;
                 }
             }
-
             return userGender;
         }
 
@@ -148,8 +173,8 @@ public class User extends DatabaseEntity{
 
         /**
          * Sets the gender of the user
-         * @param user who sex needs to be modified
-         * @param gender to set the users gender to
+         * @param user whose sex needs to be modified
+         * @param gender which will be set for the user
          */
         static public void setGender(@Nonnull User user, @Nonnull UserGender gender){
             user.set(User.StringFields.sex,gender.toString().toUpperCase());
@@ -164,7 +189,7 @@ public class User extends DatabaseEntity{
 class Status extends ObservableField<Status.Values>{
     private static final String TAG = "User_Status";
 
-    public enum Values{NotLogged, Logged}
+    public enum Values{ NotLogged, Logged }
 
     public Status(Status.Values value){
         super(value);
