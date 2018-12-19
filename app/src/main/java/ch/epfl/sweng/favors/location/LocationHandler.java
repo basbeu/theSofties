@@ -18,7 +18,22 @@ import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.ExecutionMode;
 
 /**
+ * LocationHandler
  * Owns all request and management facilities related to location
+ *
+ * can measure distance other geopoints which is important for displaying
+ * how far favors are away
+ *
+ * can set the location to be tracked continuously or only after opening the app & intervals
+ *
+ * get a human readable address from coordinates
+ *
+ * the difference between a geopoint and a Location Object is that a LOcation object is
+ * rich in additional methods, provides elevation and distance methods whereas a geopoint
+ * is essentially just latitude and longitude information
+ *
+ * The Geopoint can however be natively handled by firestore and is thus the preferred choice
+ * in database interactions
  */
 public class LocationHandler {
     private static final String TAG = "LOCATION_HANDLER";
@@ -38,6 +53,9 @@ public class LocationHandler {
         }
     }
 
+    /**
+     * holds the user's last location
+     */
     private Location lastLocation;
     public ObservableField<String> locationCity = new ObservableField<>();
     public ObservableField<GeoPoint> locationPoint = new ObservableField<>();
@@ -61,6 +79,17 @@ public class LocationHandler {
         return distance;
     }
 
+    /**
+     * This method allows to get the distance between the user's current location and some
+     * arbitrary geopoint.
+     *
+     * values above 100km are integers
+     * values between 100km and 2.5km have one decimal
+     * values below 2.5km are displayed in meters
+     *
+     * @param geo (latitude, longitude)
+     * @return a properly formatted string representing the distance to the geopoint
+     */
     public static String distanceBetween(GeoPoint geo) {
         float distance = distanceTo(geo);
         String output;
@@ -80,6 +109,10 @@ public class LocationHandler {
         return output + " away";
     }
 
+    /**
+     * Sets the location update frequency to either be recurrent or just once per app launch
+     * @param newValue boolean recurrent
+     */
     public void isRecurrent(boolean newValue){
         if (!newValue && recurrent) {
             location.removeLocationUpdates();
@@ -99,6 +132,10 @@ public class LocationHandler {
     }
 
 
+    /**
+     * Issues a request to the location client to produce regular location updates
+     * @return a request with the specifics below
+     */
     private LocationRequest locationRequest(){
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -136,6 +173,12 @@ public class LocationHandler {
         return true;
     }
 
+    /**
+     * Tries to resolve a geopoint to a physical address like humans use them
+     *
+     * @param geoPoint which is resolved to an address
+     * @return String of the address corresponding to the geopoint or error
+     */
     private String getReadableLocation(GeoPoint geoPoint){
 
         if (geoPoint == null) {
