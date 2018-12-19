@@ -109,7 +109,7 @@ public class AuthenticationProcess extends Activity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        if(mAuth.isEmailVerified()){
+        if (mAuth.isEmailVerified()){
             headerText.set("You're already logged in");
         }
     }
@@ -177,10 +177,10 @@ public class AuthenticationProcess extends Activity {
         binding.passwordTextField.addTextChangedListener(passwordTextWatcher);
 
         // Get the Intent that started this activity and extract the string
-        if(getIntent().hasExtra(AUTHENTICATION_ACTION)) {
+        if (getIntent().hasExtra(AUTHENTICATION_ACTION)) {
             action = (Action) getIntent().getExtras().get(AUTHENTICATION_ACTION);
             setUI(action);
-        } else{
+        } else {
             setUI(Action.Login);
         }
 
@@ -216,12 +216,12 @@ public class AuthenticationProcess extends Activity {
      * @param password The user password
      */
     private void authentication(String email, String password) {
-        if(!Utils.isEmailValid(email)){
+        if (!Utils.isEmailValid(email)){
             Log.d(TAG,"invalid email format");
             requirementsText.set("Wrong email format");
             return;
         }
-        if(!Utils.passwordFitsRequirements(password)){
+        if (!Utils.passwordFitsRequirements(password)){
             Log.d(TAG,"invalid password format");
             requirementsText.set("Wrong password format");
             return;
@@ -238,14 +238,14 @@ public class AuthenticationProcess extends Activity {
     }
 
     private void loggedinView(Action action){
-        if(mAuth.isEmailVerified()) {
+        if (mAuth.isEmailVerified()) {
             User.updateMain();
 
             Database.getInstance().updateFromDb(User.getMain()).addOnCompleteListener(
                     (t)->{
                         String tokenId = "1";
 
-                        if(!ExecutionMode.getInstance().isTest()) {
+                        if (!ExecutionMode.getInstance().isTest()) {
                             tokenId = FirebaseInstanceId.getInstance().getToken();
                         }
 
