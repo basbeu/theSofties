@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="java.lang.Long"/>
+        <import type="android.view.View"/>
         <variable
             name="elements"
             type="ch.epfl.sweng.favors.profile.ProfileFragment"
@@ -82,7 +83,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="35dp"
             android:orientation="horizontal">
 
             <TextView
@@ -108,14 +109,67 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/delete"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="@string/deleteButton"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/reauthenticateMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/passwordConfirmation"
+            android:visibility="invisible"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/passwordEntry"
+                android:layout_width="288dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.38"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/checkPasswordImage"
+                android:layout_width="29dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/check_image"
+                app:layout_constraintBottom_toBottomOf="@id/passwordEntry"
+                app:layout_constraintStart_toEndOf="@+id/passwordEntry"
+                app:layout_constraintTop_toTopOf="@id/passwordEntry"
+                android:visibility="@{elements.isPasswordCorrect ? View.VISIBLE : View.GONE}"
+                tools:layout_editor_absoluteY="106dp" />
+        </LinearLayout>
 
 
-        <!--
-        <ListView
-            android:id="@+id/profileListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        -->
+        <Button
+            android:id="@+id/confirmDeletion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:enabled="@{elements.isPasswordCorrect}"
+            android:text="@string/confirmDeletionText"
+            android:textSize="14sp"
+            android:visibility="invisible" />
+
     </LinearLayout>
 
 </layout>

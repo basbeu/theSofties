@@ -75,10 +75,13 @@ public class AuthenticationProcess extends Activity {
         public void onClick(View v) {
 
             mAuth.sendPasswordResetEmail(binding.emailTextField.getText().toString())
-                    .addOnCompleteListener(w-> Utils.displayToastOnTaskCompletion(w,AuthenticationProcess.this, "Reset password email sent to " + binding.emailTextField.getText().toString(),"No account with this email."));
+                    .addOnCompleteListener(w-> Utils.displayToastOnTaskCompletion(w,
+                            AuthenticationProcess.this,
+                            "Reset password email sent to "
+                                    + binding.emailTextField.getText().toString(),
+                            "No account with this email."));
         }
     };
-
 
     /**
      * sets the boolean to whether password is correct or not

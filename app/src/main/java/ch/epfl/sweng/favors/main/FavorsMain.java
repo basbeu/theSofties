@@ -101,6 +101,7 @@ public class FavorsMain extends AppCompatActivity {
         finish();
     }
 
+
     @Override
     public void onBackPressed() {}
 }

@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -172,7 +173,8 @@ public class LoggedInScreen extends AppCompatActivity implements NavigationView.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsList()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
-                logout();
+                Utils.logout(this, Authentication.getInstance());
+                Toast.makeText(this, R.string.seeyou, Toast.LENGTH_SHORT).show();
                 break;
 
         }

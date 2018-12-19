@@ -89,7 +89,6 @@ public final class Utils {
     }
 
     public static void logout(Context context, Authentication auth){
-        Toast.makeText(context, R.string.seeyou, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(context, FavorsMain.class);
         auth.signOut();
         context.startActivity(intent);

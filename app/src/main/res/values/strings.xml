@@ -16,6 +16,14 @@
     <string name="resendConfirmation">Resend confirmation.</string>
     <string name="favorPosterDetailViewTitle">Who is the poster?</string>
     <string name="gotit">Got it !</string>
+    <string name="deleteButton">Delete account</string>
+    <string name="passwordConfirmation">Please enter your password to confirm the deletion</string>
+    <string name="confirmDeletionText">Confirm</string>
+    <string name="userDeletionSuccessful">Your account has been successfully deleted</string>
+    <string name="userDeletionFail">Sorry, a problem occured. Please try again.</string>
+    <string name="wrongPassword">Wrong password. Please try again.</string>
+
+
 
     <string name="next">Next</string>
     <string-array name="sortBy">

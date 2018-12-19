@@ -82,7 +82,7 @@ public class FakeAuthentication extends Authentication {
     @Override
     public Task<Void> sendEmailVerification() {
         if(!ExecutionMode.getInstance().isInvalidAuthTest()){
-            return Tasks.forResult((Void)null);
+            return Tasks.forResult(null);
         }
         else{
             return Tasks.forException(new Exception());
