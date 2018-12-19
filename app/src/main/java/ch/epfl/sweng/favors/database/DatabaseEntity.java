@@ -18,6 +18,19 @@ import ch.epfl.sweng.favors.database.fields.DatabaseObjectField;
 import ch.epfl.sweng.favors.database.fields.DatabaseStringField;
 
 
+/**
+ * Database entity defines the capabilities
+ *
+ * The data in the entity is stored in the form of a map
+ * indicating the type of data as key
+ * and the data as value
+ *
+ * There are currently following datatypes (illustrated with examples)
+ * String data - names and other personal information
+ * long data - amount of tokens
+ * boolean data - permissions, notification settings
+ * Object data - location
+ */
 public abstract class DatabaseEntity implements Observable {
 
     protected static Database db = Database.getInstance();
@@ -30,7 +43,17 @@ public abstract class DatabaseEntity implements Observable {
     protected final String collection;
     protected String documentID;
 
-    public enum UpdateType{DATA, FROM_DB, FROM_REQUEST}
+    /**
+     * The type of update
+     * DATA update is issued when there have been local changes
+     * FROM_DB update is issued there have been remote changes that should be pushed to the user's app
+     * FROM_REQUEST if a dedicated set has been invoked to change something specific in this entity
+     */
+    public enum UpdateType{
+        DATA,
+        FROM_DB,
+        FROM_REQUEST
+    }
 
     private final static String TAG = "Favors_DatabaseHandler";
 
@@ -38,6 +61,9 @@ public abstract class DatabaseEntity implements Observable {
         this.documentID = documentId;
     }
 
+    /**
+     * @return documentID if the database entity
+     */
     public String getId() {return documentID;}
 
     /**
@@ -106,17 +132,17 @@ public abstract class DatabaseEntity implements Observable {
     /**
      * Update local data with a generic content with Objects
      *
-     * @param incommingData The map with object content and object value
-     * @return True is successfull
+     * @param incomingData The map with object content and object value
+     * @return True is successful
      */
-    protected void updateLocalData(Map<String, Object> incommingData){
-        if(incommingData == null){
+    protected void updateLocalData(Map<String, Object> incomingData){
+        if(incomingData == null){
             return;
         }
-        convertObjectMapToTypedMap(incommingData, stringData, String.class);
-        convertObjectMapToTypedMap(incommingData, booleanData, Boolean.class);
-        convertObjectMapToTypedMap(incommingData, objectData, Object.class);
-        convertObjectMapToTypedMap(incommingData, longData, Long.class);
+        convertObjectMapToTypedMap(incomingData, stringData, String.class);
+        convertObjectMapToTypedMap(incomingData, booleanData, Boolean.class);
+        convertObjectMapToTypedMap(incomingData, objectData, Object.class);
+        convertObjectMapToTypedMap(incomingData, longData, Long.class);
 
         for (OnPropertyChangedCallback callback : callbacks){
             callback.onPropertyChanged(this, UpdateType.FROM_DB.ordinal());
@@ -166,6 +192,11 @@ public abstract class DatabaseEntity implements Observable {
         }
     }
 
+    /**
+     * resets the data of this database entity to the default value null
+     * this clears all of the information that had previously been in this
+     * database field
+     */
     public void reset(){
         if(stringData != null)
             resetMap(stringData, null);
@@ -193,31 +224,46 @@ public abstract class DatabaseEntity implements Observable {
     }
 
     List<OnPropertyChangedCallback> callbacks = Collections.synchronizedList(new ArrayList<>());
+
     @Override
     public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
         assert(callback != null);
         callbacks.add(callback);
     }
+
     @Override
     public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
         callbacks.remove(callback);
     }
+
+    /**
+     * Callback that indicates a DATA update
+     */
     private void notifyContentChange(){
         for (OnPropertyChangedCallback callback : callbacks){
             callback.onPropertyChanged(this, UpdateType.DATA.ordinal());
         }
     }
 
+    /**
+     * the database set method updates local content and
+     * issues a callback indicating a FROM_REQUEST update
+     *
+     * @param id documentID of this database entity
+     * @param content to be set (changed)
+     */
     public void set(String id, Map<String, Object> content){
-        this.documentID =id;
+        this.documentID = id;
         this.updateLocalData(content);
         for (OnPropertyChangedCallback callback : callbacks){
             callback.onPropertyChanged(this, UpdateType.FROM_REQUEST.ordinal());
         }
     }
 
-    /*
+    /**
      * Get / set methods for the different types of data
+     * @param field
+     * @return
      */
     public String get(DatabaseStringField field){
         if(stringData.get(field) != null)
