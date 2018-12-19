@@ -21,6 +21,14 @@ import ch.epfl.sweng.favors.location.LocationHandler;
 import ch.epfl.sweng.favors.main.FavorsMain;
 import ch.epfl.sweng.favors.utils.TextWatcherCustom;
 
+/**
+ * The step after confirming the email address in the authentication process is
+ * to enter the personal information
+ *
+ * This includes full name, hometown and gender
+ *
+ * UI activity: activity_set_user_info
+ */
 public class SetUserInfo extends AppCompatActivity {
 
     private static final String TAG = "INIT_PROFILE_FRAGMENT";
@@ -32,6 +40,7 @@ public class SetUserInfo extends AppCompatActivity {
     public ObservableField<String> baseCity = user.getObservableObject(User.StringFields.city); // LocationHandler.getHandler().locationCity;
 
     ActivitySetUserInfoBinding binding;
+    // set names
     private TextWatcherCustom firstNameWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
@@ -45,6 +54,7 @@ public class SetUserInfo extends AppCompatActivity {
         }
     };
 
+    // set city
     private TextWatcherCustom basedLocationWatcher = new TextWatcherCustom() {
         @Override
         public void afterTextChanged(Editable editable) {
@@ -95,9 +105,10 @@ public class SetUserInfo extends AppCompatActivity {
         });
     }
 
-    /*
-    Explicitly calls the FavorMain because the back button will not work to go back to FavorMain.
-    This behavior is wanted because we don't want to accidentally have a user reach the login screen when he is logged in
+
+    /**
+     * Explicitly calls the FavorMain because the back button will not work to go back to FavorMain.
+     * This behavior is wanted because we don't want to accidentally have a user reach the login screen when he is logged in
      */
     @Override
     public void onBackPressed() {
